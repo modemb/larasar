@@ -12,7 +12,7 @@
 */
 
 Route::get('{path}', function () {
-  return view('main');
+  return view('index');
 })->where('path', '(.*)');
 
 Auth::routes();

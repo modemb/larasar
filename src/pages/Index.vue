@@ -12,8 +12,8 @@
 export default {
   name: 'PageIndex',
   methods: {
-    async loadData () {
-      await this.$axios.get('/api/backend')
+    loadData () {
+      this.$axios.get('/backend')
         .then((response) => {
           this.data = response.data
         })
