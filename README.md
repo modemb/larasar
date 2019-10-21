@@ -1,15 +1,17 @@
-# Quasar App (client)
+# Quasar App (client) & Laravel Backend (server)
 
-A Quasar Framework app
+A Laravel + Quasar Framework app
 
 ## Install the dependencies
 ```bash
 npm install
+composer install
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 ```bash
 quasar dev
+php artisan serve
 ```
 
 ### Lint the files
@@ -24,3 +26,7 @@ quasar build
 
 ### Customize the configuration
 See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+
+Backend Server:http://localhost:8000
+Frontend Server:http://localhost:8080
+Network:http://192.168.2.11:8080

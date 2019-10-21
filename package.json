@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0",
-
+    "===quasar^====": "====laravel====",
     "dev": "npm run development",
     "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "npm run development -- --watch",
@@ -19,29 +19,30 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.3.2",
     "axios": "^0.18.1",
-    "quasar": "^1.0.0",
-    "vue-i18n": "^8.0.0"
+    "js-cookie": "^2.2.1",
+    "quasar": "^1.2.4",
+    "vue-i18n": "^8.15.0"
   },
   "devDependencies": {
-    "@quasar/app": "^1.0.0",
+    "===quasar^====": "====laravel====",
+    "@quasar/app": "^1.2.2",
     "@vue/eslint-config-standard": "^4.0.0",
-    "babel-eslint": "^10.0.1",
+    "axios": "^0.19",
+    "babel-eslint": "^10.0.3",
+    "bootstrap": "^4.1.0",
+    "cross-env": "^5.2.1",
     "eslint": "^5.10.0",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-vue": "^5.0.0",
-
-    "axios": "^0.19",
-    "bootstrap": "^4.1.0",
-    "cross-env": "^5.1",
     "jquery": "^3.2",
-    "laravel-mix": "^4.0.7",
+    "laravel-mix": "^4.1.4",
     "lodash": "^4.17.13",
-    "popper.js": "^1.12",
+    "popper.js": "^1.16.0",
     "resolve-url-loader": "^2.3.1",
-    "sass": "^1.15.2",
-    "sass-loader": "^7.1.0",
+    "sass": "^1.23.0",
+    "sass-loader": "^7.3.1",
     "vue": "^2.5.17"
   },
   "engines": {

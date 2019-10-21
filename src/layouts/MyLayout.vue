@@ -16,7 +16,11 @@
           Quasar App
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn label="Login" @click.prevent="login" />register
+        <q-btn label="Logout" @click.prevent="logout" />
+        <!-- <register /> -->
+        <q-toggle color="blue-10" v-model="drawerState" />
+
       </q-toolbar>
     </q-header>
 
@@ -24,9 +28,9 @@
       v-model="leftDrawerOpen"
       bordered
       content-class="bg-grey-2"
-    >
+      >
       <q-list>
-        <q-item-label header>Essential Links</q-item-label>
+        <q-item-label header><div>Quasar v{{ $q.version }}</div>Essential Links</q-item-label>
         <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
           <q-item-section avatar>
             <q-icon name="school" />
@@ -92,16 +96,57 @@
 
 <script>
 import { openURL } from 'quasar'
+// import Register from '../components/auth/Register'
 
 export default {
-  name: 'MyLayout',
+  openURL,
+  // components: {
+  //   Register
+  // },
   data () {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
+      leftDrawerOpen: this.$q.platform.is.desktop,
+      email: 'modemb@modemb.com',
+      password: '88888888',
+      isPwd: true,
+
+      search: '',
+      tel: '',
+      url: '',
+      time: '',
+      date: ''
+    }
+  },
+  computed: {
+    drawerState: {
+      get () {
+        return this.$store.state.showcase.drawerState
+      },
+      set (val) {
+        this.$store.commit('showcase/updateDrawerState', val)
+      }
     }
   },
   methods: {
-    openURL
+    login () {
+      var data = {
+        // grant_type: 'password',
+        // client_id: 2,
+        // client_secret: 'BeCXauYX2wRcLgNDnX9btRpKHsAC0MXDQTgJGZp2',
+        username: this.email,
+        password: this.password
+        // scope: ''
+      }
+      this.$store.dispatch('users/loginAction', data) // Action
+      // this.$store.commit('users/someMutation', data) // Mutation
+    },
+    async logout () {
+      // Log out the user.
+      await this.$store.dispatch('users/logoutAction')
+
+      // Redirect to login.
+      // this.$router.push({ name: 'login' })
+    }
   }
 }
 </script>

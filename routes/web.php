@@ -11,10 +11,11 @@
 |
 */
 
-Route::get('{path}', function () {
-  return view('index');
-})->where('path', '(.*)');
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('{path}', function () {
+  return view('welcome');
+  // return view('index');
+})->where('path', '.*');
