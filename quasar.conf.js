@@ -5,19 +5,21 @@ module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
+    // https://quasar.dev/quasar-cli/cli-documentation/boot-files
     boot: [
       'i18n',
-      'axios',
-      'notify-defaults'
+      'axios'
     ],
 
+    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: [
-      'app.styl'
+      'app.sass'
     ],
 
+    // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
-      // 'mdi-v3',
+      // 'mdi-v4',
       // 'fontawesome-v5',
       // 'eva-icons',
       // 'themify',
@@ -27,53 +29,48 @@ module.exports = function (ctx) {
       'material-icons' // optional, you are not bound to it
     ],
 
+    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
-      // iconSet: 'ionicons-v4',
-      // lang: 'de', // Quasar language
+      // iconSet: 'ionicons-v4', // Quasar icon set
+      // lang: 'de', // Quasar language pack
 
-      // all: true, // --- includes everything; for dev only!
+      // Possible values for "all":
+      // * 'auto' - Auto-import needed Quasar components & directives
+      //            (slightly higher compile time; next to minimum bundle size; most convenient)
+      // * false  - Manually specify what to import
+      //            (fastest compile time; minimum bundle size; most tedious)
+      // * true   - Import everything from Quasar
+      //            (not treeshaking Quasar; biggest bundle size; convenient)
+      all: 'auto',
 
-      components: [
-        'QLayout',
-        'QHeader',
-        'QDrawer',
-        'QPageContainer',
-        'QPage',
-        'QToolbar',
-        'QToolbarTitle',
-        'QBtn',
-        'QIcon',
-        'QList',
-        'QItem',
-        'QItemSection',
-        'QItemLabel',
-        //========\\
-        'QForm',
-        'QInput',
-        'QSelect',
-        'QField',
-        'QToggle'
-      ],
-
-      directives: [
-        'Ripple'
-      ],
+      components: [],
+      directives: [],
 
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'Cookies',
+        'Meta',
+        'LocalStorage',
+        'SessionStorage',
+        'Loading'
       ]
     },
 
+    // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
     supportIE: true,
 
+    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       scopeHoisting: true,
-      // vueRouterMode: 'history',
-      // vueCompiler: true,
+      vueRouterMode: 'history',
+      // showProgress: false,
       // gzip: true,
       // analyze: true,
+      // preloadChunks: false,
       // extractCSS: false,
+
+      // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack (cfg) {
         cfg.module.rules.push({
           enforce: 'pre',
@@ -86,7 +83,8 @@ module.exports = function (ctx) {
         })
       }
     },
-    //https://webpack.js.org/configuration/dev-server/
+
+    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       // https: true,
       // port: 8080,
@@ -94,12 +92,15 @@ module.exports = function (ctx) {
     },
 
     // animations: 'all', // --- includes all animations
+    // https://quasar.dev/options/animations
     animations: [],
 
+    // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
       pwa: false
     },
 
+    // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
       // workboxPluginMode: 'InjectManifest',
       // workboxOptions: {}, // only for NON InjectManifest
@@ -141,11 +142,13 @@ module.exports = function (ctx) {
       }
     },
 
+    // https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
       // id: 'org.cordova.quasar.app',
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
     },
 
+    // https://quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
     electron: {
       // bundler: 'builder', // or 'packager'
 
@@ -170,7 +173,7 @@ module.exports = function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        // appId: 'client'
+        // appId: 'quapp'
       }
     }
   }

@@ -1,26 +1,25 @@
 import { axiosInstance } from 'boot/axios'
 import { Notify } from 'quasar'
 
-const headers = axiosInstance.defaults.headers.common
-
 export async function loginAction ({ commit, dispatch }, payload) {
-  axiosInstance.post('api/login', payload)
+  // console.log(commit)
+  axiosInstance.post('api/users', payload)
     .then((response) => {
-      // console.log(response.data)
+      // console.log(response)
       commit('loginMutation', response.data)
+      dispatch('authAction') // Action
     })
     .catch(() => {
       Notify.create({
         color: 'negative',
         position: 'top',
-        message: 'Loading failed',
+        message: 'Getting Users Data Error',
         icon: 'report_problem'
       })
     })
 }
 
 export async function registerAction ({ commit, dispatch }, payload) {
-  console.log(payload)
   axiosInstance.post('api/register', payload)
     .then((response) => {
       Notify.create({
@@ -36,34 +35,33 @@ export async function registerAction ({ commit, dispatch }, payload) {
       Notify.create({
         color: 'negative',
         position: 'top',
-        message: 'Loading failed',
+        message: 'Registration Unsuccessfull',
         icon: 'report_problem'
       })
     })
 }
 
-export async function nameAction (context) {
-  console.log(context.state.token)
-  headers['Authorization'] = `Bearer ${context.state.token}`
+export async function authAction (context) {
+  // console.log(context.state.token)
 
-  axiosInstance.get('api/user')
-  // this.$axios.get('api/backend')
+  await axiosInstance.get('api/user')
     .then((response) => {
-      console.log(response.data)
+      // console.log(response.data, context)
+      context.commit('authMutation', { user: response.data })
     })
     .catch(() => {
       Notify.create({
         color: 'negative',
         position: 'top',
-        message: 'Loading failed',
+        message: 'Error Getting User Data',
         icon: 'report_problem'
       })
     })
 }
 
-export async function logoutAction ({ commit }) {
+export async function logoutAction ({ commit }, payload) {
   try {
-    await axiosInstance.post('/api/logout')
+    axiosInstance.post('api/users', payload)
   } catch (e) { }
 
   commit('logoutMutation')

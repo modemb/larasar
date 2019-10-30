@@ -1,26 +1,4 @@
-.quasar
-.DS_Store
-.thumbs.db
-node_modules
-/dist
-/src-cordova/node_modules
-/src-cordova/platforms
-/src-cordova/plugins
-/src-cordova/www
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-
-#Laravel
-# /node_modules
+/node_modules
 /public/hot
 /public/storage
 /storage/*.key
@@ -30,5 +8,5 @@ yarn-error.log*
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
-# npm-debug.log
-# yarn-error.log
+npm-debug.log
+yarn-error.log

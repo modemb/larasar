@@ -12,15 +12,22 @@
           <q-icon name="menu" />
         </q-btn>
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <q-btn label="Login" @click.prevent="login" />register
-        <q-btn label="Logout" @click.prevent="logout" />
-        <!-- <register /> -->
-        <q-toggle color="blue-10" v-model="drawerState" />
-
+        <q-btn to="/" >
+          <q-toolbar-title>
+            <q-icon name="home" />
+            Larasar
+          </q-toolbar-title>
+        </q-btn>
+        <!-- Authenticated -->
+        <div v-if="user" class="text-right">
+          <q-btn label="Logout" @click.prevent="logout" />
+          {{ user.name }}
+        </div>
+        <!-- Guest -->
+        <div v-else class="text-right">
+          <q-btn label="Login" :to="{name: 'public.login'}" class="nav-link active" />
+          <q-btn label="Register" :to="{name: 'public.register'}" class="nav-link" />
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -96,60 +103,36 @@
 
 <script>
 import { openURL } from 'quasar'
-// import Register from '../components/auth/Register'
+import { mapGetters } from 'vuex'
+// import LocaleDropdown from '/../components/LocaleDropdown'
 
 export default {
   openURL,
   // components: {
-  //   Register
+  //   LocaleDropdown
   // },
   data () {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop,
-      email: 'modemb@modemb.com',
-      password: '88888888',
-      isPwd: true,
-
-      search: '',
-      tel: '',
-      url: '',
-      time: '',
-      date: ''
+      leftDrawerOpen: this.$q.platform.is.desktop
     }
   },
-  computed: {
-    drawerState: {
-      get () {
-        return this.$store.state.showcase.drawerState
-      },
-      set (val) {
-        this.$store.commit('showcase/updateDrawerState', val)
-      }
-    }
-  },
+  computed: mapGetters({
+    user: 'users/authGetter'
+  }),
+  // mounted () {
+  //   this.$store.dispatch('users/authAction')
+  // },
   methods: {
-    login () {
-      var data = {
-        // grant_type: 'password',
-        // client_id: 2,
-        // client_secret: 'BeCXauYX2wRcLgNDnX9btRpKHsAC0MXDQTgJGZp2',
-        username: this.email,
-        password: this.password
-        // scope: ''
-      }
-      this.$store.dispatch('users/loginAction', data) // Action
-      // this.$store.commit('users/someMutation', data) // Mutation
-    },
     async logout () {
       // Log out the user.
-      await this.$store.dispatch('users/logoutAction')
+      await this.$store.dispatch('users/logoutAction', this.user)
 
       // Redirect to login.
-      // this.$router.push({ name: 'login' })
+      this.$router.push({ name: 'public.login' })
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 </style>
