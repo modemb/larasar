@@ -4,9 +4,6 @@ const routes = [
     path: '/',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-<<<<<<< HEAD
-      { path: '', component: () => import('pages/Index.vue') }
-=======
       {
         path: '/',
         name: 'public.index',
@@ -22,7 +19,6 @@ const routes = [
         name: 'public.register',
         component: () => import('pages/auth/register.vue')
       }
->>>>>>> modemb/dev
     ]
   }
 ]
