@@ -1,11 +1,26 @@
 # Quasar App (client) & Laravel Backend (server)
 
+<<<<<<< HEAD
 A Laravel + Quasar Framework app
 
 ## Install the dependencies
 ```bash
 npm install
 composer install
+=======
+A Laravel + Quasar Framework App
+
+## Install the dependencies
+```bash
+composer install
+composer require laravel/ui --dev
+php artisan ui vue --auth
+cp .env.example .env
+php artisan key:generate
+php artisan passport:install
+npm install
+npm run dev
+>>>>>>> modemb/dev
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)

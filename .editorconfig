@@ -6,11 +6,16 @@ indent_style = space
 indent_size = 2
 end_of_line = lf
 insert_final_newline = true
+<<<<<<< HEAD:.editorconfig
+=======
+indent_style = space
+indent_size = 2
+>>>>>>> modemb/dev:.editorconfig
 trim_trailing_whitespace = true
 
 # Laravel
 [*.md]
 trim_trailing_whitespace = false
 
-[*.yml]
+[*.{yml,yaml}]
 indent_size = 2

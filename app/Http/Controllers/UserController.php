@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 // use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
@@ -20,6 +21,18 @@ class UserController extends Controller
     // {
     //     $this->middleware('guest')->except('logout');
     // }
+=======
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use App\User;
+use Hash;
+use Auth;
+use DB;
+
+class UserController extends Controller
+{
+    use AuthenticatesUsers;
+>>>>>>> modemb/dev
 
     /**
      * Display a listing of the resource.
@@ -28,7 +41,11 @@ class UserController extends Controller
      */
     public function index()
     {
+<<<<<<< HEAD
       $this->guard()->logout();
+=======
+        //
+>>>>>>> modemb/dev
     }
 
     /**
@@ -48,6 +65,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+<<<<<<< HEAD
     { //return env('PASSPORT_LOGIN_ENDPOINT');
       $http = new \GuzzleHttp\Client;
 
@@ -67,6 +85,16 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed'
+=======
+    { //return config('services.passport');
+
+      if($request->user == 'register'){
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed'
+>>>>>>> modemb/dev
         ]);
 
         return User::create([
@@ -74,6 +102,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+<<<<<<< HEAD
       }// Register
 
       $response = $http->post(env('PASSPORT_LOGIN_ENDPOINT'), [
@@ -86,6 +115,41 @@ class UserController extends Controller
               'scope' => '',
           ]// Login
       ]); return json_decode((string) $response->getBody(), true);
+=======
+
+      } elseif ($request->user == 'login') {
+
+        $http = new \GuzzleHttp\Client; $passport = config('services.passport');
+
+        $response = $http->post($passport['login_endpoint'], [
+            'form_params' => [
+                'grant_type' => 'password',
+                'client_id' => $passport['client_id'],
+                'client_secret' => $passport['client_secret'],
+                'username' => $request->username,
+                'password' => $request->password,
+                'scope' => '',
+            ]
+
+        ]); return json_decode((string) $response->getBody(), true);
+
+      } elseif ($request->id) {
+
+        // DB::table('oauth_access_tokens')
+        //   ->where('user_id', $request->id)
+        //   ->delete();
+
+        // auth()->user()->tokens->each(function ($token, $key) {
+        //     $token->delete();
+        // });
+
+        $this->guard()->logout();
+
+
+        return response()->json('Logged out successfully', 200);
+
+      }
+>>>>>>> modemb/dev
     }
 
     /**

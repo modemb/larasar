@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
 /*!
+=======
+@import url(https://fonts.googleapis.com/css?family=Nunito);/*!
+>>>>>>> modemb/dev
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
  * Copyright 2011-2019 Twitter, Inc.
@@ -136,7 +140,11 @@ dt {
 }
 
 dd {
+<<<<<<< HEAD
   margin-bottom: 0.5rem;
+=======
+  margin-bottom: .5rem;
+>>>>>>> modemb/dev
   margin-left: 0;
 }
 
@@ -162,11 +170,19 @@ sup {
 }
 
 sub {
+<<<<<<< HEAD
   bottom: -0.25em;
 }
 
 sup {
   top: -0.5em;
+=======
+  bottom: -.25em;
+}
+
+sup {
+  top: -.5em;
+>>>>>>> modemb/dev
 }
 
 a {
@@ -279,37 +295,67 @@ select {
 }
 
 button,
+<<<<<<< HEAD
 [type=button],
 [type=reset],
 [type=submit] {
+=======
+[type="button"],
+[type="reset"],
+[type="submit"] {
+>>>>>>> modemb/dev
   -webkit-appearance: button;
 }
 
 button:not(:disabled),
+<<<<<<< HEAD
 [type=button]:not(:disabled),
 [type=reset]:not(:disabled),
 [type=submit]:not(:disabled) {
+=======
+[type="button"]:not(:disabled),
+[type="reset"]:not(:disabled),
+[type="submit"]:not(:disabled) {
+>>>>>>> modemb/dev
   cursor: pointer;
 }
 
 button::-moz-focus-inner,
+<<<<<<< HEAD
 [type=button]::-moz-focus-inner,
 [type=reset]::-moz-focus-inner,
 [type=submit]::-moz-focus-inner {
+=======
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+>>>>>>> modemb/dev
   padding: 0;
   border-style: none;
 }
 
+<<<<<<< HEAD
 input[type=radio],
 input[type=checkbox] {
+=======
+input[type="radio"],
+input[type="checkbox"] {
+>>>>>>> modemb/dev
   box-sizing: border-box;
   padding: 0;
 }
 
+<<<<<<< HEAD
 input[type=date],
 input[type=time],
 input[type=datetime-local],
 input[type=month] {
+=======
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+>>>>>>> modemb/dev
   -webkit-appearance: listbox;
 }
 
@@ -330,7 +376,11 @@ legend {
   width: 100%;
   max-width: 100%;
   padding: 0;
+<<<<<<< HEAD
   margin-bottom: 0.5rem;
+=======
+  margin-bottom: .5rem;
+>>>>>>> modemb/dev
   font-size: 1.5rem;
   line-height: inherit;
   color: inherit;
@@ -341,17 +391,30 @@ progress {
   vertical-align: baseline;
 }
 
+<<<<<<< HEAD
 [type=number]::-webkit-inner-spin-button,
 [type=number]::-webkit-outer-spin-button {
   height: auto;
 }
 
 [type=search] {
+=======
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+[type="search"] {
+>>>>>>> modemb/dev
   outline-offset: -2px;
   -webkit-appearance: none;
 }
 
+<<<<<<< HEAD
 [type=search]::-webkit-search-decoration {
+=======
+[type="search"]::-webkit-search-decoration {
+>>>>>>> modemb/dev
   -webkit-appearance: none;
 }
 
@@ -507,7 +570,11 @@ mark,
 }
 
 .blockquote-footer::before {
+<<<<<<< HEAD
   content: "— ";
+=======
+  content: "\2014\00A0";
+>>>>>>> modemb/dev
 }
 
 .img-fluid {
@@ -632,11 +699,16 @@ pre code {
 }
 
 .no-gutters > .col,
+<<<<<<< HEAD
 .no-gutters > [class*=col-] {
+=======
+.no-gutters > [class*="col-"] {
+>>>>>>> modemb/dev
   padding-right: 0;
   padding-left: 0;
 }
 
+<<<<<<< HEAD
 .col-xl,
 .col-xl-auto,
 .col-xl-12,
@@ -707,6 +779,78 @@ pre code {
 .col-3,
 .col-2,
 .col-1 {
+=======
+.col-1,
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10,
+.col-11,
+.col-12,
+.col,
+.col-auto,
+.col-sm-1,
+.col-sm-2,
+.col-sm-3,
+.col-sm-4,
+.col-sm-5,
+.col-sm-6,
+.col-sm-7,
+.col-sm-8,
+.col-sm-9,
+.col-sm-10,
+.col-sm-11,
+.col-sm-12,
+.col-sm,
+.col-sm-auto,
+.col-md-1,
+.col-md-2,
+.col-md-3,
+.col-md-4,
+.col-md-5,
+.col-md-6,
+.col-md-7,
+.col-md-8,
+.col-md-9,
+.col-md-10,
+.col-md-11,
+.col-md-12,
+.col-md,
+.col-md-auto,
+.col-lg-1,
+.col-lg-2,
+.col-lg-3,
+.col-lg-4,
+.col-lg-5,
+.col-lg-6,
+.col-lg-7,
+.col-lg-8,
+.col-lg-9,
+.col-lg-10,
+.col-lg-11,
+.col-lg-12,
+.col-lg,
+.col-lg-auto,
+.col-xl-1,
+.col-xl-2,
+.col-xl-3,
+.col-xl-4,
+.col-xl-5,
+.col-xl-6,
+.col-xl-7,
+.col-xl-8,
+.col-xl-9,
+.col-xl-10,
+.col-xl-11,
+.col-xl-12,
+.col-xl,
+.col-xl-auto {
+>>>>>>> modemb/dev
   position: relative;
   width: 100%;
   padding-right: 15px;
@@ -726,6 +870,7 @@ pre code {
 }
 
 .col-1 {
+<<<<<<< HEAD
   flex: 0 0 8.3333333333%;
   max-width: 8.3333333333%;
 }
@@ -733,6 +878,15 @@ pre code {
 .col-2 {
   flex: 0 0 16.6666666667%;
   max-width: 16.6666666667%;
+=======
+  flex: 0 0 8.33333333%;
+  max-width: 8.33333333%;
+}
+
+.col-2 {
+  flex: 0 0 16.66666667%;
+  max-width: 16.66666667%;
+>>>>>>> modemb/dev
 }
 
 .col-3 {
@@ -741,6 +895,7 @@ pre code {
 }
 
 .col-4 {
+<<<<<<< HEAD
   flex: 0 0 33.3333333333%;
   max-width: 33.3333333333%;
 }
@@ -748,6 +903,15 @@ pre code {
 .col-5 {
   flex: 0 0 41.6666666667%;
   max-width: 41.6666666667%;
+=======
+  flex: 0 0 33.33333333%;
+  max-width: 33.33333333%;
+}
+
+.col-5 {
+  flex: 0 0 41.66666667%;
+  max-width: 41.66666667%;
+>>>>>>> modemb/dev
 }
 
 .col-6 {
@@ -756,6 +920,7 @@ pre code {
 }
 
 .col-7 {
+<<<<<<< HEAD
   flex: 0 0 58.3333333333%;
   max-width: 58.3333333333%;
 }
@@ -763,6 +928,15 @@ pre code {
 .col-8 {
   flex: 0 0 66.6666666667%;
   max-width: 66.6666666667%;
+=======
+  flex: 0 0 58.33333333%;
+  max-width: 58.33333333%;
+}
+
+.col-8 {
+  flex: 0 0 66.66666667%;
+  max-width: 66.66666667%;
+>>>>>>> modemb/dev
 }
 
 .col-9 {
@@ -771,6 +945,7 @@ pre code {
 }
 
 .col-10 {
+<<<<<<< HEAD
   flex: 0 0 83.3333333333%;
   max-width: 83.3333333333%;
 }
@@ -778,6 +953,15 @@ pre code {
 .col-11 {
   flex: 0 0 91.6666666667%;
   max-width: 91.6666666667%;
+=======
+  flex: 0 0 83.33333333%;
+  max-width: 83.33333333%;
+}
+
+.col-11 {
+  flex: 0 0 91.66666667%;
+  max-width: 91.66666667%;
+>>>>>>> modemb/dev
 }
 
 .col-12 {
@@ -846,11 +1030,19 @@ pre code {
 }
 
 .offset-1 {
+<<<<<<< HEAD
   margin-left: 8.3333333333%;
 }
 
 .offset-2 {
   margin-left: 16.6666666667%;
+=======
+  margin-left: 8.33333333%;
+}
+
+.offset-2 {
+  margin-left: 16.66666667%;
+>>>>>>> modemb/dev
 }
 
 .offset-3 {
@@ -858,11 +1050,19 @@ pre code {
 }
 
 .offset-4 {
+<<<<<<< HEAD
   margin-left: 33.3333333333%;
 }
 
 .offset-5 {
   margin-left: 41.6666666667%;
+=======
+  margin-left: 33.33333333%;
+}
+
+.offset-5 {
+  margin-left: 41.66666667%;
+>>>>>>> modemb/dev
 }
 
 .offset-6 {
@@ -870,11 +1070,19 @@ pre code {
 }
 
 .offset-7 {
+<<<<<<< HEAD
   margin-left: 58.3333333333%;
 }
 
 .offset-8 {
   margin-left: 66.6666666667%;
+=======
+  margin-left: 58.33333333%;
+}
+
+.offset-8 {
+  margin-left: 66.66666667%;
+>>>>>>> modemb/dev
 }
 
 .offset-9 {
@@ -882,11 +1090,19 @@ pre code {
 }
 
 .offset-10 {
+<<<<<<< HEAD
   margin-left: 83.3333333333%;
 }
 
 .offset-11 {
   margin-left: 91.6666666667%;
+=======
+  margin-left: 83.33333333%;
+}
+
+.offset-11 {
+  margin-left: 91.66666667%;
+>>>>>>> modemb/dev
 }
 
 @media (min-width: 576px) {
@@ -903,6 +1119,7 @@ pre code {
   }
 
   .col-sm-1 {
+<<<<<<< HEAD
     flex: 0 0 8.3333333333%;
     max-width: 8.3333333333%;
   }
@@ -910,6 +1127,15 @@ pre code {
   .col-sm-2 {
     flex: 0 0 16.6666666667%;
     max-width: 16.6666666667%;
+=======
+    flex: 0 0 8.33333333%;
+    max-width: 8.33333333%;
+  }
+
+  .col-sm-2 {
+    flex: 0 0 16.66666667%;
+    max-width: 16.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-sm-3 {
@@ -918,6 +1144,7 @@ pre code {
   }
 
   .col-sm-4 {
+<<<<<<< HEAD
     flex: 0 0 33.3333333333%;
     max-width: 33.3333333333%;
   }
@@ -925,6 +1152,15 @@ pre code {
   .col-sm-5 {
     flex: 0 0 41.6666666667%;
     max-width: 41.6666666667%;
+=======
+    flex: 0 0 33.33333333%;
+    max-width: 33.33333333%;
+  }
+
+  .col-sm-5 {
+    flex: 0 0 41.66666667%;
+    max-width: 41.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-sm-6 {
@@ -933,6 +1169,7 @@ pre code {
   }
 
   .col-sm-7 {
+<<<<<<< HEAD
     flex: 0 0 58.3333333333%;
     max-width: 58.3333333333%;
   }
@@ -940,6 +1177,15 @@ pre code {
   .col-sm-8 {
     flex: 0 0 66.6666666667%;
     max-width: 66.6666666667%;
+=======
+    flex: 0 0 58.33333333%;
+    max-width: 58.33333333%;
+  }
+
+  .col-sm-8 {
+    flex: 0 0 66.66666667%;
+    max-width: 66.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-sm-9 {
@@ -948,6 +1194,7 @@ pre code {
   }
 
   .col-sm-10 {
+<<<<<<< HEAD
     flex: 0 0 83.3333333333%;
     max-width: 83.3333333333%;
   }
@@ -955,6 +1202,15 @@ pre code {
   .col-sm-11 {
     flex: 0 0 91.6666666667%;
     max-width: 91.6666666667%;
+=======
+    flex: 0 0 83.33333333%;
+    max-width: 83.33333333%;
+  }
+
+  .col-sm-11 {
+    flex: 0 0 91.66666667%;
+    max-width: 91.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-sm-12 {
@@ -1027,11 +1283,19 @@ pre code {
   }
 
   .offset-sm-1 {
+<<<<<<< HEAD
     margin-left: 8.3333333333%;
   }
 
   .offset-sm-2 {
     margin-left: 16.6666666667%;
+=======
+    margin-left: 8.33333333%;
+  }
+
+  .offset-sm-2 {
+    margin-left: 16.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-sm-3 {
@@ -1039,11 +1303,19 @@ pre code {
   }
 
   .offset-sm-4 {
+<<<<<<< HEAD
     margin-left: 33.3333333333%;
   }
 
   .offset-sm-5 {
     margin-left: 41.6666666667%;
+=======
+    margin-left: 33.33333333%;
+  }
+
+  .offset-sm-5 {
+    margin-left: 41.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-sm-6 {
@@ -1051,11 +1323,19 @@ pre code {
   }
 
   .offset-sm-7 {
+<<<<<<< HEAD
     margin-left: 58.3333333333%;
   }
 
   .offset-sm-8 {
     margin-left: 66.6666666667%;
+=======
+    margin-left: 58.33333333%;
+  }
+
+  .offset-sm-8 {
+    margin-left: 66.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-sm-9 {
@@ -1063,11 +1343,19 @@ pre code {
   }
 
   .offset-sm-10 {
+<<<<<<< HEAD
     margin-left: 83.3333333333%;
   }
 
   .offset-sm-11 {
     margin-left: 91.6666666667%;
+=======
+    margin-left: 83.33333333%;
+  }
+
+  .offset-sm-11 {
+    margin-left: 91.66666667%;
+>>>>>>> modemb/dev
   }
 }
 
@@ -1085,6 +1373,7 @@ pre code {
   }
 
   .col-md-1 {
+<<<<<<< HEAD
     flex: 0 0 8.3333333333%;
     max-width: 8.3333333333%;
   }
@@ -1092,6 +1381,15 @@ pre code {
   .col-md-2 {
     flex: 0 0 16.6666666667%;
     max-width: 16.6666666667%;
+=======
+    flex: 0 0 8.33333333%;
+    max-width: 8.33333333%;
+  }
+
+  .col-md-2 {
+    flex: 0 0 16.66666667%;
+    max-width: 16.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-md-3 {
@@ -1100,6 +1398,7 @@ pre code {
   }
 
   .col-md-4 {
+<<<<<<< HEAD
     flex: 0 0 33.3333333333%;
     max-width: 33.3333333333%;
   }
@@ -1107,6 +1406,15 @@ pre code {
   .col-md-5 {
     flex: 0 0 41.6666666667%;
     max-width: 41.6666666667%;
+=======
+    flex: 0 0 33.33333333%;
+    max-width: 33.33333333%;
+  }
+
+  .col-md-5 {
+    flex: 0 0 41.66666667%;
+    max-width: 41.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-md-6 {
@@ -1115,6 +1423,7 @@ pre code {
   }
 
   .col-md-7 {
+<<<<<<< HEAD
     flex: 0 0 58.3333333333%;
     max-width: 58.3333333333%;
   }
@@ -1122,6 +1431,15 @@ pre code {
   .col-md-8 {
     flex: 0 0 66.6666666667%;
     max-width: 66.6666666667%;
+=======
+    flex: 0 0 58.33333333%;
+    max-width: 58.33333333%;
+  }
+
+  .col-md-8 {
+    flex: 0 0 66.66666667%;
+    max-width: 66.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-md-9 {
@@ -1130,6 +1448,7 @@ pre code {
   }
 
   .col-md-10 {
+<<<<<<< HEAD
     flex: 0 0 83.3333333333%;
     max-width: 83.3333333333%;
   }
@@ -1137,6 +1456,15 @@ pre code {
   .col-md-11 {
     flex: 0 0 91.6666666667%;
     max-width: 91.6666666667%;
+=======
+    flex: 0 0 83.33333333%;
+    max-width: 83.33333333%;
+  }
+
+  .col-md-11 {
+    flex: 0 0 91.66666667%;
+    max-width: 91.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-md-12 {
@@ -1209,11 +1537,19 @@ pre code {
   }
 
   .offset-md-1 {
+<<<<<<< HEAD
     margin-left: 8.3333333333%;
   }
 
   .offset-md-2 {
     margin-left: 16.6666666667%;
+=======
+    margin-left: 8.33333333%;
+  }
+
+  .offset-md-2 {
+    margin-left: 16.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-md-3 {
@@ -1221,11 +1557,19 @@ pre code {
   }
 
   .offset-md-4 {
+<<<<<<< HEAD
     margin-left: 33.3333333333%;
   }
 
   .offset-md-5 {
     margin-left: 41.6666666667%;
+=======
+    margin-left: 33.33333333%;
+  }
+
+  .offset-md-5 {
+    margin-left: 41.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-md-6 {
@@ -1233,11 +1577,19 @@ pre code {
   }
 
   .offset-md-7 {
+<<<<<<< HEAD
     margin-left: 58.3333333333%;
   }
 
   .offset-md-8 {
     margin-left: 66.6666666667%;
+=======
+    margin-left: 58.33333333%;
+  }
+
+  .offset-md-8 {
+    margin-left: 66.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-md-9 {
@@ -1245,11 +1597,19 @@ pre code {
   }
 
   .offset-md-10 {
+<<<<<<< HEAD
     margin-left: 83.3333333333%;
   }
 
   .offset-md-11 {
     margin-left: 91.6666666667%;
+=======
+    margin-left: 83.33333333%;
+  }
+
+  .offset-md-11 {
+    margin-left: 91.66666667%;
+>>>>>>> modemb/dev
   }
 }
 
@@ -1267,6 +1627,7 @@ pre code {
   }
 
   .col-lg-1 {
+<<<<<<< HEAD
     flex: 0 0 8.3333333333%;
     max-width: 8.3333333333%;
   }
@@ -1274,6 +1635,15 @@ pre code {
   .col-lg-2 {
     flex: 0 0 16.6666666667%;
     max-width: 16.6666666667%;
+=======
+    flex: 0 0 8.33333333%;
+    max-width: 8.33333333%;
+  }
+
+  .col-lg-2 {
+    flex: 0 0 16.66666667%;
+    max-width: 16.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-lg-3 {
@@ -1282,6 +1652,7 @@ pre code {
   }
 
   .col-lg-4 {
+<<<<<<< HEAD
     flex: 0 0 33.3333333333%;
     max-width: 33.3333333333%;
   }
@@ -1289,6 +1660,15 @@ pre code {
   .col-lg-5 {
     flex: 0 0 41.6666666667%;
     max-width: 41.6666666667%;
+=======
+    flex: 0 0 33.33333333%;
+    max-width: 33.33333333%;
+  }
+
+  .col-lg-5 {
+    flex: 0 0 41.66666667%;
+    max-width: 41.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-lg-6 {
@@ -1297,6 +1677,7 @@ pre code {
   }
 
   .col-lg-7 {
+<<<<<<< HEAD
     flex: 0 0 58.3333333333%;
     max-width: 58.3333333333%;
   }
@@ -1304,6 +1685,15 @@ pre code {
   .col-lg-8 {
     flex: 0 0 66.6666666667%;
     max-width: 66.6666666667%;
+=======
+    flex: 0 0 58.33333333%;
+    max-width: 58.33333333%;
+  }
+
+  .col-lg-8 {
+    flex: 0 0 66.66666667%;
+    max-width: 66.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-lg-9 {
@@ -1312,6 +1702,7 @@ pre code {
   }
 
   .col-lg-10 {
+<<<<<<< HEAD
     flex: 0 0 83.3333333333%;
     max-width: 83.3333333333%;
   }
@@ -1319,6 +1710,15 @@ pre code {
   .col-lg-11 {
     flex: 0 0 91.6666666667%;
     max-width: 91.6666666667%;
+=======
+    flex: 0 0 83.33333333%;
+    max-width: 83.33333333%;
+  }
+
+  .col-lg-11 {
+    flex: 0 0 91.66666667%;
+    max-width: 91.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-lg-12 {
@@ -1391,11 +1791,19 @@ pre code {
   }
 
   .offset-lg-1 {
+<<<<<<< HEAD
     margin-left: 8.3333333333%;
   }
 
   .offset-lg-2 {
     margin-left: 16.6666666667%;
+=======
+    margin-left: 8.33333333%;
+  }
+
+  .offset-lg-2 {
+    margin-left: 16.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-lg-3 {
@@ -1403,11 +1811,19 @@ pre code {
   }
 
   .offset-lg-4 {
+<<<<<<< HEAD
     margin-left: 33.3333333333%;
   }
 
   .offset-lg-5 {
     margin-left: 41.6666666667%;
+=======
+    margin-left: 33.33333333%;
+  }
+
+  .offset-lg-5 {
+    margin-left: 41.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-lg-6 {
@@ -1415,11 +1831,19 @@ pre code {
   }
 
   .offset-lg-7 {
+<<<<<<< HEAD
     margin-left: 58.3333333333%;
   }
 
   .offset-lg-8 {
     margin-left: 66.6666666667%;
+=======
+    margin-left: 58.33333333%;
+  }
+
+  .offset-lg-8 {
+    margin-left: 66.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-lg-9 {
@@ -1427,11 +1851,19 @@ pre code {
   }
 
   .offset-lg-10 {
+<<<<<<< HEAD
     margin-left: 83.3333333333%;
   }
 
   .offset-lg-11 {
     margin-left: 91.6666666667%;
+=======
+    margin-left: 83.33333333%;
+  }
+
+  .offset-lg-11 {
+    margin-left: 91.66666667%;
+>>>>>>> modemb/dev
   }
 }
 
@@ -1449,6 +1881,7 @@ pre code {
   }
 
   .col-xl-1 {
+<<<<<<< HEAD
     flex: 0 0 8.3333333333%;
     max-width: 8.3333333333%;
   }
@@ -1456,6 +1889,15 @@ pre code {
   .col-xl-2 {
     flex: 0 0 16.6666666667%;
     max-width: 16.6666666667%;
+=======
+    flex: 0 0 8.33333333%;
+    max-width: 8.33333333%;
+  }
+
+  .col-xl-2 {
+    flex: 0 0 16.66666667%;
+    max-width: 16.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-xl-3 {
@@ -1464,6 +1906,7 @@ pre code {
   }
 
   .col-xl-4 {
+<<<<<<< HEAD
     flex: 0 0 33.3333333333%;
     max-width: 33.3333333333%;
   }
@@ -1471,6 +1914,15 @@ pre code {
   .col-xl-5 {
     flex: 0 0 41.6666666667%;
     max-width: 41.6666666667%;
+=======
+    flex: 0 0 33.33333333%;
+    max-width: 33.33333333%;
+  }
+
+  .col-xl-5 {
+    flex: 0 0 41.66666667%;
+    max-width: 41.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-xl-6 {
@@ -1479,6 +1931,7 @@ pre code {
   }
 
   .col-xl-7 {
+<<<<<<< HEAD
     flex: 0 0 58.3333333333%;
     max-width: 58.3333333333%;
   }
@@ -1486,6 +1939,15 @@ pre code {
   .col-xl-8 {
     flex: 0 0 66.6666666667%;
     max-width: 66.6666666667%;
+=======
+    flex: 0 0 58.33333333%;
+    max-width: 58.33333333%;
+  }
+
+  .col-xl-8 {
+    flex: 0 0 66.66666667%;
+    max-width: 66.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-xl-9 {
@@ -1494,6 +1956,7 @@ pre code {
   }
 
   .col-xl-10 {
+<<<<<<< HEAD
     flex: 0 0 83.3333333333%;
     max-width: 83.3333333333%;
   }
@@ -1501,6 +1964,15 @@ pre code {
   .col-xl-11 {
     flex: 0 0 91.6666666667%;
     max-width: 91.6666666667%;
+=======
+    flex: 0 0 83.33333333%;
+    max-width: 83.33333333%;
+  }
+
+  .col-xl-11 {
+    flex: 0 0 91.66666667%;
+    max-width: 91.66666667%;
+>>>>>>> modemb/dev
   }
 
   .col-xl-12 {
@@ -1573,11 +2045,19 @@ pre code {
   }
 
   .offset-xl-1 {
+<<<<<<< HEAD
     margin-left: 8.3333333333%;
   }
 
   .offset-xl-2 {
     margin-left: 16.6666666667%;
+=======
+    margin-left: 8.33333333%;
+  }
+
+  .offset-xl-2 {
+    margin-left: 16.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-xl-3 {
@@ -1585,11 +2065,19 @@ pre code {
   }
 
   .offset-xl-4 {
+<<<<<<< HEAD
     margin-left: 33.3333333333%;
   }
 
   .offset-xl-5 {
     margin-left: 41.6666666667%;
+=======
+    margin-left: 33.33333333%;
+  }
+
+  .offset-xl-5 {
+    margin-left: 41.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-xl-6 {
@@ -1597,11 +2085,19 @@ pre code {
   }
 
   .offset-xl-7 {
+<<<<<<< HEAD
     margin-left: 58.3333333333%;
   }
 
   .offset-xl-8 {
     margin-left: 66.6666666667%;
+=======
+    margin-left: 58.33333333%;
+  }
+
+  .offset-xl-8 {
+    margin-left: 66.66666667%;
+>>>>>>> modemb/dev
   }
 
   .offset-xl-9 {
@@ -1609,11 +2105,19 @@ pre code {
   }
 
   .offset-xl-10 {
+<<<<<<< HEAD
     margin-left: 83.3333333333%;
   }
 
   .offset-xl-11 {
     margin-left: 91.6666666667%;
+=======
+    margin-left: 83.33333333%;
+  }
+
+  .offset-xl-11 {
+    margin-left: 91.66666667%;
+>>>>>>> modemb/dev
   }
 }
 
@@ -2124,7 +2628,11 @@ textarea.form-control {
 }
 
 .form-row > .col,
+<<<<<<< HEAD
 .form-row > [class*=col-] {
+=======
+.form-row > [class*="col-"] {
+>>>>>>> modemb/dev
   padding-right: 5px;
   padding-left: 5px;
 }
@@ -2178,7 +2686,11 @@ textarea.form-control {
   display: none;
   max-width: 100%;
   padding: 0.25rem 0.5rem;
+<<<<<<< HEAD
   margin-top: 0.1rem;
+=======
+  margin-top: .1rem;
+>>>>>>> modemb/dev
   font-size: 0.7875rem;
   line-height: 1.6;
   color: #fff;
@@ -2320,7 +2832,11 @@ textarea.form-control.is-valid {
   display: none;
   max-width: 100%;
   padding: 0.25rem 0.5rem;
+<<<<<<< HEAD
   margin-top: 0.1rem;
+=======
+  margin-top: .1rem;
+>>>>>>> modemb/dev
   font-size: 0.7875rem;
   line-height: 1.6;
   color: #fff;
@@ -3200,9 +3716,15 @@ fieldset:disabled a.btn {
   margin-top: 0.5rem;
 }
 
+<<<<<<< HEAD
 input[type=submit].btn-block,
 input[type=reset].btn-block,
 input[type=button].btn-block {
+=======
+input[type="submit"].btn-block,
+input[type="reset"].btn-block,
+input[type="button"].btn-block {
+>>>>>>> modemb/dev
   width: 100%;
 }
 
@@ -3427,10 +3949,17 @@ input[type=button].btn-block {
   vertical-align: 0;
 }
 
+<<<<<<< HEAD
 .dropdown-menu[x-placement^=top],
 .dropdown-menu[x-placement^=right],
 .dropdown-menu[x-placement^=bottom],
 .dropdown-menu[x-placement^=left] {
+=======
+.dropdown-menu[x-placement^="top"],
+.dropdown-menu[x-placement^="right"],
+.dropdown-menu[x-placement^="bottom"],
+.dropdown-menu[x-placement^="left"] {
+>>>>>>> modemb/dev
   right: auto;
   bottom: auto;
 }
@@ -3609,10 +4138,17 @@ input[type=button].btn-block {
   margin-bottom: 0;
 }
 
+<<<<<<< HEAD
 .btn-group-toggle > .btn input[type=radio],
 .btn-group-toggle > .btn input[type=checkbox],
 .btn-group-toggle > .btn-group > .btn input[type=radio],
 .btn-group-toggle > .btn-group > .btn input[type=checkbox] {
+=======
+.btn-group-toggle > .btn input[type="radio"],
+.btn-group-toggle > .btn input[type="checkbox"],
+.btn-group-toggle > .btn-group > .btn input[type="radio"],
+.btn-group-toggle > .btn-group > .btn input[type="checkbox"] {
+>>>>>>> modemb/dev
   position: absolute;
   clip: rect(0, 0, 0, 0);
   pointer-events: none;
@@ -3740,8 +4276,13 @@ input[type=button].btn-block {
   border-radius: 0.25rem;
 }
 
+<<<<<<< HEAD
 .input-group-text input[type=radio],
 .input-group-text input[type=checkbox] {
+=======
+.input-group-text input[type="radio"],
+.input-group-text input[type="checkbox"] {
+>>>>>>> modemb/dev
   margin-top: 0;
 }
 
@@ -3877,7 +4418,11 @@ input[type=button].btn-block {
   width: 1rem;
   height: 1rem;
   content: "";
+<<<<<<< HEAD
   background: no-repeat 50%/50% 50%;
+=======
+  background: no-repeat 50% / 50% 50%;
+>>>>>>> modemb/dev
 }
 
 .custom-checkbox .custom-control-label::before {
@@ -5852,7 +6397,11 @@ a.badge-dark.focus {
   line-height: 1;
   color: #000;
   text-shadow: 0 1px 0 #fff;
+<<<<<<< HEAD
   opacity: 0.5;
+=======
+  opacity: .5;
+>>>>>>> modemb/dev
 }
 
 .close:hover {
@@ -5862,7 +6411,11 @@ a.badge-dark.focus {
 
 .close:not(:disabled):not(.disabled):hover,
 .close:not(:disabled):not(.disabled):focus {
+<<<<<<< HEAD
   opacity: 0.75;
+=======
+  opacity: .75;
+>>>>>>> modemb/dev
 }
 
 button.close {
@@ -6079,11 +6632,19 @@ a.close.disabled {
 }
 
 .modal-footer > :not(:first-child) {
+<<<<<<< HEAD
   margin-left: 0.25rem;
 }
 
 .modal-footer > :not(:last-child) {
   margin-right: 0.25rem;
+=======
+  margin-left: .25rem;
+}
+
+.modal-footer > :not(:last-child) {
+  margin-right: .25rem;
+>>>>>>> modemb/dev
 }
 
 .modal-scrollbar-measure {
@@ -6177,72 +6738,120 @@ a.close.disabled {
 }
 
 .bs-tooltip-top,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=top] {
+=======
+.bs-tooltip-auto[x-placement^="top"] {
+>>>>>>> modemb/dev
   padding: 0.4rem 0;
 }
 
 .bs-tooltip-top .arrow,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=top] .arrow {
+=======
+.bs-tooltip-auto[x-placement^="top"] .arrow {
+>>>>>>> modemb/dev
   bottom: 0;
 }
 
 .bs-tooltip-top .arrow::before,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=top] .arrow::before {
+=======
+.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+>>>>>>> modemb/dev
   top: 0;
   border-width: 0.4rem 0.4rem 0;
   border-top-color: #000;
 }
 
 .bs-tooltip-right,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=right] {
+=======
+.bs-tooltip-auto[x-placement^="right"] {
+>>>>>>> modemb/dev
   padding: 0 0.4rem;
 }
 
 .bs-tooltip-right .arrow,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=right] .arrow {
+=======
+.bs-tooltip-auto[x-placement^="right"] .arrow {
+>>>>>>> modemb/dev
   left: 0;
   width: 0.4rem;
   height: 0.8rem;
 }
 
 .bs-tooltip-right .arrow::before,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=right] .arrow::before {
+=======
+.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+>>>>>>> modemb/dev
   right: 0;
   border-width: 0.4rem 0.4rem 0.4rem 0;
   border-right-color: #000;
 }
 
 .bs-tooltip-bottom,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=bottom] {
+=======
+.bs-tooltip-auto[x-placement^="bottom"] {
+>>>>>>> modemb/dev
   padding: 0.4rem 0;
 }
 
 .bs-tooltip-bottom .arrow,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=bottom] .arrow {
+=======
+.bs-tooltip-auto[x-placement^="bottom"] .arrow {
+>>>>>>> modemb/dev
   top: 0;
 }
 
 .bs-tooltip-bottom .arrow::before,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=bottom] .arrow::before {
+=======
+.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+>>>>>>> modemb/dev
   bottom: 0;
   border-width: 0 0.4rem 0.4rem;
   border-bottom-color: #000;
 }
 
 .bs-tooltip-left,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=left] {
+=======
+.bs-tooltip-auto[x-placement^="left"] {
+>>>>>>> modemb/dev
   padding: 0 0.4rem;
 }
 
 .bs-tooltip-left .arrow,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=left] .arrow {
+=======
+.bs-tooltip-auto[x-placement^="left"] .arrow {
+>>>>>>> modemb/dev
   right: 0;
   width: 0.4rem;
   height: 0.8rem;
 }
 
 .bs-tooltip-left .arrow::before,
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=left] .arrow::before {
+=======
+.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+>>>>>>> modemb/dev
   left: 0;
   border-width: 0.4rem 0 0.4rem 0.4rem;
   border-left-color: #000;
@@ -6304,36 +6913,60 @@ a.close.disabled {
 }
 
 .bs-popover-top,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=top] {
+=======
+.bs-popover-auto[x-placement^="top"] {
+>>>>>>> modemb/dev
   margin-bottom: 0.5rem;
 }
 
 .bs-popover-top > .arrow,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=top] > .arrow {
+=======
+.bs-popover-auto[x-placement^="top"] > .arrow {
+>>>>>>> modemb/dev
   bottom: calc((0.5rem + 1px) * -1);
 }
 
 .bs-popover-top > .arrow::before,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=top] > .arrow::before {
+=======
+.bs-popover-auto[x-placement^="top"] > .arrow::before {
+>>>>>>> modemb/dev
   bottom: 0;
   border-width: 0.5rem 0.5rem 0;
   border-top-color: rgba(0, 0, 0, 0.25);
 }
 
 .bs-popover-top > .arrow::after,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=top] > .arrow::after {
+=======
+.bs-popover-auto[x-placement^="top"] > .arrow::after {
+>>>>>>> modemb/dev
   bottom: 1px;
   border-width: 0.5rem 0.5rem 0;
   border-top-color: #fff;
 }
 
 .bs-popover-right,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=right] {
+=======
+.bs-popover-auto[x-placement^="right"] {
+>>>>>>> modemb/dev
   margin-left: 0.5rem;
 }
 
 .bs-popover-right > .arrow,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=right] > .arrow {
+=======
+.bs-popover-auto[x-placement^="right"] > .arrow {
+>>>>>>> modemb/dev
   left: calc((0.5rem + 1px) * -1);
   width: 0.5rem;
   height: 1rem;
@@ -6341,45 +6974,73 @@ a.close.disabled {
 }
 
 .bs-popover-right > .arrow::before,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=right] > .arrow::before {
+=======
+.bs-popover-auto[x-placement^="right"] > .arrow::before {
+>>>>>>> modemb/dev
   left: 0;
   border-width: 0.5rem 0.5rem 0.5rem 0;
   border-right-color: rgba(0, 0, 0, 0.25);
 }
 
 .bs-popover-right > .arrow::after,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=right] > .arrow::after {
+=======
+.bs-popover-auto[x-placement^="right"] > .arrow::after {
+>>>>>>> modemb/dev
   left: 1px;
   border-width: 0.5rem 0.5rem 0.5rem 0;
   border-right-color: #fff;
 }
 
 .bs-popover-bottom,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=bottom] {
+=======
+.bs-popover-auto[x-placement^="bottom"] {
+>>>>>>> modemb/dev
   margin-top: 0.5rem;
 }
 
 .bs-popover-bottom > .arrow,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=bottom] > .arrow {
+=======
+.bs-popover-auto[x-placement^="bottom"] > .arrow {
+>>>>>>> modemb/dev
   top: calc((0.5rem + 1px) * -1);
 }
 
 .bs-popover-bottom > .arrow::before,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=bottom] > .arrow::before {
+=======
+.bs-popover-auto[x-placement^="bottom"] > .arrow::before {
+>>>>>>> modemb/dev
   top: 0;
   border-width: 0 0.5rem 0.5rem 0.5rem;
   border-bottom-color: rgba(0, 0, 0, 0.25);
 }
 
 .bs-popover-bottom > .arrow::after,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=bottom] > .arrow::after {
+=======
+.bs-popover-auto[x-placement^="bottom"] > .arrow::after {
+>>>>>>> modemb/dev
   top: 1px;
   border-width: 0 0.5rem 0.5rem 0.5rem;
   border-bottom-color: #fff;
 }
 
 .bs-popover-bottom .popover-header::before,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=bottom] .popover-header::before {
+=======
+.bs-popover-auto[x-placement^="bottom"] .popover-header::before {
+>>>>>>> modemb/dev
   position: absolute;
   top: 0;
   left: 50%;
@@ -6391,12 +7052,20 @@ a.close.disabled {
 }
 
 .bs-popover-left,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=left] {
+=======
+.bs-popover-auto[x-placement^="left"] {
+>>>>>>> modemb/dev
   margin-right: 0.5rem;
 }
 
 .bs-popover-left > .arrow,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=left] > .arrow {
+=======
+.bs-popover-auto[x-placement^="left"] > .arrow {
+>>>>>>> modemb/dev
   right: calc((0.5rem + 1px) * -1);
   width: 0.5rem;
   height: 1rem;
@@ -6404,14 +7073,22 @@ a.close.disabled {
 }
 
 .bs-popover-left > .arrow::before,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=left] > .arrow::before {
+=======
+.bs-popover-auto[x-placement^="left"] > .arrow::before {
+>>>>>>> modemb/dev
   right: 0;
   border-width: 0.5rem 0 0.5rem 0.5rem;
   border-left-color: rgba(0, 0, 0, 0.25);
 }
 
 .bs-popover-left > .arrow::after,
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=left] > .arrow::after {
+=======
+.bs-popover-auto[x-placement^="left"] > .arrow::after {
+>>>>>>> modemb/dev
   right: 1px;
   border-width: 0.5rem 0 0.5rem 0.5rem;
   border-left-color: #fff;
@@ -6562,7 +7239,11 @@ a.close.disabled {
   display: inline-block;
   width: 20px;
   height: 20px;
+<<<<<<< HEAD
   background: no-repeat 50%/100% 100%;
+=======
+  background: no-repeat 50% / 100% 100%;
+>>>>>>> modemb/dev
 }
 
 .carousel-control-prev-icon {
@@ -6600,7 +7281,11 @@ a.close.disabled {
   background-clip: padding-box;
   border-top: 10px solid transparent;
   border-bottom: 10px solid transparent;
+<<<<<<< HEAD
   opacity: 0.5;
+=======
+  opacity: .5;
+>>>>>>> modemb/dev
   transition: opacity 0.6s ease;
 }
 
@@ -6646,8 +7331,13 @@ a.close.disabled {
   border: 0.25em solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
+<<<<<<< HEAD
   -webkit-animation: spinner-border 0.75s linear infinite;
           animation: spinner-border 0.75s linear infinite;
+=======
+  -webkit-animation: spinner-border .75s linear infinite;
+          animation: spinner-border .75s linear infinite;
+>>>>>>> modemb/dev
 }
 
 .spinner-border-sm {
@@ -6684,8 +7374,13 @@ a.close.disabled {
   background-color: currentColor;
   border-radius: 50%;
   opacity: 0;
+<<<<<<< HEAD
   -webkit-animation: spinner-grow 0.75s linear infinite;
           animation: spinner-grow 0.75s linear infinite;
+=======
+  -webkit-animation: spinner-grow .75s linear infinite;
+          animation: spinner-grow .75s linear infinite;
+>>>>>>> modemb/dev
 }
 
 .spinner-grow-sm {
@@ -7193,7 +7888,11 @@ button.bg-dark:focus {
 }
 
 .embed-responsive-21by9::before {
+<<<<<<< HEAD
   padding-top: 42.8571428571%;
+=======
+  padding-top: 42.85714286%;
+>>>>>>> modemb/dev
 }
 
 .embed-responsive-16by9::before {
