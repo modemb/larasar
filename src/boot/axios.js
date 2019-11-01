@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // const headers = axiosInstance.defaults.headers.common
 
-console.log(process.env)
+// console.log(process.env)
 
 // We create our own axios instance and set a custom base URL.
 // Note that if we wouldn't set any config here we do not need

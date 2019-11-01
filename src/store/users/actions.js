@@ -2,10 +2,13 @@ import { axiosInstance } from 'boot/axios'
 import { Notify } from 'quasar'
 
 export async function loginAction ({ commit, dispatch }, payload) {
-  // console.log(commit)
+  // var b = []
+  // var a = [{ user: 'register' }]
+  // a.push(...b)
+  // console.log(b)
   axiosInstance.post('api/users', payload)
     .then((response) => {
-      // console.log(response)
+      // console.log(response, 'loginAction')
       commit('loginMutation', response.data)
       dispatch('authAction') // Action
     })
@@ -13,7 +16,7 @@ export async function loginAction ({ commit, dispatch }, payload) {
       Notify.create({
         color: 'negative',
         position: 'top',
-        message: 'Getting Users Data Error',
+        message: 'Getting loginAction Data Error',
         icon: 'report_problem'
       })
     })
@@ -42,18 +45,18 @@ export async function registerAction ({ commit, dispatch }, payload) {
 }
 
 export async function authAction (context) {
-  // console.log(context.state.token)
+  // console.log(context, 'authAction')
 
-  await axiosInstance.get('api/user')
+  axiosInstance.get('api/user')
     .then((response) => {
-      // console.log(response.data, context)
+      // console.log(response.data, 'authAction')
       context.commit('authMutation', { user: response.data })
     })
     .catch(() => {
       Notify.create({
         color: 'negative',
         position: 'top',
-        message: 'Error Getting User Data',
+        message: 'Error Getting authAction Data',
         icon: 'report_problem'
       })
     })

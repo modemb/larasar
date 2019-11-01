@@ -24,6 +24,7 @@
 // import LoginWithGithub from '~/components/LoginWithGithub'
 
 export default {
+  name: 'public.login',
   data () {
     return {
       email: 'modemb@modemb.com',

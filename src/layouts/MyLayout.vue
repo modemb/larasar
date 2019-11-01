@@ -8,8 +8,7 @@
           round
           @click="leftDrawerOpen = !leftDrawerOpen"
           aria-label="Menu"
-        >
-          <q-icon name="menu" />
+        ><q-icon name="menu" />
         </q-btn>
 
         <q-btn to="/" >
@@ -108,24 +107,25 @@ import { mapGetters } from 'vuex'
 
 export default {
   openURL,
-  // components: {
-  //   LocaleDropdown
-  // },
   data () {
     return {
       leftDrawerOpen: this.$q.platform.is.desktop
     }
   },
   computed: mapGetters({
-    user: 'users/authGetter'
+    user: 'users/authGetter',
+    token: 'users/tokenGetter'
   }),
-  // mounted () {
-  //   this.$store.dispatch('users/authAction')
-  // },
+  mounted () {
+    console.log(this.token)
+    if (this.token) {
+      this.$store.dispatch('users/authAction')
+    }
+  },
   methods: {
     async logout () {
       // Log out the user.
-      await this.$store.dispatch('users/logoutAction', this.user)
+      this.$store.dispatch('users/logoutAction', this.user)
 
       // Redirect to login.
       this.$router.push({ name: 'public.login' })

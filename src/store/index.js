@@ -1,8 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-// import example from './module-example'
-// import Auth from '../boot/auth.js'
 import users from './users'
 
 Vue.use(Vuex)

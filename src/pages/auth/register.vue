@@ -42,6 +42,7 @@
 
 <script>
 export default {
+  name: 'public.register',
   data () {
     return {
       password: '',
