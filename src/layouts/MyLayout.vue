@@ -117,10 +117,7 @@ export default {
     token: 'users/tokenGetter'
   }),
   mounted () {
-    console.log(this.token)
-    if (this.token) {
-      this.$store.dispatch('users/authAction')
-    }
+    if (this.token) this.$store.dispatch('users/authAction')
   },
   methods: {
     async logout () {
