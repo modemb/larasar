@@ -1,10 +1,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // axios boot file (src/boot/axios.js)
 
 import axios from 'axios'
 import store from './../store'
 =======
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 import { Notify } from 'quasar'
@@ -14,6 +17,9 @@ import axios from 'axios'
 
 // console.log(process.env)
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -28,6 +34,7 @@ const axiosInstance = axios.create({
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 console.log(store)
 
 export default ({ Vue }) => {
@@ -36,6 +43,8 @@ export default ({ Vue }) => {
     if (token) request.headers.common['Authorization'] = `Bearer ${token}`
   })// ToBeFix
 =======
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 export default ({ router, store, Vue }) => {
@@ -99,6 +108,9 @@ export default ({ router, store, Vue }) => {
     return Promise.reject(error)
   })
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev

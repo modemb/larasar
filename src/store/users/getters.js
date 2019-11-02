@@ -1,9 +1,12 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 export function someGetter (state) {
   console.log(state)
   return state
 =======
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 export function authGetter (state) {
@@ -14,6 +17,9 @@ export function tokenGetter (state) {
   // console.log(state, 'authGetter')
   return state.token
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev

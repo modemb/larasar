@@ -2,10 +2,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 // import example from './module-example'
 // import Auth from '../boot/auth.js'
 import showcase from './showcase'
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 =======
@@ -20,8 +23,11 @@ export default function (/* { ssrContext } */) {
     modules: {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       // example,
       showcase,
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 =======
@@ -43,6 +49,7 @@ export default function (/* { ssrContext } */) {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   if (process.env.DEV && module.hot) {
     module.hot.accept(['./showcase'], () => {
       const newShowcase = require('./showcase').default
@@ -52,6 +59,8 @@ export default function (/* { ssrContext } */) {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   // if (process.env.DEV && module.hot) {
   //   module.hot.accept(['./showcase'], () => {
   //     const newShowcase = require('./showcase').default
@@ -59,6 +68,9 @@ export default function (/* { ssrContext } */) {
   //   })
   // }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev

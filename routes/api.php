@@ -23,7 +23,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/user', function (Request $request) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         return $request->user();
+=======
+      return $request->user();
+>>>>>>> modemb/dev
 =======
       return $request->user();
 >>>>>>> modemb/dev
@@ -36,7 +40,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Route::patch('settings/password', 'Settings\PasswordController@update');
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Route::post('logout', 'Auth\LoginController@logout');
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 =======
@@ -49,9 +56,12 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::group(['middleware' => 'guest:api'], function () {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Route::post('login', 'UserController@store');
     // Route::post('register', 'UserController@store');
 =======
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 
@@ -59,6 +69,9 @@ Route::group(['middleware' => 'guest:api'], function () {
       'users' => 'UserController'
     ]);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -74,8 +87,13 @@ Route::group(['middleware' => 'guest:api'], function () {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
+=======
+    // Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
+    // Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
+>>>>>>> modemb/dev
 =======
     // Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     // Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');

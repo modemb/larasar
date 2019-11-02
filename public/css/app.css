@@ -1,8 +1,12 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
 /*!
+=======
+@import url(https://fonts.googleapis.com/css?family=Nunito);/*!
+>>>>>>> modemb/dev
 =======
 @import url(https://fonts.googleapis.com/css?family=Nunito);/*!
 >>>>>>> modemb/dev
@@ -146,7 +150,11 @@ dt {
 dd {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-bottom: 0.5rem;
+=======
+  margin-bottom: .5rem;
+>>>>>>> modemb/dev
 =======
   margin-bottom: .5rem;
 >>>>>>> modemb/dev
@@ -180,6 +188,7 @@ sup {
 sub {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   bottom: -0.25em;
 }
 
@@ -188,12 +197,17 @@ sup {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   bottom: -.25em;
 }
 
 sup {
   top: -.5em;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -311,9 +325,15 @@ select {
 button,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 [type=button],
 [type=reset],
 [type=submit] {
+=======
+[type="button"],
+[type="reset"],
+[type="submit"] {
+>>>>>>> modemb/dev
 =======
 [type="button"],
 [type="reset"],
@@ -330,9 +350,15 @@ button,
 button:not(:disabled),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 [type=button]:not(:disabled),
 [type=reset]:not(:disabled),
 [type=submit]:not(:disabled) {
+=======
+[type="button"]:not(:disabled),
+[type="reset"]:not(:disabled),
+[type="submit"]:not(:disabled) {
+>>>>>>> modemb/dev
 =======
 [type="button"]:not(:disabled),
 [type="reset"]:not(:disabled),
@@ -349,9 +375,15 @@ button:not(:disabled),
 button::-moz-focus-inner,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 [type=button]::-moz-focus-inner,
 [type=reset]::-moz-focus-inner,
 [type=submit]::-moz-focus-inner {
+=======
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+>>>>>>> modemb/dev
 =======
 [type="button"]::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,
@@ -368,8 +400,13 @@ button::-moz-focus-inner,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 input[type=radio],
 input[type=checkbox] {
+=======
+input[type="radio"],
+input[type="checkbox"] {
+>>>>>>> modemb/dev
 =======
 input[type="radio"],
 input[type="checkbox"] {
@@ -384,6 +421,7 @@ input[type="checkbox"] {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 input[type=date],
 input[type=time],
 input[type=datetime-local],
@@ -391,11 +429,16 @@ input[type=month] {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
 input[type="date"],
 input[type="time"],
 input[type="datetime-local"],
 input[type="month"] {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -421,7 +464,11 @@ legend {
   padding: 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-bottom: 0.5rem;
+=======
+  margin-bottom: .5rem;
+>>>>>>> modemb/dev
 =======
   margin-bottom: .5rem;
 >>>>>>> modemb/dev
@@ -440,6 +487,7 @@ progress {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 [type=number]::-webkit-inner-spin-button,
 [type=number]::-webkit-outer-spin-button {
   height: auto;
@@ -449,6 +497,8 @@ progress {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
 [type="number"]::-webkit-inner-spin-button,
 [type="number"]::-webkit-outer-spin-button {
   height: auto;
@@ -456,6 +506,9 @@ progress {
 
 [type="search"] {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -465,7 +518,11 @@ progress {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 [type=search]::-webkit-search-decoration {
+=======
+[type="search"]::-webkit-search-decoration {
+>>>>>>> modemb/dev
 =======
 [type="search"]::-webkit-search-decoration {
 >>>>>>> modemb/dev
@@ -629,7 +686,11 @@ mark,
 .blockquote-footer::before {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   content: "— ";
+=======
+  content: "\2014\00A0";
+>>>>>>> modemb/dev
 =======
   content: "\2014\00A0";
 >>>>>>> modemb/dev
@@ -762,7 +823,11 @@ pre code {
 .no-gutters > .col,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .no-gutters > [class*=col-] {
+=======
+.no-gutters > [class*="col-"] {
+>>>>>>> modemb/dev
 =======
 .no-gutters > [class*="col-"] {
 >>>>>>> modemb/dev
@@ -773,6 +838,7 @@ pre code {
   padding-left: 0;
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 .col-xl,
@@ -848,6 +914,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
 .col-1,
 .col-2,
 .col-3,
@@ -919,6 +987,9 @@ pre code {
 .col-xl,
 .col-xl-auto {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -943,6 +1014,7 @@ pre code {
 .col-1 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   flex: 0 0 8.3333333333%;
   max-width: 8.3333333333%;
 }
@@ -953,6 +1025,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   flex: 0 0 8.33333333%;
   max-width: 8.33333333%;
 }
@@ -961,6 +1035,9 @@ pre code {
   flex: 0 0 16.66666667%;
   max-width: 16.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -974,6 +1051,7 @@ pre code {
 .col-4 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   flex: 0 0 33.3333333333%;
   max-width: 33.3333333333%;
 }
@@ -984,6 +1062,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   flex: 0 0 33.33333333%;
   max-width: 33.33333333%;
 }
@@ -992,6 +1072,9 @@ pre code {
   flex: 0 0 41.66666667%;
   max-width: 41.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1005,6 +1088,7 @@ pre code {
 .col-7 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   flex: 0 0 58.3333333333%;
   max-width: 58.3333333333%;
 }
@@ -1015,6 +1099,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   flex: 0 0 58.33333333%;
   max-width: 58.33333333%;
 }
@@ -1023,6 +1109,9 @@ pre code {
   flex: 0 0 66.66666667%;
   max-width: 66.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1036,6 +1125,7 @@ pre code {
 .col-10 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   flex: 0 0 83.3333333333%;
   max-width: 83.3333333333%;
 }
@@ -1046,6 +1136,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   flex: 0 0 83.33333333%;
   max-width: 83.33333333%;
 }
@@ -1054,6 +1146,9 @@ pre code {
   flex: 0 0 91.66666667%;
   max-width: 91.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1127,6 +1222,7 @@ pre code {
 .offset-1 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-left: 8.3333333333%;
 }
 
@@ -1135,12 +1231,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   margin-left: 8.33333333%;
 }
 
 .offset-2 {
   margin-left: 16.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1153,6 +1254,7 @@ pre code {
 .offset-4 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-left: 33.3333333333%;
 }
 
@@ -1161,12 +1263,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   margin-left: 33.33333333%;
 }
 
 .offset-5 {
   margin-left: 41.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1179,6 +1286,7 @@ pre code {
 .offset-7 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-left: 58.3333333333%;
 }
 
@@ -1187,12 +1295,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   margin-left: 58.33333333%;
 }
 
 .offset-8 {
   margin-left: 66.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1205,6 +1318,7 @@ pre code {
 .offset-10 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-left: 83.3333333333%;
 }
 
@@ -1213,12 +1327,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   margin-left: 83.33333333%;
 }
 
 .offset-11 {
   margin-left: 91.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1240,6 +1359,7 @@ pre code {
   .col-sm-1 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 8.3333333333%;
     max-width: 8.3333333333%;
   }
@@ -1250,6 +1370,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 8.33333333%;
     max-width: 8.33333333%;
   }
@@ -1258,6 +1380,9 @@ pre code {
     flex: 0 0 16.66666667%;
     max-width: 16.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1271,6 +1396,7 @@ pre code {
   .col-sm-4 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 33.3333333333%;
     max-width: 33.3333333333%;
   }
@@ -1281,6 +1407,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 33.33333333%;
     max-width: 33.33333333%;
   }
@@ -1289,6 +1417,9 @@ pre code {
     flex: 0 0 41.66666667%;
     max-width: 41.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1302,6 +1433,7 @@ pre code {
   .col-sm-7 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 58.3333333333%;
     max-width: 58.3333333333%;
   }
@@ -1312,6 +1444,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 58.33333333%;
     max-width: 58.33333333%;
   }
@@ -1320,6 +1454,9 @@ pre code {
     flex: 0 0 66.66666667%;
     max-width: 66.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1333,6 +1470,7 @@ pre code {
   .col-sm-10 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 83.3333333333%;
     max-width: 83.3333333333%;
   }
@@ -1343,6 +1481,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 83.33333333%;
     max-width: 83.33333333%;
   }
@@ -1351,6 +1491,9 @@ pre code {
     flex: 0 0 91.66666667%;
     max-width: 91.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1428,6 +1571,7 @@ pre code {
   .offset-sm-1 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 8.3333333333%;
   }
 
@@ -1436,12 +1580,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 8.33333333%;
   }
 
   .offset-sm-2 {
     margin-left: 16.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1454,6 +1603,7 @@ pre code {
   .offset-sm-4 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 33.3333333333%;
   }
 
@@ -1462,12 +1612,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 33.33333333%;
   }
 
   .offset-sm-5 {
     margin-left: 41.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1480,6 +1635,7 @@ pre code {
   .offset-sm-7 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 58.3333333333%;
   }
 
@@ -1488,12 +1644,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 58.33333333%;
   }
 
   .offset-sm-8 {
     margin-left: 66.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1506,6 +1667,7 @@ pre code {
   .offset-sm-10 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 83.3333333333%;
   }
 
@@ -1514,12 +1676,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 83.33333333%;
   }
 
   .offset-sm-11 {
     margin-left: 91.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1542,6 +1709,7 @@ pre code {
   .col-md-1 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 8.3333333333%;
     max-width: 8.3333333333%;
   }
@@ -1552,6 +1720,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 8.33333333%;
     max-width: 8.33333333%;
   }
@@ -1560,6 +1730,9 @@ pre code {
     flex: 0 0 16.66666667%;
     max-width: 16.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1573,6 +1746,7 @@ pre code {
   .col-md-4 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 33.3333333333%;
     max-width: 33.3333333333%;
   }
@@ -1583,6 +1757,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 33.33333333%;
     max-width: 33.33333333%;
   }
@@ -1591,6 +1767,9 @@ pre code {
     flex: 0 0 41.66666667%;
     max-width: 41.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1604,6 +1783,7 @@ pre code {
   .col-md-7 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 58.3333333333%;
     max-width: 58.3333333333%;
   }
@@ -1614,6 +1794,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 58.33333333%;
     max-width: 58.33333333%;
   }
@@ -1622,6 +1804,9 @@ pre code {
     flex: 0 0 66.66666667%;
     max-width: 66.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1635,6 +1820,7 @@ pre code {
   .col-md-10 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 83.3333333333%;
     max-width: 83.3333333333%;
   }
@@ -1645,6 +1831,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 83.33333333%;
     max-width: 83.33333333%;
   }
@@ -1653,6 +1841,9 @@ pre code {
     flex: 0 0 91.66666667%;
     max-width: 91.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1730,6 +1921,7 @@ pre code {
   .offset-md-1 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 8.3333333333%;
   }
 
@@ -1738,12 +1930,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 8.33333333%;
   }
 
   .offset-md-2 {
     margin-left: 16.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1756,6 +1953,7 @@ pre code {
   .offset-md-4 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 33.3333333333%;
   }
 
@@ -1764,12 +1962,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 33.33333333%;
   }
 
   .offset-md-5 {
     margin-left: 41.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1782,6 +1985,7 @@ pre code {
   .offset-md-7 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 58.3333333333%;
   }
 
@@ -1790,12 +1994,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 58.33333333%;
   }
 
   .offset-md-8 {
     margin-left: 66.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1808,6 +2017,7 @@ pre code {
   .offset-md-10 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 83.3333333333%;
   }
 
@@ -1816,12 +2026,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 83.33333333%;
   }
 
   .offset-md-11 {
     margin-left: 91.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1844,6 +2059,7 @@ pre code {
   .col-lg-1 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 8.3333333333%;
     max-width: 8.3333333333%;
   }
@@ -1854,6 +2070,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 8.33333333%;
     max-width: 8.33333333%;
   }
@@ -1862,6 +2080,9 @@ pre code {
     flex: 0 0 16.66666667%;
     max-width: 16.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1875,6 +2096,7 @@ pre code {
   .col-lg-4 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 33.3333333333%;
     max-width: 33.3333333333%;
   }
@@ -1885,6 +2107,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 33.33333333%;
     max-width: 33.33333333%;
   }
@@ -1893,6 +2117,9 @@ pre code {
     flex: 0 0 41.66666667%;
     max-width: 41.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1906,6 +2133,7 @@ pre code {
   .col-lg-7 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 58.3333333333%;
     max-width: 58.3333333333%;
   }
@@ -1916,6 +2144,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 58.33333333%;
     max-width: 58.33333333%;
   }
@@ -1924,6 +2154,9 @@ pre code {
     flex: 0 0 66.66666667%;
     max-width: 66.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -1937,6 +2170,7 @@ pre code {
   .col-lg-10 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 83.3333333333%;
     max-width: 83.3333333333%;
   }
@@ -1947,6 +2181,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 83.33333333%;
     max-width: 83.33333333%;
   }
@@ -1955,6 +2191,9 @@ pre code {
     flex: 0 0 91.66666667%;
     max-width: 91.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2032,6 +2271,7 @@ pre code {
   .offset-lg-1 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 8.3333333333%;
   }
 
@@ -2040,12 +2280,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 8.33333333%;
   }
 
   .offset-lg-2 {
     margin-left: 16.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2058,6 +2303,7 @@ pre code {
   .offset-lg-4 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 33.3333333333%;
   }
 
@@ -2066,12 +2312,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 33.33333333%;
   }
 
   .offset-lg-5 {
     margin-left: 41.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2084,6 +2335,7 @@ pre code {
   .offset-lg-7 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 58.3333333333%;
   }
 
@@ -2092,12 +2344,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 58.33333333%;
   }
 
   .offset-lg-8 {
     margin-left: 66.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2110,6 +2367,7 @@ pre code {
   .offset-lg-10 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 83.3333333333%;
   }
 
@@ -2118,12 +2376,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 83.33333333%;
   }
 
   .offset-lg-11 {
     margin-left: 91.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2146,6 +2409,7 @@ pre code {
   .col-xl-1 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 8.3333333333%;
     max-width: 8.3333333333%;
   }
@@ -2156,6 +2420,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 8.33333333%;
     max-width: 8.33333333%;
   }
@@ -2164,6 +2430,9 @@ pre code {
     flex: 0 0 16.66666667%;
     max-width: 16.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2177,6 +2446,7 @@ pre code {
   .col-xl-4 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 33.3333333333%;
     max-width: 33.3333333333%;
   }
@@ -2187,6 +2457,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 33.33333333%;
     max-width: 33.33333333%;
   }
@@ -2195,6 +2467,9 @@ pre code {
     flex: 0 0 41.66666667%;
     max-width: 41.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2208,6 +2483,7 @@ pre code {
   .col-xl-7 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 58.3333333333%;
     max-width: 58.3333333333%;
   }
@@ -2218,6 +2494,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 58.33333333%;
     max-width: 58.33333333%;
   }
@@ -2226,6 +2504,9 @@ pre code {
     flex: 0 0 66.66666667%;
     max-width: 66.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2239,6 +2520,7 @@ pre code {
   .col-xl-10 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flex: 0 0 83.3333333333%;
     max-width: 83.3333333333%;
   }
@@ -2249,6 +2531,8 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     flex: 0 0 83.33333333%;
     max-width: 83.33333333%;
   }
@@ -2257,6 +2541,9 @@ pre code {
     flex: 0 0 91.66666667%;
     max-width: 91.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2334,6 +2621,7 @@ pre code {
   .offset-xl-1 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 8.3333333333%;
   }
 
@@ -2342,12 +2630,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 8.33333333%;
   }
 
   .offset-xl-2 {
     margin-left: 16.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2360,6 +2653,7 @@ pre code {
   .offset-xl-4 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 33.3333333333%;
   }
 
@@ -2368,12 +2662,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 33.33333333%;
   }
 
   .offset-xl-5 {
     margin-left: 41.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2386,6 +2685,7 @@ pre code {
   .offset-xl-7 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 58.3333333333%;
   }
 
@@ -2394,12 +2694,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 58.33333333%;
   }
 
   .offset-xl-8 {
     margin-left: 66.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2412,6 +2717,7 @@ pre code {
   .offset-xl-10 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin-left: 83.3333333333%;
   }
 
@@ -2420,12 +2726,17 @@ pre code {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     margin-left: 83.33333333%;
   }
 
   .offset-xl-11 {
     margin-left: 91.66666667%;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -2941,7 +3252,11 @@ textarea.form-control {
 .form-row > .col,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .form-row > [class*=col-] {
+=======
+.form-row > [class*="col-"] {
+>>>>>>> modemb/dev
 =======
 .form-row > [class*="col-"] {
 >>>>>>> modemb/dev
@@ -3003,7 +3318,11 @@ textarea.form-control {
   padding: 0.25rem 0.5rem;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-top: 0.1rem;
+=======
+  margin-top: .1rem;
+>>>>>>> modemb/dev
 =======
   margin-top: .1rem;
 >>>>>>> modemb/dev
@@ -3153,7 +3472,11 @@ textarea.form-control.is-valid {
   padding: 0.25rem 0.5rem;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-top: 0.1rem;
+=======
+  margin-top: .1rem;
+>>>>>>> modemb/dev
 =======
   margin-top: .1rem;
 >>>>>>> modemb/dev
@@ -4041,9 +4364,15 @@ fieldset:disabled a.btn {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 input[type=submit].btn-block,
 input[type=reset].btn-block,
 input[type=button].btn-block {
+=======
+input[type="submit"].btn-block,
+input[type="reset"].btn-block,
+input[type="button"].btn-block {
+>>>>>>> modemb/dev
 =======
 input[type="submit"].btn-block,
 input[type="reset"].btn-block,
@@ -4280,6 +4609,7 @@ input[type="button"].btn-block {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .dropdown-menu[x-placement^=top],
 .dropdown-menu[x-placement^=right],
 .dropdown-menu[x-placement^=bottom],
@@ -4287,11 +4617,16 @@ input[type="button"].btn-block {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
 .dropdown-menu[x-placement^="top"],
 .dropdown-menu[x-placement^="right"],
 .dropdown-menu[x-placement^="bottom"],
 .dropdown-menu[x-placement^="left"] {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -4475,6 +4810,7 @@ input[type="button"].btn-block {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .btn-group-toggle > .btn input[type=radio],
 .btn-group-toggle > .btn input[type=checkbox],
 .btn-group-toggle > .btn-group > .btn input[type=radio],
@@ -4482,11 +4818,16 @@ input[type="button"].btn-block {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
 .btn-group-toggle > .btn input[type="radio"],
 .btn-group-toggle > .btn input[type="checkbox"],
 .btn-group-toggle > .btn-group > .btn input[type="radio"],
 .btn-group-toggle > .btn-group > .btn input[type="checkbox"] {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -4619,8 +4960,13 @@ input[type="button"].btn-block {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .input-group-text input[type=radio],
 .input-group-text input[type=checkbox] {
+=======
+.input-group-text input[type="radio"],
+.input-group-text input[type="checkbox"] {
+>>>>>>> modemb/dev
 =======
 .input-group-text input[type="radio"],
 .input-group-text input[type="checkbox"] {
@@ -4766,7 +5112,11 @@ input[type="button"].btn-block {
   content: "";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   background: no-repeat 50%/50% 50%;
+=======
+  background: no-repeat 50% / 50% 50%;
+>>>>>>> modemb/dev
 =======
   background: no-repeat 50% / 50% 50%;
 >>>>>>> modemb/dev
@@ -6749,7 +7099,11 @@ a.badge-dark.focus {
   text-shadow: 0 1px 0 #fff;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   opacity: 0.5;
+=======
+  opacity: .5;
+>>>>>>> modemb/dev
 =======
   opacity: .5;
 >>>>>>> modemb/dev
@@ -6767,7 +7121,11 @@ a.badge-dark.focus {
 .close:not(:disabled):not(.disabled):focus {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   opacity: 0.75;
+=======
+  opacity: .75;
+>>>>>>> modemb/dev
 =======
   opacity: .75;
 >>>>>>> modemb/dev
@@ -6992,6 +7350,7 @@ a.close.disabled {
 .modal-footer > :not(:first-child) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   margin-left: 0.25rem;
 }
 
@@ -7000,12 +7359,17 @@ a.close.disabled {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
   margin-left: .25rem;
 }
 
 .modal-footer > :not(:last-child) {
   margin-right: .25rem;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -7104,7 +7468,11 @@ a.close.disabled {
 .bs-tooltip-top,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=top] {
+=======
+.bs-tooltip-auto[x-placement^="top"] {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="top"] {
 >>>>>>> modemb/dev
@@ -7117,7 +7485,11 @@ a.close.disabled {
 .bs-tooltip-top .arrow,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=top] .arrow {
+=======
+.bs-tooltip-auto[x-placement^="top"] .arrow {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="top"] .arrow {
 >>>>>>> modemb/dev
@@ -7130,7 +7502,11 @@ a.close.disabled {
 .bs-tooltip-top .arrow::before,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=top] .arrow::before {
+=======
+.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="top"] .arrow::before {
 >>>>>>> modemb/dev
@@ -7145,7 +7521,11 @@ a.close.disabled {
 .bs-tooltip-right,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=right] {
+=======
+.bs-tooltip-auto[x-placement^="right"] {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="right"] {
 >>>>>>> modemb/dev
@@ -7158,7 +7538,11 @@ a.close.disabled {
 .bs-tooltip-right .arrow,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=right] .arrow {
+=======
+.bs-tooltip-auto[x-placement^="right"] .arrow {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="right"] .arrow {
 >>>>>>> modemb/dev
@@ -7173,7 +7557,11 @@ a.close.disabled {
 .bs-tooltip-right .arrow::before,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=right] .arrow::before {
+=======
+.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="right"] .arrow::before {
 >>>>>>> modemb/dev
@@ -7188,7 +7576,11 @@ a.close.disabled {
 .bs-tooltip-bottom,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=bottom] {
+=======
+.bs-tooltip-auto[x-placement^="bottom"] {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="bottom"] {
 >>>>>>> modemb/dev
@@ -7201,7 +7593,11 @@ a.close.disabled {
 .bs-tooltip-bottom .arrow,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=bottom] .arrow {
+=======
+.bs-tooltip-auto[x-placement^="bottom"] .arrow {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="bottom"] .arrow {
 >>>>>>> modemb/dev
@@ -7214,7 +7610,11 @@ a.close.disabled {
 .bs-tooltip-bottom .arrow::before,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=bottom] .arrow::before {
+=======
+.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
 >>>>>>> modemb/dev
@@ -7229,7 +7629,11 @@ a.close.disabled {
 .bs-tooltip-left,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=left] {
+=======
+.bs-tooltip-auto[x-placement^="left"] {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="left"] {
 >>>>>>> modemb/dev
@@ -7242,7 +7646,11 @@ a.close.disabled {
 .bs-tooltip-left .arrow,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=left] .arrow {
+=======
+.bs-tooltip-auto[x-placement^="left"] .arrow {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="left"] .arrow {
 >>>>>>> modemb/dev
@@ -7257,7 +7665,11 @@ a.close.disabled {
 .bs-tooltip-left .arrow::before,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-tooltip-auto[x-placement^=left] .arrow::before {
+=======
+.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+>>>>>>> modemb/dev
 =======
 .bs-tooltip-auto[x-placement^="left"] .arrow::before {
 >>>>>>> modemb/dev
@@ -7327,7 +7739,11 @@ a.close.disabled {
 .bs-popover-top,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=top] {
+=======
+.bs-popover-auto[x-placement^="top"] {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="top"] {
 >>>>>>> modemb/dev
@@ -7340,7 +7756,11 @@ a.close.disabled {
 .bs-popover-top > .arrow,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=top] > .arrow {
+=======
+.bs-popover-auto[x-placement^="top"] > .arrow {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="top"] > .arrow {
 >>>>>>> modemb/dev
@@ -7353,7 +7773,11 @@ a.close.disabled {
 .bs-popover-top > .arrow::before,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=top] > .arrow::before {
+=======
+.bs-popover-auto[x-placement^="top"] > .arrow::before {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="top"] > .arrow::before {
 >>>>>>> modemb/dev
@@ -7368,7 +7792,11 @@ a.close.disabled {
 .bs-popover-top > .arrow::after,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=top] > .arrow::after {
+=======
+.bs-popover-auto[x-placement^="top"] > .arrow::after {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="top"] > .arrow::after {
 >>>>>>> modemb/dev
@@ -7383,7 +7811,11 @@ a.close.disabled {
 .bs-popover-right,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=right] {
+=======
+.bs-popover-auto[x-placement^="right"] {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="right"] {
 >>>>>>> modemb/dev
@@ -7396,7 +7828,11 @@ a.close.disabled {
 .bs-popover-right > .arrow,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=right] > .arrow {
+=======
+.bs-popover-auto[x-placement^="right"] > .arrow {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="right"] > .arrow {
 >>>>>>> modemb/dev
@@ -7412,7 +7848,11 @@ a.close.disabled {
 .bs-popover-right > .arrow::before,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=right] > .arrow::before {
+=======
+.bs-popover-auto[x-placement^="right"] > .arrow::before {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="right"] > .arrow::before {
 >>>>>>> modemb/dev
@@ -7427,7 +7867,11 @@ a.close.disabled {
 .bs-popover-right > .arrow::after,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=right] > .arrow::after {
+=======
+.bs-popover-auto[x-placement^="right"] > .arrow::after {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="right"] > .arrow::after {
 >>>>>>> modemb/dev
@@ -7442,7 +7886,11 @@ a.close.disabled {
 .bs-popover-bottom,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=bottom] {
+=======
+.bs-popover-auto[x-placement^="bottom"] {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="bottom"] {
 >>>>>>> modemb/dev
@@ -7455,7 +7903,11 @@ a.close.disabled {
 .bs-popover-bottom > .arrow,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=bottom] > .arrow {
+=======
+.bs-popover-auto[x-placement^="bottom"] > .arrow {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="bottom"] > .arrow {
 >>>>>>> modemb/dev
@@ -7468,7 +7920,11 @@ a.close.disabled {
 .bs-popover-bottom > .arrow::before,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=bottom] > .arrow::before {
+=======
+.bs-popover-auto[x-placement^="bottom"] > .arrow::before {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="bottom"] > .arrow::before {
 >>>>>>> modemb/dev
@@ -7483,7 +7939,11 @@ a.close.disabled {
 .bs-popover-bottom > .arrow::after,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=bottom] > .arrow::after {
+=======
+.bs-popover-auto[x-placement^="bottom"] > .arrow::after {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="bottom"] > .arrow::after {
 >>>>>>> modemb/dev
@@ -7498,7 +7958,11 @@ a.close.disabled {
 .bs-popover-bottom .popover-header::before,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=bottom] .popover-header::before {
+=======
+.bs-popover-auto[x-placement^="bottom"] .popover-header::before {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="bottom"] .popover-header::before {
 >>>>>>> modemb/dev
@@ -7518,7 +7982,11 @@ a.close.disabled {
 .bs-popover-left,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=left] {
+=======
+.bs-popover-auto[x-placement^="left"] {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="left"] {
 >>>>>>> modemb/dev
@@ -7531,7 +7999,11 @@ a.close.disabled {
 .bs-popover-left > .arrow,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=left] > .arrow {
+=======
+.bs-popover-auto[x-placement^="left"] > .arrow {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="left"] > .arrow {
 >>>>>>> modemb/dev
@@ -7547,7 +8019,11 @@ a.close.disabled {
 .bs-popover-left > .arrow::before,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=left] > .arrow::before {
+=======
+.bs-popover-auto[x-placement^="left"] > .arrow::before {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="left"] > .arrow::before {
 >>>>>>> modemb/dev
@@ -7562,7 +8038,11 @@ a.close.disabled {
 .bs-popover-left > .arrow::after,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .bs-popover-auto[x-placement^=left] > .arrow::after {
+=======
+.bs-popover-auto[x-placement^="left"] > .arrow::after {
+>>>>>>> modemb/dev
 =======
 .bs-popover-auto[x-placement^="left"] > .arrow::after {
 >>>>>>> modemb/dev
@@ -7721,7 +8201,11 @@ a.close.disabled {
   height: 20px;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   background: no-repeat 50%/100% 100%;
+=======
+  background: no-repeat 50% / 100% 100%;
+>>>>>>> modemb/dev
 =======
   background: no-repeat 50% / 100% 100%;
 >>>>>>> modemb/dev
@@ -7767,7 +8251,11 @@ a.close.disabled {
   border-bottom: 10px solid transparent;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   opacity: 0.5;
+=======
+  opacity: .5;
+>>>>>>> modemb/dev
 =======
   opacity: .5;
 >>>>>>> modemb/dev
@@ -7821,8 +8309,13 @@ a.close.disabled {
   border-radius: 50%;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-animation: spinner-border 0.75s linear infinite;
           animation: spinner-border 0.75s linear infinite;
+=======
+  -webkit-animation: spinner-border .75s linear infinite;
+          animation: spinner-border .75s linear infinite;
+>>>>>>> modemb/dev
 =======
   -webkit-animation: spinner-border .75s linear infinite;
           animation: spinner-border .75s linear infinite;
@@ -7869,8 +8362,13 @@ a.close.disabled {
   opacity: 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   -webkit-animation: spinner-grow 0.75s linear infinite;
           animation: spinner-grow 0.75s linear infinite;
+=======
+  -webkit-animation: spinner-grow .75s linear infinite;
+          animation: spinner-grow .75s linear infinite;
+>>>>>>> modemb/dev
 =======
   -webkit-animation: spinner-grow .75s linear infinite;
           animation: spinner-grow .75s linear infinite;
@@ -8388,7 +8886,11 @@ button.bg-dark:focus {
 .embed-responsive-21by9::before {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   padding-top: 42.8571428571%;
+=======
+  padding-top: 42.85714286%;
+>>>>>>> modemb/dev
 =======
   padding-top: 42.85714286%;
 >>>>>>> modemb/dev

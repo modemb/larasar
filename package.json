@@ -1,6 +1,7 @@
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   "name": "larasar",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
@@ -58,6 +59,8 @@
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     "name": "quapp",
     "version": "0.0.1",
     "description": "A Quasar Framework app",
@@ -112,6 +115,9 @@
         "last 1 version, not dead, ie >= 11"
     ]
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev

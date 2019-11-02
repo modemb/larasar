@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Cookies from 'js-cookie'
 
 export default {
@@ -9,6 +10,8 @@ export default {
 =======
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
 // import { Cookies } from 'quasar'
 
 export default {
@@ -16,6 +19,9 @@ export default {
   // token: Cookies.get('token')
   token: localStorage.getItem('token') || null
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev

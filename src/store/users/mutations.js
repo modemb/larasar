@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Cookies from 'js-cookie'
 
 export function loginMutation (state, token) {
@@ -10,6 +11,8 @@ export function loginMutation (state, token) {
 }
 
 =======
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 // import { Cookies } from 'quasar'
@@ -30,6 +33,9 @@ export function authMutation (state, { user }) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -39,8 +45,13 @@ export function logoutMutation (state) {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   Cookies.remove('token')
   // localStorage.removeItem('token')
+=======
+  // Cookies.remove('token')
+  localStorage.removeItem('token')
+>>>>>>> modemb/dev
 =======
   // Cookies.remove('token')
   localStorage.removeItem('token')
