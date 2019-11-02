@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
@@ -22,6 +23,8 @@ class UserController extends Controller
     //     $this->middleware('guest')->except('logout');
     // }
 =======
+=======
+>>>>>>> modemb/dev
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
@@ -32,6 +35,9 @@ use DB;
 class UserController extends Controller
 {
     use AuthenticatesUsers;
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
     /**
@@ -42,7 +48,11 @@ class UserController extends Controller
     public function index()
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
       $this->guard()->logout();
+=======
+        //
+>>>>>>> modemb/dev
 =======
         //
 >>>>>>> modemb/dev
@@ -66,6 +76,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
 <<<<<<< HEAD
+<<<<<<< HEAD
     { //return env('PASSPORT_LOGIN_ENDPOINT');
       $http = new \GuzzleHttp\Client;
 
@@ -86,6 +97,8 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed'
 =======
+=======
+>>>>>>> modemb/dev
     { //return config('services.passport');
 
       if($request->user == 'register'){
@@ -94,6 +107,9 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed'
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
         ]);
 
@@ -102,6 +118,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+<<<<<<< HEAD
 <<<<<<< HEAD
       }// Register
 
@@ -116,6 +133,8 @@ class UserController extends Controller
           ]// Login
       ]); return json_decode((string) $response->getBody(), true);
 =======
+=======
+>>>>>>> modemb/dev
 
       } elseif ($request->user == 'login') {
 
@@ -149,6 +168,9 @@ class UserController extends Controller
         return response()->json('Logged out successfully', 200);
 
       }
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
     }
 

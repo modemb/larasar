@@ -22,7 +22,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Route::post('logout', 'Auth\LoginController@logout');
     Route::get('/user', function (Request $request) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         return $request->user();
+=======
+      return $request->user();
+>>>>>>> modemb/dev
 =======
       return $request->user();
 >>>>>>> modemb/dev
@@ -31,7 +35,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Route::patch('settings/profile', 'Settings\ProfileController@update');
     // Route::patch('settings/password', 'Settings\PasswordController@update');
 <<<<<<< HEAD
+<<<<<<< HEAD
     Route::post('logout', 'Auth\LoginController@logout');
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
     Route::apiResources([
@@ -41,13 +48,19 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::group(['middleware' => 'guest:api'], function () {
 <<<<<<< HEAD
+<<<<<<< HEAD
     Route::post('login', 'UserController@store');
     // Route::post('register', 'UserController@store');
 =======
+=======
+>>>>>>> modemb/dev
 
     Route::apiResources([
       'users' => 'UserController'
     ]);
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
     // Route::post('login', 'Auth\LoginController@login');
@@ -60,8 +73,13 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::post('email/resend', 'Auth\VerificationController@resend');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
+=======
+    // Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
+    // Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
+>>>>>>> modemb/dev
 =======
     // Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     // Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');

@@ -170,7 +170,10 @@ module.exports = function xhrAdapter(config) {
     };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> modemb/dev
     // Handle browser request cancellation (as opposed to a manual cancellation)
     request.onabort = function handleAbort() {
       if (!request) {
@@ -183,6 +186,9 @@ module.exports = function xhrAdapter(config) {
       request = null;
     };
 
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
     // Handle low level network errors
     request.onerror = function handleError() {
@@ -212,8 +218,13 @@ module.exports = function xhrAdapter(config) {
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
 <<<<<<< HEAD
+<<<<<<< HEAD
           cookies.read(config.xsrfCookieName) :
           undefined;
+=======
+        cookies.read(config.xsrfCookieName) :
+        undefined;
+>>>>>>> modemb/dev
 =======
         cookies.read(config.xsrfCookieName) :
         undefined;
@@ -305,6 +316,10 @@ var utils = __webpack_require__(/*! ./utils */ "./node_modules/axios/lib/utils.j
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
 var Axios = __webpack_require__(/*! ./core/Axios */ "./node_modules/axios/lib/core/Axios.js");
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+var mergeConfig = __webpack_require__(/*! ./core/mergeConfig */ "./node_modules/axios/lib/core/mergeConfig.js");
+>>>>>>> modemb/dev
 =======
 var mergeConfig = __webpack_require__(/*! ./core/mergeConfig */ "./node_modules/axios/lib/core/mergeConfig.js");
 >>>>>>> modemb/dev
@@ -338,7 +353,11 @@ axios.Axios = Axios;
 // Factory for creating new instances
 axios.create = function create(instanceConfig) {
 <<<<<<< HEAD
+<<<<<<< HEAD
   return createInstance(utils.merge(defaults, instanceConfig));
+=======
+  return createInstance(mergeConfig(axios.defaults, instanceConfig));
+>>>>>>> modemb/dev
 =======
   return createInstance(mergeConfig(axios.defaults, instanceConfig));
 >>>>>>> modemb/dev
@@ -491,16 +510,22 @@ module.exports = function isCancel(value) {
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 var defaults = __webpack_require__(/*! ./../defaults */ "./node_modules/axios/lib/defaults.js");
 var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
 var InterceptorManager = __webpack_require__(/*! ./InterceptorManager */ "./node_modules/axios/lib/core/InterceptorManager.js");
 var dispatchRequest = __webpack_require__(/*! ./dispatchRequest */ "./node_modules/axios/lib/core/dispatchRequest.js");
 =======
+=======
+>>>>>>> modemb/dev
 var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
 var buildURL = __webpack_require__(/*! ../helpers/buildURL */ "./node_modules/axios/lib/helpers/buildURL.js");
 var InterceptorManager = __webpack_require__(/*! ./InterceptorManager */ "./node_modules/axios/lib/core/InterceptorManager.js");
 var dispatchRequest = __webpack_require__(/*! ./dispatchRequest */ "./node_modules/axios/lib/core/dispatchRequest.js");
 var mergeConfig = __webpack_require__(/*! ./mergeConfig */ "./node_modules/axios/lib/core/mergeConfig.js");
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
 /**
@@ -526,6 +551,7 @@ Axios.prototype.request = function request(config) {
   // Allow for axios('example/url'[, config]) a la fetch API
   if (typeof config === 'string') {
 <<<<<<< HEAD
+<<<<<<< HEAD
     config = utils.merge({
       url: arguments[0]
     }, arguments[1]);
@@ -534,6 +560,8 @@ Axios.prototype.request = function request(config) {
   config = utils.merge(defaults, {method: 'get'}, this.defaults, config);
   config.method = config.method.toLowerCase();
 =======
+=======
+>>>>>>> modemb/dev
     config = arguments[1] || {};
     config.url = arguments[0];
   } else {
@@ -542,6 +570,9 @@ Axios.prototype.request = function request(config) {
 
   config = mergeConfig(this.defaults, config);
   config.method = config.method ? config.method.toLowerCase() : 'get';
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
   // Hook up interceptors middleware
@@ -564,12 +595,18 @@ Axios.prototype.request = function request(config) {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> modemb/dev
 Axios.prototype.getUri = function getUri(config) {
   config = mergeConfig(this.defaults, config);
   return buildURL(config.url, config.params, config.paramsSerializer).replace(/^\?/, '');
 };
 
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 // Provide aliases for supported request methods
 utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
@@ -816,9 +853,12 @@ module.exports = function enhanceError(error, config, code, request, response) {
     error.code = code;
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
   error.request = request;
   error.response = response;
 =======
+=======
+>>>>>>> modemb/dev
 
   error.request = request;
   error.response = response;
@@ -842,6 +882,9 @@ module.exports = function enhanceError(error, config, code, request, response) {
       code: this.code
     };
   };
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   return error;
 };
@@ -850,7 +893,10 @@ module.exports = function enhanceError(error, config, code, request, response) {
 /***/ }),
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> modemb/dev
 /***/ "./node_modules/axios/lib/core/mergeConfig.js":
 /*!****************************************************!*\
   !*** ./node_modules/axios/lib/core/mergeConfig.js ***!
@@ -914,6 +960,9 @@ module.exports = function mergeConfig(config1, config2) {
 
 /***/ }),
 
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 /***/ "./node_modules/axios/lib/core/settle.js":
 /*!***********************************************!*\
@@ -937,8 +986,12 @@ var createError = __webpack_require__(/*! ./createError */ "./node_modules/axios
 module.exports = function settle(resolve, reject, response) {
   var validateStatus = response.config.validateStatus;
 <<<<<<< HEAD
+<<<<<<< HEAD
   // Note: status is not exposed by XDomainRequest
   if (!response.status || !validateStatus || validateStatus(response.status)) {
+=======
+  if (!validateStatus || validateStatus(response.status)) {
+>>>>>>> modemb/dev
 =======
   if (!validateStatus || validateStatus(response.status)) {
 >>>>>>> modemb/dev
@@ -1015,6 +1068,7 @@ function setContentTypeIfUnset(headers, value) {
 function getDefaultAdapter() {
   var adapter;
 <<<<<<< HEAD
+<<<<<<< HEAD
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
     adapter = __webpack_require__(/*! ./adapters/xhr */ "./node_modules/axios/lib/adapters/xhr.js");
@@ -1022,6 +1076,8 @@ function getDefaultAdapter() {
     // For node use HTTP adapter
     adapter = __webpack_require__(/*! ./adapters/http */ "./node_modules/axios/lib/adapters/xhr.js");
 =======
+=======
+>>>>>>> modemb/dev
   // Only Node.JS has a process variable that is of [[Class]] process
   if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
     // For node use HTTP adapter
@@ -1029,6 +1085,9 @@ function getDefaultAdapter() {
   } else if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
     adapter = __webpack_require__(/*! ./adapters/xhr */ "./node_modules/axios/lib/adapters/xhr.js");
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   }
   return adapter;
@@ -1039,6 +1098,10 @@ var defaults = {
 
   transformRequest: [function transformRequest(data, headers) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    normalizeHeaderName(headers, 'Accept');
+>>>>>>> modemb/dev
 =======
     normalizeHeaderName(headers, 'Accept');
 >>>>>>> modemb/dev
@@ -1205,12 +1268,18 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
   if (serializedParams) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> modemb/dev
     var hashmarkIndex = url.indexOf('#');
     if (hashmarkIndex !== -1) {
       url = url.slice(0, hashmarkIndex);
     }
 
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
     url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
   }
@@ -1264,6 +1333,7 @@ module.exports = (
 
   // Standard browser envs support document.cookie
 <<<<<<< HEAD
+<<<<<<< HEAD
   (function standardBrowserEnv() {
     return {
       write: function write(name, value, expires, path, domain, secure) {
@@ -1309,6 +1379,8 @@ module.exports = (
     };
   })()
 =======
+=======
+>>>>>>> modemb/dev
     (function standardBrowserEnv() {
       return {
         write: function write(name, value, expires, path, domain, secure) {
@@ -1353,6 +1425,9 @@ module.exports = (
         remove: function remove() {}
       };
     })()
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 );
 
@@ -1403,6 +1478,7 @@ module.exports = (
   // Standard browser envs have full support of the APIs needed to test
   // whether the request URL is of the same origin as current location.
 <<<<<<< HEAD
+<<<<<<< HEAD
   (function standardBrowserEnv() {
     var msie = /(msie|trident)/i.test(navigator.userAgent);
     var urlParsingNode = document.createElement('a');
@@ -1410,18 +1486,24 @@ module.exports = (
 
     /**
 =======
+=======
+>>>>>>> modemb/dev
     (function standardBrowserEnv() {
       var msie = /(msie|trident)/i.test(navigator.userAgent);
       var urlParsingNode = document.createElement('a');
       var originURL;
 
       /**
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
     * Parse a URL to discover it's components
     *
     * @param {String} url The URL to be parsed
     * @returns {Object}
     */
+<<<<<<< HEAD
 <<<<<<< HEAD
     function resolveURL(url) {
       var href = url;
@@ -1453,6 +1535,8 @@ module.exports = (
 
     /**
 =======
+=======
+>>>>>>> modemb/dev
       function resolveURL(url) {
         var href = url;
 
@@ -1482,12 +1566,16 @@ module.exports = (
       originURL = resolveURL(window.location.href);
 
       /**
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
     * Determine if a URL shares the same origin as the current location
     *
     * @param {String} requestURL The URL to test
     * @returns {boolean} True if URL shares the same origin, otherwise false
     */
+<<<<<<< HEAD
 <<<<<<< HEAD
     return function isURLSameOrigin(requestURL) {
       var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
@@ -1503,6 +1591,8 @@ module.exports = (
     };
   })()
 =======
+=======
+>>>>>>> modemb/dev
       return function isURLSameOrigin(requestURL) {
         var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
         return (parsed.protocol === originURL.protocol &&
@@ -1516,6 +1606,9 @@ module.exports = (
         return true;
       };
     })()
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 );
 
@@ -1662,7 +1755,11 @@ module.exports = function spread(callback) {
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
 <<<<<<< HEAD
+<<<<<<< HEAD
 var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
+=======
+var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/axios/node_modules/is-buffer/index.js");
+>>>>>>> modemb/dev
 =======
 var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/axios/node_modules/is-buffer/index.js");
 >>>>>>> modemb/dev
@@ -1842,10 +1939,13 @@ function trim(str) {
  * react-native:
  *  navigator.product -> 'ReactNative'
 <<<<<<< HEAD
+<<<<<<< HEAD
  */
 function isStandardBrowserEnv() {
   if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
 =======
+=======
+>>>>>>> modemb/dev
  * nativescript
  *  navigator.product -> 'NativeScript' or 'NS'
  */
@@ -1853,6 +1953,9 @@ function isStandardBrowserEnv() {
   if (typeof navigator !== 'undefined' && (navigator.product === 'ReactNative' ||
                                            navigator.product === 'NativeScript' ||
                                            navigator.product === 'NS')) {
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
     return false;
   }
@@ -1936,7 +2039,10 @@ function merge(/* obj1, obj2, obj3, ... */) {
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> modemb/dev
  * Function equal to merge with the difference being that no reference
  * to original objects is kept.
  *
@@ -1963,6 +2069,9 @@ function deepMerge(/* obj1, obj2, obj3, ... */) {
 }
 
 /**
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
  * Extends object a by mutably adding to it the properties of object b.
  *
@@ -2002,6 +2111,10 @@ module.exports = {
   forEach: forEach,
   merge: merge,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  deepMerge: deepMerge,
+>>>>>>> modemb/dev
 =======
   deepMerge: deepMerge,
 >>>>>>> modemb/dev
@@ -2013,7 +2126,10 @@ module.exports = {
 /***/ }),
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> modemb/dev
 /***/ "./node_modules/axios/node_modules/is-buffer/index.js":
 /*!************************************************************!*\
   !*** ./node_modules/axios/node_modules/is-buffer/index.js ***!
@@ -2036,6 +2152,9 @@ module.exports = function isBuffer (obj) {
 
 /***/ }),
 
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************************!*\
@@ -6516,6 +6635,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /***/ "./node_modules/is-buffer/index.js":
 /*!*****************************************!*\
   !*** ./node_modules/is-buffer/index.js ***!
@@ -6538,6 +6658,8 @@ module.exports = function isBuffer (obj) {
 
 /***/ }),
 
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 /***/ "./node_modules/jquery/dist/jquery.js":
@@ -34278,7 +34400,11 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @version 1.15.0
+=======
+ * @version 1.16.0
+>>>>>>> modemb/dev
 =======
  * @version 1.16.0
 >>>>>>> modemb/dev
@@ -34304,6 +34430,7 @@ __webpack_require__.r(__webpack_exports__);
  * SOFTWARE.
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
 
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
@@ -34315,6 +34442,8 @@ for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
   }
 }
 =======
+=======
+>>>>>>> modemb/dev
 var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined' && typeof navigator !== 'undefined';
 
 var timeoutDuration = function () {
@@ -34326,6 +34455,9 @@ var timeoutDuration = function () {
   }
   return 0;
 }();
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
 function microtaskDebounce(fn) {
@@ -34447,7 +34579,10 @@ function getScrollParent(element) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> modemb/dev
 /**
  * Returns the reference node of the reference object, or the reference object itself.
  * @method
@@ -34459,6 +34594,9 @@ function getReferenceNode(reference) {
   return reference && reference.referenceNode ? reference.referenceNode : reference;
 }
 
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 var isIE11 = isBrowser && !!(window.MSInputMethodContext && document.documentMode);
 var isIE10 = isBrowser && /MSIE 10/.test(navigator.userAgent);
@@ -34769,8 +34907,13 @@ function getBoundingClientRect(element) {
   // subtract scrollbar size from sizes
   var sizes = element.nodeName === 'HTML' ? getWindowSizes(element.ownerDocument) : {};
 <<<<<<< HEAD
+<<<<<<< HEAD
   var width = sizes.width || element.clientWidth || result.right - result.left;
   var height = sizes.height || element.clientHeight || result.bottom - result.top;
+=======
+  var width = sizes.width || element.clientWidth || result.width;
+  var height = sizes.height || element.clientHeight || result.height;
+>>>>>>> modemb/dev
 =======
   var width = sizes.width || element.clientWidth || result.width;
   var height = sizes.height || element.clientHeight || result.height;
@@ -34927,7 +35070,11 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
 
   var boundaries = { top: 0, left: 0 };
 <<<<<<< HEAD
+<<<<<<< HEAD
   var offsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, reference);
+=======
+  var offsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, getReferenceNode(reference));
+>>>>>>> modemb/dev
 =======
   var offsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, getReferenceNode(reference));
 >>>>>>> modemb/dev
@@ -35059,7 +35206,11 @@ function getReferenceOffsets(state, popper, reference) {
   var fixedPosition = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   var commonOffsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, reference);
+=======
+  var commonOffsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, getReferenceNode(reference));
+>>>>>>> modemb/dev
 =======
   var commonOffsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, getReferenceNode(reference));
 >>>>>>> modemb/dev
@@ -35325,7 +35476,11 @@ function destroy() {
   this.disableEventListeners();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   // remove the popper if user explicity asked for the deletion on destroy
+=======
+  // remove the popper if user explicitly asked for the deletion on destroy
+>>>>>>> modemb/dev
 =======
   // remove the popper if user explicitly asked for the deletion on destroy
 >>>>>>> modemb/dev
@@ -49607,8 +49762,13 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+=======
+// const files = require.context('./', true, /\.vue$/i)
+// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+>>>>>>> modemb/dev
 =======
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
@@ -49658,6 +49818,7 @@ window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js")
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
  * a simple convenience so we don't have to attach every token manually.
@@ -49673,12 +49834,18 @@ if (token) {
 /**
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 // import Echo from 'laravel-echo'
+=======
+// import Echo from 'laravel-echo';
+>>>>>>> modemb/dev
 =======
 // import Echo from 'laravel-echo';
 >>>>>>> modemb/dev

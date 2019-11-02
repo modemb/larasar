@@ -1,15 +1,21 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // axios boot file (src/boot/axios.js)
 
 import axios from 'axios'
 import store from './../store'
 =======
+=======
+>>>>>>> modemb/dev
 import { Notify } from 'quasar'
 import axios from 'axios'
 
 // const headers = axiosInstance.defaults.headers.common
 
 // console.log(process.env)
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
 // We create our own axios instance and set a custom base URL.
@@ -21,6 +27,7 @@ const axiosInstance = axios.create({
 })
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 console.log(store)
 
 export default ({ Vue }) => {
@@ -29,6 +36,8 @@ export default ({ Vue }) => {
     if (token) request.headers.common['Authorization'] = `Bearer ${token}`
   })// ToBeFix
 =======
+=======
+>>>>>>> modemb/dev
 export default ({ router, store, Vue }) => {
   // Request interceptor
   axiosInstance.interceptors.request.use(request => {
@@ -89,6 +98,9 @@ export default ({ router, store, Vue }) => {
 
     return Promise.reject(error)
   })
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   // for use inside Vue files through this.$axios
   Vue.prototype.$axios = axiosInstance

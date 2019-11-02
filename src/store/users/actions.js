@@ -2,6 +2,7 @@ import { axiosInstance } from 'boot/axios'
 import { Notify } from 'quasar'
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const headers = axiosInstance.defaults.headers.common
 
 export async function loginAction ({ commit, dispatch }, payload) {
@@ -10,6 +11,8 @@ export async function loginAction ({ commit, dispatch }, payload) {
       // console.log(response.data)
       commit('loginMutation', response.data)
 =======
+=======
+>>>>>>> modemb/dev
 export async function loginAction ({ commit, dispatch }, payload) {
   // var b = []
   // var a = [{ user: 'register' }]
@@ -20,6 +23,9 @@ export async function loginAction ({ commit, dispatch }, payload) {
       // console.log(response, 'loginAction')
       commit('loginMutation', response.data)
       dispatch('authAction') // Action
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
     })
     .catch(() => {
@@ -27,7 +33,11 @@ export async function loginAction ({ commit, dispatch }, payload) {
         color: 'negative',
         position: 'top',
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: 'Loading failed',
+=======
+        message: 'Getting loginAction Data Error',
+>>>>>>> modemb/dev
 =======
         message: 'Getting loginAction Data Error',
 >>>>>>> modemb/dev
@@ -38,7 +48,10 @@ export async function loginAction ({ commit, dispatch }, payload) {
 
 export async function registerAction ({ commit, dispatch }, payload) {
 <<<<<<< HEAD
+<<<<<<< HEAD
   console.log(payload)
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
   axiosInstance.post('api/register', payload)
@@ -57,7 +70,11 @@ export async function registerAction ({ commit, dispatch }, payload) {
         color: 'negative',
         position: 'top',
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: 'Loading failed',
+=======
+        message: 'Registration Unsuccessfull',
+>>>>>>> modemb/dev
 =======
         message: 'Registration Unsuccessfull',
 >>>>>>> modemb/dev
@@ -66,6 +83,7 @@ export async function registerAction ({ commit, dispatch }, payload) {
     })
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 export async function nameAction (context) {
   console.log(context.state.token)
@@ -76,6 +94,8 @@ export async function nameAction (context) {
     .then((response) => {
       console.log(response.data)
 =======
+=======
+>>>>>>> modemb/dev
 export async function authAction (context) {
   // console.log(context, 'authAction')
 
@@ -83,6 +103,9 @@ export async function authAction (context) {
     .then((response) => {
       // console.log(response.data, 'authAction')
       context.commit('authMutation', { user: response.data })
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
     })
     .catch(() => {
@@ -90,7 +113,11 @@ export async function authAction (context) {
         color: 'negative',
         position: 'top',
 <<<<<<< HEAD
+<<<<<<< HEAD
         message: 'Loading failed',
+=======
+        message: 'Error Getting authAction Data',
+>>>>>>> modemb/dev
 =======
         message: 'Error Getting authAction Data',
 >>>>>>> modemb/dev
@@ -100,9 +127,15 @@ export async function authAction (context) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 export async function logoutAction ({ commit }) {
   try {
     await axiosInstance.post('/api/logout')
+=======
+export async function logoutAction ({ commit }, payload) {
+  try {
+    axiosInstance.post('api/users', payload)
+>>>>>>> modemb/dev
 =======
 export async function logoutAction ({ commit }, payload) {
   try {

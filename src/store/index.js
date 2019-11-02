@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 // import example from './module-example'
 // import Auth from '../boot/auth.js'
 import showcase from './showcase'
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 import users from './users'
@@ -16,8 +19,11 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
 <<<<<<< HEAD
+<<<<<<< HEAD
       // example,
       showcase,
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
       users
@@ -36,6 +42,7 @@ export default function (/* { ssrContext } */) {
   */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   if (process.env.DEV && module.hot) {
     module.hot.accept(['./showcase'], () => {
       const newShowcase = require('./showcase').default
@@ -43,12 +50,17 @@ export default function (/* { ssrContext } */) {
     })
   }
 =======
+=======
+>>>>>>> modemb/dev
   // if (process.env.DEV && module.hot) {
   //   module.hot.accept(['./showcase'], () => {
   //     const newShowcase = require('./showcase').default
   //     Store.hotUpdate({ modules: { showcase: newShowcase } })
   //   })
   // }
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
   return Store
