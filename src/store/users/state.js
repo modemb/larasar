@@ -1,7 +1,10 @@
-// import { Cookies } from 'quasar'
+import { Cookies } from 'quasar'
+
+// Use Cookies
+const cookie = false
 
 export default {
   user: null,
-  // token: Cookies.get('token')
-  token: localStorage.getItem('token') || null
+  token: cookie ? Cookies.get('token') : localStorage.getItem('token') || null,
+  cookie
 }

@@ -9,7 +9,7 @@ composer require laravel/ui --dev
 php artisan ui vue --auth
 cp .env.example .env
 php artisan key:generate
-php artisan passport:install
+php artisan passport:keys or php artisan passport:install
 npm install
 npm run dev
 ```
