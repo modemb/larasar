@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 A Laravel + Quasar Framework app
 
 ## Install the dependencies
@@ -10,6 +11,8 @@ A Laravel + Quasar Framework app
 npm install
 composer install
 =======
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 =======
@@ -28,6 +31,9 @@ npm install
 npm run dev
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev

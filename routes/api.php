@@ -24,7 +24,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         return $request->user();
+=======
+      return $request->user();
+>>>>>>> modemb/dev
 =======
       return $request->user();
 >>>>>>> modemb/dev
@@ -41,7 +45,10 @@ Route::group(['middleware' => 'auth:api'], function () {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Route::post('logout', 'Auth\LoginController@logout');
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 =======
@@ -57,9 +64,12 @@ Route::group(['middleware' => 'guest:api'], function () {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Route::post('login', 'UserController@store');
     // Route::post('register', 'UserController@store');
 =======
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 =======
@@ -70,6 +80,9 @@ Route::group(['middleware' => 'guest:api'], function () {
     ]);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -88,8 +101,13 @@ Route::group(['middleware' => 'guest:api'], function () {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
+=======
+    // Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
+    // Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
+>>>>>>> modemb/dev
 =======
     // Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     // Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');

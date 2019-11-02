@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
@@ -28,6 +29,8 @@ class UserController extends Controller
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
@@ -40,6 +43,9 @@ class UserController extends Controller
     use AuthenticatesUsers;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -56,7 +62,11 @@ class UserController extends Controller
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       $this->guard()->logout();
+=======
+        //
+>>>>>>> modemb/dev
 =======
         //
 >>>>>>> modemb/dev
@@ -88,6 +98,7 @@ class UserController extends Controller
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     { //return env('PASSPORT_LOGIN_ENDPOINT');
       $http = new \GuzzleHttp\Client;
 
@@ -112,6 +123,8 @@ class UserController extends Controller
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
+=======
+>>>>>>> modemb/dev
     { //return config('services.passport');
 
       if($request->user == 'register'){
@@ -122,6 +135,9 @@ class UserController extends Controller
             'password' => 'required|string|min:8|confirmed'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
@@ -134,6 +150,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -150,6 +167,8 @@ class UserController extends Controller
           ]// Login
       ]); return json_decode((string) $response->getBody(), true);
 =======
+=======
+>>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
 =======
@@ -189,6 +208,9 @@ class UserController extends Controller
       }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 =======
 >>>>>>> modemb/dev
