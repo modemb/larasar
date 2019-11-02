@@ -17,14 +17,10 @@ export default ({ router, store, Vue }) => {
   // Request interceptor
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
-    if (token) {
-      request.headers.common['Authorization'] = `Bearer ${token}`
-    }
+    if (token) request.headers.common['Authorization'] = `Bearer ${token}`
 
     const locale = store.getters['lang/locale']
-    if (locale) {
-      request.headers.common['Accept-Language'] = locale
-    }
+    if (locale) request.headers.common['Accept-Language'] = locale
 
     // request.headers['X-Socket-Id'] = Echo.socketId()
 

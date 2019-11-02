@@ -1,12 +1,8 @@
 <template>
 
-    <div class="q-pa-md flex-center">
+    <q-page class="q-pa-md flex-center">
 
-      <q-form
-        @submit="onSubmit"
-        @reset="onReset"
-        class="q-gutter-md"
-        >
+      <q-form class="q-gutter-md">
         <q-input
           filled
           v-model="name"
@@ -31,18 +27,18 @@
         </q-input>
 
         <div>
-          <q-btn color="primary" label="Register" @click.prevent="register"/>
+          <q-btn color="primary" label="Register" @click.prevent=""/>
           <q-btn label="clients" type="reset" color="primary" flat class="q-ml-sm" @click.prevent="clients" />
         </div>
       </q-form>
 
-    </div>
+    </q-page>
 
 </template>
 
 <script>
 export default {
-  name: 'public.register',
+  name: 'PageIndex',
   data () {
     return {
       password: '',

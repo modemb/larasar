@@ -71,7 +71,7 @@ module.exports = function (ctx) {
       // extractCSS: false,
       // ================= \\
       // vueCompiler: true,
-      // distDir: 'public/quasar',
+      distDir: 'public/quasar',
       // publicPath: '/quasar/',
 
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack

@@ -47,19 +47,17 @@ export async function registerAction ({ commit, dispatch }, payload) {
 export async function authAction (context) {
   // console.log(context, 'authAction')
 
-  axiosInstance.get('api/user')
-    .then((response) => {
-      // console.log(response.data, 'authAction')
-      context.commit('authMutation', { user: response.data })
+  try {
+    const { data } = await axiosInstance.get('api/user')
+    context.commit('authMutation', { user: data })
+  } catch (error) {
+    Notify.create({
+      color: 'negative',
+      position: 'top',
+      message: 'Error Getting authAction Data',
+      icon: 'report_problem'
     })
-    .catch(() => {
-      Notify.create({
-        color: 'negative',
-        position: 'top',
-        message: 'Error Getting authAction Data',
-        icon: 'report_problem'
-      })
-    })
+  }
 }
 
 export async function logoutAction ({ commit }, payload) {
