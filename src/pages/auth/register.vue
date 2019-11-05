@@ -41,11 +41,11 @@ export default {
   name: 'PageIndex',
   data () {
     return {
-      password: '',
-      password_confirmation: '',
+      password: '88888888',
+      password_confirmation: '88888888',
       isPwd: true,
-      email: '',
-      name: ''
+      email: 'modembfr@gmail.com',
+      name: 'Mohamed'
     }
   },
   methods: {
@@ -58,7 +58,7 @@ export default {
         email: this.email,
         password: this.password,
         password_confirmation: this.password_confirmation,
-        user: 'register'
+        user: 'login'
         // scope: ''
       }
       this.$store.dispatch('users/registerAction', data)

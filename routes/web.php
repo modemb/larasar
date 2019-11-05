@@ -12,7 +12,15 @@
 */
 
 Route::get('/', function () {
+<<<<<<< HEAD
     return view('index');
+=======
+  return view('welcome');
+});
+
+Route::get('/url', function () {
+    return env('APP_URL');
+>>>>>>> modemb/dev
 });
 
 Auth::routes();

@@ -34,6 +34,8 @@ import Vue from 'vue'
 import createApp from './app.js'
 
 
+import 'app/src-pwa/register-service-worker.js'
+
 
 
 import qboot_Booti18n from 'boot/i18n'
@@ -51,12 +53,17 @@ Vue.config.productionTip = false
 
 
 
-console.info('[Quasar] Running SPA.')
-
+console.info('[Quasar] Running SSR + PWA.')
+console.info('[Quasar] Forcing PWA into the network-first approach to not break Hot Module Replacement while developing.')
 
 
 const { app, store, router } = createApp()
 
+
+// Needed only for iOS PWAs
+if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.navigator.standalone) {
+  import(/* webpackChunkName: "fastclick"  */ '@quasar/fastclick')
+}
 
 
 async function start () {
@@ -104,13 +111,22 @@ async function start () {
 
   
 
+    // prime the store with server-initialized state.
+    // the state is determined during SSR and inlined in the page markup.
+    
+    if (window.__INITIAL_STATE__) {
+      store.replaceState(window.__INITIAL_STATE__)
+    }
     
 
-    
+    const appInstance = new Vue(app)
 
-      new Vue(app)
-
-    
+    // wait until router has resolved all async before hooks
+    // and async components...
+    router.onReady(() => {
+      
+      appInstance.$mount('#q-app')
+    })
 
   
 

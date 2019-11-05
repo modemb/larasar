@@ -3,7 +3,6 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
-          flat
           dense
           round
           @click="leftDrawerOpen = !leftDrawerOpen"
@@ -20,6 +19,9 @@
         <!-- Authenticated -->
         <div v-if="user" class="text-right">
           <q-btn label="Logout" @click.prevent="logout" />
+          <q-avatar>
+            <img :src="user.new.avatar">
+          </q-avatar>
           {{ user.name }}
         </div>
         <!-- Guest -->
@@ -113,19 +115,16 @@ export default {
     }
   },
   computed: mapGetters({
-    user: 'users/authGetter',
-    token: 'users/tokenGetter'
+    user: 'users/authGetter'
   }),
-  mounted () {
-    if (this.token) this.$store.dispatch('users/authAction')
-  },
   methods: {
     async logout () {
       // Log out the user.
       this.$store.dispatch('users/logoutAction', this.user)
-
-      // Redirect to login.
-      this.$router.push({ name: 'public.login' })
+        .then(() => {
+          // Redirect to login.
+          this.$router.push({ name: 'public.login' })
+        })
     }
   }
 }

@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        //$user->getId()
     }
 
     /**
@@ -65,7 +65,7 @@ class UserController extends Controller
                 'grant_type' => 'password',
                 'client_id' => $passport['client_id'],
                 'client_secret' => $passport['client_secret'],
-                'username' => $request->username,
+                'username' => $request->email,
                 'password' => $request->password,
                 'scope' => '',
             ]
