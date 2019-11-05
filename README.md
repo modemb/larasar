@@ -18,6 +18,9 @@ npm run dev
 ```bash
 quasar dev
 php artisan serve
+# In order to build a SSR website, we first need to add the SSR mode to our Quasar project:
+quasar mode add ssr
+quasar dev -m ssr
 ```
 
 ### Lint the files
@@ -33,6 +36,9 @@ quasar build
 ### Customize the configuration
 See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
 
-Backend Server:http://localhost:8000
-Frontend Server:http://localhost:8080
+# Frontend Client
+Local:http://localhost:8080
 Network:http://192.168.2.11:8080
+# Backend Sever
+Local:http://localhost:8000
+Network: php -S 192.168.2.11:8000 -t public

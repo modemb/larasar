@@ -22,7 +22,7 @@ export default {
   name: 'PageIndex',
   data () {
     return {
-      email: 'modemb@modemb.com',
+      email: 'modembfr@gmail.com',
       password: '88888888',
       isPwd: true
     }
@@ -30,7 +30,7 @@ export default {
   methods: {
     login () {
       var data = {
-        username: this.email,
+        email: this.email,
         password: this.password,
         user: 'login'
         // scope: ''
@@ -45,9 +45,6 @@ export default {
       // })
       // Fetch the user.await
       // this.$store.dispatch('auth/fetchUser')
-
-      // Redirect home.
-      this.$router.push({ path: '/' })
     }
   }
 }

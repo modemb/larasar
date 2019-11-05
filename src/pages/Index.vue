@@ -11,7 +11,7 @@
       <li>
         <!-- <div class="collapsible-header">
           <i class="material-icons">place</i> -->
-          <div class="col s12"><img alt="Larasar logo" src="~assets/quasar-logo-full.svg"></div>
+          <a class="col s12" target="_blank" href="http://modemb.com/"><img alt="Larasar logo" title="MoDemb" src="~assets/quasar-logo-full.svg"></a>
           <!-- <span class="badge">1</span></div>
         <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div> -->
       </li>

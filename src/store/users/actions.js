@@ -11,6 +11,8 @@ export async function loginAction ({ commit, dispatch }, payload) {
       // console.log(response, 'loginAction')
       commit('loginMutation', response.data)
       dispatch('authAction') // Action
+      // Redirect home.
+      this.$router.push({ path: '/' })
     })
     .catch(() => {
       Notify.create({
@@ -24,6 +26,7 @@ export async function loginAction ({ commit, dispatch }, payload) {
 
 export async function registerAction ({ commit, dispatch }, payload) {
   axiosInstance.post('api/register', payload)
+  dispatch('loginAction', payload)
     .then((response) => {
       Notify.create({
         color: 'positive',
@@ -31,8 +34,6 @@ export async function registerAction ({ commit, dispatch }, payload) {
         message: 'Registration Successfull',
         icon: 'check'
       })
-      // console.log(response.data)
-      // commit('someMutation', response.data)
     })
     .catch(() => {
       Notify.create({
