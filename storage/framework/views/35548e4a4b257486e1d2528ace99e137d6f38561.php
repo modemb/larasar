@@ -14,7 +14,11 @@
                     <?php endif; ?>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                     You are logged in!
+=======
+                    <?php echo app('translator')->get('You are logged in!'); ?>
+>>>>>>> modemb/dev
 =======
                     <?php echo app('translator')->get('You are logged in!'); ?>
 >>>>>>> modemb/dev

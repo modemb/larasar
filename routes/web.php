@@ -17,11 +17,6 @@ Route::get('/', function () {
   return view('welcome');
 });
 
-Route::get('/url', function () {
-  // return env('APP_URL');
-  return view('welcome');
-});
-
 Route::get('/user', function (Request $request) {
   return $request->user();
 });

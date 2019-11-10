@@ -4,7 +4,11 @@ export function loginMutation (state, token) {
   state.token = token.access_token
   if (state.cookie) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     Cookies.set('token', token, { expires: token.expires_in ? 365 : null })
+=======
+    Cookies.set('token', token.access_token, { expires: token.expires_in ? 365 : null })
+>>>>>>> modemb/dev
 =======
     Cookies.set('token', token.access_token, { expires: token.expires_in ? 365 : null })
 >>>>>>> modemb/dev

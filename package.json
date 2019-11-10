@@ -22,7 +22,11 @@
         "@quasar/extras": "^1.3.3",
         "axios": "^0.19",
 <<<<<<< HEAD
+<<<<<<< HEAD
         "quasar": "^1.3.0",
+=======
+        "quasar": "^1.4.0",
+>>>>>>> modemb/dev
 =======
         "quasar": "^1.4.0",
 >>>>>>> modemb/dev
