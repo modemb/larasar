@@ -6,17 +6,17 @@
         <q-input
           filled
           v-model="name"
-          label="Your name *"
-          hint="Name and surname"
+          :label="$t('name')"
+          :hint="$t('name')"
           lazy-rules
-          :rules="[ val => val && val.length > 0 || 'Please type something']"
+          :rules="[ val => val && val.length > 0 || $t('error_alert_title')]"
         />
 
-        <q-input v-model="email" filled type="email" hint="Email" />
+        <q-input v-model="email" filled type="email" :hint="$t('email')" />
 
-        <q-input v-model="password" filled type="password" hint="Password" />
+        <q-input v-model="password" filled type="password" :hint="$t('password')" />
 
-        <q-input v-model="password_confirmation" filled :type="isPwd ? 'password' : 'text'" hint="Password with toggle">
+        <q-input v-model="password_confirmation" filled :type="isPwd ? 'password' : 'text'" :hint="$t('confirm_password')">
           <template v-slot:append>
             <q-icon
               :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -27,7 +27,7 @@
         </q-input>
 
         <div>
-          <q-btn color="primary" label="Register" @click.prevent="register"/>
+          <q-btn color="primary" :label="$t('register')" @click.prevent="register"/>
           <q-btn label="clients" type="reset" color="primary" flat class="q-ml-sm" @click.prevent="clients" />
         </div>
       </q-form>

@@ -4,14 +4,14 @@
       <li>
         <!-- <div class="collapsible-header">
           <i class="material-icons">filter_drama</i> -->
-          <h4 v-if="user" >You are logged in!</h4>
+          <h4 v-if="user" >{{$t('you_are_logged_in')}}</h4>
           <!-- <span class="new badge">4</span></div>
         <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div> -->
       </li>
       <li>
         <!-- <div class="collapsible-header">
           <i class="material-icons">place</i> -->
-          <a class="col s12" target="_blank" href="http://modemb.com/"><img alt="Larasar logo" title="MoDemb" src="~assets/quasar-logo-full.svg"></a>
+          <img alt="Larasar logo" src="~assets/quasar-logo-full.svg">
           <!-- <span class="badge">1</span></div>
         <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div> -->
       </li>

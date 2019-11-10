@@ -1,4 +1,4 @@
-import { Notify } from 'quasar'
+import { Notify, Cookies } from 'quasar'
 import axios from 'axios'
 
 // const headers = axiosInstance.defaults.headers.common
@@ -19,9 +19,8 @@ export default ({ router, store, Vue }) => {
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
     if (token) request.headers.common['Authorization'] = `Bearer ${token}`
-
-    const locale = store.getters['lang/locale']
-    if (locale) request.headers.common['Accept-Language'] = locale
+    // const locale = store.getters['config/localeGetter']
+    // if (locale) request.headers.common['Accept-Language'] = locale
 
     // request.headers['X-Socket-Id'] = Echo.socketId()
 
@@ -74,6 +73,8 @@ export default ({ router, store, Vue }) => {
   Vue.prototype.$axios = axiosInstance
   // Auth User Check
   store.dispatch('users/authAction')
+  // Config
+  store.dispatch('config/configAction', Cookies.get('locale'))
 }
 
 // Here we define a named export

@@ -1,7 +1,7 @@
 import { Cookies, LocalStorage } from 'quasar'
 
 // Use Cookies
-const cookie = false
+const cookie = true
 
 export default {
   user: null,

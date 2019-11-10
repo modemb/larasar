@@ -40,23 +40,9 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { //return config('services.passport');
+    { //return $name = $request->input('email');
 
-      if($request->user == 'register'){
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed'
-        ]);
-
-        return User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-      } elseif ($request->user == 'login') {
+      if ($request->user == 'login') {
 
         $http = new \GuzzleHttp\Client; $passport = config('services.passport');
 
@@ -69,7 +55,6 @@ class UserController extends Controller
                 'password' => $request->password,
                 'scope' => '',
             ]
-
         ]); return json_decode((string) $response->getBody(), true);
 
       } elseif ($request->id) {
@@ -82,8 +67,7 @@ class UserController extends Controller
         //     $token->delete();
         // });
 
-        $this->guard()->logout();
-
+        // $this->guard()->logout();
 
         return response()->json('Logged out successfully', 200);
 

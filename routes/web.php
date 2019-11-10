@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,8 +17,8 @@ Route::get('/', function () {
   return view('welcome');
 });
 
-Route::get('/url', function () {
-    return env('APP_URL');
+Route::get('/user', function (Request $request) {
+  return $request->user();
 });
 
 Auth::routes();

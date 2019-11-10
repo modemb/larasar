@@ -13,7 +13,7 @@
                         </div>
                     <?php endif; ?>
 
-                    You are logged in!
+                    <?php echo app('translator')->get('You are logged in!'); ?>
                 </div>
             </div>
         </div>
