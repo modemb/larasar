@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,15 +14,16 @@
 */
 
 Route::get('/', function () {
-<<<<<<< HEAD
-    return view('index');
-=======
   return view('welcome');
 });
 
 Route::get('/url', function () {
-    return env('APP_URL');
->>>>>>> modemb/dev
+  // return env('APP_URL');
+  return view('welcome');
+});
+
+Route::get('/user', function (Request $request) {
+  return $request->user();
 });
 
 Auth::routes();

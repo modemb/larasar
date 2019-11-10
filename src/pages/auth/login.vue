@@ -3,12 +3,12 @@
     <q-page class="q-pa-md flex-center">
 
       <q-form class="q-gutter-md">
-        <q-input v-model="email" filled type="email" hint="Email" />
+        <q-input v-model="email" filled type="email" :hint="$t('email')" />
 
-        <q-input v-model="password" filled type="password" hint="Password" />
+        <q-input v-model="password" filled type="password" :hint="$t('password')" />
 
         <div>
-          <q-btn color="primary" label="LogIn" @click.prevent="login"/>
+          <q-btn color="primary" :loading="loader" :label="$t('login')" @click.prevent="login"/>
         </div>
       </q-form>
 

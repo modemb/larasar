@@ -13,10 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
+Route::get('/config', function () {
+    return [
+      'appName' => config('app.name'),
+      'locale' => $locale = app()->getLocale(),
+      'locales' => config('app.locales'),
+      'githubAuth' => config('services.github.client_id'),
+    ];
 
-// });
+});
 
 Route::group(['middleware' => 'auth:api'], function () {
     // Route::post('logout', 'Auth\LoginController@logout');
