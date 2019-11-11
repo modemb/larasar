@@ -37,19 +37,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 05:52:02] production.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -92,19 +80,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 05:52:13] production.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -147,19 +123,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 05:54:18] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -202,19 +166,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 05:54:59] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -257,19 +209,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 05:55:33] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -309,19 +249,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 05:55:38] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -364,19 +292,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 05:58:43] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -419,19 +335,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:04:15] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -471,19 +375,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:04:29] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -526,19 +418,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:16:29] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(73): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('Access token co...')
@@ -580,19 +460,7 @@
 #36 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #37 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #38 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:35:32] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -671,19 +539,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:36:15] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -762,19 +618,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:36:15] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -853,19 +697,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:36:42] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -905,19 +737,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:36:42] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -957,19 +777,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:37:08] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -1009,19 +817,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:37:08] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -1061,19 +857,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:37:17] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -1116,19 +900,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:37:26] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -1171,19 +943,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:37:42] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -1223,19 +983,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:37:42] local.ERROR: Key path "file://D:\Projects\wamp\www\larasar\storage\oauth-public.key" does not exist or is not readable {"exception":"[object] (LogicException(code: 0): Key path \"file://D:\\Projects\\wamp\\www\\larasar\\storage\\oauth-public.key\" does not exist or is not readable at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\CryptKey.php:48)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php(243): League\\OAuth2\\Server\\CryptKey->__construct('file://D:\\\\Proje...', NULL, false)
@@ -1275,19 +1023,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:38:30] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(73): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('Access token co...')
@@ -1329,19 +1065,7 @@
 #36 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #37 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #38 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:39:37] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -1420,19 +1144,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:39:38] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -1511,19 +1223,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:39:42] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -1608,19 +1308,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:39:46] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -1699,19 +1387,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 06:39:51] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -1790,19 +1466,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:06:35] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -1881,19 +1545,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:06:47] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -1978,19 +1630,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:06:53] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2069,19 +1709,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:08:27] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2160,19 +1788,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:09:29] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2251,19 +1867,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:11:46] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2342,19 +1946,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:11:56] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2439,19 +2031,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:12:07] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2530,19 +2110,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:12:53] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2621,19 +2189,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:13:10] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2712,19 +2268,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:13:19] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2803,19 +2347,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:13:51] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2894,19 +2426,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:14:01] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -2985,19 +2505,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:14:12] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -3082,19 +2590,7 @@
 #37 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #38 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #39 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 13:15:02] local.ERROR: The resource owner or authorization server denied the request. {"exception":"[object] (League\\OAuth2\\Server\\Exception\\OAuthServerException(code: 9): The resource owner or authorization server denied the request. at D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\Exception\\OAuthServerException.php:223)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\league\\oauth2-server\\src\\AuthorizationValidators\\BearerTokenValidator.php(100): League\\OAuth2\\Server\\Exception\\OAuthServerException::accessDenied('The JWT string ...', NULL, Object(InvalidArgumentException))
@@ -3173,19 +2669,7 @@
 #34 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 15:00:18] local.ERROR: Illuminate\View\Engines\PhpEngine::main(): Failed opening required 'D:\Projects\wamp\www\larasar\public\quasar/index.html' (include_path='.;C:\php\pear') {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 64): Illuminate\\View\\Engines\\PhpEngine::main(): Failed opening required 'D:\\Projects\\wamp\\www\\larasar\\public\\quasar/index.html' (include_path='.;C:\\php\\pear') at D:\\Projects\\wamp\\www\\larasar\\storage\\framework\\views\\5f955c1283b48e5e1fbe2315982b6fbd9c55bde6.php:2)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(148): Symfony\\Component\\Debug\\Exception\\FatalErrorException->__construct()
@@ -3242,19 +2726,7 @@
 #51 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): App\\Http\\Kernel->handle()
 #52 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(0): {main}()
 #53 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 15:00:21] local.ERROR: Illuminate\View\Engines\PhpEngine::main(): Failed opening required 'D:\Projects\wamp\www\larasar\public\quasar/index.html' (include_path='.;C:\php\pear') {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 64): Illuminate\\View\\Engines\\PhpEngine::main(): Failed opening required 'D:\\Projects\\wamp\\www\\larasar\\public\\quasar/index.html' (include_path='.;C:\\php\\pear') at D:\\Projects\\wamp\\www\\larasar\\storage\\framework\\views\\5f955c1283b48e5e1fbe2315982b6fbd9c55bde6.php:2)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(148): Symfony\\Component\\Debug\\Exception\\FatalErrorException->__construct()
@@ -3311,19 +2783,7 @@
 #51 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): App\\Http\\Kernel->handle()
 #52 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(0): {main}()
 #53 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
 "} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
-=======
-"} 
->>>>>>> modemb/dev
 [2019-11-02 15:19:22] local.ERROR: Illuminate\View\Engines\PhpEngine::main(): Failed opening required 'D:\Projects\wamp\www\larasar\public\quasar/index.html' (include_path='.;C:\php\pear') {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 64): Illuminate\\View\\Engines\\PhpEngine::main(): Failed opening required 'D:\\Projects\\wamp\\www\\larasar\\public\\quasar/index.html' (include_path='.;C:\\php\\pear') at D:\\Projects\\wamp\\www\\larasar\\storage\\framework\\views\\5f955c1283b48e5e1fbe2315982b6fbd9c55bde6.php:2)
 [stacktrace]
 #0 D:\\Projects\\wamp\\www\\larasar\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(148): Symfony\\Component\\Debug\\Exception\\FatalErrorException->__construct()
@@ -3380,15 +2840,6 @@
 #51 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): App\\Http\\Kernel->handle()
 #52 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(0): {main}()
 #53 {main}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"}
-=======
-=======
->>>>>>> modemb/dev
-=======
->>>>>>> modemb/dev
 "} 
 [2019-11-02 22:06:54] local.ERROR: Illuminate\View\Engines\PhpEngine::main(): Failed opening required 'D:\Projects\wamp\www\larasar\public\quasar\index.html' (include_path='.;C:\php\pear') {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 64): Illuminate\\View\\Engines\\PhpEngine::main(): Failed opening required 'D:\\Projects\\wamp\\www\\larasar\\public\\quasar\\index.html' (include_path='.;C:\\php\\pear') at D:\\Projects\\wamp\\www\\larasar\\storage\\framework\\views\\5f955c1283b48e5e1fbe2315982b6fbd9c55bde6.php:2)
 [stacktrace]
@@ -6267,10 +5718,3 @@
 #35 D:\\Projects\\wamp\\www\\larasar\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #36 {main}
 "} 
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> modemb/dev
-=======
->>>>>>> modemb/dev
-=======
->>>>>>> modemb/dev
