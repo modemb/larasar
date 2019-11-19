@@ -5,3 +5,7 @@ export function localeGetter (state) {
 export function localesGetter (state) {
   return state.locales
 }
+
+export function githubAuthGetter (state) {
+  return state.githubAuth
+}

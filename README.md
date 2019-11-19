@@ -18,8 +18,6 @@ npm run dev
 ```bash
 quasar dev
 php artisan serve
-# In order to build a SSR website, we first need to add the SSR mode to our Quasar project:
-quasar mode add ssr
 quasar dev -m ssr
 ```
 
@@ -31,6 +29,7 @@ npm run lint
 ### Build the app for production
 ```bash
 quasar build
+quasar build -m ssr
 ```
 
 ### Customize the configuration

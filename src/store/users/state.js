@@ -1,7 +1,5 @@
 import { Cookies, LocalStorage } from 'quasar'
-
-// Use Cookies
-const cookie = true
+import { cookie } from 'boot/axios'
 
 export default {
   user: null,

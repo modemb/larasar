@@ -1,26 +1,27 @@
-import { Notify, Cookies } from 'quasar'
+import { Notify, LocalStorage } from 'quasar'
 import axios from 'axios'
-
-// const headers = axiosInstance.defaults.headers.common
-
 // console.log(process.env)
+// Use Cookies
+const cookie = false
 
 // We create our own axios instance and set a custom base URL.
 // Note that if we wouldn't set any config here we do not need
 // a named export, as we could just `import axios from 'axios'`
 const axiosInstance = axios.create({
   // baseURL: 'http://127.0.0.1:8000'
-  // baseURL: 'http://192.168.2.11:8000'
-  baseURL: 'http://localhost/larasar/public'
+  // baseURL: 'http://192.168.2.11:9000'
+  // baseURL: 'http://localhost/larasar/public'
+  baseURL: 'http://modemb.com/larasar/public'
 })
 
 export default ({ router, store, Vue }) => {
   // Request interceptor
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
+    const locale = store.getters['config/localeGetter']
+    request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     if (token) request.headers.common['Authorization'] = `Bearer ${token}`
-    // const locale = store.getters['config/localeGetter']
-    // if (locale) request.headers.common['Accept-Language'] = locale
+    if (locale) request.headers.common['Accept-Language'] = locale
 
     // request.headers['X-Socket-Id'] = Echo.socketId()
 
@@ -74,9 +75,9 @@ export default ({ router, store, Vue }) => {
   // Auth User Check
   store.dispatch('users/authAction')
   // Config
-  store.dispatch('config/configAction', Cookies.get('locale'))
+  store.dispatch('config/configAction', LocalStorage.getItem('locale'))
 }
 
 // Here we define a named export
 // that we can later use inside .js files:
-export { axiosInstance }
+export { axiosInstance, cookie }

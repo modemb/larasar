@@ -28,7 +28,6 @@
 
         <div>
           <q-btn color="primary" :label="$t('register')" @click.prevent="register"/>
-          <q-btn label="clients" type="reset" color="primary" flat class="q-ml-sm" @click.prevent="clients" />
         </div>
       </q-form>
 
@@ -38,7 +37,7 @@
 
 <script>
 export default {
-  name: 'PageIndex',
+  name: 'registerPage',
   data () {
     return {
       password: '88888888',
@@ -62,20 +61,6 @@ export default {
         // scope: ''
       }
       this.$store.dispatch('users/registerAction', data)
-    },
-    clients () {
-      const data = {
-        name: 'modemb@modemb.com',
-        secret: 'iI7ZtHQAGTNY5l24YfGAvqeKCNyRkwSbbYHIAAcQ',
-        redirect: 'http://localhost:8080'
-      }
-      this.$axios.get('/oauth/clients', data)
-        .then(response => {
-          console.log(response.data)
-        })
-        .catch(response => {
-          // List errors on response...
-        })
     }
   }
 }

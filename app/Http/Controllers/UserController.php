@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //$user->getId()
+        return 'index';
     }
 
     /**

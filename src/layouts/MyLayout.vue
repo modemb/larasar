@@ -1,5 +1,6 @@
 <template>
   <q-layout view="lHr lpR lFr">
+    <!-- Header -->
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-btn dense round icon="menu" behavior="mobile" @click="rightDrawer = !rightDrawer" />
@@ -15,7 +16,9 @@
         <q-btn dense round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" />
       </q-toolbar>
     </q-header>
+    <!-- Header End -->
 
+    <!-- Drawer -->
     <q-drawer
       v-model="leftDrawerOpen"
       side="right"
@@ -110,11 +113,13 @@
         </div>
       </q-scroll-area>
     </q-drawer>
+    <!-- Drawer End -->
 
     <q-page-container>
       <router-view />
     </q-page-container>
 
+    <!-- Footer -->
     <q-footer elevated>
       <q-toolbar>
         <q-toolbar-title>
@@ -125,6 +130,7 @@
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
+    <!-- Footer End -->
 
     <q-ajax-bar />
   </q-layout>
