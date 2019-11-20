@@ -1,20 +1,20 @@
 <template>
-  <q-btn icon="fab fa-github" :label="$t('login_with')" color="primary" class="q-ml-sm" @click.prevent="login" />
+  <q-btn icon="fab fa-github" v-if="githubAuth" :label="$t('login_with')" color="primary" class="q-ml-sm" @click.prevent="login" />
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'LoginWithGithub',
 
-  // computed: {
-  //   ...mapGetters({
-  //     githubAuth: 'config/githubAuthGetter'
-  //   })
-  //   // url: () => `/api/login/github`
-  //   // url: () => `/api/oauth/github`
-  // },
+  computed: {
+    ...mapGetters({
+      githubAuth: 'config/githubAuthGetter'
+    }),
+    url: () => `/api/login/github`
+    // url: () => `/api/oauth/github`
+  },
 
   mounted () {
     window.addEventListener('message', this.onMessage, false)

@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return 'index';
+        return DB::table('oauth_providers')->get();
     }
 
     /**
@@ -30,7 +30,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return 'create';
     }
 
     /**
@@ -40,7 +40,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { //return $name = $request->input('email');
+    { //return $request;
 
       if ($request->user == 'login') {
 

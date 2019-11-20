@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+ 
 
 /*
 |--------------------------------------------------------------------------
@@ -50,10 +50,13 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::post('email/verify/{user}', 'Auth\VerificationController@verify')->name('verification.verify');
     Route::post('email/resend', 'Auth\VerificationController@resend');
 
+    Route::post('register/{driver}', 'Auth\RegisterController@redirectToProvider');
+    Route::get('register/{driver}/callback', 'Auth\RegisterController@handleProviderCallback')->name('oauth.callback');
+
     // Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     // Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
     // Route::post('login/{driver}', 'Auth\OAuthController@redirectToProvider');
     // Route::get('login/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
-    Route::post('login/{driver}', 'Auth\LoginController@redirectToProvider');
-    Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallback')->name('oauth.callback');
+    // Route::post('login/{driver}', 'Auth\LoginController@redirectToProvider');
+    // Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallback')->name('oauth.callback');
 });

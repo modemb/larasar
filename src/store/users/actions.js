@@ -59,7 +59,13 @@ export async function authAction (context) {
 }
 
 export async function githubAuthAction (context, { provider }) {
-  const { data } = await axiosInstance.post(`/api/login/${provider}`)
+  const { data } = await axiosInstance.post(`/api/register/${provider}`)
+  if (data === '') {
+    axiosInstance.get(`/api/users`).then(response => {
+      console.log(response.data)
+      context.dispatch('loginAction', response.data)
+    })
+  }
   return data.url
 }
 
