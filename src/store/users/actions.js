@@ -3,7 +3,11 @@ import { Notify } from 'quasar'
 
 export async function loginAction ({ commit, dispatch }, payload) {
   axiosInstance.post('api/users', payload)
+<<<<<<< HEAD
     .then((response) => {
+=======
+    .then(response => {
+>>>>>>> modemb/dev
       const token = response.data
       commit('loginMutation', token)
       dispatch('authAction')
@@ -56,6 +60,16 @@ export async function authAction (context) {
       })
     }
   }
+<<<<<<< HEAD
+=======
+}
+
+export async function githubAuthAction (context, { provider }) {
+  const { data } = await axiosInstance.post(`/api/login/${provider}`, {
+    url: process.env.APP_URL // ToImplement
+  })
+  return data.url
+>>>>>>> modemb/dev
 }
 
 export async function logoutAction ({ commit }, payload) {

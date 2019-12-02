@@ -20,7 +20,11 @@ class UserController extends Controller
      */
     public function index()
     {
+<<<<<<< HEAD
         //$user->getId()
+=======
+      //
+>>>>>>> modemb/dev
     }
 
     /**
@@ -30,7 +34,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return 'create';
     }
 
     /**
@@ -40,7 +44,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+<<<<<<< HEAD
     { //return $name = $request->input('email');
+=======
+    { //return $request;
+>>>>>>> modemb/dev
 
       if ($request->user == 'login') {
 
@@ -82,7 +90,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-      //
+      return User::find($id);
     }
 
     /**

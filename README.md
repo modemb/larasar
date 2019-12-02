@@ -1,4 +1,4 @@
-# Quasar App (client) & Laravel Backend (server)
+# Quasar App (client) & Laravel API Backend (server)
 
 A Laravel + Quasar Framework App
 
@@ -18,8 +18,11 @@ npm run dev
 ```bash
 quasar dev
 php artisan serve
+<<<<<<< HEAD
 # In order to build a SSR website, we first need to add the SSR mode to our Quasar project:
 quasar mode add ssr
+=======
+>>>>>>> modemb/dev
 quasar dev -m ssr
 ```
 
@@ -31,6 +34,7 @@ npm run lint
 ### Build the app for production
 ```bash
 quasar build
+quasar build -m ssr
 ```
 
 ### Customize the configuration

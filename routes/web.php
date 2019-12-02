@@ -15,6 +15,10 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
   return view('welcome');
+<<<<<<< HEAD
+=======
+  // return view('index');
+>>>>>>> modemb/dev
 });
 
 Route::get('/user', function (Request $request) {

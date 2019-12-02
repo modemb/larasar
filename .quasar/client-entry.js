@@ -14,6 +14,8 @@ import 'quasar/dist/quasar.ie.polyfills.js'
 
 
 
+import '@quasar/extras/fontawesome-v5/fontawesome-v5.css'
+
 import '@quasar/extras/roboto-font/roboto-font.css'
 
 import '@quasar/extras/material-icons/material-icons.css'
@@ -51,7 +53,7 @@ Vue.config.productionTip = false
 
 
 
-console.info('[Quasar] Running SPA.')
+console.info('[Quasar] Running SSR.')
 
 
 
@@ -104,13 +106,22 @@ async function start () {
 
   
 
+    // prime the store with server-initialized state.
+    // the state is determined during SSR and inlined in the page markup.
+    
+    if (window.__INITIAL_STATE__) {
+      store.replaceState(window.__INITIAL_STATE__)
+    }
     
 
-    
+    const appInstance = new Vue(app)
 
-      new Vue(app)
-
-    
+    // wait until router has resolved all async before hooks
+    // and async components...
+    router.onReady(() => {
+      
+      appInstance.$mount('#q-app')
+    })
 
   
 

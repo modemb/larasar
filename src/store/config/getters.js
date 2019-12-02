@@ -5,3 +5,10 @@ export function localeGetter (state) {
 export function localesGetter (state) {
   return state.locales
 }
+<<<<<<< HEAD
+=======
+
+export function githubAuthGetter (state) {
+  return state.githubAuth
+}
+>>>>>>> modemb/dev

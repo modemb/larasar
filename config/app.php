@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://localhost/larasar/public'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -172,6 +172,7 @@ return [
         /*
          * Package Service Providers...
          */
+        // Barryvdh\Cors\ServiceProvider::class,
 
         /*
          * Application Service Providers...

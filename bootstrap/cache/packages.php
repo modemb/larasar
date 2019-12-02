@@ -31,6 +31,20 @@
       0 => 'Laravel\\Passport\\PassportServiceProvider',
     ),
   ),
+<<<<<<< HEAD
+=======
+  'laravel/socialite' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Socialite\\SocialiteServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Socialite' => 'Laravel\\Socialite\\Facades\\Socialite',
+    ),
+  ),
+>>>>>>> modemb/dev
   'laravel/tinker' => 
   array (
     'providers' => 

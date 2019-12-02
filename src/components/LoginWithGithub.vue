@@ -1,18 +1,16 @@
 <template>
-  <button v-if="githubAuth" class="btn btn-dark ml-auto" type="button" @click="login">
-    {{ $t('login_with') }}
-    <fa :icon="['fab', 'github']" />
-  </button>
+  <q-btn icon="fab fa-github" v-if="githubAuth" :label="$t('login_with')" color="primary" class="q-ml-sm" @click.prevent="login" />
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'LoginWithGithub',
 
-  computed: {
-    githubAuth: () => window.config.githubAuth,
-    url: () => `/api/oauth/github`
-  },
+  computed: mapGetters({
+    githubAuth: 'config/githubAuthGetter'
+  }),
 
   mounted () {
     window.addEventListener('message', this.onMessage, false)
@@ -26,10 +24,9 @@ export default {
     async login () {
       const newWindow = openWindow('', this.$t('login'))
 
-      const url = await this.$store.dispatch('auth/fetchOauthUrl', {
+      const url = await this.$store.dispatch('users/githubAuthAction', {
         provider: 'github'
       })
-
       newWindow.location.href = url
     },
 
@@ -37,15 +34,18 @@ export default {
      * @param {MessageEvent} e
      */
     onMessage (e) {
-      if (e.origin !== window.origin || !e.data.token) {
+      console.log(e.origin, window.origin)
+      if (/* e.origin !== window.origin || */ !e.data.token) {
         return
       }
-
-      this.$store.dispatch('auth/saveToken', {
-        token: e.data.token
-      })
-
-      this.$router.push({ name: 'home' })
+      // console.log(e.data.token, 'hi')
+      try {
+        this.$store.commit('users/loginMutation', e.data.token)
+      } catch (e) { alert(e) }
+      this.$store.dispatch('users/authAction')
+        .then(() => {
+          this.$router.push({ path: '/' })
+        })
     }
   }
 }

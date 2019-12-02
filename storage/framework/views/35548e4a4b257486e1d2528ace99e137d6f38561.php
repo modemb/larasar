@@ -13,7 +13,11 @@
                         </div>
                     <?php endif; ?>
 
+<<<<<<< HEAD
                     <?php echo app('translator')->get('You are logged in!'); ?>
+=======
+                    You are logged in!
+>>>>>>> modemb/dev
                 </div>
             </div>
         </div>

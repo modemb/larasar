@@ -20,8 +20,16 @@ Route::get('/config', function () {
       'locales' => config('app.locales'),
       'githubAuth' => config('services.github.client_id'),
     ];
+<<<<<<< HEAD
 
 });
+=======
+});
+
+Route::apiResources([
+  'users' => 'UserController'
+]);
+>>>>>>> modemb/dev
 
 Route::group(['middleware' => 'auth:api'], function () {
     // Route::post('logout', 'Auth\LoginController@logout');
@@ -31,17 +39,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     // Route::patch('settings/profile', 'Settings\ProfileController@update');
     // Route::patch('settings/password', 'Settings\PasswordController@update');
-    Route::apiResources([
-      'users' => 'UserController'
-    ]);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
-
-    Route::apiResources([
-      'users' => 'UserController'
-    ]);
-
     // Route::post('login', 'Auth\LoginController@login');
     Route::post('register', 'Auth\RegisterController@register');
 
@@ -53,4 +53,10 @@ Route::group(['middleware' => 'guest:api'], function () {
 
     // Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     // Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
+
+    // Route::post('login/{driver}', 'Auth\OAuthController@redirectToProvider');
+    // Route::get('login/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
+
+    Route::post('login/{driver}', 'Auth\LoginController@redirectToProvider');
+    Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallback')->name('oauth.callback');
 });
