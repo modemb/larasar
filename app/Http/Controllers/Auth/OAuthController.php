@@ -47,7 +47,27 @@ class OAuthController extends Controller
     public function handleProviderCallback($provider)
     {
         $user = Socialite::driver($provider)->stateless()->user();
-        $user = $this->findOrCreateUser($provider, $user);
+        return$user = $this->findOrCreateUser($provider, $user);
+
+        //=========================================================
+        $guzzle = new \GuzzleHttp\Client;$passport = config('services.passport');
+        $response = $guzzle->post($passport['login_endpoint'], [
+            'form_params' => [
+              // 'grant_type' => 'client_credentials',
+              'client_id' => $passport['client_id'],
+              'client_secret' => $passport['client_secret'],
+              'grant_type' => 'password',
+              'username' => $user['email'],
+              'password' => '88888888',
+              'scope' => '*',
+            ],
+        ]); $res = json_decode((string) $response->getBody(), true);
+
+        return  view('oauth/callback', [
+          'token' => $res['access_token'],
+          'token_type' => $res['token_type'],
+          'expires_in' => $res['expires_in'],
+        ]);//======================================================
 
         $this->guard()->setToken(
             $token = $this->guard()->login($user)

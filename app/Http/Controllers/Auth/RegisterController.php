@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Auth;
 use App\User;
-use Socialite;
-use App\OAuthProvider;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -25,7 +23,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers, AuthenticatesUsers;
 
     /**
      * Where to redirect users after registration.
@@ -42,9 +40,6 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-        config([
-          'services.github.redirect' => route('oauth.callback', 'github'),
-        ]);
     }
 
     /**
@@ -75,80 +70,5 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-    }
-
-    /**
-     * Redirect the user to the Provider authentication page.
-     *
-     * @return Response
-     */
-    public function redirectToProvider($provider)
-    {
-        return [
-            'url' => Socialite::driver($provider)
-              ->stateless()
-              ->redirect()
-              ->getTargetUrl()
-        ];
-    }
-
-    /**
-     * Obtain the user information from GitHub.
-     *
-     * @return Response
-     */
-    public function handleProviderCallback(Request $request, $provider)
-    {
-        if($request->input('error') !== null)
-            return $request->input('error');
-
-        $user = Socialite::driver($provider)
-          ->stateless()
-          ->user();
-
-        $email = ($user->email != '')?$user->email:'';
-        $name = ($user->name != '')?$user->name:'';
-        $avatar = ($user->avatar != '')?$user->avatar:'';
-
-        $localUser = User::where('email', $user->email)->first();
-
-
-        //$this->validator();
-
-        //If does not exist, create it
-        if(!$localUser){
-          $localUser = $this->create([
-            'email' => $email,
-            'name' => $name,
-            'password' => 'klksdjanfljkadsf'
-          ]);
-          OAuthProvider::create([
-            'user_id' => $localUser->id,
-            'provider' => $provider,
-            'provider_user_id' => $user->id,
-            'access_token' => $user->token,
-            'refresh_token' => $user->refreshToken,
-          ]);
-          //Login the user
-          // Auth::login($localUser);
-          //Update Avatar
-          User::where('email',$email)
-            ->update([
-              'avatar' => $avatar
-            ]);
-          // return 'create';// redirect('/first');
-        }
-
-        //Update Avatar
-        User::where('email',$email)
-          ->update([
-            'avatar' => $avatar
-          ]);
-
-        //Login the user
-        // Auth::login($localUser);
-
-        return [$user];// redirect('/');
-
     }
 }

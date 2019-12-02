@@ -102,8 +102,8 @@ module.exports = function (ctx) {
     devServer: {
       // https: true,
       // port: 8080,
-      port: ctx.mode.spa ? 9000
-      : (ctx.mode.pwa ? 8080 : 9090),
+      port: ctx.mode.spa ? 8080
+      : (ctx.mode.pwa ? 9090 : 9000),
       open: true // opens browser window automatically
     },
 
@@ -113,7 +113,7 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
-      pwa: true
+      pwa: false
     },
 
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa

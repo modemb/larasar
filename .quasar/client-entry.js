@@ -53,7 +53,7 @@ Vue.config.productionTip = false
 
 
 
-console.info('[Quasar] Running SPA.')
+console.info('[Quasar] Running SSR.')
 
 
 
@@ -106,13 +106,22 @@ async function start () {
 
   
 
+    // prime the store with server-initialized state.
+    // the state is determined during SSR and inlined in the page markup.
+    
+    if (window.__INITIAL_STATE__) {
+      store.replaceState(window.__INITIAL_STATE__)
+    }
     
 
-    
+    const appInstance = new Vue(app)
 
-      new Vue(app)
-
-    
+    // wait until router has resolved all async before hooks
+    // and async components...
+    router.onReady(() => {
+      
+      appInstance.$mount('#q-app')
+    })
 
   
 

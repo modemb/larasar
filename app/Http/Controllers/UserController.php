@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return DB::table('oauth_providers')->get();
+      //
     }
 
     /**
@@ -82,7 +82,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-      //
+      return User::find($id);
     }
 
     /**

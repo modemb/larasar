@@ -38,15 +38,6 @@ export default {
         // scope: ''
       }
       this.$store.dispatch('users/loginAction', data) // Action
-      // this.$store.commit('users/someMutation', data) // Mutation
-
-      // Save the token.
-      // this.$store.dispatch('auth/saveToken', {
-      //   token: data.token,
-      //   remember: this.remember
-      // })
-      // Fetch the user.await
-      // this.$store.dispatch('auth/fetchUser')
     }
   }
 }

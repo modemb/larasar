@@ -1,6 +1,6 @@
 <?php
 
- 
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +22,10 @@ Route::get('/config', function () {
     ];
 });
 
+Route::apiResources([
+  'users' => 'UserController'
+]);
+
 Route::group(['middleware' => 'auth:api'], function () {
     // Route::post('logout', 'Auth\LoginController@logout');
     Route::get('/user', function (Request $request) {
@@ -30,17 +34,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     // Route::patch('settings/profile', 'Settings\ProfileController@update');
     // Route::patch('settings/password', 'Settings\PasswordController@update');
-    Route::apiResources([
-      'users' => 'UserController'
-    ]);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
-
-    Route::apiResources([
-      'users' => 'UserController'
-    ]);
-
     // Route::post('login', 'Auth\LoginController@login');
     Route::post('register', 'Auth\RegisterController@register');
 
@@ -50,13 +46,12 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::post('email/verify/{user}', 'Auth\VerificationController@verify')->name('verification.verify');
     Route::post('email/resend', 'Auth\VerificationController@resend');
 
-    Route::post('register/{driver}', 'Auth\RegisterController@redirectToProvider');
-    Route::get('register/{driver}/callback', 'Auth\RegisterController@handleProviderCallback')->name('oauth.callback');
-
     // Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     // Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
+
     // Route::post('login/{driver}', 'Auth\OAuthController@redirectToProvider');
     // Route::get('login/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
-    // Route::post('login/{driver}', 'Auth\LoginController@redirectToProvider');
-    // Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallback')->name('oauth.callback');
+
+    Route::post('login/{driver}', 'Auth\LoginController@redirectToProvider');
+    Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallback')->name('oauth.callback');
 });

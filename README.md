@@ -1,4 +1,4 @@
-# Quasar App (client) & Laravel Backend (server)
+# Quasar App (client) & Laravel API Backend (server)
 
 A Laravel + Quasar Framework App
 

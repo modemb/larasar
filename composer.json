@@ -1,7 +1,7 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "A Laravel-Qusar starter project template.",
     "keywords": [
         "framework",
         "laravel"

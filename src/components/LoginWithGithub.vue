@@ -8,13 +8,9 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'LoginWithGithub',
 
-  computed: {
-    ...mapGetters({
-      githubAuth: 'config/githubAuthGetter'
-    }),
-    url: () => `/api/login/github`
-    // url: () => `/api/oauth/github`
-  },
+  computed: mapGetters({
+    githubAuth: 'config/githubAuthGetter'
+  }),
 
   mounted () {
     window.addEventListener('message', this.onMessage, false)
@@ -31,26 +27,25 @@ export default {
       const url = await this.$store.dispatch('users/githubAuthAction', {
         provider: 'github'
       })
-      // let test = await this.$axios.get(url)
       newWindow.location.href = url
-      console.log(newWindow.location.href)
-      // window.opener.postMessage({ token: url })
     },
 
     /**
      * @param {MessageEvent} e
      */
     onMessage (e) {
-      if (e.origin !== window.origin || !e.data.token) {
+      console.log(e.origin, window.origin)
+      if (/* e.origin !== window.origin || */ !e.data.token) {
         return
       }
-
-      this.$store.dispatch('users/authAction', {
-        token: e.data.token
-      })
-
-      // this.$router.push({ name: 'public.index' })
-      this.$router.push({ path: '/' })
+      // console.log(e.data.token, 'hi')
+      try {
+        this.$store.commit('users/loginMutation', e.data.token)
+      } catch (e) { alert(e) }
+      this.$store.dispatch('users/authAction')
+        .then(() => {
+          this.$router.push({ path: '/' })
+        })
     }
   }
 }

@@ -19,7 +19,7 @@ export default ({ router, store, Vue }) => {
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
     const locale = store.getters['config/localeGetter']
-    request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    // request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     if (token) request.headers.common['Authorization'] = `Bearer ${token}`
     if (locale) request.headers.common['Accept-Language'] = locale
 
@@ -36,7 +36,7 @@ export default ({ router, store, Vue }) => {
       Notify.create({
         color: 'negative',
         position: 'top',
-        message: status,
+        message: 'Response interceptor ' + status,
         icon: 'report_problem'
 
         // type: 'error',
