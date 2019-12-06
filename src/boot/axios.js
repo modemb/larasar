@@ -1,4 +1,5 @@
 import { Notify, Cookies } from 'quasar'
+import { Notify, LocalStorage } from 'quasar'
 import axios from 'axios'
 // console.log(process.env)
 // Use Cookies
