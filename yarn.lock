@@ -845,7 +845,7 @@
   resolved "https://registry.yarnpkg.com/@positron/stack-trace/-/stack-trace-1.0.0.tgz#14fcc712a530038ef9be1ce6952315a839f466a8"
   integrity sha1-FPzHEqUwA475vhzmlSMVqDn0Zqg=
 
-"@quasar/app@^1.3.3":
+"@quasar/app@^1.3.1":
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/@quasar/app/-/app-1.3.3.tgz#40bebe47161ddc76ce3070e6a4537447b7ee2279"
   integrity sha512-LjKV1PzLDey2KKfcdopxNEBJRqIig5pzFjUj6AS4UKq/N9bHakn2+3TqtYz4oCSn1NWkQgX38GVRqsSblnVzlQ==
@@ -7622,7 +7622,7 @@ qs@~6.5.2:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
-quasar@^1.5.4:
+quasar@^1.5.2:
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.5.4.tgz#9687347603521931c34fa0cf0679d1c2417bf203"
   integrity sha512-B3WVyXddjiJ1TpEv/ZTVFoiMSzCgLtIuCA+sXFuPqi8vENWnbmwPRvJPGPaz5ghw1mi+0TAoDL1zKpY2quXjZg==
