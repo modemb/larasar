@@ -1,9 +1,6 @@
 <template>
   <q-layout view="lHr lpR lFr">
-<<<<<<< HEAD
-=======
     <!-- Header -->
->>>>>>> modemb/dev
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-btn dense round icon="menu" behavior="mobile" @click="rightDrawer = !rightDrawer" />
@@ -122,10 +119,7 @@
       <router-view />
     </q-page-container>
 
-<<<<<<< HEAD
-=======
     <!-- Footer -->
->>>>>>> modemb/dev
     <q-footer elevated>
       <q-toolbar>
         <q-toolbar-title>
@@ -136,10 +130,7 @@
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
-<<<<<<< HEAD
-=======
     <!-- Footer End -->
->>>>>>> modemb/dev
 
     <q-ajax-bar />
   </q-layout>

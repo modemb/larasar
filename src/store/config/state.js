@@ -1,8 +1,5 @@
 export default {
   locale: null,
-<<<<<<< HEAD
-  locales: null
-=======
   locales: {
     'en': 'EN',
     'es': 'ES',
@@ -10,5 +7,4 @@ export default {
     'zh-CN': '中文'
   },
   githubAuth: null
->>>>>>> modemb/dev
 }

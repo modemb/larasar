@@ -42,8 +42,17 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function driver($provider)
+    {
         config([
-          'services.github.redirect' => route('oauth.callback', 'github'),
+          'services.'.$provider.'.redirect' => route('oauth.callback', $provider),
         ]);
     }
 
@@ -54,6 +63,7 @@ class LoginController extends Controller
      */
     public function redirectToProvider($provider)
     {
+        $this->driver($provider);
         return [
           'url' => Socialite::driver($provider)
             ->stateless()
@@ -70,6 +80,8 @@ class LoginController extends Controller
     public function handleProviderCallback(Request $request, $provider)
     {
         if($request->input('error') !== null) return $request->input('error');
+
+        $this->driver($provider);
 
         $user = Socialite::driver($provider)
           ->stateless()
@@ -88,7 +100,7 @@ class LoginController extends Controller
           $localUser = User::create([
             'email' => $email,
             'name' => $name,
-            'password' => Hash::make($data['88888888'])
+            'password' => Hash::make('88888888')
           ]);
           User::where('email',$email)
             ->update([
@@ -123,7 +135,7 @@ class LoginController extends Controller
             'token' => $res['access_token'],
             'token_type' => $res['token_type'],
             'expires_in' => $res['expires_in'],
-            'transfer' => 'http://localhost:9090'
+            'transfer' => 'http://localhost:8080'
         ]);
     }
 }

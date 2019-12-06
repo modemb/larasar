@@ -8,8 +8,7 @@
           access_token: '{{ $token }}',
           expires_in: '{{ $expires_in }}'
         }
-    },  '{{$transfer}}')
-    window.close()
+    },  '{{$transfer}}'); window.close()
   </script>
 </head>
 <body>
