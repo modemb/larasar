@@ -28,10 +28,6 @@
 
         <div>
           <q-btn color="primary" :label="$t('register')" @click.prevent="register"/>
-<<<<<<< HEAD
-          <q-btn label="clients" type="reset" color="primary" flat class="q-ml-sm" @click.prevent="clients" />
-=======
->>>>>>> modemb/dev
         </div>
       </q-form>
 
@@ -41,11 +37,7 @@
 
 <script>
 export default {
-<<<<<<< HEAD
-  name: 'PageIndex',
-=======
   name: 'registerPage',
->>>>>>> modemb/dev
   data () {
     return {
       password: '88888888',

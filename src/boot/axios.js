@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { Notify, Cookies } from 'quasar'
-=======
-import { Notify, LocalStorage } from 'quasar'
->>>>>>> modemb/dev
 import axios from 'axios'
 // console.log(process.env)
 // Use Cookies
@@ -13,30 +9,19 @@ const cookie = false
 // a named export, as we could just `import axios from 'axios'`
 const axiosInstance = axios.create({
   // baseURL: 'http://127.0.0.1:8000'
-<<<<<<< HEAD
-  // baseURL: 'http://192.168.2.11:8000'
-  baseURL: 'http://localhost/larasar/public'
-=======
   // baseURL: 'http://192.168.2.11:9000'
   // baseURL: 'http://localhost/larasar/public'
   baseURL: 'http://modemb.com/larasar/public'
->>>>>>> modemb/dev
 })
 
 export default ({ router, store, Vue }) => {
   // Request interceptor
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
-<<<<<<< HEAD
-    if (token) request.headers.common['Authorization'] = `Bearer ${token}`
-    // const locale = store.getters['config/localeGetter']
-    // if (locale) request.headers.common['Accept-Language'] = locale
-=======
     const locale = store.getters['config/localeGetter']
     // request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     if (token) request.headers.common['Authorization'] = `Bearer ${token}`
     if (locale) request.headers.common['Accept-Language'] = locale
->>>>>>> modemb/dev
 
     // request.headers['X-Socket-Id'] = Echo.socketId()
 
@@ -90,11 +75,7 @@ export default ({ router, store, Vue }) => {
   // Auth User Check
   store.dispatch('users/authAction')
   // Config
-<<<<<<< HEAD
-  store.dispatch('config/configAction', Cookies.get('locale'))
-=======
   store.dispatch('config/configAction', LocalStorage.getItem('locale'))
->>>>>>> modemb/dev
 }
 
 // Here we define a named export
