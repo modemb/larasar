@@ -6,20 +6,21 @@
         <q-input v-model="email" filled type="email" :hint="$t('email')" />
 
         <q-input v-model="password" filled type="password" :hint="$t('password')" />
-
-        <q-btn color="primary" :label="$t('login')" @click.prevent="login"/>
-        <login-with-github />
+        <div class="col-md-12">
+          <q-btn color="primary" :label="$t('login')" @click.prevent="login" class="q-ma-sm"/>
+          <login-with-social />
+        </div>
       </q-form>
 
     </q-page>
 </template>
 
 <script>
-import LoginWithGithub from '../../components/LoginWithGithub'
+import LoginWithSocial from '../../components/LoginWithSocial'
 
 export default {
   components: {
-    LoginWithGithub
+    LoginWithSocial
   },
   name: 'PageIndex',
   data () {
