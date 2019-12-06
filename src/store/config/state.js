@@ -6,5 +6,5 @@ export default {
     'fr': 'FR',
     'zh-CN': '中文'
   },
-  githubAuth: null
+  services: null
 }

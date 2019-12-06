@@ -13,12 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/config', function () {
+Route::post('/config', function () {
     return [
       'appName' => config('app.name'),
-      'locale' => $locale = app()->getLocale(),
+      'locale' => app()->getLocale(),
       'locales' => config('app.locales'),
-      'githubAuth' => config('services.github.client_id'),
+      'services' => config('services'),
     ];
 });
 
@@ -46,12 +46,12 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::post('email/verify/{user}', 'Auth\VerificationController@verify')->name('verification.verify');
     Route::post('email/resend', 'Auth\VerificationController@resend');
 
+    Route::post('login/{driver}', 'Auth\LoginController@redirectToProvider');
+    Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallback')->name('oauth.callback');
+
     // Route::post('oauth/{driver}', 'Auth\OAuthController@redirectToProvider');
     // Route::get('oauth/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
 
     // Route::post('login/{driver}', 'Auth\OAuthController@redirectToProvider');
     // Route::get('login/{driver}/callback', 'Auth\OAuthController@handleProviderCallback')->name('oauth.callback');
-
-    Route::post('login/{driver}', 'Auth\LoginController@redirectToProvider');
-    Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallback')->name('oauth.callback');
 });

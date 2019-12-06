@@ -1,31 +1,47 @@
 <template>
-  <q-btn icon="fab fa-github" v-if="githubAuth" :label="$t('login_with')" color="primary" class="q-ml-sm" @click.prevent="login" />
+  <span>
+    <span v-for="(provider, key) in drivers" :key="key">
+      <q-btn
+        :icon='"fab fa-"+provider'
+        v-if="socialAuth[provider].client_id"
+        :label="$t('login_with')"
+        color="primary"
+        class="q-ma-sm"
+        @click.prevent="login(provider)"
+      />
+    </span>
+  </span>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'LoginWithGithub',
-
+  name: 'LoginWithsocial',
+  data () {
+    return {
+      drivers: [
+        'github',
+        'facebook',
+        'google'
+      ]
+    }
+  },
   computed: mapGetters({
-    githubAuth: 'config/githubAuthGetter'
+    socialAuth: 'config/servicesGetter'
   }),
-
   mounted () {
     window.addEventListener('message', this.onMessage, false)
   },
-
   beforeDestroy () {
     window.removeEventListener('message', this.onMessage)
   },
-
   methods: {
-    async login () {
+    async login (driver) {
       const newWindow = openWindow('', this.$t('login'))
-
-      const url = await this.$store.dispatch('users/githubAuthAction', {
-        provider: 'github'
+      console.log(driver)
+      const url = await this.$store.dispatch('users/socialAuthAction', {
+        provider: driver
       })
       newWindow.location.href = url
     },

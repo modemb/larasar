@@ -58,7 +58,7 @@ export async function authAction (context) {
   }
 }
 
-export async function githubAuthAction (context, { provider }) {
+export async function socialAuthAction (context, { provider }) {
   const { data } = await axiosInstance.post(`/api/login/${provider}`, {
     url: process.env.APP_URL // ToImplement
   })
