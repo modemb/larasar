@@ -57,11 +57,13 @@ console.info('[Quasar] Running SPA.')
 
 
 
-const { app, store, router } = createApp()
-
 
 
 async function start () {
+  const { app, store, router } = await createApp()
+
+  
+
   
   let routeUnchanged = true
   const redirect = url => {

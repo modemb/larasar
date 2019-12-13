@@ -20,16 +20,11 @@ Route::post('/config', function () {
       'locales' => config('app.locales'),
       'services' => config('services'),
     ];
-<<<<<<< HEAD
-
-});
-=======
 });
 
 Route::apiResources([
   'users' => 'UserController'
 ]);
->>>>>>> modemb/dev
 
 Route::group(['middleware' => 'auth:api'], function () {
     // Route::post('logout', 'Auth\LoginController@logout');

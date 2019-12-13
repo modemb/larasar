@@ -22,18 +22,10 @@ class UserController extends Controller
      */
     public function index()
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        //$user->getId()
-=======
-      //
->>>>>>> modemb/dev
-=======
       $bitgo = new BitGoSDK(env('YOUR_API_KEY_HERE'), CurrencyCode::BITCOIN, false);
       $bitgo->walletId = env('YOUR_WALLET_ID_HERE');
 
       return$createAddress = $bitgo->createWalletAddress();
->>>>>>> modemb/dev
     }
 
     /**
@@ -53,11 +45,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-<<<<<<< HEAD
-    { //return $name = $request->input('email');
-=======
     { //return $request;
->>>>>>> modemb/dev
 
       if ($request->user == 'login') {
 

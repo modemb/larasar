@@ -24,10 +24,7 @@ class HomeController extends Controller
     public function index()
     {
       // return auth()->user();
-<<<<<<< HEAD
-=======
       // return url()->current();
->>>>>>> modemb/dev
       return view('home');
     }
 }
