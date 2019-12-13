@@ -1,4 +1,4 @@
-# Quasar App (client) & Laravel API Backend (server)
+# Quasar App (client) & Laravel Backend (server)
 
 A Laravel + Quasar Framework App
 
@@ -24,6 +24,7 @@ quasar mode add ssr
 =======
 >>>>>>> modemb/dev
 quasar dev -m ssr
+quasar dev -m pwa
 ```
 
 ### Lint the files
@@ -35,6 +36,7 @@ npm run lint
 ```bash
 quasar build
 quasar build -m ssr
+quasar build -m pwa
 ```
 
 ### Customize the configuration

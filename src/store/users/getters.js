@@ -3,6 +3,5 @@ export function authGetter (state) {
 }
 
 export function tokenGetter (state) {
-  // console.log(state, 'authGetter')
   return state.token
 }

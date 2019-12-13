@@ -1,5 +1,6 @@
 import { Notify, LocalStorage } from 'quasar'
 import axios from 'axios'
+
 // console.log(process.env)
 // Use Cookies
 const cookie = false
@@ -8,6 +9,7 @@ const cookie = false
 // Note that if we wouldn't set any config here we do not need
 // a named export, as we could just `import axios from 'axios'`
 const axiosInstance = axios.create({
+  // baseURL: process.env.APP_URL
   // baseURL: 'http://127.0.0.1:8000'
   // baseURL: 'http://192.168.2.11:9000'
   // baseURL: 'http://localhost/larasar/public'

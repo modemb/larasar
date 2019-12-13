@@ -5,7 +5,7 @@ export async function loginAction ({ commit, dispatch }, payload) {
   axiosInstance.post('api/users', payload)
     .then(response => {
       const token = response.data
-      commit('loginMutation', token)
+      commit('loginMutation', { ...token, ...payload })
       dispatch('authAction')
       // Redirect home.
       this.$router.push({ path: '/' })
@@ -59,9 +59,7 @@ export async function authAction (context) {
 }
 
 export async function socialAuthAction (context, { provider }) {
-  const { data } = await axiosInstance.post(`/api/login/${provider}`, {
-    url: process.env.APP_URL // ToImplement
-  })
+  const { data } = await axiosInstance.post(`/api/login/${provider}`)
   return data.url
 }
 
