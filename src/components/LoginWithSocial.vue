@@ -54,7 +54,6 @@ export default {
       if (/* e.origin !== window.origin || */ !e.data.token) {
         return
       }
-      // console.log(e.data.token, 'hi')
       try {
         this.$store.commit('users/loginMutation', e.data.token)
       } catch (e) { alert(e) }

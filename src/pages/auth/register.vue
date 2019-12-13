@@ -27,7 +27,7 @@
         </q-input>
 
         <div>
-          <q-btn color="primary" :label="$t('register')" @click.prevent="register"/>
+          <q-btn color="primary" :label="$t('register')" @click.prevent="register" />
         </div>
       </q-form>
 

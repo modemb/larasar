@@ -1,5 +1,6 @@
 export default {
   locale: null,
   locales: null,
-  services: null
+  services: null,
+  appName: null
 }

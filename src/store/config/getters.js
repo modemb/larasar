@@ -9,3 +9,7 @@ export function localesGetter (state) {
 export function servicesGetter (state) {
   return state.services
 }
+
+export function appNameGetter (state) {
+  return state.appName
+}

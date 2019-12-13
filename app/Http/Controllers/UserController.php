@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use neto737\BitGoSDK\Enum\CurrencyCode;
+use neto737\BitGoSDK\BitGoSDK;
 use Illuminate\Http\Request;
 use App\User;
 use Hash;
@@ -20,7 +22,10 @@ class UserController extends Controller
      */
     public function index()
     {
-      //
+      $bitgo = new BitGoSDK(env('YOUR_API_KEY_HERE'), CurrencyCode::BITCOIN, false);
+      $bitgo->walletId = env('YOUR_WALLET_ID_HERE');
+
+      return$createAddress = $bitgo->createWalletAddress();
     }
 
     /**
@@ -105,7 +110,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return 'update';
     }
 
     /**

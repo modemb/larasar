@@ -8,7 +8,7 @@
         <q-btn to="/"  class="q-ma-md">
           <q-toolbar-title>
             <q-icon name="home" />
-            Larasar
+            {{ appName }}
           </q-toolbar-title>
         </q-btn>
 
@@ -101,6 +101,15 @@
               <q-item-label caption>@QuasarFramework</q-item-label>
             </q-item-section>
           </q-item>
+          <q-item clickable to='/block_chain'>
+            <q-item-section avatar>
+              <q-icon name="money" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>BlockChain</q-item-label>
+              <q-item-label caption>@QuasarFramework</q-item-label>
+            </q-item-section>
+          </q-item>
         </q-list>
         <!-- Authenticated -->
         <div v-if="user" class="q-pa-md">
@@ -154,7 +163,8 @@ export default {
     LocaleDropdown
   },
   computed: mapGetters({
-    user: 'users/authGetter'
+    user: 'users/authGetter',
+    appName: 'config/appNameGetter'
   }),
   methods: {
     async logout () {

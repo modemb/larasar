@@ -3,4 +3,5 @@ export function configMutation (state, { config, locale }) {
   state.locale = locale
   state.locales = config.locales
   state.services = config.services
+  state.appName = config.appName
 }
