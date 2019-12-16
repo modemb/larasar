@@ -30,9 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'passport' => [
-      'login_endpoint' => env('APP_URL').'/oauth/token',
       'client_id' => env('PASSPORT_GRANT_CLIENT_ID'),
       'client_secret' => env('PASSPORT_GRANT_CLIENT_SECRET'),
+      'login_endpoint' => $app->runningInConsole() ? config('app.url') : url('/').'/oauth/token',
     ],
     'github' => [
       'client_id' => env('GITHUB_CLIENT_ID'),
@@ -46,7 +46,6 @@ return [
       'client_id' => env('GOOGLE_CLIENT_ID'),
       'client_secret' => env('GOOGLE_CLIENT_SECRET'),
       // 'redirect' => env('APP_URL').'api/login/google/callback',
-      // 'redirect' => $app->runningInConsole() ? config('app.url') : url('/') . 'api/login/google/callback',
     ],
     'twilio' => [
       'token'  => env('TWILIO_TOKEN'),

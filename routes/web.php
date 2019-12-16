@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,20 +11,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-  return view('welcome');
-  // return view('index');
-});
-
-Route::get('/user', function (Request $request) {
-  return $request->user();
-});
+// Route::get('/', function () {
+//   // return view('welcome');
+//   return view('index');
+// });
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-// Route::get('{path}', function () {
-//   return view('welcome');
-//   // return view('index');
-// })->where('path', '.*');
+Route::get('{path}', function () {
+  // return view('welcome');
+  return view('index');
+})->where('path', '.*');

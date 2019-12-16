@@ -13,43 +13,43 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   ready () {
     if (process.env.DEV) {
-      console.log('App is being served from cache by a service worker.')
+      // console.log('App is being served from cache by a service worker.')
     }
   },
 
   registered (/* registration */) {
     if (process.env.DEV) {
-      console.log('Service worker has been registered.')
+      // console.log('Service worker has been registered.')
     }
   },
 
   cached (/* registration */) {
     if (process.env.DEV) {
-      console.log('Content has been cached for offline use.')
+      // console.log('Content has been cached for offline use.')
     }
   },
 
   updatefound (/* registration */) {
     if (process.env.DEV) {
-      console.log('New content is downloading.')
+      // console.log('New content is downloading.')
     }
   },
 
   updated (/* registration */) {
     if (process.env.DEV) {
-      console.log('New content is available; please refresh.')
+      // console.log('New content is available; please refresh.')
     }
   },
 
   offline () {
     if (process.env.DEV) {
-      console.log('No internet connection found. App is running in offline mode.')
+      // console.log('No internet connection found. App is running in offline mode.')
     }
   },
 
-  error (err) {
+  error (/* err */) {
     if (process.env.DEV) {
-      console.error('Error during service worker registration:', err)
+      // console.error('Error during service worker registration:', err)
     }
   }
 })

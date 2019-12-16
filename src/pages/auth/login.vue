@@ -27,8 +27,8 @@ export default {
   },
   data () {
     return {
-      email: 'modembfr@gmail.com',
-      password: '88888888',
+      email: '',
+      password: '',
       isPwd: true,
       remember: false
     }
