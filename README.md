@@ -36,13 +36,10 @@ npm run lint
 quasar build
 quasar build -m ssr
 quasar build -m pwa
-<<<<<<< HEAD
-=======
 quasar build -m [android|ios]
 quasar build -m electron
 quasar build -m ios -- some params --and options --here
 quasar build -m electron -- --no-sandbox --disable-setuid-sandbox
->>>>>>> modemb/dev
 ```
 
 ### Customize the configuration
