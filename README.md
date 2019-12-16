@@ -20,13 +20,10 @@ quasar dev
 php artisan serve
 quasar dev -m ssr
 quasar dev -m pwa
-<<<<<<< HEAD
-=======
 quasar dev -m [android|ios]
 quasar dev -m electron
 quasar dev -m ios -- some params --and options --here
 quasar dev -m electron -- --no-sandbox --disable-setuid-sandbox
->>>>>>> modemb/dev
 ```
 
 ### Lint the files
