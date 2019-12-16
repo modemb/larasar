@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<<<<<<< HEAD
-<file name=".env" server="home682217311.1and1-data.host/larasar/" local="132204996837334726" remote="132204997180000000" Dst="1" />
+<file name=".env" server="home682217311.1and1-data.host/larasar/" local="132209065610000000" remote="132209065610000000" Dst="1" />
 <file name=".editorconfig" server="home682217311.1and1-data.host/larasar/" local="132183444190000000" remote="132183444190000000" Dst="1" />
 <file name=".env.example" server="home682217311.1and1-data.host/larasar/" local="132183444190000000" remote="132183444190000000" Dst="1" />
 <file name=".eslintignore" server="home682217311.1and1-data.host/larasar/" local="132183444190000000" remote="132183444190000000" Dst="1" />
@@ -24,9 +23,4 @@
 <file name="server.php" server="home682217311.1and1-data.host/larasar/" local="132183444220000000" remote="132183444220000000" Dst="1" />
 <file name="webpack.mix.js" server="home682217311.1and1-data.host/larasar/" local="132183444220000000" remote="132183444220000000" Dst="1" />
 <file name="yarn.lock" server="home682217311.1and1-data.host/larasar/" local="132183444220000000" remote="132183444220000000" Dst="1" />
-=======
-<file name=".env" server="home682217311.1and1-data.host/larasar/" local="132209065410248126" remote="132209065610000000" Dst="1" />
-<file name="composer.json" server="home682217311.1and1-data.host/larasar/" local="132206727415114854" remote="132209064150000000" Dst="1" />
-<file name="composer.lock" server="home682217311.1and1-data.host/larasar/" local="132206727415134851" remote="132209064320000000" Dst="1" />
->>>>>>> modemb/dev
 </dwsync>

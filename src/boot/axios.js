@@ -2,11 +2,7 @@ import { Notify, LocalStorage } from 'quasar'
 import { i18n } from './i18n'
 import axios from 'axios'
 
-<<<<<<< HEAD
-// console.log(process.env)
-=======
 // console.log(i18n, process.env)
->>>>>>> modemb/dev
 // Use Cookies
 const cookie = false
 const lang = LocalStorage.getItem('locale') || i18n.locale
@@ -15,13 +11,7 @@ const lang = LocalStorage.getItem('locale') || i18n.locale
 // Note that if we wouldn't set any config here we do not need
 // a named export, as we could just `import axios from 'axios'`
 const axiosInstance = axios.create({
-<<<<<<< HEAD
-  // baseURL: process.env.APP_URL
-  // baseURL: 'http://127.0.0.1:8000'
-  // baseURL: 'http://192.168.2.11:9000'
-=======
   // baseURL: process.env.API_URL
->>>>>>> modemb/dev
   // baseURL: 'http://localhost/larasar/public'
   baseURL: 'http://modemb.com/larasar/public'
 })
