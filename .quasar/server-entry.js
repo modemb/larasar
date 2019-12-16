@@ -48,7 +48,7 @@ import qboot_Bootaxios from 'boot/axios'
 // return a Promise that resolves to the app instance.
 export default context => {
   return new Promise(async (resolve, reject) => {
-    const { app, store, router } = createApp(context)
+    const { app, store, router } = await createApp(context)
 
     
     let routeUnchanged = true

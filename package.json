@@ -26,6 +26,7 @@
     },
     "devDependencies": {
         "@quasar/app": "^1.4.0",
+        "@quasar/quasar-app-extension-dotenv": "^1.0.0",
         "@vue/eslint-config-standard": "^4.0.0",
         "babel-eslint": "^10.0.1",
         "bootstrap": "^4.4.1",

@@ -40,11 +40,11 @@ export default {
   name: 'registerPage',
   data () {
     return {
-      password: '88888888',
-      password_confirmation: '88888888',
+      password: '',
+      password_confirmation: '',
       isPwd: true,
-      email: 'modembfr@gmail.com',
-      name: 'Mohamed'
+      email: '',
+      name: ''
     }
   },
   methods: {

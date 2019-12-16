@@ -846,15 +846,21 @@
   integrity sha1-FPzHEqUwA475vhzmlSMVqDn0Zqg=
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 "@quasar/app@^1.3.1":
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/@quasar/app/-/app-1.3.3.tgz#40bebe47161ddc76ce3070e6a4537447b7ee2279"
   integrity sha512-LjKV1PzLDey2KKfcdopxNEBJRqIig5pzFjUj6AS4UKq/N9bHakn2+3TqtYz4oCSn1NWkQgX38GVRqsSblnVzlQ==
 =======
+=======
+>>>>>>> modemb/dev
 "@quasar/app@^1.0.0":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@quasar/app/-/app-1.2.2.tgz#ded118f5329b7c8fd1245898a409be1b0802c7e3"
   integrity sha512-Z/l2j9EL6xXiO5eLTMPYcoHDSRf9gd+TC0F+2piJcG1OSEil51aeMWlvZBoxN4jz2Gm5ZiUwmq8mwttlzEeQMg==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   dependencies:
     "@quasar/babel-preset-app" "1.1.6"
@@ -7537,15 +7543,21 @@ qs@~6.5.2:
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 quasar@^1.5.2:
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.5.4.tgz#9687347603521931c34fa0cf0679d1c2417bf203"
   integrity sha512-B3WVyXddjiJ1TpEv/ZTVFoiMSzCgLtIuCA+sXFuPqi8vENWnbmwPRvJPGPaz5ghw1mi+0TAoDL1zKpY2quXjZg==
 =======
+=======
+>>>>>>> modemb/dev
 quasar@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.2.5.tgz#eefc723b347b20ce324954aff9b412be9520dca3"
   integrity sha512-O/bQtdu4Bn0+VfnvIZW8QY4FvfybCCQVoXmDFq7e3yW/V/1pvIjWPKei/qVKY5v303YohxJoTrGoAkmMMjYp8Q==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
 query-string@^4.1.0:
@@ -9322,10 +9334,17 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
 
+<<<<<<< HEAD
 vue-i18n@^8.15.1:
   version "8.15.1"
   resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.15.1.tgz#90097a08a1e932f645c6b9c404c780d24f6d6224"
   integrity sha512-GBbz8qYCu0U2LNu4IcuFLZiuyninG4k26knvhL7GZG5Ncp4RR2VKDEH6g8gQ6I+UUBCvH2MBQVPSdxWe4DBkPw==
+=======
+vue-i18n@^8.0.0:
+  version "8.15.0"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.15.0.tgz#9b11ef8e7a124f67cdf788c8c90a81f3606240ed"
+  integrity sha512-juJ/avAP39bOMycC+qQDLJ8U9z9LtLF/9PsRoJLBSfsYZo9bqYntyyX5QPicwlb1emJKjgxhZ3YofHiQcXBu0Q==
+>>>>>>> modemb/dev
 
 vue-loader@15.7.1, vue-loader@^15.4.2:
   version "15.7.1"

@@ -27,8 +27,13 @@ export default {
   },
   data () {
     return {
+<<<<<<< HEAD
       email: 'modembfr@gmail.com',
       password: '88888888',
+=======
+      email: '',
+      password: '',
+>>>>>>> modemb/dev
       isPwd: true,
       remember: false
     }

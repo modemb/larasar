@@ -32,7 +32,11 @@ module.exports = function (ctx) {
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
       iconSet: 'material-icons', // Quasar icon set
+<<<<<<< HEAD
       lang: 'fr', // Quasar language pack
+=======
+      // lang: 'fr', // Quasar language pack
+>>>>>>> modemb/dev
 
       // Possible values for "all":
       // * 'auto' - Auto-import needed Quasar components & directives
@@ -73,7 +77,7 @@ module.exports = function (ctx) {
       // ================= \\
       // vueCompiler: true,
       distDir: 'public/quasar',
-      // publicPath: '/quasar/',
+      publicPath: '/larasar/public',
 
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack (cfg) {
@@ -86,6 +90,13 @@ module.exports = function (ctx) {
             formatter: require('eslint').CLIEngine.getFormatter('stylish')
           }
         })
+<<<<<<< HEAD
+=======
+
+        if (ctx.prod) {
+          cfg.output.publicPath = '/larasar/public/quasar/'
+        }
+>>>>>>> modemb/dev
       }
     },
 
@@ -103,7 +114,7 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
-      pwa: false
+      pwa: true
     },
 
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa

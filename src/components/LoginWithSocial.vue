@@ -39,7 +39,7 @@ export default {
   methods: {
     async login (driver) {
       const newWindow = openWindow('', this.$t('login'))
-      console.log(driver)
+      // console.log(driver)
       const url = await this.$store.dispatch('users/socialAuthAction', {
         provider: driver
       })
@@ -50,7 +50,7 @@ export default {
      * @param {MessageEvent} e
      */
     onMessage (e) {
-      console.log(e.origin, window.origin)
+      // console.log(e.origin, window.origin)
       if (/* e.origin !== window.origin || */ !e.data.token) {
         return
       }

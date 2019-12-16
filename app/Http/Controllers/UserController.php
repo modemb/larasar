@@ -24,7 +24,10 @@ class UserController extends Controller
     {
       $bitgo = new BitGoSDK(env('YOUR_API_KEY_HERE'), CurrencyCode::BITCOIN, false);
       $bitgo->walletId = env('YOUR_WALLET_ID_HERE');
+<<<<<<< HEAD
 
+=======
+>>>>>>> modemb/dev
       return$createAddress = $bitgo->createWalletAddress();
     }
 

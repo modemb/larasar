@@ -30,9 +30,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'passport' => [
+<<<<<<< HEAD
       'login_endpoint' => env('APP_URL').'/oauth/token',
       'client_id' => env('PASSPORT_GRANT_CLIENT_ID'),
       'client_secret' => env('PASSPORT_GRANT_CLIENT_SECRET'),
+=======
+      'client_id' => env('PASSPORT_GRANT_CLIENT_ID'),
+      'client_secret' => env('PASSPORT_GRANT_CLIENT_SECRET'),
+      'login_endpoint' => $app->runningInConsole() ? config('app.url') : url('/').'/oauth/token',
+>>>>>>> modemb/dev
     ],
     'github' => [
       'client_id' => env('GITHUB_CLIENT_ID'),
@@ -46,7 +52,17 @@ return [
       'client_id' => env('GOOGLE_CLIENT_ID'),
       'client_secret' => env('GOOGLE_CLIENT_SECRET'),
       // 'redirect' => env('APP_URL').'api/login/google/callback',
-      // 'redirect' => $app->runningInConsole() ? config('app.url') : url('/') . 'api/login/google/callback',
+    ],
+    'twilio' => [
+      'token'  => env('TWILIO_TOKEN'),
+      'id'     => env('TWILIO_ID'),
+      'number' => env('TWILIO_NUMBER'),
+    ],
+    'bitgo' => [
+      'env'   => env('BITGO_ENV', 'test'),
+      'token' => env('BITGO_TOKEN'),
+      'host'  => env('BITGO_HOST'),
+      'port'  => env('BITGO_PORT'),
     ],
     'twilio' => [
       'token'  => env('TWILIO_TOKEN'),

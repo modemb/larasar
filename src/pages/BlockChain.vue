@@ -1,16 +1,16 @@
 <template>
     <q-page class="q-pa-md flex-center">
-        {{block_chain.bitgo}}
+        {{block_chain}}
     </q-page>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   name: 'loginPage',
-  computed: mapGetters({
-    block_chain: 'config/servicesGetter'
-  })
+  data () {
+    return {
+      block_chain: 'working on it'
+    }
+  }
 }
 </script>
