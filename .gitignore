@@ -1,9 +1,9 @@
+/dist
 /node_modules
 /public/hot
 /public/storage
 /storage/*.key
 /vendor
-/dist
 .env
 .env.backup
 .phpunit.result.cache

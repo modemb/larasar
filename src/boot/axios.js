@@ -13,7 +13,7 @@ const lang = LocalStorage.getItem('locale') || i18n.locale
 const axiosInstance = axios.create({
   // baseURL: process.env.API_URL
   // baseURL: 'http://localhost/larasar/public'
-  baseURL: 'http://modemb.com/larasar/public'
+  baseURL: 'http://larasar.modemb.com'
 })
 
 export default ({ router, store, Vue }) => {
