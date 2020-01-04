@@ -1,0 +1,9 @@
+org.cordova.quasar.app
+drawable screen
+mipmap ic_launcher
+mipmap ic_launcher_background
+mipmap ic_launcher_foreground
+string activity_name
+string app_name
+string launcher_name
+xml config

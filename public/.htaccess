@@ -5,8 +5,7 @@
 
     RewriteEngine On
 
-    RewriteBase /larasar/public
-    # RewriteBase /larasar/public/quasar
+    RewriteBase /
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
