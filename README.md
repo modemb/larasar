@@ -14,13 +14,19 @@ npm install
 npm run dev
 ```
 
+### Cordova Setup: Android Studio – Configure – Default Project Structure 
+```bash
+export ANDROID_HOME='D:\Projects\Android\android-sdk'
+export JAVA_HOME='E:\Apps\Android\Android Studio\jre'
+```
+
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 ```bash
 quasar dev
 php artisan serve
 quasar dev -m ssr
 quasar dev -m pwa
-quasar dev -m [android|ios]
+quasar dev -m android|ios
 quasar dev -m electron
 quasar dev -m ios -- some params --and options --here
 quasar dev -m electron -- --no-sandbox --disable-setuid-sandbox
@@ -36,7 +42,7 @@ npm run lint
 quasar build
 quasar build -m ssr
 quasar build -m pwa
-quasar build -m [android|ios]
+quasar build -m android|ios
 quasar build -m electron
 quasar build -m ios -- some params --and options --here
 quasar build -m electron -- --no-sandbox --disable-setuid-sandbox

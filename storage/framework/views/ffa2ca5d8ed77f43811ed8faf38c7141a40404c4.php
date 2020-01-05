@@ -98,7 +98,4 @@
         </div>
     </body>
 </html>
-<script>
-  console.log(process)
-</script>
 <?php /**PATH D:\Projects\wamp\www\larasar\resources\views/welcome.blade.php ENDPATH**/ ?>

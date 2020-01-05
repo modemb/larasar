@@ -72,8 +72,8 @@ module.exports = function (ctx) {
       // extractCSS: false,
       // ================= \\
       // vueCompiler: true,
-      distDir: 'public/quasar',
-      publicPath: '/larasar/public',
+      // distDir: 'public/quasar',
+      publicPath: '/',
 
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack (cfg) {
@@ -86,9 +86,9 @@ module.exports = function (ctx) {
             formatter: require('eslint').CLIEngine.getFormatter('stylish')
           }
         })
-
+        // Comment to build To dist
         if (ctx.prod) {
-          cfg.output.publicPath = '/larasar/public/quasar/'
+          // cfg.output.publicPath = '/quasar'
         }
       }
     },

@@ -3,8 +3,7 @@ import { axiosInstance, cookie } from 'boot/axios'
 import { i18n } from 'boot/i18n'
 
 export function configAction ({ commit }, locale) {
-  cookie ? Cookies.set('locale', locale, { expires: 365 })
-    : LocalStorage.set('locale', locale, { expires: 365 })
+  cookie ? Cookies.set('locale', locale, { expires: 365 }) : LocalStorage.set('locale', locale, { expires: 365 })
   i18n.locale = locale
   axiosInstance.post('api/config')
     .then((response) => {
