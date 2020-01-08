@@ -45,8 +45,7 @@ return [
     'google' => [
       'client_id' => env('GOOGLE_CLIENT_ID'),
       'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-      // 'redirect' => env('APP_URL').'api/login/google/callback',
-      // 'redirect' => $app->runningInConsole() ? config('app.url') : url('/') . 'api/login/google/callback',
+      // 'redirect' => env('APP_URL').'api/login/google/callback'
     ],
     'twilio' => [
       'token'  => env('TWILIO_TOKEN'),

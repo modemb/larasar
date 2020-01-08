@@ -62,6 +62,37 @@ class UserController extends Controller
             ]
         ]); return json_decode((string) $response->getBody(), true);
 
+      } elseif ($request->user == 'register') {
+
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed'
+        ]);
+
+        $seed = str_split('abcdefghijklmnopqrstuvwxyz'
+             .'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+             .'0123456789!@#$%^&*()'); // and any other characters
+        shuffle($seed); // probably optional since array_is randomized; this may be redundant
+        $rand = ''; foreach (array_rand($seed, 6) as $k) $rand .= $seed[$k];
+
+        $user = User::create([
+            'role' => $request->role,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]); //UserModule: TagStore
+
+        if(Auth::check()) $content_role = [
+            'title'=> 'The '.Auth::user()->role.' Added You As '.$request['role'],
+            'body'=> 'Please use your email: '.$request['email'].' and password: '.$rand.' to login',
+            'button' => 'Click Here',
+            'url' => env('APP_URL').'/login'
+        ];  //Mail::to($request->email)->send(new InfoOfatv($content_role));
+
+        // if($request->form == 'admin')
+        // return back()->with('status', $request['role'].' Created Successfully');
+        return response()->json('Registered successfully', 200);
       } elseif ($request->id) {
 
         // DB::table('oauth_access_tokens')

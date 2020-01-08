@@ -49,18 +49,15 @@ export default {
   },
   methods: {
     register () {
-      const data = {
-        // grant_type: 'password',
-        // client_id: 2,
-        // client_secret: 'BeCXauYX2wRcLgNDnX9btRpKHsAC0MXDQTgJGZp2',
+      this.$store.dispatch('users/registerAction', {
         name: this.name,
         email: this.email,
         password: this.password,
         password_confirmation: this.password_confirmation,
-        user: 'login'
-        // scope: ''
-      }
-      this.$store.dispatch('users/registerAction', data)
+        role: 'User',
+        user: 'register',
+        scope: ''
+      })
     }
   }
 }

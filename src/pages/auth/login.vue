@@ -35,14 +35,13 @@ export default {
   },
   methods: {
     login () {
-      var data = {
+      this.$store.dispatch('users/loginAction', {
         email: this.email,
         password: this.password,
         remember: this.remember,
         user: 'login'
         // scope: ''
-      }
-      this.$store.dispatch('users/loginAction', data) // Action
+      })
     }
   }
 }

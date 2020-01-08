@@ -1,4 +1,4 @@
-#Sat Jan 04 09:26:55 EST 2020
+#Tue Jan 07 10:01:01 EST 2020
 base.0=D\:\\Projects\\wamp\\www\\larasar\\src-cordova\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\release\\0
 path.0=classes.dex
 renamed.0=classes.dex

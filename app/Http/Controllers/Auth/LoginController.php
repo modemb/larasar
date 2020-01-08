@@ -135,7 +135,7 @@ class LoginController extends Controller
             'token' => $res['access_token'],
             'token_type' => $res['token_type'],
             'expires_in' => $res['expires_in'],
-            'transfer' => 'http://larasar.modemb.com/'
+            'transfer' => 'http://larasar.modemb.com'
         ]);
     }
 }
