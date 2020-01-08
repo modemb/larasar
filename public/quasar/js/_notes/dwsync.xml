@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
+<<<<<<< HEAD
 <file name="2d0deed0.f8ce0890.js" server="home682217311.1and1-data.host/larasar/" local="132209342857983451" remote="132209344200000000" Dst="1" />
 <file name="2d0f0f34.61a2f99f.js" server="home682217311.1and1-data.host/larasar/" local="132209342858003441" remote="132209344200000000" Dst="1" />
 <file name="2d21eb45.1bd68112.js" server="home682217311.1and1-data.host/larasar/" local="132209342858013444" remote="132209344210000000" Dst="1" />
@@ -10,4 +11,16 @@
 <file name="ead2eb96.d4bbf5cd.js" server="home682217311.1and1-data.host/larasar/" local="132209342858023440" remote="132209344250000000" Dst="1" />
 <file name="app.b19f7c36.js" server="home682217311.1and1-data.host/larasar/" local="132209342858013444" remote="132209344270000000" Dst="1" />
 <file name="vendor.97baac00.js" server="home682217311.1and1-data.host/larasar/" local="132209342858023440" remote="132209344310000000" Dst="1" />
+=======
+<file name="2d0deed0.db958630.js" server="home682217311.1and1-data.host/larasar/" local="132229483465020341" remote="132229484200000000" Dst="1" />
+<file name="2d0f0f34.3bf78766.js" server="home682217311.1and1-data.host/larasar/" local="132229483465050356" remote="132229484200000000" Dst="1" />
+<file name="2d21eb45.b11785ef.js" server="home682217311.1and1-data.host/larasar/" local="132229483465060341" remote="132229484200000000" Dst="1" />
+<file name="2d2250f0.977ca9b1.js" server="home682217311.1and1-data.host/larasar/" local="132229483465060341" remote="132229484200000000" Dst="1" />
+<file name="2d225216.3a4b5503.js" server="home682217311.1and1-data.host/larasar/" local="132229483465060341" remote="132229484200000000" Dst="1" />
+<file name="2d22c0ff.498629dd.js" server="home682217311.1and1-data.host/larasar/" local="132229483465060341" remote="132229484200000000" Dst="1" />
+<file name="4b47640d.02c68189.js" server="home682217311.1and1-data.host/larasar/" local="132229483465060341" remote="132229484210000000" Dst="1" />
+<file name="80b96ea8.8386fb9a.js" server="home682217311.1and1-data.host/larasar/" local="132229483465060341" remote="132229484210000000" Dst="1" />
+<file name="app.3bf245b6.js" server="home682217311.1and1-data.host/larasar/" local="132229483465060341" remote="132229484210000000" Dst="1" />
+<file name="vendor.cec75be6.js" server="home682217311.1and1-data.host/larasar/" local="132229483465070339" remote="132229484210000000" Dst="1" />
+>>>>>>> modemb/dev
 </dwsync>

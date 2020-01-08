@@ -21,13 +21,14 @@ export async function loginAction ({ commit, dispatch }, payload) {
 }
 
 export async function registerAction ({ commit, dispatch }, payload) {
-  axiosInstance.post('api/register', payload)
-  dispatch('loginAction', payload)
+  axiosInstance.post('api/users', payload)
     .then(response => {
+      payload.user = 'login'
+      dispatch('loginAction', payload)
       Notify.create({
         color: 'positive',
         position: 'top',
-        message: 'Registration Successfull',
+        message: response.data,
         icon: 'check'
       })
     })

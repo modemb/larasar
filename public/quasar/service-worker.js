@@ -14,7 +14,11 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
+<<<<<<< HEAD
   "/larasar/public/quasar/precache-manifest.6803f619bd105fa73fbf896f700e7fab.js"
+=======
+  "/quasar/precache-manifest.eeacfb76f12005a64c09de90576935cd.js"
+>>>>>>> modemb/dev
 );
 
 workbox.core.setCacheNameDetails({prefix: "quapp"});

@@ -48,6 +48,15 @@ quasar build -m ios -- some params --and options --here
 quasar build -m electron -- --no-sandbox --disable-setuid-sandbox
 ```
 
+### Publishing to Store
+https://quasar.dev/quasar-cli/developing-cordova-apps/publishing-to-store#Introduction
+
+# Navigate to the folder that contains keytool.exe or add this folder to your path
+# Open a Command Prompt window running as an administrator.
+cd 'E:\Apps\Android\Android Studio\jre\jre\bin'
+keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 20000
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore 'D:\Projects\wamp\www\larasar\dist\cordova\android\apk\release' alias_name
+
 ### Customize the configuration
 See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
 

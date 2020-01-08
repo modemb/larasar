@@ -11,9 +11,7 @@ const lang = LocalStorage.getItem('locale') || i18n.locale
 // Note that if we wouldn't set any config here we do not need
 // a named export, as we could just `import axios from 'axios'`
 const axiosInstance = axios.create({
-  // baseURL: process.env.API_URL
-  // baseURL: 'http://localhost/larasar/public'
-  baseURL: 'http://larasar.modemb.com'
+  baseURL: process.env.API_URL
 })
 
 export default ({ router, store, Vue }) => {

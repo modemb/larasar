@@ -5,7 +5,12 @@
 
     RewriteEngine On
 
+<<<<<<< HEAD
     RewriteBase /
+=======
+    # RewriteBase /
+    RewriteBase /larasar/public 
+>>>>>>> modemb/dev
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .

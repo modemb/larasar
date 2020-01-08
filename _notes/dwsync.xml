@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
+<<<<<<< HEAD
 <file name=".env" server="home682217311.1and1-data.host/larasar/" local="132209065610000000" remote="132209065610000000" Dst="1" />
+=======
+<file name=".env" server="home682217311.1and1-data.host/larasar/" local="132209065410248126" remote="132209065610000000" Dst="1" />
+<file name="composer.json" server="home682217311.1and1-data.host/larasar/" local="132209064150000000" remote="132209064150000000" Dst="1" />
+<file name="composer.lock" server="home682217311.1and1-data.host/larasar/" local="132209064320000000" remote="132209064320000000" Dst="1" />
+>>>>>>> modemb/dev
 <file name=".editorconfig" server="home682217311.1and1-data.host/larasar/" local="132183444190000000" remote="132183444190000000" Dst="1" />
 <file name=".env.example" server="home682217311.1and1-data.host/larasar/" local="132183444190000000" remote="132183444190000000" Dst="1" />
 <file name=".eslintignore" server="home682217311.1and1-data.host/larasar/" local="132183444190000000" remote="132183444190000000" Dst="1" />
@@ -13,8 +19,11 @@
 <file name="artisan" server="home682217311.1and1-data.host/larasar/" local="132183444200000000" remote="132183444200000000" Dst="1" />
 <file name="babel.config.js" server="home682217311.1and1-data.host/larasar/" local="132183444200000000" remote="132183444200000000" Dst="1" />
 <file name="bash.exe.stackdump" server="home682217311.1and1-data.host/larasar/" local="132183444200000000" remote="132183444200000000" Dst="1" />
+<<<<<<< HEAD
 <file name="composer.json" server="home682217311.1and1-data.host/larasar/" local="132183444200000000" remote="132183444200000000" Dst="1" />
 <file name="composer.lock" server="home682217311.1and1-data.host/larasar/" local="132183444210000000" remote="132183444210000000" Dst="1" />
+=======
+>>>>>>> modemb/dev
 <file name="package-lock.json" server="home682217311.1and1-data.host/larasar/" local="132183444210000000" remote="132183444210000000" Dst="1" />
 <file name="package.json" server="home682217311.1and1-data.host/larasar/" local="132183444210000000" remote="132183444210000000" Dst="1" />
 <file name="phpunit.xml" server="home682217311.1and1-data.host/larasar/" local="132183444220000000" remote="132183444220000000" Dst="1" />

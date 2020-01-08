@@ -59,11 +59,14 @@ console.info('[Quasar] Running PWA.')
 console.info('[Quasar] Forcing PWA into the network-first approach to not break Hot Module Replacement while developing.')
 
 
+<<<<<<< HEAD
 
 // Needed only for iOS PWAs
 if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.navigator.standalone) {
   import(/* webpackChunkName: "fastclick"  */ '@quasar/fastclick')
 }
+=======
+>>>>>>> modemb/dev
 
 
 async function start () {
