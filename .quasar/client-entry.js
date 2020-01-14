@@ -36,8 +36,6 @@ import Vue from 'vue'
 import createApp from './app.js'
 
 
-import 'app/src-pwa/register-service-worker.js'
-
 
 
 import qboot_Booti18n from 'boot/i18n'
@@ -55,18 +53,10 @@ Vue.config.productionTip = false
 
 
 
-console.info('[Quasar] Running PWA.')
-console.info('[Quasar] Forcing PWA into the network-first approach to not break Hot Module Replacement while developing.')
+console.info('[Quasar] Running SPA.')
 
 
-<<<<<<< HEAD
 
-// Needed only for iOS PWAs
-if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.navigator.standalone) {
-  import(/* webpackChunkName: "fastclick"  */ '@quasar/fastclick')
-}
-=======
->>>>>>> modemb/dev
 
 
 async function start () {
