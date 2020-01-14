@@ -13,15 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/config', function () {
-    return [
-      'appName' => config('app.name'),
-      'locale' => app()->getLocale(),
-      'locales' => config('app.locales'),
-      'services' => config('services'),
-    ];
-});
-
 Route::apiResources([
   'users' => 'UserController'
 ]);
@@ -38,7 +29,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::group(['middleware' => 'guest:api'], function () {
     // Route::post('login', 'Auth\LoginController@login');
-    Route::post('register', 'Auth\RegisterController@register');
+    // Route::post('register', 'Auth\RegisterController@register');
 
     Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');

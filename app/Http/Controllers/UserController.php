@@ -47,7 +47,14 @@ class UserController extends Controller
     public function store(Request $request)
     { //return $request;
 
+      if ($request->locale) $this->edit($request->locale);
+
       if ($request->user == 'login') {
+
+        $this->validate($request, [
+          'email' => ['required', 'string', 'email', 'max:255'],
+          'password' => ['required'],
+        ]);
 
         $http = new \GuzzleHttp\Client; $passport = config('services.passport');
 
@@ -65,9 +72,9 @@ class UserController extends Controller
       } elseif ($request->user == 'register') {
 
         $this->validate($request, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed'
+          'name' => ['required', 'string', 'max:255'],
+          'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+          'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
         $seed = str_split('abcdefghijklmnopqrstuvwxyz'
@@ -93,6 +100,16 @@ class UserController extends Controller
         // if($request->form == 'admin')
         // return back()->with('status', $request['role'].' Created Successfully');
         return response()->json('Registered successfully', 200);
+
+      } elseif ($request->locale) {
+
+        return [
+          'appName' => config('app.name'),
+          'locale' => app()->getLocale(),
+          'locales' => config('app.locales'),
+          'services' => config('services'),
+        ];
+
       } elseif ($request->id) {
 
         // DB::table('oauth_access_tokens')
@@ -129,7 +146,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+      config(['app.locale' => $id]);
     }
 
     /**

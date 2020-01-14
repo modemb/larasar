@@ -1,11 +1,11 @@
-import { Notify, LocalStorage } from 'quasar'
+import { Notify, Cookies, LocalStorage } from 'quasar'
 import { i18n } from './i18n'
 import axios from 'axios'
 
-// console.log(i18n, process.env)
+// console.log(process.env.COOKIE)
 // Use Cookies
-const cookie = false
-const lang = LocalStorage.getItem('locale') || i18n.locale
+const cookie = process.env.COOKIE
+let locale = cookie ? Cookies.get('locale') : LocalStorage.getItem('locale') || i18n.locale
 
 // We create our own axios instance and set a custom base URL.
 // Note that if we wouldn't set any config here we do not need
@@ -18,7 +18,7 @@ export default ({ router, store, Vue }) => {
   // Request interceptor
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
-    const locale = store.getters['config/localeGetter']
+    locale = store.getters['config/localeGetter']
     // request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     if (token) request.headers.common['Authorization'] = `Bearer ${token}`
     if (locale) request.headers.common['Accept-Language'] = locale
@@ -75,9 +75,9 @@ export default ({ router, store, Vue }) => {
   // Auth User Check
   store.dispatch('users/authAction')
   // Config
-  store.dispatch('config/configAction', lang)
+  store.dispatch('config/configAction', locale)
 }
 
 // Here we define a named export
 // that we can later use inside .js files:
-export { axiosInstance, cookie }
+export { axiosInstance, cookie, locale }

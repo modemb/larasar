@@ -1,8 +1,8 @@
-import { axiosInstance } from 'boot/axios'
+import { axiosInstance, locale } from 'boot/axios'
 import { Notify } from 'quasar'
 
 export async function loginAction ({ commit, dispatch }, payload) {
-  axiosInstance.post('api/users', payload)
+  const data = await axiosInstance.post('api/users', { ...{ locale: locale }, ...payload })
     .then(response => {
       const token = response.data
       commit('loginMutation', { ...token, ...payload })
@@ -10,18 +10,11 @@ export async function loginAction ({ commit, dispatch }, payload) {
       // Redirect home.
       this.$router.push({ path: '/' })
     })
-    .catch(error => {
-      Notify.create({
-        color: 'negative',
-        position: 'top',
-        message: 'loginAction ' + error,
-        icon: 'report_problem'
-      })
-    })
+  return data
 }
 
 export async function registerAction ({ commit, dispatch }, payload) {
-  axiosInstance.post('api/users', payload)
+  const data = await axiosInstance.post('api/users', { ...{ locale: locale }, ...payload })
     .then(response => {
       payload.user = 'login'
       dispatch('loginAction', payload)
@@ -32,14 +25,7 @@ export async function registerAction ({ commit, dispatch }, payload) {
         icon: 'check'
       })
     })
-    .catch(error => {
-      Notify.create({
-        color: 'negative',
-        position: 'top',
-        message: 'registerActionn ' + error,
-        icon: 'report_problem'
-      })
-    })
+  return data
 }
 
 export async function authAction (context) {

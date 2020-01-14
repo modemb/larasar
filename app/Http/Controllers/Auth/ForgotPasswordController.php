@@ -32,6 +32,18 @@ class ForgotPasswordController extends Controller
     }
 
     /**
+     * Validate the email for the given request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    protected function validateEmail(Request $request)
+    {
+        config(['app.locale' => $request->locale]);
+        $request->validate(['email' => 'required|email']);
+    }
+
+    /**
      * Get the response for a successful password reset link.
      *
      * @param  \Illuminate\Http\Request $request
