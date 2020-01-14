@@ -9,7 +9,11 @@
     RewriteBase /
 =======
     # RewriteBase /
+<<<<<<< HEAD
     RewriteBase /larasar/public 
+>>>>>>> modemb/dev
+=======
+    RewriteBase /larasar/public
 >>>>>>> modemb/dev
 
     # Handle Authorization Header

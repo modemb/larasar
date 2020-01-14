@@ -7,16 +7,37 @@
           filled
           v-model="name"
           :label="$t('name')"
-          :hint="$t('name')"
+          :hint="name_data"
           lazy-rules
-          :rules="[ val => val && val.length > 0 || $t('error_alert_title')]"
+          :rules="[val => val && val.length > 0 || name_data]"
         />
 
-        <q-input v-model="email" filled type="email" :hint="$t('email')" />
+        <q-input
+          v-model="email"
+          filled
+          :label="$t('email')"
+          type="email"
+          :hint="email_data"
+          lazy-rules
+          :rules="[val => val && val.length > 0 || email_data]"
+        />
 
-        <q-input v-model="password" filled type="password" :hint="$t('password')" />
+        <q-input
+          v-model="password"
+          filled
+          :label="$t('password')"
+          type="password"
+          :hint="password_data"
+          lazy-rules
+          :rules="[val => val && val.length > 0 || password_data]"
+        />
 
-        <q-input v-model="password_confirmation" filled :type="isPwd ? 'password' : 'text'" :hint="$t('confirm_password')">
+        <q-input
+          v-model="password_confirmation"
+          filled
+          :type="isPwd ? 'password' : 'text'"
+          :label="$t('confirm_password')"
+          >
           <template v-slot:append>
             <q-icon
               :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -40,11 +61,14 @@ export default {
   name: 'registerPage',
   data () {
     return {
-      password: '',
-      password_confirmation: '',
-      isPwd: true,
-      email: '',
-      name: ''
+      name: null,
+      name_data: null,
+      email: null,
+      email_data: null,
+      password: null,
+      password_data: null,
+      password_confirmation: null,
+      isPwd: true
     }
   },
   methods: {
@@ -58,6 +82,14 @@ export default {
         user: 'register',
         scope: ''
       })
+        .catch(error => {
+          console.log(error.response.data)
+          // console.log(error.response.data.message)
+          // console.log(error.response.data.errors.email[0])
+          this.name_data = [error.response.data.errors.name][0] || error.response.data.message
+          this.email_data = [error.response.data.errors.email][0] || error.response.data.message
+          this.password_data = [error.response.data.errors.password][0] || error.response.data.message
+        })
     }
   }
 }

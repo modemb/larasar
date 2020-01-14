@@ -22,8 +22,8 @@ export JAVA_HOME='E:\Apps\Android\Android Studio\jre'
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 ```bash
-quasar dev
 php artisan serve
+quasar dev
 quasar dev -m ssr
 quasar dev -m pwa
 quasar dev -m android|ios
