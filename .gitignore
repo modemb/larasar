@@ -1,6 +1,8 @@
 _notes/
+!_*/
 # /node_modules
 /public/hot
+/public/quasar
 /public/storage
 /storage/*.key
 /vendor

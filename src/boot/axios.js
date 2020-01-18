@@ -2,7 +2,6 @@ import { Notify, Cookies, LocalStorage } from 'quasar'
 import { i18n } from './i18n'
 import axios from 'axios'
 
-// console.log(process.env.COOKIE)
 // Use Cookies
 const cookie = process.env.COOKIE
 let locale = cookie ? Cookies.get('locale') : LocalStorage.getItem('locale') || i18n.locale
@@ -48,7 +47,7 @@ export default ({ router, store, Vue }) => {
       })
     }
 
-    if (status === 401 && store.getters['auth/check']) {
+    if (status === 401 && store.getters['users/authGetter']) {
       Notify.create({
         color: 'negative',
         position: 'top',

@@ -37,16 +37,23 @@
       <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
         <div class="absolute-bottom bg-transparent text-center">
           <template v-if="user">
-            <q-avatar size="70px" class="q-mb-sm">
+            <q-avatar size="70px" class="*q-mb-sm">
               <img :src="user.new.avatar">
             </q-avatar>
-            <div class="text-weight-bold">{{ user.name }}</div>
+            <div class="text-weight-bold">
+              <q-btn-dropdown
+                rounded
+                :label="user.name"
+                @click.prevent="authDrawer"
+              >
+              </q-btn-dropdown>
+            </div>
             <div>{{ user.email }}</div>
           </template>
         </div>
       </q-img>
       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
-        <q-list>
+        <q-list v-if='open'>
           <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
             <q-item-section avatar>
               <q-icon name="school" />
@@ -101,7 +108,27 @@
               <q-item-label caption>@QuasarFramework</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable to='/block_chain'>
+        </q-list>
+        <q-list v-else>
+          <q-item clickable to='/profile'>
+            <q-item-section avatar>
+              <q-icon name="person" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Profile</q-item-label>
+              <q-item-label caption>Admin</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable to='/users'>
+            <q-item-section avatar>
+              <q-icon name="people" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Users</q-item-label>
+              <!-- <q-item-label caption>@QuasarFramework</q-item-label> -->
+            </q-item-section>
+          </q-item>
+          <q-item clickable :to="{name: 'auth.block_chain'}">
             <q-item-section avatar>
               <q-icon name="money" />
             </q-item-section>
@@ -155,7 +182,8 @@ export default {
   data () {
     return {
       leftDrawerOpen: false, // this.$q.platform.is.desktop,
-      rightDrawer: false
+      rightDrawer: false,
+      open: true
     }
   },
   components: {
@@ -174,6 +202,13 @@ export default {
           // Redirect to login.
           this.$router.push({ name: 'public.login' })
         })
+    },
+    authDrawer () {
+      if (this.open) {
+        this.open = false
+      } else {
+        this.open = true
+      }
     }
   }
 }

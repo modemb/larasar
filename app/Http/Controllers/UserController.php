@@ -101,6 +101,7 @@ class UserController extends Controller
         // return back()->with('status', $request['role'].' Created Successfully');
         return response()->json('Registered successfully', 200);
 
+<<<<<<< HEAD
       } elseif ($request->locale) {
 
         return [
@@ -110,6 +111,8 @@ class UserController extends Controller
           'services' => config('services'),
         ];
 
+=======
+>>>>>>> modemb/dev
       } elseif ($request->id) {
 
         // DB::table('oauth_access_tokens')
@@ -125,6 +128,13 @@ class UserController extends Controller
         return response()->json('Logged out successfully', 200);
 
       }
+
+      return [
+        'appName' => config('app.name'),
+        'locale' => app()->getLocale(),
+        'locales' => config('app.locales'),
+        // 'services' => config('services'),
+      ];
     }
 
     /**
@@ -158,7 +168,39 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return 'update';
+      $this->validate($request, [
+          'name', //=> 'string|max:255',
+          'email', //=> 'string|email|max:255|unique:users',
+          'phone', //=> 'numeric|min:6|unique:users',
+      ]);
+
+      $check = Auth::validate([
+          'email'    => Auth::user()->email,//$this->user->email,
+          'password' => $request->current_password
+      ]);
+
+      $file = $request->file('avatar');
+      $put = User::find($id);
+      if ($request->name) $put->name = $request->name;
+      if ($request->email) $put->email = $request->email;
+      if ($request->phone) $put->phone = $request->phone;
+      if ($request->address) $put->address = $request->address;
+      if ($request->city) $put->city = $request->city;
+      if ($request->zip_code)  $put->zip_code = $request->zip_code;
+      if ($request->password) {
+          if (!$check) {
+              return back()->with('status', 'Current Password Do Not Match Our Record');
+          }
+          if ($request->password != $request->password_confirmation) {
+              return back()->with('status', 'Password Confirmation Do Not Match');
+          }   $put->password = bcrypt($request->password);
+      }
+      if ($request->hasFile('avatar')) {
+          $FileName = $file->getClientOriginalName();
+          $path = $file->storeAs('images/profile', $id.'jpg');
+          $file->move('images/profile', $id.'jpg');
+          $put->avatar = $path;
+      }   $put->update();
     }
 
     /**

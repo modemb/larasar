@@ -1,7 +1,7 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 module.exports = function (ctx) {
-  let localServer = true // WampServer
+  let localProdServer = false // WampServer
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
@@ -73,7 +73,7 @@ module.exports = function (ctx) {
       // ================= \\
       // vueCompiler: true,
       distDir: 'public/quasar',// Comment for dist folder
-      publicPath: localServer?'/larasar/public':'/',
+      publicPath: localProdServer?'/larasar/public':'/',
 
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack (cfg) {
@@ -87,7 +87,7 @@ module.exports = function (ctx) {
           }
         })
         if (ctx.prod) {
-          cfg.output.publicPath = localServer?'/larasar/public/quasar/':'/quasar/'
+          cfg.output.publicPath = localProdServer?'/larasar/public/quasar/':'/quasar/'
         }
       }
     },
