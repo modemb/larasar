@@ -1,9 +1,9 @@
 <template>
   <span>
     <span v-for="(provider, key) in drivers" :key="key">
+      <!-- v-if="socialAuth[provider].client_id" -->
       <q-btn
         :icon='"fab fa-"+provider'
-        v-if="socialAuth[provider].client_id"
         :label="$t('login_with')"
         color="primary"
         class="q-ma-sm"
@@ -22,7 +22,7 @@ export default {
     return {
       drivers: [
         'github',
-        'facebook',
+        // 'facebook',
         'google'
       ]
     }
@@ -51,7 +51,7 @@ export default {
      */
     onMessage (e) {
       // console.log(e.origin, window.origin)
-      if (/* e.origin !== window.origin || */ !e.data.token) {
+      if (e.origin !== window.origin || !e.data.token) {
         return
       }
       try {

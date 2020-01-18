@@ -2,6 +2,8 @@
   "ok": "De Acuerdo",
   "cancel": "Cancelar",
   "error_alert_title": "Ha ocurrido un problema",
+  "add_user": "Agregar usuario",
+  "users_list": "Lista de usuarios",
   "error_alert_text": "¡Algo salió mal! Inténtalo de nuevo.",
   "token_expired_alert_title": "!Sesión Expirada!",
   "token_expired_alert_text": "Por favor inicie sesión de nuevo para continuar.",

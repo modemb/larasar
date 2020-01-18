@@ -8,22 +8,19 @@
           <!-- <span class="new badge">4</span></div>
         <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div> -->
       </li>
-        <q-uploader
-          url="http://localhost:8080/upload"
-          style="max-width: 300px"
-        />
       <li>
-        <!-- <div class="collapsible-header">
-          <i class="material-icons">place</i> -->
-          <img alt="Larasar logo" src="~assets/quasar-logo-full.svg">
-          <!-- <span class="badge">1</span></div>
-        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div> -->
-        <!-- <q-item clickable tag="a" target="_blank" href="https://github.com/modemb/larasar">
-          <h4 class="fab fa-github"> Github</h4>
-        </q-item> -->
         <div class="collapsible-body">
           <a  target="_blank" href="https://github.com/modemb/larasar"><h4 class="fab fa-github">Github</h4></a>
           <a  target="_blank" href="https://www.facebook.com/modemb.dev"><h4 class="fab fa-facebook">Facebook</h4></a>
+        </div>
+        <a target="_blank"  href="https://quasar.dev" class="logo">
+          <img alt="Larasar logo" src="~assets/quasar-logo-full.svg">
+        </a>
+        <div class="collapsible-body">
+          <a target="_blank"  href="https://laravel.com" class="logo">
+                <img class="mark" src="https://laravel.com/img/logomark.min.svg" alt="Laravel">
+                <img class="type" src="https://laravel.com/img/logotype.min.svg" alt="Laravel">
+            </a>
         </div>
       </li>
     </ul>

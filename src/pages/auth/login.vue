@@ -1,45 +1,65 @@
 <template>
 
-    <q-page class="q-pa-md flex-center">
+    <q-page class="q-pa-md">
 
       <q-form class="q-gutter-md">
-        <q-input
-          v-model="email"
-          filled
-          type="email"
-          :label="$t('email')"
-          :hint="email_data"
-          lazy-rules
-          :rules="[val => val && val.length > 0 || email_data]"
-        />
+        <div class="row flex justify-center">
 
-        <q-input
-          v-model="password"
-          filled
-          :type="isPwd ? 'password' : 'text'"
-          :label="$t('password')"
-          :hint="password_data"
-          lazy-rules
-          :rules="[val => val && val.length > 0 || password_data]"
-          >
-          <template v-slot:append>
-            <q-icon
-              :name="isPwd ? 'visibility_off' : 'visibility'"
-              class="cursor-pointer"
-              @click="isPwd = !isPwd"
-            />
-          </template>
-        </q-input>
-        <div class="col-md-12">
-          <q-btn color="primary" :loading="loader" :label="$t('login')" @click.prevent="login" class="q-ma-sm"/>
-          <login-with-social />
-          <q-checkbox v-model="remember" :label="$t('remember_me')" />
-          <q-btn color="primary" flat :label="$t('forgot_password')" to="/password/reset" class="q-ma-sm"/>
+          <div class="col-md-6 q-pa-md">
+
+            <q-card class="my-card text-white">
+              <q-card-section class="bg-primary">
+                <div class="text-h6">{{$t('login')}}</div>
+                <!-- <div class="text-subtitle2">by John Doe</div> -->
+              </q-card-section>
+
+              <div class="q-pa-md">
+
+                <q-input
+                  filled
+                  v-model="email"
+                  type="email"
+                  :label="$t('email')"
+                  :hint="email_data"
+                  lazy-rules
+                  :rules="[val => val && val.length > 0 || email_data]"
+                />
+
+                <q-input
+                  filled
+                  v-model="password"
+                  :type="isPwd ? 'password' : 'text'"
+                  :label="$t('password')"
+                  :hint="password_data"
+                  lazy-rules
+                  :rules="[val => val && val.length > 0 || password_data]"
+                  >
+                  <template v-slot:append>
+                    <q-icon
+                      :name="isPwd ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPwd = !isPwd"
+                    />
+                  </template>
+                </q-input>
+                <div class="col-md-12">
+                  <q-btn color="primary" :loading="loader" :label="$t('login')" @click.prevent="login" class="*q-ma-sm"/>
+                  <login-with-social />
+                  <q-checkbox v-model="remember" :label="$t('remember_me')" />
+                  <q-btn color="primary" flat :label="$t('forgot_password')" to="/password/reset" class="*q-ma-sm"/>
+                </div>
+
+              </div>
+
+            </q-card>
+
+          </div>
+
         </div>
-
       </q-form>
 
     </q-page>
+
 </template>
 
 <script>
@@ -76,9 +96,6 @@ export default {
         })
         .catch(error => {
           this.loader = false
-          // console.log(error.response.data)
-          // console.log(error.response.data.message)
-          // console.log(error.response.data.errors.email[0])
           this.email_data = [error.response.data.errors.email][0] || error.response.data.message
           this.password_data = [error.response.data.errors.password][0] || error.response.data.message
         })

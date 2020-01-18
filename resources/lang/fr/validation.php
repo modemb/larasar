@@ -146,6 +146,9 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+      'name' => 'nom',
+      'password' => 'Mot de passe',
+    ],
 
 ];

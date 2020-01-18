@@ -1,19 +1,25 @@
 <template>
 
-    <q-page class="q-pa-md">
+    <q-page class="q-pa-md flex-center">
 
       <q-form class="q-gutter-md">
-        <div class="row flex justify-center">
+        <div class="row">
 
           <div class="col-md-6 q-pa-md">
 
             <q-card class="my-card text-white">
               <q-card-section class="bg-primary">
-                <div class="text-h6">{{$t('register')}}</div>
+                <div class="text-h6">{{$t('your_info')}}</div>
                 <!-- <div class="text-subtitle2">by John Doe</div> -->
               </q-card-section>
 
               <div class="q-pa-md">
+
+                <q-uploader
+                  url="http://localhost:8080/upload"
+                  style="max-width: 300px"
+                  class="q-mb-xl"
+                />
 
                 <q-input
                   filled
@@ -34,21 +40,52 @@
                   :rules="[val => val && val.length > 0 || email_data]"
                 />
 
+                <q-btn color="primary" :label="$t('update')" @click.prevent="update" />
+
+              </div>
+
+            </q-card>
+
+          </div>
+
+          <div class="col-md-6 q-pa-md">
+
+            <q-card class="my-card text-white">
+              <q-card-section class="bg-primary">
+                <div class="text-h6">{{$t('your_password')}}</div>
+                <!-- <div class="text-subtitle2">by John Doe</div> -->
+              </q-card-section>
+
+              <div class="q-pa-md">
+
                 <q-input
                   filled
-                  v-model="password"
-                  :label="$t('password')"
+                  v-model="name"
                   type="password"
-                  :hint="password_data"
+                  :label="$t('Current Password')"
+                  :hint="name_data"
                   lazy-rules
-                  :rules="[val => val && val.length > 0 || password_data]"
+                  :rules="[val => val && val.length > 0 || name_data]"
+                />
+
+                <q-input
+                  filled
+                  v-model="email"
+                  :label="$t('New Password')"
+                  type="password"
+                  :hint="email_data"
+                  lazy-rules
+                  :rules="[val => val && val.length > 0 || email_data]"
                 />
 
                 <q-input
                   v-model="password_confirmation"
                   filled
                   :type="isPwd ? 'password' : 'text'"
-                  :label="$t('confirm_password')"
+                  :label="$t('Confirm New Password')"
+                  :hint="password_data"
+                  lazy-rules
+                  :rules="[val => val && val.length > 0 || password_data]"
                   >
                   <template v-slot:append>
                     <q-icon
@@ -59,9 +96,7 @@
                   </template>
                 </q-input>
 
-                <div class="q-pt-md">
-                  <q-btn color="primary" :label="$t('register')" @click.prevent="register" />
-                </div>
+                <q-btn color="primary" :label="$t('update')" @click.prevent="update" />
 
               </div>
 
@@ -78,8 +113,8 @@
 
 <script>
 export default {
-  name: 'registerPage',
-  data () {
+  name: 'updatePage',
+  meta () {
     return {
       name: null,
       name_data: null,
@@ -92,14 +127,14 @@ export default {
     }
   },
   methods: {
-    register () {
-      this.$store.dispatch('users/registerAction', {
+    update () {
+      this.$store.dispatch('users/updateAction', {
         name: this.name,
         email: this.email,
         password: this.password,
         password_confirmation: this.password_confirmation,
         role: 'User',
-        user: 'register',
+        user: 'update',
         scope: ''
       })
         .catch(error => {

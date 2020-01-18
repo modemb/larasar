@@ -2,6 +2,8 @@
   "ok": "Ok",
   "cancel": "Cancel",
   "error_alert_title": "Oops...",
+  "add_user": "Add User",
+  "users_list": "Users List",
   "error_alert_text": "Something went wrong! Please try again.",
   "token_expired_alert_title": "Session Expired!",
   "token_expired_alert_text": "Please log in again to continue.",

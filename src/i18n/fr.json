@@ -3,6 +3,8 @@
   "cancel": "Annuler",
   "error_alert_title": "Oops...",
   "error_alert_text": "Something went wrong! Please try again.",
+  "add_user": "Ajouter un utilisateur",
+  "users_list": "Liste des utilisateurs",
   "token_expired_alert_title": "La session a expiré!",
   "token_expired_alert_text": "Veuillez vous reconnecter pour continuer.",
   "login": "S'identifier",
