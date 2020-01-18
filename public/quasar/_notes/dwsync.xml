@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<<<<<<< HEAD
-<file name="manifest.json" server="home682217311.1and1-data.host/larasar/" local="132209342858413443" remote="132209344310000000" Dst="1" />
-<file name="index.html" server="home682217311.1and1-data.host/larasar/" local="132209342858413443" remote="132209344080000000" Dst="1" />
-<file name="precache-manifest.6803f619bd105fa73fbf896f700e7fab.js" server="home682217311.1and1-data.host/larasar/" local="132209342858413443" remote="132209344450000000" Dst="1" />
-<file name="service-worker.js" server="home682217311.1and1-data.host/larasar/" local="132209342858413443" remote="132209344470000000" Dst="1" />
-=======
-<file name="manifest.json" server="home682217311.1and1-data.host/larasar/" local="132229483465320346" remote="132229484170000000" Dst="1" />
-<file name="index.html" server="home682217311.1and1-data.host/larasar/" local="132229483465320346" remote="132229484160000000" Dst="1" />
-<file name="precache-manifest.eeacfb76f12005a64c09de90576935cd.js" server="home682217311.1and1-data.host/larasar/" local="132229483465320346" remote="132229484220000000" Dst="1" />
-<file name="service-worker.js" server="home682217311.1and1-data.host/larasar/" local="132229483465330339" remote="132229484220000000" Dst="1" />
->>>>>>> modemb/dev
+<file name="manifest.json" server="home682217311.1and1-data.host/larasar/" local="132238393051894147" remote="132238393900000000" Dst="1" />
+<file name="index.html" server="home682217311.1and1-data.host/larasar/" local="132238393051884137" remote="132238393890000000" Dst="1" />
+<file name="service-worker.js" server="home682217311.1and1-data.host/larasar/" local="132238393051894147" remote="132238393950000000" Dst="1" />
+<file name="precache-manifest.82a6a820ea2243bf2413fb0c2dfd515d.js" server="home682217311.1and1-data.host/larasar/" local="132238393051894147" remote="132238393950000000" Dst="1" />
 </dwsync>
