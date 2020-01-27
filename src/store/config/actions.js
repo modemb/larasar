@@ -8,7 +8,6 @@ export function configAction ({ commit }, locale) {
   axiosInstance.post('api/users', { locale: locale })
     .then((response) => {
       const config = response.data
-      // console.log(response.data, 'configAction')
       commit('configMutation', { config, locale })
     })
     .catch(error => {

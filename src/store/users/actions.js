@@ -28,6 +28,27 @@ export async function registerAction ({ commit, dispatch }, payload) {
   return data
 }
 
+export async function logoutAction ({ commit }, payload) {
+  try {
+    axiosInstance.post('api/users', payload)
+  } catch (e) { }
+
+  commit('logoutMutation')
+}
+
+export async function updateAction ({ commit, dispatch }, payload) {
+  axiosInstance.put('api/users/' + payload.id, payload)
+    .then(response => {
+      dispatch('authAction')
+      Notify.create({
+        color: 'positive',
+        position: 'top',
+        message: response.data,
+        icon: 'check'
+      })
+    })
+}
+
 export async function authAction (context) {
   let token = context.getters['tokenGetter']
   if (token) {
@@ -45,15 +66,36 @@ export async function authAction (context) {
   }
 }
 
+export async function usersAction (context) {
+  let token = context.getters['tokenGetter']
+  if (token) {
+    try {
+      const { data } = await axiosInstance.get('api/users')
+      context.commit('usersMutation', { users: data })
+    } catch (error) {
+      Notify.create({
+        color: 'negative',
+        position: 'top',
+        message: 'usersAction ' + error,
+        icon: 'report_problem'
+      })
+    }
+  }
+}
+
+export async function deleteAction (context, user) {
+  let token = context.getters['tokenGetter']
+  if (token && confirm('Are You Sure You Want To Delete User ' + user.name) === true) {
+    const { data } = await axiosInstance.delete(`/api/users/${user.id}`)
+      .then(async () => {
+        const { data } = await axiosInstance.get('api/users')
+        context.commit('usersMutation', { users: data })
+      })
+    return data
+  }
+}
+
 export async function socialAuthAction (context, { provider }) {
   const { data } = await axiosInstance.post(`/api/login/${provider}`)
   return data.url
-}
-
-export async function logoutAction ({ commit }, payload) {
-  try {
-    axiosInstance.post('api/users', payload)
-  } catch (e) { }
-
-  commit('logoutMutation')
 }

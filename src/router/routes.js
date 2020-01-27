@@ -4,7 +4,7 @@ const routes = [
     path: '/',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      // Public routes
+      // Public Routes
       {
         path: '/',
         name: 'public.index',
@@ -30,7 +30,7 @@ const routes = [
         name: 'public.password.reset.token',
         component: () => import('pages/auth/password/reset')
       },
-      // Auth routes
+      // Auth Routes
       {
         path: '/profile',
         name: 'auth.profile',
@@ -42,9 +42,9 @@ const routes = [
         component: () => import('pages/Users')
       },
       {
-        path: '/block_chain',
-        name: 'auth.block_chain',
-        component: () => import('pages/BlockChain')
+        path: '/test',
+        name: 'auth.test',
+        component: () => import('pages/Test')
       }
     ]
   }

@@ -42,12 +42,12 @@
                     />
                   </template>
                 </q-input>
-                <div class="col-md-12">
-                  <q-btn color="primary" :loading="loader" :label="$t('login')" @click.prevent="login" class="*q-ma-sm"/>
+                <template class="*col-md-12">
+                  <q-btn color="primary" :loading="loader" :label="$t('login')" @click.prevent="login" class="q-ma-sm"/>
                   <login-with-social />
                   <q-checkbox v-model="remember" :label="$t('remember_me')" />
-                  <q-btn color="primary" flat :label="$t('forgot_password')" to="/password/reset" class="*q-ma-sm"/>
-                </div>
+                  <q-btn color="primary" flat :label="$t('forgot_password')" to="/password/reset" class="q-ma-sm"/>
+                </template>
 
               </div>
 

@@ -1,7 +1,6 @@
 import { Cookies, LocalStorage } from 'quasar'
 
 export function loginMutation (state, data) {
-  // console.log(data, data.remember ? data.expires_in : null, )
   state.token = data.access_token
   if (state.cookie) {
     Cookies.set('token', data.access_token, { expires: data.remember ? data.expires_in : null })
@@ -13,6 +12,10 @@ export function loginMutation (state, data) {
 
 export function authMutation (state, { user }) {
   state.user = user
+}
+
+export function usersMutation (state, { users }) {
+  state.users = users
 }
 
 export function logoutMutation (state) {

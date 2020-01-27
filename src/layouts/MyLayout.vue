@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHr lpR lFr">
+  <q-layout view="lHr LpR lFr">
     <!-- Header -->
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
@@ -44,7 +44,7 @@
               <q-btn-dropdown
                 rounded
                 :label="user.name"
-                @click.prevent="authDrawer"
+                @click.prevent="authDrawer = !authDrawer"
               >
               </q-btn-dropdown>
             </div>
@@ -53,7 +53,7 @@
         </div>
       </q-img>
       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
-        <q-list v-if='open'>
+        <q-list v-if='authDrawer'>
           <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
             <q-item-section avatar>
               <q-icon name="school" />
@@ -108,6 +108,15 @@
               <q-item-label caption>@QuasarFramework</q-item-label>
             </q-item-section>
           </q-item>
+          <!-- Authenticated -->
+          <div v-if="user" class="q-pa-md">
+            <q-btn icon="lock_open" :label="$t('logout')" @click.prevent="logout" />
+          </div>
+          <!-- Guest -->
+          <div v-else class="q-pa-md">
+            <q-btn icon="vpn_key" :label="$t('login')" :to="{name: 'public.login'}" />
+            <q-btn icon="add_to_queue" :label="$t('register')" :to="{name: 'public.register'}" />
+          </div>
         </q-list>
         <q-list v-else>
           <q-item clickable to='/profile'>
@@ -116,37 +125,28 @@
             </q-item-section>
             <q-item-section>
               <q-item-label>Profile</q-item-label>
-              <q-item-label caption>Admin</q-item-label>
+              <q-item-label caption>{{user.role}}</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable to='/users'>
+          <q-item clickable v-if="user.id == 1" to='/users'>
             <q-item-section avatar>
               <q-icon name="people" />
             </q-item-section>
             <q-item-section>
               <q-item-label>Users</q-item-label>
-              <!-- <q-item-label caption>@QuasarFramework</q-item-label> -->
+              <q-item-label caption>RoleUsers</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable :to="{name: 'auth.block_chain'}">
+          <q-item clickable :to="{name: 'auth.test'}">
             <q-item-section avatar>
-              <q-icon name="money" />
+              <q-icon name="check_circle_outline" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>BlockChain</q-item-label>
-              <q-item-label caption>@QuasarFramework</q-item-label>
+              <q-item-label>Test</q-item-label>
+              <q-item-label caption>@CheckCode</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
-        <!-- Authenticated -->
-        <div v-if="user" class="q-pa-md">
-          <q-btn icon="lock_open" :label="$t('logout')" @click.prevent="logout" />
-        </div>
-        <!-- Guest -->
-        <div v-else class="q-pa-md">
-          <q-btn icon="vpn_key" :label="$t('login')" :to="{name: 'public.login'}" />
-          <q-btn icon="add_to_queue" :label="$t('register')" :to="{name: 'public.register'}" />
-        </div>
       </q-scroll-area>
     </q-drawer>
     <!-- Drawer End -->
@@ -183,7 +183,7 @@ export default {
     return {
       leftDrawerOpen: false, // this.$q.platform.is.desktop,
       rightDrawer: false,
-      open: true
+      authDrawer: true
     }
   },
   components: {
@@ -202,13 +202,6 @@ export default {
           // Redirect to login.
           this.$router.push({ name: 'public.login' })
         })
-    },
-    authDrawer () {
-      if (this.open) {
-        this.open = false
-      } else {
-        this.open = true
-      }
     }
   }
 }
