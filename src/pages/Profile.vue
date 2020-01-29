@@ -149,10 +149,7 @@ export default {
         password: this.password,
         password_confirmation: this.password_confirmation
       })
-    },
-    ...mapGetters({
-      user: 'users/authGetter'
-    })
+    }
   }
 }
 </script>

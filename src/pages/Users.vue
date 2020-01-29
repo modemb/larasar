@@ -43,6 +43,12 @@
               :validate="proteinRangeValidation"
               @hide="proteinRangeValidation"
               >
+              <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
+              <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
+              <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
+              <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
+              <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
+              <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
             </q-popup-edit>
           </q-td>
           <q-td key="delete" :props="props">
@@ -97,26 +103,36 @@ export default {
   },
   mounted () {
     this.$store.dispatch('users/usersAction').then(() => {
-    // this.data = this.usersGetter
+      // this.data = this.usersGetter
       this.original = this.usersGetter
-    })
-    // get initial data from server (1st page)
-    this.onRequest({
-      pagination: this.pagination,
-      filter: undefined
+      // get initial data from server (1st page)
+      this.onRequest({
+        pagination: this.pagination,
+        filter: undefined
+      })
     })
   },
   methods: {
     Delete (user) {
       this.$store.dispatch('users/deleteAction', user)
         .then(response => {
-          alert(response)
-          this.$q.notify.create({
-            color: 'positive',
-            position: 'top',
-            message: response,
-            icon: 'check'
+          this.$store.dispatch('users/usersAction').then(() => {
+            // this.data = this.usersGetter
+            this.original = this.usersGetter
+            // get initial data from server (1st page)
+            this.onRequest({
+              pagination: this.pagination,
+              filter: undefined
+            })
           })
+          alert(response)
+
+          // this.$q.notify.create({
+          //   color: 'positive',
+          //   position: 'top',
+          //   message: response,
+          //   icon: 'check'
+          // })
         })
     },
     onRequest (props) {

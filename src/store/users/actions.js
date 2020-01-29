@@ -87,10 +87,6 @@ export async function deleteAction (context, user) {
   let token = context.getters['tokenGetter']
   if (token && confirm('Are You Sure You Want To Delete User ' + user.name) === true) {
     const { data } = await axiosInstance.delete(`/api/users/${user.id}`)
-      .then(async () => {
-        const { data } = await axiosInstance.get('api/users')
-        context.commit('usersMutation', { users: data })
-      })
     return data
   }
 }

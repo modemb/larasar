@@ -179,6 +179,10 @@ import LocaleDropdown from '../components/LocaleDropdown'
 
 export default {
   openURL,
+  components: {
+    QAjaxBar,
+    LocaleDropdown
+  },
   data () {
     return {
       leftDrawerOpen: false, // this.$q.platform.is.desktop,
@@ -186,14 +190,16 @@ export default {
       authDrawer: true
     }
   },
-  components: {
-    QAjaxBar,
-    LocaleDropdown
-  },
   computed: mapGetters({
     user: 'users/authGetter',
     appName: 'config/appNameGetter'
   }),
+  mounted () {
+    // console.log(this.$store.getters['users/tokenGetter'])
+    if (!this.$store.getters['users/tokenGetter']) {
+      // this.$router.push({ name: 'public.login' })
+    }
+  },
   methods: {
     async logout () {
       // Log out the user.

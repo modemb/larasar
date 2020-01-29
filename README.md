@@ -80,3 +80,8 @@ Network:<http://192.168.2.11:8080>
 
 Local:<http://localhost:8000>
 Network: php -S 192.168.2.11:8000 -t public
+
+## Running Seeders
+
+php artisan db:seed
+php artisan db:seed --class=UsersTableSeeder

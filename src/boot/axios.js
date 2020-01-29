@@ -76,6 +76,14 @@ export default ({ router, store, Vue }) => {
   // store.dispatch('users/usersAction')
   // Config
   store.dispatch('config/configAction', locale)
+  // Router Authentication
+  router.beforeEach(async (to, from, next) => {
+    if (store.getters['users/tokenGetter']) {
+      next()
+    } else {
+      next(!to.meta.requiresAuth)
+    }
+  })
 }
 
 // Here we define a named export

@@ -23,7 +23,8 @@ class UserController extends Controller
      */
     public function index()
     {
-      return User::all();
+      // return User::all();
+      return DB::table('users')->get();
       $bitgo = new BitGoSDK(env('YOUR_API_KEY_HERE'), CurrencyCode::BITCOIN, false);
       $bitgo->walletId = env('YOUR_WALLET_ID_HERE');//TagIndex: bitgoModule
       return$createAddress = $bitgo->createWalletAddress();
@@ -134,7 +135,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-      return User::find($id);
+      //
     }
 
     /**
@@ -201,7 +202,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    { 
+    {
         if ($id == 1 || Auth::id() == $id)
           return 'You Cannot Delete Super Admin or Your Own Account';
           //back()->with('status', 'You Cannot Delete Super Admin or Your Own Account');

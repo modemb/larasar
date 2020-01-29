@@ -8,43 +8,51 @@ const routes = [
       {
         path: '/',
         name: 'public.index',
-        component: () => import('pages/Index.vue')
+        component: () => import('pages/Index.vue'),
+        meta: { requiresAuth: false }
       },
       {
         path: '/login',
         name: 'public.login',
-        component: () => import('pages/auth/login')
+        component: () => import('pages/auth/login'),
+        meta: { requiresAuth: false }
       },
       {
         path: '/register',
         name: 'public.register',
-        component: () => import('pages/auth/register')
+        component: () => import('pages/auth/register'),
+        meta: { requiresAuth: false }
       },
       {
         path: '/password/reset',
         name: 'public.password.reset',
-        component: () => import('pages/auth/password/email')
+        component: () => import('pages/auth/password/email'),
+        meta: { requiresAuth: false }
       },
       {
         path: '/password/reset/:token',
         name: 'public.password.reset.token',
-        component: () => import('pages/auth/password/reset')
+        component: () => import('pages/auth/password/reset'),
+        meta: { requiresAuth: false }
       },
       // Auth Routes
       {
         path: '/profile',
         name: 'auth.profile',
-        component: () => import('pages/Profile')
+        component: () => import('pages/Profile'),
+        meta: { requiresAuth: true }
       },
       {
         path: '/users',
         name: 'auth.users',
-        component: () => import('pages/Users')
+        component: () => import('pages/Users'),
+        meta: { requiresAuth: true }
       },
       {
         path: '/test',
         name: 'auth.test',
-        component: () => import('pages/Test')
+        component: () => import('pages/Test'),
+        meta: { requiresAuth: true }
       }
     ]
   }
