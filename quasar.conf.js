@@ -72,8 +72,8 @@ module.exports = function (ctx) {
       // extractCSS: false,
       // ================= \\
       // vueCompiler: true,
-      distDir: 'public/quasar',// Comment for dist folder
-      publicPath: localProdServer?'/larasar/public':'/',
+      distDir: 'public/quasar', // Comment for dist folder
+      publicPath: localProdServer ? '/larasar/public' : '/',
 
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack (cfg) {
@@ -87,7 +87,7 @@ module.exports = function (ctx) {
           }
         })
         if (ctx.prod) {
-          cfg.output.publicPath = localProdServer?'/larasar/public/quasar/':'/quasar/'
+          cfg.output.publicPath = localProdServer ? '/larasar/public/quasar/' : '/quasar/'
         }
       }
     },
@@ -96,7 +96,7 @@ module.exports = function (ctx) {
     devServer: {
       https: false,
       port: ctx.mode.spa ? 8080
-      : (ctx.mode.pwa ? 9090 : 9000),
+        : (ctx.mode.pwa ? 9090 : 9000),
       open: true // opens browser window automatically
     },
 
@@ -156,7 +156,6 @@ module.exports = function (ctx) {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
       id: 'org.cordova.quasar.app'
     },
-
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
     capacitor: {

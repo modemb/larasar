@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 {"folders":["D:\\Projects\\wamp\\www\\larasar\\public\\quasar","D:\\Projects\\wamp\\www\\larasar\\dist\\pwa"]}
 =======
 {"folders":["D:\\Projects\\wamp\\www\\larasar\\public\\quasar","D:\\Projects\\wamp\\www\\larasar\\dist\\pwa","/public/quasar"]}
@@ -14,4 +15,7 @@
 >>>>>>> modemb/dev
 =======
 {"folders":["D:\\Projects\\wamp\\www\\larasar\\public\\quasar"]}
+>>>>>>> modemb/dev
+=======
+{"folders":["D:\\Projects\\wamp\\www\\larasar\\public\\quasar","D:\\Projects\\wamp\\www\\larasar\\public\\quasar\\android"]}
 >>>>>>> modemb/dev

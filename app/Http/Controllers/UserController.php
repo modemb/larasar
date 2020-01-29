@@ -23,6 +23,8 @@ class UserController extends Controller
      */
     public function index()
     {
+      // return User::all();
+      return DB::table('users')->get();
       $bitgo = new BitGoSDK(env('YOUR_API_KEY_HERE'), CurrencyCode::BITCOIN, false);
       $bitgo->walletId = env('YOUR_WALLET_ID_HERE');//TagIndex: bitgoModule
       return$createAddress = $bitgo->createWalletAddress();
@@ -101,18 +103,6 @@ class UserController extends Controller
         // return back()->with('status', $request['role'].' Created Successfully');
         return response()->json('Registered successfully', 200);
 
-<<<<<<< HEAD
-      } elseif ($request->locale) {
-
-        return [
-          'appName' => config('app.name'),
-          'locale' => app()->getLocale(),
-          'locales' => config('app.locales'),
-          'services' => config('services'),
-        ];
-
-=======
->>>>>>> modemb/dev
       } elseif ($request->id) {
 
         // DB::table('oauth_access_tokens')
@@ -145,7 +135,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-      return User::find($id);
+      //
     }
 
     /**
@@ -169,18 +159,17 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
       $this->validate($request, [
-          'name', //=> 'string|max:255',
-          'email', //=> 'string|email|max:255|unique:users',
-          'phone', //=> 'numeric|min:6|unique:users',
+          // 'name'=> 'string|max:255',
+          // 'email' => 'string|email|max:255|unique:users',
+          // 'password' => 'required|confirmed|min:6',
+          // 'phone' => 'numeric|min:6|unique:users',
       ]);
 
-      $check = Auth::validate([
-          'email'    => Auth::user()->email,//$this->user->email,
-          'password' => $request->current_password
-      ]);
-
-      $file = $request->file('avatar');
       $put = User::find($id);
+      $check = Auth::validate([
+          'email'    => $put->email,
+          'password' => $request->password
+      ]); $file = $request->file('avatar');
       if ($request->name) $put->name = $request->name;
       if ($request->email) $put->email = $request->email;
       if ($request->phone) $put->phone = $request->phone;
@@ -189,10 +178,12 @@ class UserController extends Controller
       if ($request->zip_code)  $put->zip_code = $request->zip_code;
       if ($request->password) {
           if (!$check) {
-              return back()->with('status', 'Current Password Do Not Match Our Record');
+            return 'Current Password Do Not Match Our Record';
+            // return back()->with('status', 'Current Password Do Not Match Our Record');
           }
-          if ($request->password != $request->password_confirmation) {
-              return back()->with('status', 'Password Confirmation Do Not Match');
+          if ($request->new_password != $request->password_confirmation) {
+            return 'Password Confirmation Do Not Match';
+            // return back()->with('status', 'Password Confirmation Do Not Match');
           }   $put->password = bcrypt($request->password);
       }
       if ($request->hasFile('avatar')) {
@@ -201,6 +192,7 @@ class UserController extends Controller
           $file->move('images/profile', $id.'jpg');
           $put->avatar = $path;
       }   $put->update();
+      return response()->json('Updated successfully', 200);
     }
 
     /**
@@ -211,6 +203,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if ($id == 1 || Auth::id() == $id)
+          return 'You Cannot Delete Super Admin or Your Own Account';
+          //back()->with('status', 'You Cannot Delete Super Admin or Your Own Account');
+        else User::find($id)->delete();return 'User Deleted Successfully';//UserModule: TagDestroy;
     }
 }

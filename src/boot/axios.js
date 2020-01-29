@@ -3,14 +3,14 @@ import { i18n } from './i18n'
 import axios from 'axios'
 
 // Use Cookies
-const cookie = process.env.COOKIE
+const cookie = false
 let locale = cookie ? Cookies.get('locale') : LocalStorage.getItem('locale') || i18n.locale
 
 // We create our own axios instance and set a custom base URL.
 // Note that if we wouldn't set any config here we do not need
 // a named export, as we could just `import axios from 'axios'`
 const axiosInstance = axios.create({
-  baseURL: process.env.API_URL
+  baseURL: process.env.DEV ? process.env.DEV_URL : process.env.API_URL
 })
 
 export default ({ router, store, Vue }) => {
@@ -73,8 +73,17 @@ export default ({ router, store, Vue }) => {
   Vue.prototype.$axios = axiosInstance
   // Auth User Check
   store.dispatch('users/authAction')
+  // store.dispatch('users/usersAction')
   // Config
   store.dispatch('config/configAction', locale)
+  // Router Authentication
+  router.beforeEach(async (to, from, next) => {
+    if (store.getters['users/tokenGetter']) {
+      next()
+    } else {
+      next(!to.meta.requiresAuth)
+    }
+  })
 }
 
 // Here we define a named export
