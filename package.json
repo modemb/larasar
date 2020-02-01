@@ -21,7 +21,7 @@
     "dependencies": {
         "@quasar/extras": "^1.5.0",
         "axios": "^0.19.2",
-        "quasar": "^1.8.3",
+        "quasar": "^1.8.5",
         "vue-i18n": "^8.15.1"
     },
     "devDependencies": {
@@ -32,7 +32,7 @@
         "bootstrap": "^4.0.0",
         "cross-env": "^5.1",
         "devtron": "^1.4.0",
-        "electron": "^7.1.10",
+        "electron": "^7.1.11",
         "electron-builder": "^21.2.0",
         "electron-debug": "^3.0.1",
         "electron-devtools-installer": "^2.2.4",

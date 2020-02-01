@@ -16,7 +16,7 @@
               <form class="q-pa-md">
 
                 <q-uploader
-                  url="http://localhost/larasar/public"
+                  url="http://localhost/larasar/public/"
                   style="max-width: 300px"
                   class="q-mb-xl"
                 />

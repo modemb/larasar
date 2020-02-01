@@ -40,8 +40,6 @@
               buttons
               label-set="Update"
               label-cancel="Close"
-              :validate="proteinRangeValidation"
-              @hide="proteinRangeValidation"
               >
               <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
               <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />

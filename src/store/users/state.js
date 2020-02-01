@@ -3,7 +3,7 @@ import { cookie } from 'boot/axios'
 
 export default {
   user: null,
-  users: null,
+  users: [],
   token: cookie ? Cookies.get('token') : LocalStorage.getItem('token') || null,
   cookie
 }

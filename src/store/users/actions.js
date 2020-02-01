@@ -49,6 +49,14 @@ export async function updateAction ({ commit, dispatch }, payload) {
     })
 }
 
+export async function deleteAction (context, user) {
+  let token = context.getters['tokenGetter']
+  if (token && confirm('Are You Sure You Want To Delete User ' + user.name) === true) {
+    const { data } = await axiosInstance.delete(`/api/users/${user.id}`)
+    return data
+  } else return 'User ' + user.name + ' Not Deleted'
+}
+
 export async function authAction (context) {
   let token = context.getters['tokenGetter']
   if (token) {
@@ -80,14 +88,6 @@ export async function usersAction (context) {
         icon: 'report_problem'
       })
     }
-  }
-}
-
-export async function deleteAction (context, user) {
-  let token = context.getters['tokenGetter']
-  if (token && confirm('Are You Sure You Want To Delete User ' + user.name) === true) {
-    const { data } = await axiosInstance.delete(`/api/users/${user.id}`)
-    return data
   }
 }
 

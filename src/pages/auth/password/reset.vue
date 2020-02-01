@@ -92,11 +92,14 @@ export default {
         password: this.password,
         password_confirmation: this.password_confirmation
       })
+        .tehn(() => {
+          alert(this.$t('password_updated'))
+        })
         .catch(error => {
           this.email_data = [error.response.data.errors.email][0] || error.response.data.message
           this.password_data = [error.response.data.errors.password][0] || error.response.data.message
         })
-      alert(data.status)
+      alert(data.status) // ToImplement
     }
   }
 }
