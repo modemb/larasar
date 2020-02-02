@@ -2,9 +2,16 @@
 <dwsync>
 <file name="ConfirmPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132223568450000000" remote="132223568450000000" Dst="1" />
 <file name="ForgotPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132234956801259033" remote="132235311980000000" Dst="1" />
+<<<<<<< HEAD
 <file name="LoginController.php" server="home682217311.1and1-data.host/larasar/" local="132229687895303597" remote="132235311980000000" Dst="1" />
 <file name="OAuthController.php" server="home682217311.1and1-data.host/larasar/" local="132223568460000000" remote="132223568460000000" Dst="1" />
 <file name="RegisterController.php" server="home682217311.1and1-data.host/larasar/" local="132223568460000000" remote="132223568460000000" Dst="1" />
 <file name="ResetPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132234646036276600" remote="132235311980000000" Dst="1" />
+=======
+<file name="LoginController.php" server="home682217311.1and1-data.host/larasar/" local="132250499674138628" remote="132250500310000000" Dst="1" />
+<file name="OAuthController.php" server="home682217311.1and1-data.host/larasar/" local="132223568460000000" remote="132223568460000000" Dst="1" />
+<file name="RegisterController.php" server="home682217311.1and1-data.host/larasar/" local="132223568460000000" remote="132223568460000000" Dst="1" />
+<file name="ResetPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132251569513180390" remote="132251569880000000" Dst="1" />
+>>>>>>> modemb/dev
 <file name="VerificationController.php" server="home682217311.1and1-data.host/larasar/" local="132223568470000000" remote="132223568470000000" Dst="1" />
 </dwsync>

@@ -14,6 +14,15 @@ const axiosInstance = axios.create({
 })
 
 export default ({ router, store, Vue }) => {
+  // Router Authentication
+  router.beforeEach((to, from, next) => {
+    if (store.getters['users/tokenGetter']) {
+      next()
+    } else {
+      next(!to.meta.requiresAuth)
+    }
+  })
+
   // Request interceptor
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
@@ -69,10 +78,13 @@ export default ({ router, store, Vue }) => {
 
     return Promise.reject(error)
   })
+
   // for use inside Vue files through this.$axios
   Vue.prototype.$axios = axiosInstance
+
   // Auth User Check
   store.dispatch('users/authAction')
+<<<<<<< HEAD
   // store.dispatch('users/usersAction')
   // Config
   store.dispatch('config/configAction', locale)
@@ -84,6 +96,11 @@ export default ({ router, store, Vue }) => {
       next(!to.meta.requiresAuth)
     }
   })
+=======
+
+  // Config
+  store.dispatch('config/configAction', locale)
+>>>>>>> modemb/dev
 }
 
 // Here we define a named export

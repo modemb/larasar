@@ -69,13 +69,17 @@
 </template>
 
 <script>
+import { locale } from 'boot/axios'
+
 export default {
   name: 'resetPage',
   data () {
     return {
       token: '',
       email: '',
+      email_data: '',
       password: '',
+      password_data: '',
       isPwd: true,
       password_confirmation: ''
     }
@@ -86,17 +90,28 @@ export default {
   },
   methods: {
     async reset () {
-      const { data } = await this.$axios.post('/api/password/reset', {
+      const data = {
+        user: 'login',
+        locale: locale,
         token: this.token,
         email: this.email,
         password: this.password,
         password_confirmation: this.password_confirmation
-      })
+      }
+      this.$axios.post('/api/password/reset', data)
+        .then(() => {
+          this.$store.dispatch('users/loginAction', data)
+          this.$q.notify({
+            color: 'positive',
+            position: 'top',
+            message: this.$t('password_updated'),
+            icon: 'check'
+          })
+        })
         .catch(error => {
-          this.email_data = [error.response.data.errors.email][0] || error.response.data.message
+          this.email_data = error.response.data.email || [error.response.data.errors.email][0] || error.response.data.message
           this.password_data = [error.response.data.errors.password][0] || error.response.data.message
         })
-      alert(data.status)
     }
   }
 }

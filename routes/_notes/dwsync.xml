@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
+<<<<<<< HEAD
 <file name="api.php" server="home682217311.1and1-data.host/larasar/" local="132234956801359025" remote="132235312020000000" Dst="1" />
 <file name="channels.php" server="home682217311.1and1-data.host/larasar/" local="132202526610000000" remote="132202526610000000" Dst="1" />
 <file name="console.php" server="home682217311.1and1-data.host/larasar/" local="132202526620000000" remote="132202526620000000" Dst="1" />
 <file name="web.php" server="home682217311.1and1-data.host/larasar/" local="132230704563498413" remote="132235312020000000" Dst="1" />
+=======
+<file name="api.php" server="home682217311.1and1-data.host/larasar/" local="132251498466329084" remote="132251498560000000" Dst="1" />
+<file name="channels.php" server="home682217311.1and1-data.host/larasar/" local="132202526610000000" remote="132202526610000000" Dst="1" />
+<file name="console.php" server="home682217311.1and1-data.host/larasar/" local="132202526620000000" remote="132202526620000000" Dst="1" />
+<file name="web.php" server="home682217311.1and1-data.host/larasar/" local="132251474274349089" remote="132251474390000000" Dst="1" />
+>>>>>>> modemb/dev
 </dwsync>

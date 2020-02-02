@@ -102,17 +102,14 @@ class LoginController extends Controller
             'name' => $name,
             'password' => Hash::make('88888888')
           ]);
-          User::where('email',$email)
-            ->update([
-              'avatar' => $avatar
-            ]);
           // return 'create';// redirect('/first');
         }
 
         //Update Avatar
         User::where('email',$email)
           ->update([
-            'avatar' => $avatar
+              'avatar' => $avatar,
+              'password' => Hash::make('88888888')
           ]);
 
         //Login the user
