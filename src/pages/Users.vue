@@ -40,11 +40,6 @@
               buttons
               label-set="Update"
               label-cancel="Close"
-<<<<<<< HEAD
-              :validate="proteinRangeValidation"
-              @hide="proteinRangeValidation"
-=======
->>>>>>> modemb/dev
               >
               <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
               <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />

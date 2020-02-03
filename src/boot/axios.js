@@ -70,7 +70,7 @@ export default ({ router, store, Vue }) => {
         // confirmButtonText: i18n.t('ok'),
         // cancelButtonText: i18n.t('cancel')
       }).then(() => {
-        store.commit('users/logoutAction')
+        store.commit('users/logoutMutation')
 
         router.push({ name: 'public.login' })
       })
@@ -84,23 +84,9 @@ export default ({ router, store, Vue }) => {
 
   // Auth User Check
   store.dispatch('users/authAction')
-<<<<<<< HEAD
-  // store.dispatch('users/usersAction')
-  // Config
-  store.dispatch('config/configAction', locale)
-  // Router Authentication
-  router.beforeEach(async (to, from, next) => {
-    if (store.getters['users/tokenGetter']) {
-      next()
-    } else {
-      next(!to.meta.requiresAuth)
-    }
-  })
-=======
 
   // Config
   store.dispatch('config/configAction', locale)
->>>>>>> modemb/dev
 }
 
 // Here we define a named export
