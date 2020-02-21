@@ -1,8 +1,4 @@
 <template>
-<<<<<<< HEAD
-
-=======
->>>>>>> modemb/dev
     <q-page class="q-pa-md flex-center">
 
       <q-form class="q-gutter-md">
@@ -70,11 +66,7 @@
                 <q-input
                   filled
                   v-model="password"
-<<<<<<< HEAD
-                  type="password"
-=======
                   :type="isPwd ? 'password' : 'text'"
->>>>>>> modemb/dev
                   :label="$t('your_password')"
                   :hint="password_data"
                   lazy-rules
@@ -83,11 +75,7 @@
 
                 <q-input
                   filled
-<<<<<<< HEAD
-                  type="password"
-=======
                   :type="isPwd ? 'password' : 'text'"
->>>>>>> modemb/dev
                   v-model="new_password"
                   :label="$t('new_password')"
                   :hint="new_password_data"
@@ -125,10 +113,6 @@
       </q-form>
 
     </q-page>
-<<<<<<< HEAD
-
-=======
->>>>>>> modemb/dev
 </template>
 
 <script>
@@ -136,22 +120,13 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'updatePage',
-<<<<<<< HEAD
-  meta () {
-=======
   data () {
->>>>>>> modemb/dev
     return {
       name: null,
       email: null,
       password: null,
-<<<<<<< HEAD
-      password_confirmation: null,
-      new_password: null,
-=======
       new_password: null,
       password_confirmation: null,
->>>>>>> modemb/dev
       isPwd: true
     }
   },
@@ -168,15 +143,10 @@ export default {
     },
     pwd () {
       this.$store.dispatch('users/updateAction', {
-<<<<<<< HEAD
-        id: this.user.id,
-        password: this.password,
-=======
         pwd: true,
         id: this.user.id,
         password: this.password,
         new_password: this.new_password,
->>>>>>> modemb/dev
         password_confirmation: this.password_confirmation
       })
     }

@@ -1,18 +1,10 @@
 import { axiosInstance, locale } from 'boot/axios'
-<<<<<<< HEAD
-import { Notify } from 'quasar'
-
-export async function loginAction ({ commit, dispatch }, payload) {
-  const data = await axiosInstance.post('api/users', { ...{ locale: locale }, ...payload })
-    .then(response => {
-=======
 import { i18n } from 'boot/i18n'
 import { Notify } from 'quasar'
 
 export async function loginAction ({ commit, dispatch, getters }, payload) {
   const data = await axiosInstance.post('api/login', { ...{ locale: locale }, ...payload })
     .then(async response => {
->>>>>>> modemb/dev
       const token = response.data
       commit('loginMutation', { ...token, ...payload })
       let user = { ...await dispatch('authAction'), ...payload }
@@ -35,11 +27,7 @@ export async function loginAction ({ commit, dispatch, getters }, payload) {
 }
 
 export async function registerAction ({ commit, dispatch }, payload) {
-<<<<<<< HEAD
-  const data = await axiosInstance.post('api/users', { ...{ locale: locale }, ...payload })
-=======
   const data = await axiosInstance.post('api/register', { ...{ locale: locale }, ...payload })
->>>>>>> modemb/dev
     .then(response => {
       payload.api = 'login'
       dispatch('loginAction', payload)
@@ -53,21 +41,12 @@ export async function registerAction ({ commit, dispatch }, payload) {
   return data
 }
 
-<<<<<<< HEAD
-export async function logoutAction ({ commit }, payload) {
-  try {
-    axiosInstance.post('api/users', payload)
-  } catch (e) { }
-
-  commit('logoutMutation')
-=======
 export async function logoutAction ({ commit }, user) {
   // axiosInstance.post('api/logout', payload)
   axiosInstance.post('api/logout', { ...{ locale: locale }, ...user })
     .then(repomse => {
       commit('logoutMutation')
     })
->>>>>>> modemb/dev
 }
 
 export async function updateAction ({ commit, dispatch }, payload) {
@@ -105,23 +84,6 @@ export async function authAction (context) {
       })
     context.commit('authMutation', { user: data })
     return data
-  }
-}
-
-export async function usersAction (context) {
-  let token = context.getters['tokenGetter']
-  if (token) {
-    try {
-      const { data } = await axiosInstance.get('api/users')
-      context.commit('usersMutation', { users: data })
-    } catch (error) {
-      Notify.create({
-        color: 'negative',
-        position: 'top',
-        message: 'usersAction ' + error,
-        icon: 'report_problem'
-      })
-    }
   }
 }
 
