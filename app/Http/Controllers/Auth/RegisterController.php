@@ -43,6 +43,18 @@ class RegisterController extends Controller
     }
 
     /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function registered(Request $request, User $user)
+    {
+        if ($request->user) return response()->json($user->name.' Registered Successfully');
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
@@ -50,6 +62,7 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        if(isset($data['locale']))config(['app.locale' =>  $data['locale']]);
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],

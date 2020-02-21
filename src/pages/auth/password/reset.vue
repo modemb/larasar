@@ -29,7 +29,7 @@
                   filled
                   v-model="password"
                   :label="$t('password')"
-                  type="password"
+                  :type="isPwd ? 'password' : 'text'"
                   :hint="password_data"
                   lazy-rules
                   :rules="[val => val && val.length > 0 || password_data]"

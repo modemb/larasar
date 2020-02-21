@@ -1,5 +1,4 @@
 <template>
-
     <q-page class="q-pa-md flex-center">
 
       <q-form class="q-gutter-md">
@@ -67,7 +66,7 @@
                 <q-input
                   filled
                   v-model="password"
-                  type="password"
+                  :type="isPwd ? 'password' : 'text'"
                   :label="$t('your_password')"
                   :hint="password_data"
                   lazy-rules
@@ -76,7 +75,7 @@
 
                 <q-input
                   filled
-                  type="password"
+                  :type="isPwd ? 'password' : 'text'"
                   v-model="new_password"
                   :label="$t('new_password')"
                   :hint="new_password_data"
@@ -114,7 +113,6 @@
       </q-form>
 
     </q-page>
-
 </template>
 
 <script>
@@ -122,13 +120,13 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'updatePage',
-  meta () {
+  data () {
     return {
       name: null,
       email: null,
       password: null,
-      password_confirmation: null,
       new_password: null,
+      password_confirmation: null,
       isPwd: true
     }
   },
@@ -145,8 +143,10 @@ export default {
     },
     pwd () {
       this.$store.dispatch('users/updateAction', {
+        pwd: true,
         id: this.user.id,
         password: this.password,
+        new_password: this.new_password,
         password_confirmation: this.password_confirmation
       })
     }

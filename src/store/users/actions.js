@@ -1,12 +1,25 @@
 import { axiosInstance, locale } from 'boot/axios'
+import { i18n } from 'boot/i18n'
 import { Notify } from 'quasar'
 
-export async function loginAction ({ commit, dispatch }, payload) {
-  const data = await axiosInstance.post('api/users', { ...{ locale: locale }, ...payload })
-    .then(response => {
+export async function loginAction ({ commit, dispatch, getters }, payload) {
+  const data = await axiosInstance.post('api/login', { ...{ locale: locale }, ...payload })
+    .then(async response => {
       const token = response.data
       commit('loginMutation', { ...token, ...payload })
-      dispatch('authAction')
+      let user = { ...await dispatch('authAction'), ...payload }
+      let verifyEemail = false
+      if (!user.email_verified_at && verifyEemail) { // Email Verification========================
+        axiosInstance.get(`api/email/verify/${user.id}/${user.hash}?${user.query}`).then(() => {
+          commit('loginAction', payload)
+        }).catch(() => {
+          if (confirm(i18n.t('verify_email_address') + '\n' + i18n.t('resend_verification_link')) === true) {
+            axiosInstance.post('/api/email/resend').then(() => {
+              alert(i18n.t('verify_email_address'))
+            }).catch(e => { alert(e) })
+          } dispatch('logoutAction')
+        }); return
+      }// ==============================================Email Verification End====================
       // Redirect home.
       this.$router.push({ path: '/' })
     })
@@ -14,9 +27,9 @@ export async function loginAction ({ commit, dispatch }, payload) {
 }
 
 export async function registerAction ({ commit, dispatch }, payload) {
-  const data = await axiosInstance.post('api/users', { ...{ locale: locale }, ...payload })
+  const data = await axiosInstance.post('api/register', { ...{ locale: locale }, ...payload })
     .then(response => {
-      payload.user = 'login'
+      payload.api = 'login'
       dispatch('loginAction', payload)
       Notify.create({
         color: 'positive',
@@ -28,12 +41,12 @@ export async function registerAction ({ commit, dispatch }, payload) {
   return data
 }
 
-export async function logoutAction ({ commit }, payload) {
-  try {
-    axiosInstance.post('api/users', payload)
-  } catch (e) { }
-
-  commit('logoutMutation')
+export async function logoutAction ({ commit }, user) {
+  // axiosInstance.post('api/logout', payload)
+  axiosInstance.post('api/logout', { ...{ locale: locale }, ...user })
+    .then(repomse => {
+      commit('logoutMutation')
+    })
 }
 
 export async function updateAction ({ commit, dispatch }, payload) {
@@ -60,17 +73,17 @@ export async function deleteAction (context, user) {
 export async function authAction (context) {
   let token = context.getters['tokenGetter']
   if (token) {
-    try {
-      const { data } = await axiosInstance.get('api/user')
-      context.commit('authMutation', { user: data })
-    } catch (error) {
-      Notify.create({
-        color: 'negative',
-        position: 'top',
-        message: 'authAction ' + error,
-        icon: 'report_problem'
+    const { data } = await axiosInstance.get('api/user')
+      .catch(error => {
+        Notify.create({
+          color: 'negative',
+          position: 'top',
+          message: 'authAction ' + error,
+          icon: 'report_problem'
+        })
       })
-    }
+    context.commit('authMutation', { user: data })
+    return data
   }
 }
 

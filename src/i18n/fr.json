@@ -33,7 +33,7 @@
   "new_password": "nouveau mot de passe",
   "login_with": "Connectez-vous avec",
   "register_with": "Inscrivez-vous avec",
-  "verify_email": "Vérifier les courriels",
+  "verify_email": "Vérifier le courriel",
   "send_verification_link": "Envoyer le lien de vérification",
   "resend_verification_link": "Renvoyer le lien de vérification?",
   "failed_to_verify_email": "Échec de la vérification du courrier électronique.",
