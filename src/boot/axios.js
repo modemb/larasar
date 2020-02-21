@@ -57,23 +57,23 @@ export default ({ router, store, Vue }) => {
     }
 
     if (status === 401 && store.getters['users/authGetter']) {
-      Notify.create({
-        color: 'negative',
-        position: 'top',
-        message: 'Token Expired',
-        icon: 'report_problem'
+      store.dispatch('users/logoutAction')
+        .then(() => {
+          router.push({ name: 'public.login' })
+          Notify.create({
+            color: 'negative',
+            position: 'top',
+            message: i18n.t('token_expired_alert_title'),
+            icon: 'report_problem'
 
-        // type: 'warning',
-        // title: i18n.t('token_expired_alert_title'),
-        // text: i18n.t('token_expired_alert_text'),
-        // reverseButtons: true,
-        // confirmButtonText: i18n.t('ok'),
-        // cancelButtonText: i18n.t('cancel')
-      }).then(() => {
-        store.commit('users/logoutMutation')
-
-        router.push({ name: 'public.login' })
-      })
+            // type: 'warning',
+            // title: i18n.t('token_expired_alert_title'),
+            // text: i18n.t('token_expired_alert_text'),
+            // reverseButtons: true,
+            // confirmButtonText: i18n.t('ok'),
+            // cancelButtonText: i18n.t('cancel')
+          })
+        })
     }
 
     return Promise.reject(error)

@@ -18,7 +18,9 @@ Route::apiResources([
 ]);
 
 Route::group(['middleware' => 'auth:api'], function () {
-    // Route::post('logout', 'Auth\LoginController@logout');
+    Route::post('logout', 'Auth\LoginController@logout');
+    Route::post('email/resend', 'Auth\VerificationController@resend');
+    Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
     Route::get('/user', function (Request $request) {
       return $request->user();
     });
@@ -28,14 +30,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
-    // Route::post('login', 'Auth\LoginController@login');
-    // Route::post('register', 'Auth\RegisterController@register');
+    Route::post('login', 'Auth\LoginController@login');
+    Route::post('register', 'Auth\RegisterController@register');
 
     Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');
-
-    Route::post('email/verify/{user}', 'Auth\VerificationController@verify')->name('verification.verify');
-    Route::post('email/resend', 'Auth\VerificationController@resend');
 
     Route::post('login/{driver}', 'Auth\LoginController@redirectToProvider');
     Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallback')->name('oauth.callback');

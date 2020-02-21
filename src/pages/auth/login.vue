@@ -65,6 +65,7 @@
 
 <script>
 import LoginWithSocial from '../../components/LoginWithSocial'
+const qs = params => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
 
 export default {
   name: 'loginPage',
@@ -89,7 +90,11 @@ export default {
         email: this.email,
         password: this.password,
         remember: this.remember,
-        user: 'login'
+        // id: this.$route.params.id,
+        hash: this.$route.params.hash,
+        // query: this.$route.query,
+        query: qs(this.$route.query),
+        api: 'login'
         // scope: ''
       })
         .then(() => {

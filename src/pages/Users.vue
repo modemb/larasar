@@ -36,6 +36,7 @@
           <q-td key="role" :props="props">{{ props.row.role }}</q-td>
           <q-td key="edit" :props="props">
             <q-btn icon="edit" rounded class="q-ma-md" />
+<<<<<<< HEAD
             <q-popup-edit v-model="props.row.edit" title="Update carbs"
               buttons
               label-set="Update"
@@ -47,6 +48,26 @@
               <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
               <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
               <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
+=======
+            <q-popup-edit
+              v-model="props.row.edit"
+              title="Update carbs"
+              buttons
+              @onsubmit.prevent="info(props.row.id)"
+              label-set="Update"
+              label-cancel="Close"
+              >
+                <q-uploader
+                  url="http://localhost/larasar/public/images/profile/default.jpg"
+                  style="max-width: 300px"
+                  class="q-mb-xl"
+                />
+              <q-input type="text" v-model="name" :label="props.row.name" dense autofocus hint="Use buttons to close"/>
+              <q-input type="text" v-model="email" :label="props.row.email" hint="Use buttons to close"/>
+              <!-- <q-input type="text" v-model="props.row.status" dense autofocus hint="Use buttons to close" /> -->
+              <!-- <q-input type="text" v-model="props.row.role" dense autofocus hint="Use buttons to close" /> -->
+              <q-btn color="primary" :label="$t('update')" @click.prevent="info(props.row.id)" />
+>>>>>>> modemb/dev
             </q-popup-edit>
           </q-td>
           <q-td key="delete" :props="props">
@@ -73,6 +94,11 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
+<<<<<<< HEAD
+=======
+      name: null,
+      email: null,
+>>>>>>> modemb/dev
       filter: '',
       loading: false,
       // rowCount: 10,
@@ -111,9 +137,33 @@ export default {
     })
   },
   methods: {
+<<<<<<< HEAD
     Delete (user) {
       this.$store.dispatch('users/deleteAction', user)
         .then(response => {
+=======
+    info (id) {
+      this.$store.dispatch('users/updateAction', {
+        id: id,
+        name: this.name,
+        email: this.email
+      })
+        .then(() => {
+          this.$store.dispatch('users/usersAction').then(() => {
+            // this.data = this.usersGetter
+            this.original = this.usersGetter
+            // get initial data from server (1st page)
+            this.onRequest({
+              pagination: this.pagination,
+              filter: undefined
+            })
+          })
+        })
+    },
+    Delete (user) {
+      this.$store.dispatch('users/deleteAction', user)
+        .then((response) => {
+>>>>>>> modemb/dev
           this.$store.dispatch('users/usersAction').then(() => {
             // this.data = this.usersGetter
             this.original = this.usersGetter

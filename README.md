@@ -81,7 +81,21 @@ Network:<http://192.168.2.11:8080>
 Local:<http://localhost:8000>
 Network: php -S 192.168.2.11:8000 -t public
 
-## Running Seeders
+## Running Seeders - Super Admin id = 1
 
 php artisan db:seed
 php artisan db:seed --class=UsersTableSeeder
+
+# ============================= ToImplement ====================================
+# ----------------------------- Publishing to Store-----------------------------
+# https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
+# ----------------------------- Data Table -------------------------------------
+Update users <=> working on
+# ----------------------------- Profile ----------------------------------------
+Picture
+# ----------------------------- Authentication ---------------------------------
+Improve Email Verification 
+Please use the Authorization HTTP header instead as using the `access_token` query parameter is deprecated.
+<https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param>
+Email verification
+

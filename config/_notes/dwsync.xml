@@ -5,7 +5,11 @@
 <file name="broadcasting.php" server="home682217311.1and1-data.host/larasar/" local="132201966960000000" remote="132201966960000000" Dst="1" />
 <file name="cache.php" server="home682217311.1and1-data.host/larasar/" local="132201966960000000" remote="132201966960000000" Dst="1" />
 <<<<<<< HEAD
+<<<<<<< HEAD
 <file name="cors.php" server="home682217311.1and1-data.host/larasar/" local="132235699670000000" remote="132235699670000000" Dst="1" />
+=======
+<file name="cors.php" server="home682217311.1and1-data.host/larasar/" local="132235204958306321" remote="132235699670000000" Dst="1" />
+>>>>>>> modemb/dev
 =======
 <file name="cors.php" server="home682217311.1and1-data.host/larasar/" local="132235204958306321" remote="132235699670000000" Dst="1" />
 >>>>>>> modemb/dev

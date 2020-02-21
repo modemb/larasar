@@ -11,8 +11,13 @@ use Hash;
 use Auth;
 use DB;
 
+/**
+ * Tags: UserModule - BitgoModule
+ *
+ * @for UserController
+ */
 class UserController extends Controller
-{   //Tags: bitgoModule
+{
 
     use AuthenticatesUsers;
 
@@ -26,7 +31,7 @@ class UserController extends Controller
       // return User::all();
       return DB::table('users')->get();
       $bitgo = new BitGoSDK(env('YOUR_API_KEY_HERE'), CurrencyCode::BITCOIN, false);
-      $bitgo->walletId = env('YOUR_WALLET_ID_HERE');//TagIndex: bitgoModule
+      $bitgo->walletId = env('YOUR_WALLET_ID_HERE');//TagIndex: BitgoModule
       return$createAddress = $bitgo->createWalletAddress();
     }
 
@@ -90,7 +95,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ]); //UserModule: TagStore
+        ]); //TagStore: UserModule
 
         if(Auth::check()) $content_role = [
             'title'=> 'The '.Auth::user()->role.' Added You As '.$request['role'],
@@ -157,13 +162,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-      $this->validate($request, [
-          // 'name'=> 'string|max:255',
-          // 'email' => 'string|email|max:255|unique:users',
-          // 'password' => 'required|confirmed|min:6',
-          // 'phone' => 'numeric|min:6|unique:users',
-      ]);
+    { //return $request->new_password;
 
       $put = User::find($id);
       $check = Auth::validate([
@@ -176,22 +175,25 @@ class UserController extends Controller
       if ($request->address) $put->address = $request->address;
       if ($request->city) $put->city = $request->city;
       if ($request->zip_code)  $put->zip_code = $request->zip_code;
-      if ($request->password) {
+      if ($request->pwd) {
+          $this->validate($request, [
+            // 'new_password' => ['required', 'string', 'min:8', 'confirmed'],
+          ]);
           if (!$check) {
             return 'Current Password Do Not Match Our Record';
             // return back()->with('status', 'Current Password Do Not Match Our Record');
           }
-          if ($request->new_password != $request->password_confirmation) {
+          if (!$request->new_password || $request->new_password != $request->password_confirmation) {
             return 'Password Confirmation Do Not Match';
             // return back()->with('status', 'Password Confirmation Do Not Match');
-          }   $put->password = bcrypt($request->password);
+          }   $put->password = bcrypt($request->new_password);
       }
       if ($request->hasFile('avatar')) {
           $FileName = $file->getClientOriginalName();
           $path = $file->storeAs('images/profile', $id.'jpg');
           $file->move('images/profile', $id.'jpg');
           $put->avatar = $path;
-      }   $put->update();
+      }   $put->update();//TagUpdate: UserModule
       return response()->json('Updated successfully', 200);
     }
 
@@ -206,6 +208,24 @@ class UserController extends Controller
         if ($id == 1 || Auth::id() == $id)
           return 'You Cannot Delete Super Admin or Your Own Account';
           //back()->with('status', 'You Cannot Delete Super Admin or Your Own Account');
-        else User::find($id)->delete();return 'User Deleted Successfully';//UserModule: TagDestroy;
+        else User::find($id)->delete();return 'User Deleted Successfully';//TagDestroy: UserModule
+    }
+
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function registered(Request $request, User $user)
+    {
+        if ($user instanceof MustVerifyEmail) {
+            $user->sendEmailVerificationNotification();
+
+            return response()->json(['status' => trans('verification.sent')]);
+        }
+
+        return response()->json($user);
     }
 }
