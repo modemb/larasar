@@ -19,7 +19,7 @@ export default ({ router, store, Vue }) => {
     if (store.getters['users/tokenGetter']) {
       next()
     } else {
-      next(!to.meta.requiresAuth)
+      next(!to.meta.requiresAuth || { path: '/login' })
     }
   })
 
@@ -27,7 +27,8 @@ export default ({ router, store, Vue }) => {
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
     locale = store.getters['config/localeGetter']
-    // request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    request.headers.common['Content-Type'] = 'multipart/form-data'
     if (token) request.headers.common['Authorization'] = `Bearer ${token}`
     if (locale) request.headers.common['Accept-Language'] = locale
 

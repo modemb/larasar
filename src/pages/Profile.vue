@@ -1,7 +1,7 @@
 <template>
     <q-page class="q-pa-md flex-center">
 
-      <q-form class="q-gutter-md">
+      <div class="q-gutter-md">
         <div class="row">
 
           <!-- Profile Info -->
@@ -12,12 +12,30 @@
                 <div class="text-h6">{{$t('your_info')}}</div>
               </q-card-section>
 
-              <form class="q-pa-md">
+              <q-form class="q-pa-md">
+
+                <q-img
+                  :src="url + '/' + user.avatar"
+                  style="width: 100%"
+                  class="q-mb-xl"
+                  native-context-menu
+                />
+
+                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+                <q-input type="file" v-model="avatar" />
 
                 <q-uploader
-                  url="http://localhost/larasar/public/images/profile/default.jpg"
-                  style="max-width: 300px"
+                  style="max-width: 100%"
                   class="q-mb-xl"
+                  label="Upload"
+                  auto-upload
+                  :factory="factoryFn"
+                />
+
+                <q-uploader
+                  url='http://localhost/larasar/public/api/users/1'
+                  method='PUT'
+                  style="max-width: 100%"
                 />
 
                 <q-input
@@ -47,12 +65,13 @@
 
                 <q-btn color="primary" :label="$t('update')" @click.prevent="info" />
 
-              </form>
+              </q-form>
 
             </q-card>
 
           </div>
           <!-- Profile Info End -->
+
           <!-- Password Reset -->
           <div class="col-md-6 q-pa-md">
 
@@ -61,7 +80,7 @@
                 <div class="text-h6">{{$t('your_password')}}</div>
               </q-card-section>
 
-              <form class="q-pa-md">
+              <q-form class="q-pa-md">
 
                 <q-input
                   filled
@@ -102,7 +121,7 @@
 
                 <q-btn color="primary" :label="$t('update')" @click.prevent="pwd" />
 
-              </form>
+              </q-form>
 
             </q-card>
 
@@ -110,13 +129,14 @@
           <!-- Password Reset End -->
 
         </div>
-      </q-form>
+      </div>
 
     </q-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+const qs = params => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
 
 export default {
   name: 'updatePage',
@@ -124,21 +144,46 @@ export default {
     return {
       name: null,
       email: null,
+      avatar: null,
       password: null,
       new_password: null,
       password_confirmation: null,
-      isPwd: true
+      isPwd: true,
+      file: '',
+      url: process.env.DEV ? process.env.DEV_URL : process.env.API_URL
     }
   },
   computed: mapGetters({
-    user: 'users/authGetter'
+    user: 'users/authGetter',
+    token: 'users/tokenGetter'
   }),
   methods: {
-    info () {
-      this.$store.dispatch('users/updateAction', {
-        id: this.user.id,
-        name: this.name,
-        email: this.email
+    factoryFn (file) {
+      return new Promise((resolve, reject) => {
+        // Retrieve JWT token from your store.
+        // const token = this.token
+        // console.log(file[0])
+        let fd = new FormData()
+        fd.append('avatar', file)
+        // fd.append('avatar', file[0])
+        // fd = { avatar: file[0] }
+        console.log(fd)
+        resolve({
+          // url: 'http://localhost:8080/public/images/profile',
+          // url: 'http://localhost:8080/upload',
+          // url: 'http://larasar.modemb.com/public/images/profile',
+          // url: `http://localhost/larasar/public/api/users/1?avatar=${qs(fd)}`,
+          // url: `http://localhost/larasar/public/api/users/${this.user.id}?${fd}`,
+          // url: this.url+'/api/users/'+this.user.id?fd=test,
+          url: `${this.url}/api/users/${this.user.id}?${qs(fd)}`,
+          method: 'PUT'
+          // headers: [
+          //   // { name: 'X-Requested-With', value: 'XMLHttpRequest' },
+          //   // { name: 'Content-Type', value: 'application/json-patch+json' }
+          //   // { name: 'Authorization', value: `Bearer ${token}` },
+          //   { name: 'Content-Type', value: 'multipart/form-data' }
+          // ]
+        })
       })
     },
     pwd () {
@@ -149,6 +194,27 @@ export default {
         new_password: this.new_password,
         password_confirmation: this.password_confirmation
       })
+    },
+    handleFileUpload () {
+      console.log(this.$refs.file.files[0])
+      this.file = this.$refs.file.files[0]
+    },
+    info () {
+      // eslint-disable-next-line no-unused-vars
+      let data = {
+        id: this.user.id,
+        name: this.name,
+        email: this.email,
+        avatar: this.avatar[0]
+      }
+      let formData = new FormData()
+      formData.append('id', this.user.id)
+      formData.append('name', this.name)
+      formData.append('email', this.email)
+      formData.append('avatar', this.avatar[0])
+      // formData.append('file', this.file)
+      console.log(formData)
+      this.$store.dispatch('users/updateAction', data)
     }
   }
 }
