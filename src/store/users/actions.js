@@ -27,10 +27,10 @@ export async function loginAction ({ commit, dispatch, getters }, payload) {
 }
 
 export async function registerAction ({ commit, dispatch }, payload) {
-  const data = await axiosInstance.post('api/register', { ...{ locale: locale }, ...payload })
+  let url = payload.api === 'register' ? 'api/register' : 'api/users'
+  const data = await axiosInstance.post(url, { ...{ locale: locale }, ...payload })
     .then(response => {
-      payload.api = 'login'
-      dispatch('loginAction', payload)
+      if (payload.api === 'register') dispatch('loginAction', payload)
       Notify.create({
         color: 'positive',
         position: 'top',
@@ -89,9 +89,10 @@ export async function authAction (context) {
 
 export async function usersAction (context) {
   let token = context.getters['tokenGetter']
+  let auth = await context.dispatch('authAction')
   if (token) {
     try {
-      const { data } = await axiosInstance.get('api/users')
+      const { data } = await axiosInstance.get(`api/users/${auth.id}`)
       context.commit('usersMutation', { users: data })
     } catch (error) {
       Notify.create({

@@ -128,15 +128,15 @@
               <q-item-label caption>{{user.role}}</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-if="user.id == 1" to='/users'>
-            <q-item-section avatar>
+          <q-item clickable v-if="(user.id == 1 || user.role == 'Admin') || user.role == 'Seller'" to='/users'>
+            <q-item-section avatar><!-- Admins and Sellers View ====-->
               <q-icon name="people" />
             </q-item-section>
             <q-item-section>
               <q-item-label>Users</q-item-label>
-              <q-item-label caption>RoleUsers</q-item-label>
+              <q-item-label caption>{{user.role}}'s Users</q-item-label>
             </q-item-section>
-          </q-item>
+          </q-item><!--==============-- Admins and Sellers View End -->
           <q-item clickable :to="{name: 'auth.test'}">
             <q-item-section avatar>
               <q-icon name="check_circle_outline" />
@@ -168,7 +168,7 @@
     </q-footer>
     <!-- Footer End -->
 
-    <q-ajax-bar />
+    <q-ajax-bar size="5px"/>
   </q-layout>
 </template>
 

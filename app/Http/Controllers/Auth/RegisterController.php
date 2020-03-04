@@ -51,7 +51,7 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, User $user)
     {
-        if ($request->api) return response()->json($user->name.' Registered Successfully');
+        return response()->json($user->name.' Registered Successfully');
     }
 
     /**

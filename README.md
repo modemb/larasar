@@ -86,12 +86,12 @@ Network: php -S 192.168.2.11:8000 -t public
 php artisan db:seed
 php artisan db:seed --class=UsersTableSeeder
 
-# =================== ToImplement =======================
-# ------------------- Publishing to Store ---------------
+# ============== ToImplement ==============
+# -------------- Publishing to Store --------------
 # https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
-# ------------------- Data Table ------------------------
-Improve users update
-# ------------------- Profile ---------------------------
+# -------------- Data Table --------------
+Improve users update <https://quasar.dev/vue-components/popup-edit#QPopupEdit-API>
+# -------------- Profile.vue --------------
 Picture <https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
         <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/>
         <https://serversideup.net/uploading-files-vuejs-axios/>
@@ -99,7 +99,7 @@ Picture <https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
         <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/#Vue_js_Laravel_File_Upload>
         <https://quasar.dev/vue-components/img#Image-style>
         <https://quasar.dev/vue-components/uploader#QUploader-API>
-# ------------------- Authentication --------------------
+# -------------- Authentication --------------
 Improve Email Verification 
 Please use the Authorization HTTP header instead as using the `access_token` query parameter is deprecated.
 <https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param>

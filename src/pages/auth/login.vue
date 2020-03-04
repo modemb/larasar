@@ -74,9 +74,9 @@ export default {
   data () {
     return {
       loader: false,
-      email: null,
+      email: process.env.DEV ? 'modembfr@gmail.com' : null,
       email_data: null,
-      password: null,
+      password: process.env.DEV ? '88888888' : null,
       password_data: null,
       isPwd: true,
       remember: false

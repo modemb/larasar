@@ -15,13 +15,13 @@
               <q-form class="q-pa-md">
 
                 <q-img
-                  :src="url + '/' + user.avatar"
+                  :src="user.new.avatar || url+'/'+user.avatar"
                   style="width: 100%"
                   class="q-mb-xl"
                   native-context-menu
                 />
 
-                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+                <!-- <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
                 <q-input type="file" v-model="avatar" />
 
                 <q-uploader
@@ -36,10 +36,11 @@
                   url='http://localhost/larasar/public/api/users/1'
                   method='PUT'
                   style="max-width: 100%"
-                />
+                /> -->
 
                 <q-input
                   filled
+                  type="text"
                   v-model="name"
                   :label="user.name || $t('name')"
                   lazy-rules
@@ -154,8 +155,7 @@ export default {
     }
   },
   computed: mapGetters({
-    user: 'users/authGetter',
-    token: 'users/tokenGetter'
+    user: 'users/authGetter'
   }),
   methods: {
     factoryFn (file) {
@@ -166,22 +166,14 @@ export default {
         let fd = new FormData()
         fd.append('avatar', file)
         // fd.append('avatar', file[0])
-        // fd = { avatar: file[0] }
-        console.log(fd)
+        // fd = qs(file[0])
+        // fd = { avatar: qs(file[0]) }
+        // console.log(fd)
         resolve({
-          // url: 'http://localhost:8080/public/images/profile',
-          // url: 'http://localhost:8080/upload',
-          // url: 'http://larasar.modemb.com/public/images/profile',
-          // url: `http://localhost/larasar/public/api/users/1?avatar=${qs(fd)}`,
-          // url: `http://localhost/larasar/public/api/users/${this.user.id}?${fd}`,
-          // url: this.url+'/api/users/'+this.user.id?fd=test,
           url: `${this.url}/api/users/${this.user.id}?${qs(fd)}`,
           method: 'PUT'
           // headers: [
-          //   // { name: 'X-Requested-With', value: 'XMLHttpRequest' },
-          //   // { name: 'Content-Type', value: 'application/json-patch+json' }
-          //   // { name: 'Authorization', value: `Bearer ${token}` },
-          //   { name: 'Content-Type', value: 'multipart/form-data' }
+          //   { name: 'Content-Type', value: 'application/json-patch+json' }
           // ]
         })
       })
@@ -196,25 +188,21 @@ export default {
       })
     },
     handleFileUpload () {
-      console.log(this.$refs.file.files[0])
+      // console.log(this.$refs.file.files[0])
       this.file = this.$refs.file.files[0]
     },
     info () {
       // eslint-disable-next-line no-unused-vars
-      let data = {
+      const data = {
         id: this.user.id,
         name: this.name,
-        email: this.email,
-        avatar: this.avatar[0]
+        email: this.email
+        // avatar: this.avatar
       }
-      let formData = new FormData()
-      formData.append('id', this.user.id)
-      formData.append('name', this.name)
-      formData.append('email', this.email)
-      formData.append('avatar', this.avatar[0])
-      // formData.append('file', this.file)
-      console.log(formData)
-      this.$store.dispatch('users/updateAction', data)
+      const formData = new FormData()// ToFix
+      formData.append('avatar', this.avatar)
+      // console.log(formData, this.avatar)
+      this.$store.dispatch('users/updateAction', { ...formData, ...data })
     }
   }
 }

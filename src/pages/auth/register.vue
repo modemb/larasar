@@ -88,7 +88,10 @@ export default {
       password: null,
       password_data: null,
       password_confirmation: null,
-      isPwd: true
+      isPwd: true,
+      options: [
+        'Seller', 'User'
+      ]
     }
   },
   methods: {
@@ -98,11 +101,11 @@ export default {
         email: this.email,
         password: this.password,
         password_confirmation: this.password_confirmation,
-        role: 'User',
         api: 'register',
         scope: ''
       })
         .catch(error => {
+          this.role_data = [error.response.data.errors.role][0] || error.response.data.message
           this.name_data = [error.response.data.errors.name][0] || error.response.data.message
           this.email_data = [error.response.data.errors.email][0] || error.response.data.message
           this.password_data = [error.response.data.errors.password][0] || error.response.data.message

@@ -14,7 +14,7 @@ use DB;
 /**
  * Tags: UserModule - BitgoModule
  *
- * @for UserController
+ * @for UserController - Users.vue
  */
 class UserController extends Controller
 {
@@ -29,7 +29,7 @@ class UserController extends Controller
     public function index()
     {
       // return User::all();
-      return DB::table('users')->get();
+      // return DB::table('users')->get();
       $bitgo = new BitGoSDK(env('YOUR_API_KEY_HERE'), CurrencyCode::BITCOIN, false);
       $bitgo->walletId = env('YOUR_WALLET_ID_HERE');//TagIndex: BitgoModule
       return$createAddress = $bitgo->createWalletAddress();
@@ -52,8 +52,43 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { //return $request;
+    { //return $request->auth['role'];
       if ($request->locale) config(['app.locale' => $request->locale]);
+      if($request->auth['id'] == 1 || $request->auth['role'] != 'Super Admin')
+      User::find(1)->update(['role' => 'Super Admin']);//Super Admin Role
+      if ($request->api) {
+
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $seed = str_split('abcdefghijklmnopqrstuvwxyz'
+            .'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            .'0123456789!@#$%^&*()'); // and any other characters
+        shuffle($seed); // probably optional since array_is randomized; this may be redundant
+        $rand = ''; foreach (array_rand($seed, 8) as $k) $rand .= $seed[$k];
+
+        $user = User::create([
+            'user_id' => $request->auth['id'],
+            'role' => $request->role,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]); //UserModule: TagStore
+
+        $content_role = [
+            'title'=> 'The '.$request->auth['role'].' Added You As '.$request['role'],
+            'body'=> 'Please use your email: '.$request['email'].' and password: '.$rand.' to login',
+            'button' => 'Click Here',
+            'url' => env('APP_URL').'/login'
+        ];  //Mail::to($request->email)->send(new InfoOfatv($content_role));
+
+        // if($request->form == 'admin')
+        return $request['role'].' Created Successfully';
+        // return back()->with('status', $request['role'].' Created Successfully');
+      }
       return [
         'appName' => config('app.name'),
         'locale' => app()->getLocale(),
@@ -68,9 +103,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-      //
+    public function show(User $user)
+    { //return $user->role == 'Seller'?1:0;
+      $admins = $user->id == 1 || $user->role == 'Admin'?1:0;
+      $sellers = $user->role == 'Seller'?1:0;
+      $buyers = $user->role == 'Buyer'?1:0;
+      if($admins) return User::all();
+      if($sellers) return User::where('user_id', $user['id'])->get();
     }
 
     /**
@@ -92,22 +131,27 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { return $request;
+    { //return $request;
       $put = User::find($id);
       $check = Auth::validate([
           'email'    => $put->email,
           'password' => $request->password
       ]); $file = $request->file('avatar');
+      if ($request->role) $put->role = $request->role;
       if ($request->name) $put->name = $request->name;
       if ($request->email) $put->email = $request->email;
       if ($request->phone) $put->phone = $request->phone;
       if ($request->address) $put->address = $request->address;
       if ($request->city) $put->city = $request->city;
       if ($request->zip_code) $put->zip_code = $request->zip_code;
-      if ($request->pwd) {
+      if ($request->pwd || $request->update_password) {
           $this->validate($request, [
             // 'new_password' => ['required', 'string', 'min:8', 'confirmed'],
           ]);
+          if ($request->update_password) {
+            $request->new_password = $request->update_password;
+            $check = true;
+          }
           if (!$check) {
             return 'Current Password Do Not Match Our Record';
             // return back()->with('status', 'Current Password Do Not Match Our Record');
@@ -121,7 +165,7 @@ class UserController extends Controller
             $path = $file->storeAs('images/profile', $id.'jpg');
             $file->move('images/profile', $id.'jpg');
             $put->avatar = $path;
-      }     $put->update();//TagUpdate: UserModule
+      }     $put->update();//UserModule: TagUpdate
       return response()->json('Updated successfully', 200);
     }
 

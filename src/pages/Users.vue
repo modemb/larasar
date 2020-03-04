@@ -1,6 +1,95 @@
 <template>
   <div class="q-pa-md">
-    <q-btn icon="add_circle_outline" rounded class="q-mb-md" :label="$t('add_user')" />
+    <q-btn
+      icon="add_circle_outline"
+      rounded class="q-mb-md"
+      :label="$t('add_user')"
+      @click="addUser = true, editUser = false, role = name = email = avatar = null"
+    /><!-- UserModule: TagAdd -->
+    <!--============ Add Update Users PopUp ============-->
+    <q-dialog v-model="addUser">
+        <q-card class="my-card text-white" style='width:800px'>
+          <q-card-section class="bg-primary">
+            <div class="text-h6">{{editUser?$t('update_user'):$t('add_user')}}</div>
+          </q-card-section>
+
+          <div class="q-pa-md">
+
+            <q-img
+              :src="avatar"
+              style="width: 100%"
+              class="q-mb-xl"
+              native-context-menu
+            />
+
+            <q-select
+              filled
+              v-model="role"
+              class="q-pb-md"
+              :hint="role_data"
+              :options="options"
+              :label="role || $t('role')"
+              :rules="[val => val && val.length > 0 || role_data]"
+            />
+
+            <q-input
+              filled
+              v-model="name"
+              lazy-rules
+              :label="name || $t('name')"
+              :hint="name_data"
+              :rules="[val => val && val.length > 0 || name_data]"
+            />
+
+            <q-input
+              filled
+              v-model="email"
+              type="email"
+              lazy-rules
+              :label="email || $t('email')"
+              :hint="email_data"
+              :rules="[val => val && val.length > 0 || email_data]"
+            />
+
+            <q-input
+              filled
+              v-model="password"
+              lazy-rules
+              class="q-pt-md"
+              :label="$t('password')"
+              :type="isPwd ? 'password' : 'text'"
+              :hint="password_data"
+              :rules="[val => val && val.length > 0 || password_data]"
+            />
+
+            <q-input
+              v-model="password_confirmation"
+              filled
+              :type="isPwd ? 'password' : 'text'"
+              :label="$t('confirm_password')"
+              >
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd = !isPwd"
+                />
+              </template>
+            </q-input>
+
+            <div class="q-pt-md">
+              <q-btn color="primary" v-if="editUser" :label="$t('update_user')" @click.prevent="update(user)" />
+              <q-btn color="primary" v-else if="addUser" :label="$t('add_user')" @click.prevent="add" />
+              <q-btn no-caps label="Close" color="primary" class="q-ma-md" v-close-popup />
+            </div>
+
+          </div>
+
+        </q-card>
+    </q-dialog>
+    <!--============ Add Update Users PopUp End ========-->
+
+    <!--============ Data Table =================-->
     <q-table
       :title="$t('users_list')"
       :data="data"
@@ -17,7 +106,7 @@
           <q-td key="id" :props="props">{{ props.row.id }}</q-td>
           <q-td key="name" :props="props">
             {{ props.row.name }}
-            <q-popup-edit v-model="props.row.name" title="Update calories" buttons>
+            <q-popup-edit v-model="props.row.name" title="Update calories" buttons >
               <q-input v-model="props.row.name" dense autofocus />
             </q-popup-edit>
           </q-td>
@@ -34,32 +123,12 @@
             </q-popup-edit>
           </q-td>
           <q-td key="role" :props="props">{{ props.row.role }}</q-td>
-          <q-td key="edit" :props="props">
-            <q-btn icon="edit" rounded class="q-ma-md" />
-            <q-popup-edit
-              v-model="props.row.edit"
-              title="Update carbs"
-              buttons
-              @onsubmit.prevent="info(props.row.id)"
-              label-set="Update"
-              label-cancel="Close"
-              >
-                <q-uploader
-                  url="http://localhost/larasar/public/images/profile/default.jpg"
-                  style="max-width: 300px"
-                  class="q-mb-xl"
-                />
-              <q-input type="text" v-model="name" :label="props.row.name" dense autofocus hint="Use buttons to close"/>
-              <q-input type="text" v-model="email" :label="props.row.email" hint="Use buttons to close"/>
-              <!-- <q-input type="text" v-model="props.row.status" dense autofocus hint="Use buttons to close" /> -->
-              <!-- <q-input type="text" v-model="props.row.role" dense autofocus hint="Use buttons to close" /> -->
-              <q-btn color="primary" :label="$t('update')" @click.prevent="info(props.row.id)" />
-            </q-popup-edit>
+          <q-td key="edit" :props="props"><!-- UserModule: TagEdit -->
+            <q-btn icon="edit" rounded class="q-ma-md" @click="edit(props.row), addUser = true" />
           </q-td>
           <q-td key="delete" :props="props">
             <q-btn icon="delete_forever" rounded class="*q-mb-md" @click.prevent="Delete(props.row)"/>
           </q-td>
-          <!-- <q-td key="calcium" :props="props">{{ props.row.calcium }}</q-td> -->
         </q-tr>
       </template>
       <template v-slot:top-right>
@@ -71,6 +140,7 @@
       </template>
 
     </q-table>
+    <!--============ Data Table End =============-->
   </div>
 </template>
 
@@ -80,11 +150,24 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
+      addUser: false,
+      editUser: false,
+      html: null,
+      role: null,
       name: null,
+      name_data: null,
       email: null,
+      email_data: null,
+      password: null,
+      password_data: null,
+      password_confirmation: null,
+      isPwd: true,
       filter: '',
       loading: false,
       // rowCount: 10,
+      options: [
+        'Admin', 'Seller', 'User'
+      ],
       pagination: {
         // sortBy: 'desc',
         descending: false,
@@ -106,7 +189,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('users', ['usersGetter'])
+    ...mapGetters('users', ['usersGetter', 'authGetter'])
   },
   mounted () {
     this.$store.dispatch('users/usersAction').then(() => {
@@ -120,13 +203,63 @@ export default {
     })
   },
   methods: {
-    info (id) {
-      this.$store.dispatch('users/updateAction', {
-        id: id,
+    add (user) {
+      this.$store.dispatch('users/registerAction', {
+        auth: this.authGetter,
+        role: this.role,
         name: this.name,
-        email: this.email
+        email: this.email,
+        password: this.password,
+        password_confirmation: this.password_confirmation,
+        api: 'add',
+        scope: ''
       })
         .then(() => {
+          this.role = this.name = this.email = this.password = this.password_confirmation = null
+          this.$store.dispatch('users/usersAction').then(() => {
+            // this.data = this.usersGetter
+            this.original = this.usersGetter
+            // get initial data from server (1st page)
+            this.onRequest({
+              pagination: this.pagination,
+              filter: undefined
+            })
+          })
+        })
+        .catch(error => {
+          this.role_data = [error.response.data.errors.role][0] || error.response.data.message
+          this.name_data = [error.response.data.errors.name][0] || error.response.data.message
+          this.email_data = [error.response.data.errors.email][0] || error.response.data.message
+          this.password_data = [error.response.data.errors.password][0] || error.response.data.message
+        })
+    },
+    edit (user) {
+      this.user = user
+      this.avatar = user.new.avatar
+      this.role = user.role
+      this.name = user.name
+      this.email = user.email
+      this.editUser = true
+      // this.addUser = false
+      this.password = user.password
+    },
+    update (user) {
+      const data = {
+        id: user.id,
+        user: true,
+        role: this.role,
+        name: this.name,
+        email: this.email,
+        update_password: this.password,
+        password_confirmation: this.password_confirmation
+        // avatar: this.avatar
+      }
+      const formData = new FormData()// ToFix
+      formData.append('avatar', this.avatar)
+      // console.log(formData, this.avatar)
+      this.$store.dispatch('users/updateAction', { ...formData, ...data })
+        .then(() => {
+          this.password = this.password_confirmation = null
           this.$store.dispatch('users/usersAction').then(() => {
             // this.data = this.usersGetter
             this.original = this.usersGetter
