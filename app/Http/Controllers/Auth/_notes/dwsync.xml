@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="ConfirmPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132223568450000000" remote="132223568450000000" Dst="1" />
-<file name="ForgotPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132234956801259033" remote="132235311980000000" Dst="1" />
-<file name="LoginController.php" server="home682217311.1and1-data.host/larasar/" local="132266952270000000" remote="132266952270000000" Dst="1" />
-<file name="OAuthController.php" server="home682217311.1and1-data.host/larasar/" local="132223568460000000" remote="132223568460000000" Dst="1" />
-<file name="RegisterController.php" server="home682217311.1and1-data.host/larasar/" local="132266952270000000" remote="132266952270000000" Dst="1" />
-<file name="ResetPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132251698950000000" remote="132251698950000000" Dst="1" />
-<file name="VerificationController.php" server="home682217311.1and1-data.host/larasar/" local="132267295250000000" remote="132267295250000000" Dst="1" />
+<file name="ConfirmPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132223568450000000" remote="132278095860000000" Dst="1" />
+<file name="ForgotPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132234956801259033" remote="132278095860000000" Dst="1" />
+<file name="LoginController.php" server="home682217311.1and1-data.host/larasar/" local="132278095860000000" remote="132278095860000000" Dst="1" />
+<file name="OAuthController.php" server="home682217311.1and1-data.host/larasar/" local="132223568460000000" remote="132278095860000000" Dst="1" />
+<file name="RegisterController.php" server="home682217311.1and1-data.host/larasar/" local="132278095870000000" remote="132278095870000000" Dst="1" />
+<file name="ResetPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132251698950000000" remote="132278095870000000" Dst="1" />
+<file name="VerificationController.php" server="home682217311.1and1-data.host/larasar/" local="132267295250000000" remote="132278095870000000" Dst="1" />
 </dwsync>

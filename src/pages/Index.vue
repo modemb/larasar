@@ -10,17 +10,20 @@
       </li>
       <li>
         <div class="collapsible-body">
-          <a  target="_blank" href="https://github.com/modemb/larasar"><h4 class="fab fa-github">Github</h4></a>
+          <a  target="_blank" href="https://github.com/modemb/larasar"><h4 class="fab fa-github q-mr-sm">Github</h4></a>
           <a  target="_blank" href="https://www.facebook.com/modemb.dev"><h4 class="fab fa-facebook">Facebook</h4></a>
         </div>
         <a target="_blank"  href="https://quasar.dev" class="logo">
           <img alt="Larasar logo" src="~assets/quasar-logo-full.svg">
         </a>
         <div class="collapsible-body">
-          <a target="_blank"  href="https://laravel.com" class="logo">
-                <img class="mark" src="https://laravel.com/img/logomark.min.svg" alt="Laravel">
-                <img class="type" src="https://laravel.com/img/logotype.min.svg" alt="Laravel">
-            </a>
+          <a target="_blank"  href="https://laravel.com" class="logo q-mr-lg">
+              <img class="mark" src="https://laravel.com/img/logomark.min.svg" alt="Laravel">
+              <img class="type" src="https://laravel.com/img/logotype.min.svg" alt="Laravel">
+          </a>
+          <a target="_blank" id="logo" href="https://vuejs.org">
+              <img src="https://vuejs.org/images/logo.png" alt="vue logo" width=50>
+          </a>
         </div>
       </li>
     </ul>

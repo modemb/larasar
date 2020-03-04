@@ -16,20 +16,18 @@ const axiosInstance = axios.create({
 export default ({ router, store, Vue }) => {
   // Router Authentication
   router.beforeEach((to, from, next) => {
-    if (store.getters['users/tokenGetter']) {
-      next()
-    } else {
-      next(!to.meta.requiresAuth)
-    }
+    if (store.getters['users/tokenGetter']) next()
+    else next(!to.meta.requiresAuth || { path: '/login' })
   })
 
   // Request interceptor
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
     locale = store.getters['config/localeGetter']
-    // request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     if (token) request.headers.common['Authorization'] = `Bearer ${token}`
     if (locale) request.headers.common['Accept-Language'] = locale
+    request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    request.headers.common['Content-Type'] = 'multipart/form-data'
 
     // request.headers['X-Socket-Id'] = Echo.socketId()
 
@@ -73,10 +71,8 @@ export default ({ router, store, Vue }) => {
             // confirmButtonText: i18n.t('ok'),
             // cancelButtonText: i18n.t('cancel')
           })
-        })
-    }
-
-    return Promise.reject(error)
+        }); return
+    } return Promise.reject(error)
   })
 
   // for use inside Vue files through this.$axios

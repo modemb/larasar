@@ -165,14 +165,16 @@ class LoginController extends Controller
         $avatar = ($user->avatar)?$user->avatar:'';
 
         $localUser = User::where('email', $user->email)->first();
+        $role = $localUser['id'] = 1 ?'Super Adamin':'Seller';
 
         //$this->validator();
 
         //If does not exist, create it
         if(!$localUser){
           $localUser = User::create([
-            'email' => $email,
+            'role' => $role,
             'name' => $name,
+            'email' => $email,
             'password' => Hash::make($password)
           ]);
         }
