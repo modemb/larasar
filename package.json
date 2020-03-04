@@ -19,15 +19,6 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "dependencies": {
-<<<<<<< HEAD
-        "@quasar/extras": "^1.5.1",
-        "axios": "^0.19.2",
-        "quasar": "^1.9.3",
-        "vue-i18n": "^8.15.1"
-    },
-    "devDependencies": {
-        "@quasar/app": "^1.5.7",
-=======
         "@quasar/extras": "^1.5.2",
         "axios": "^0.19.2",
         "quasar": "^1.9.7",
@@ -35,18 +26,13 @@
     },
     "devDependencies": {
         "@quasar/app": "^1.6.0",
->>>>>>> modemb/dev
         "@quasar/quasar-app-extension-dotenv": "^1.0.0",
         "@vue/eslint-config-standard": "^4.0.0",
         "babel-eslint": "^10.1.0",
         "bootstrap": "^4.0.0",
         "cross-env": "^5.1",
         "devtron": "^1.4.0",
-<<<<<<< HEAD
-        "electron": "^7.1.12",
-=======
         "electron": "^7.1.14",
->>>>>>> modemb/dev
         "electron-builder": "^21.2.0",
         "electron-debug": "^3.0.1",
         "electron-devtools-installer": "^2.2.4",
@@ -59,11 +45,7 @@
         "lodash": "^4.17.13",
         "popper.js": "^1.16.1",
         "resolve-url-loader": "^2.3.1",
-<<<<<<< HEAD
-        "sass": "^1.25.0",
-=======
         "sass": "^1.26.2",
->>>>>>> modemb/dev
         "sass-loader": "7.*",
         "vue": "^2.6.11",
         "vue-template-compiler": "^2.6.11",

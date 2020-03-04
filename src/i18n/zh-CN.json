@@ -4,12 +4,9 @@
   "error_alert_title": "错误...",
   "error_alert_text": "遇到一些错误，请稍后重试~",
   "add_user": "添加用户",
-<<<<<<< HEAD
-=======
   "edit_user": "编辑使用者",
   "update_user": "更新用户",
   "role": "角色",
->>>>>>> modemb/dev
   "users_list": "用户列表",
   "token_expired_alert_title": "验证过期!",
   "token_expired_alert_text": "请稍后重新登录系统",

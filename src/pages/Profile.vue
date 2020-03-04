@@ -1,11 +1,7 @@
 <template>
     <q-page class="q-pa-md flex-center">
 
-<<<<<<< HEAD
-      <q-form class="q-gutter-md">
-=======
       <div class="q-gutter-md">
->>>>>>> modemb/dev
         <div class="row">
 
           <!-- Profile Info -->
@@ -16,18 +12,6 @@
                 <div class="text-h6">{{$t('your_info')}}</div>
               </q-card-section>
 
-<<<<<<< HEAD
-              <form class="q-pa-md">
-
-                <q-uploader
-                  url="http://localhost/larasar/public/images/profile/default.jpg"
-                  style="max-width: 300px"
-                  class="q-mb-xl"
-                />
-
-                <q-input
-                  filled
-=======
               <q-form class="q-pa-md">
 
                 <q-img
@@ -57,7 +41,6 @@
                 <q-input
                   filled
                   type="text"
->>>>>>> modemb/dev
                   v-model="name"
                   :label="user.name || $t('name')"
                   lazy-rules
@@ -83,20 +66,12 @@
 
                 <q-btn color="primary" :label="$t('update')" @click.prevent="info" />
 
-<<<<<<< HEAD
-              </form>
-=======
               </q-form>
->>>>>>> modemb/dev
 
             </q-card>
 
           </div>
           <!-- Profile Info End -->
-<<<<<<< HEAD
-=======
-
->>>>>>> modemb/dev
           <!-- Password Reset -->
           <div class="col-md-6 q-pa-md">
 
@@ -105,11 +80,7 @@
                 <div class="text-h6">{{$t('your_password')}}</div>
               </q-card-section>
 
-<<<<<<< HEAD
-              <form class="q-pa-md">
-=======
               <q-form class="q-pa-md">
->>>>>>> modemb/dev
 
                 <q-input
                   filled
@@ -150,11 +121,7 @@
 
                 <q-btn color="primary" :label="$t('update')" @click.prevent="pwd" />
 
-<<<<<<< HEAD
-              </form>
-=======
               </q-form>
->>>>>>> modemb/dev
 
             </q-card>
 
@@ -162,21 +129,14 @@
           <!-- Password Reset End -->
 
         </div>
-<<<<<<< HEAD
-      </q-form>
-=======
       </div>
->>>>>>> modemb/dev
 
     </q-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-<<<<<<< HEAD
-=======
 const qs = params => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
->>>>>>> modemb/dev
 
 export default {
   name: 'updatePage',
@@ -184,12 +144,6 @@ export default {
     return {
       name: null,
       email: null,
-<<<<<<< HEAD
-      password: null,
-      new_password: null,
-      password_confirmation: null,
-      isPwd: true
-=======
       avatar: null,
       password: null,
       new_password: null,
@@ -197,20 +151,12 @@ export default {
       isPwd: true,
       file: '',
       url: process.env.DEV ? process.env.DEV_URL : process.env.API_URL
->>>>>>> modemb/dev
     }
   },
   computed: mapGetters({
     user: 'users/authGetter'
   }),
   methods: {
-<<<<<<< HEAD
-    info () {
-      this.$store.dispatch('users/updateAction', {
-        id: this.user.id,
-        name: this.name,
-        email: this.email
-=======
     factoryFn (file) {
       return new Promise((resolve, reject) => {
         // Retrieve JWT token from your store.
@@ -229,7 +175,6 @@ export default {
           //   { name: 'Content-Type', value: 'application/json-patch+json' }
           // ]
         })
->>>>>>> modemb/dev
       })
     },
     pwd () {
@@ -240,8 +185,6 @@ export default {
         new_password: this.new_password,
         password_confirmation: this.password_confirmation
       })
-<<<<<<< HEAD
-=======
     },
     handleFileUpload () {
       // console.log(this.$refs.file.files[0])
@@ -259,7 +202,6 @@ export default {
       formData.append('avatar', this.avatar)
       // console.log(formData, this.avatar)
       this.$store.dispatch('users/updateAction', { ...formData, ...data })
->>>>>>> modemb/dev
     }
   }
 }
