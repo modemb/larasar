@@ -1,5 +1,8 @@
 {
   "ok": "确定",
+  "status": "地位",
+  "edit": "编辑",
+  "delete": "删除",
   "cancel": "取消",
   "error_alert_title": "错误...",
   "error_alert_text": "遇到一些错误，请稍后重试~",
@@ -28,6 +31,7 @@
   "send_password_reset_link": "发送重置链接",
   "settings": "设置",
   "profile": "个人设置",
+  "users": "用户",
   "your_info": "您的个人信息",
   "info_updated": "您的个人信息已经更改!",
   "update": "更新",

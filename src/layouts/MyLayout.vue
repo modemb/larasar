@@ -124,7 +124,7 @@
               <q-icon name="person" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>Profile</q-item-label>
+              <q-item-label>{{$t('profile')}}</q-item-label>
               <q-item-label caption>{{user.role}}</q-item-label>
             </q-item-section>
           </q-item>
@@ -133,7 +133,7 @@
               <q-icon name="people" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>Users</q-item-label>
+              <q-item-label>{{$t('users')}}</q-item-label>
               <q-item-label caption>{{user.role}}'s Users</q-item-label>
             </q-item-section>
           </q-item><!--==============-- Admins and Sellers View End -->

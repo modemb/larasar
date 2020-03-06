@@ -1,5 +1,8 @@
 {
   "ok": "Ok",
+  "id": "Status",
+  "edit": "Edit",
+  "delete": "Delete",
   "cancel": "Cancel",
   "error_alert_title": "Oops...",
   "add_user": "Add User",
@@ -28,6 +31,7 @@
   "send_password_reset_link": "Send Password Reset Link",
   "settings": "Settings",
   "profile": "Profile",
+  "users": "Users",
   "your_info": "Your Info",
   "info_updated": "Your info has been updated!",
   "update": "Update",
