@@ -9,11 +9,11 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
-        "fruitcake/laravel-cors": "^1.0",
         "fideloper/proxy": "^4.2",
+        "fruitcake/laravel-cors": "^1.0",
         "laravel/framework": "^7.0",
-        "laravel/passport": "^7.5",
-        "laravel/socialite": "^4.2",
+        "laravel/passport": "^8.4",
+        "laravel/socialite": "^4.3",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "neto737/bitgosdk-php": "^2.2"

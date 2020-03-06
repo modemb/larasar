@@ -41,9 +41,10 @@ quasar dev -m electron -- --no-sandbox --disable-setuid-sandbox
 npm run lint
 ```
 
-### Update
+### Miscellaneous
 
 ```bash
+quasar create quapp
 npm update && quasar dev
 ```
 
