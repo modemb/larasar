@@ -41,6 +41,12 @@ quasar dev -m electron -- --no-sandbox --disable-setuid-sandbox
 npm run lint
 ```
 
+### Update
+
+```bash
+npm update && quasar dev
+```
+
 ### Build the app for production
 
 ```bash
