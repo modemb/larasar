@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <ul class="collapsible">
+    <ul class="collapsible text-center">
       <li>
         <!-- <div class="collapsible-header">
           <i class="material-icons">filter_drama</i> -->

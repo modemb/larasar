@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,5 +26,5 @@ Route::get('{path}', function () {
   return view('index');
 })->where('path', '.*');//->middleware('verified');
 
-Auth::routes(['verify' => true]);
-// Auth::routes();
+// Auth::routes(['verify' => true]);
+Auth::routes();

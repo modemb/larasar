@@ -1,5 +1,8 @@
 {
   "ok": "De Acuerdo",
+  "status": "Estado",
+  "edit": "Editar",
+  "delete": "Eliminar",
   "cancel": "Cancelar",
   "error_alert_title": "Ha ocurrido un problema",
   "add_user": "Agregar usuario",
@@ -28,6 +31,7 @@
   "send_password_reset_link": "Enviar Enlace de Restablecimiento de Contraseña",
   "settings": "Configuraciones",
   "profile": "Perfil",
+  "users": "Los usuarios",
   "your_info": "Tu Información",
   "info_updated": "¡Tu información ha sido actualizada!",
   "update": "Actualizar",

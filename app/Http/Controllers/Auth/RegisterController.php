@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Auth;
+use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -26,11 +26,11 @@ class RegisterController extends Controller
     use RegistersUsers;
 
     /**
-     * Where to redirect users after registration.
+     * Where to redirect users after login.
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -51,6 +51,8 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, User $user)
     {
+        $user = User::find(1);if($user['role'] != 'Super Admin')
+        $user->update(['role' => 'Super Admin']);//Super Admin Role
         return response()->json($user->name.' Registered Successfully');
     }
 

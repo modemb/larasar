@@ -27,7 +27,7 @@
               v-model="role"
               class="q-pb-md"
               :hint="role_data"
-              :options="options"
+              :options="(authGetter.id == 1 || authGetter.role == 'Admin')?admin:seller"
               :label="role || $t('role')"
               :rules="[val => val && val.length > 0 || role_data]"
             />
@@ -165,8 +165,11 @@ export default {
       filter: '',
       loading: false,
       // rowCount: 10,
-      options: [
-        'Admin', 'Seller', 'User'
+      admin: [
+        'Admin', 'Seller', 'Buyer'
+      ],
+      seller: [
+        'Seller', 'Buyer'
       ],
       pagination: {
         // sortBy: 'desc',
@@ -177,12 +180,12 @@ export default {
       },
       columns: [
         { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
-        { name: 'name', align: 'center', label: 'Name', field: 'name', sortable: true },
-        { name: 'email', align: 'center', label: 'Email', field: 'email', sortable: true },
-        { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
-        { name: 'role', align: 'center', label: 'Role', field: 'role', sortable: true },
-        { name: 'edit', align: 'center', label: 'Edit', field: 'edit', sortable: true },
-        { name: 'delete', align: 'center', label: 'Delete', field: 'delete', sortable: true }
+        { name: 'name', align: 'center', label: this.$t('name'), field: 'name', sortable: true },
+        { name: 'email', align: 'center', label: this.$t('email'), field: 'email', sortable: true },
+        { name: 'status', align: 'center', label: this.$t('status'), field: 'status', sortable: true },
+        { name: 'role', align: 'center', label: this.$t('role'), field: 'role', sortable: true },
+        { name: 'edit', align: 'center', label: this.$t('edit'), field: 'edit', sortable: true },
+        { name: 'delete', align: 'center', label: this.$t('delete'), field: 'delete', sortable: true }
       ],
       data: [],
       original: []

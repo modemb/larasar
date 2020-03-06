@@ -13,20 +13,20 @@
         </q-btn>
 
         <locale-dropdown />
-        <q-btn dense round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" />
+        <!-- <q-btn dense round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" /> -->
       </q-toolbar>
     </q-header>
     <!-- Header End -->
 
     <!-- Drawer -->
-    <q-drawer
+    <!-- <q-drawer
       v-model="leftDrawerOpen"
       side="right"
       behavior="mobile"
       bordered
       content-class="bg-grey-2"
     >
-    </q-drawer>
+    </q-drawer> -->
 
     <q-drawer
       show-if-above
@@ -124,7 +124,7 @@
               <q-icon name="person" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>Profile</q-item-label>
+              <q-item-label>{{$t('profile')}}</q-item-label>
               <q-item-label caption>{{user.role}}</q-item-label>
             </q-item-section>
           </q-item>
@@ -133,7 +133,7 @@
               <q-icon name="people" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>Users</q-item-label>
+              <q-item-label>{{$t('users')}}</q-item-label>
               <q-item-label caption>{{user.role}}'s Users</q-item-label>
             </q-item-section>
           </q-item><!--==============-- Admins and Sellers View End -->

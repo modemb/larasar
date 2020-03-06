@@ -55,9 +55,8 @@ export default ({ router, store, Vue }) => {
     }
 
     if (status === 401 && store.getters['users/authGetter']) {
-      store.dispatch('users/logoutAction')
-        .then(() => {
-          router.push({ name: 'public.login' })
+      store.dispatch('users/logoutAction').then(() => {
+        router.push({ path: '/login' }).then(() => {
           Notify.create({
             color: 'negative',
             position: 'top',
@@ -71,7 +70,8 @@ export default ({ router, store, Vue }) => {
             // confirmButtonText: i18n.t('ok'),
             // cancelButtonText: i18n.t('cancel')
           })
-        }); return
+        })
+      })
     } return Promise.reject(error)
   })
 

@@ -907,15 +907,21 @@
   integrity sha1-FPzHEqUwA475vhzmlSMVqDn0Zqg=
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 "@quasar/app@^1.4.5":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@quasar/app/-/app-1.5.0.tgz#44c805e7a8346233bee1f79efb043b453d764983"
   integrity sha512-Qc2I/QxH8awDE6gB3CXqh97j4EefzCLTiGdfl7Ki4m4I7ExpKiS66NtwJSeyKBAZrIVFM+LYNZR0VoWf5SDkng==
 =======
+=======
+>>>>>>> modemb/dev
 "@quasar/app@^1.5.7":
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/@quasar/app/-/app-1.5.8.tgz#2e55c1a0ff593ac776f0afbc01c7c65d3f8c72ef"
   integrity sha512-fIbVmHW7AHzWk0cWIsUY1gecqlYN6KqZIyNKJ+xzt2iHc9x5AYE/lMqw9Ku4DxTl0LvFli9aHNh0pJnDdwz6Tg==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   dependencies:
     "@quasar/babel-preset-app" "1.1.9"
@@ -939,7 +945,11 @@
     copy-webpack-plugin "5.1.1"
     cross-spawn "7.0.1"
 <<<<<<< HEAD
+<<<<<<< HEAD
     css-loader "3.4.1"
+=======
+    css-loader "3.4.2"
+>>>>>>> modemb/dev
 =======
     css-loader "3.4.2"
 >>>>>>> modemb/dev
@@ -975,12 +985,21 @@
     postcss-safe-parser "4.0.2"
     register-service-worker "1.6.2"
 <<<<<<< HEAD
+<<<<<<< HEAD
     sass-loader "8.0.0"
     semver "7.1.1"
     strip-ansi "6.0.0"
     stylus "0.54.7"
     stylus-loader "3.0.2"
     terser-webpack-plugin "2.3.2"
+=======
+    sass-loader "8.0.2"
+    semver "7.1.3"
+    strip-ansi "6.0.0"
+    stylus "0.54.7"
+    stylus-loader "3.0.2"
+    terser-webpack-plugin "2.3.4"
+>>>>>>> modemb/dev
 =======
     sass-loader "8.0.2"
     semver "7.1.3"
@@ -998,15 +1017,21 @@
     vue-template-compiler "2.6.11"
     vuex "3.1.2"
 <<<<<<< HEAD
+<<<<<<< HEAD
     webpack "4.41.5"
     webpack-bundle-analyzer "3.6.0"
     webpack-chain "6.3.0"
     webpack-dev-server "3.10.1"
 =======
+=======
+>>>>>>> modemb/dev
     webpack "4.41.6"
     webpack-bundle-analyzer "3.6.0"
     webpack-chain "6.4.0"
     webpack-dev-server "3.10.3"
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
     webpack-merge "4.2.2"
     webpack-node-externals "1.7.2"
@@ -1039,15 +1064,21 @@
     babel-plugin-transform-imports "^1.0.0"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 "@quasar/extras@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.4.0.tgz#e273e0610f4f22482ac49934ce4426260c08e49d"
   integrity sha512-ouhk4dWkPYWCjBZU+xN9/55O3Bszn1MDpFSFCtcGQXVe6VrmIvE/wE09YD+cp4PZdzsQZZiiTftziyoCzdy2Qg==
 =======
+=======
+>>>>>>> modemb/dev
 "@quasar/extras@^1.5.1":
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.5.2.tgz#12fb0aa0f150cc749670d2b3198f712a10c344b2"
   integrity sha512-4hwibnTNHM0OmZl6T3PN6CaHnVOmsCWpNwgFhJS0zMfsQ2z2s1OxObOFVDSSBuPT+sRk3iakhMLRaohNze0HYA==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
 "@quasar/fastclick@1.1.4":
@@ -1915,15 +1946,21 @@ aws4@^1.8.0:
   integrity sha512-Uvq6hVe90D0B2WEnUqtdgY1bATGz3mw33nH9Y+dmA+w5DHvUmBgkr5rM/KCHpCsiFNRUfokW/szpPPgMK2hm4A==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 axios@^0.19.1:
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.1.tgz#8a6a04eed23dfe72747e1dd43c604b8f1677b5aa"
   integrity sha512-Yl+7nfreYKaLRvAvjNPkvfjnQHJM1yLBY3zhqAwcJSwR/6ETkanUgylgtIvkvz0xJ+p/vZuNw8X7Hnb7Whsbpw==
 =======
+=======
+>>>>>>> modemb/dev
 axios@^0.19.2:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
   integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   dependencies:
     follow-redirects "1.5.10"
@@ -3224,15 +3261,21 @@ css-declaration-sorter@^4.0.1:
     timsort "^0.3.0"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 css-loader@3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-3.4.1.tgz#dfb7968aa9bffb26bd20375afdffe77d5a234b77"
   integrity sha512-+ybmv7sVxxNEenQhkifQDvny/1iNQM7YooJbSfVUdQQvisyg1aKIqgGjCjoFSyVLJMp17z9rfZFQaR5HGHcMbw==
 =======
+=======
+>>>>>>> modemb/dev
 css-loader@3.4.2:
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-3.4.2.tgz#d3fdb3358b43f233b78501c5ed7b1c6da6133202"
   integrity sha512-jYq4zdZT0oS0Iykt+fqnzVLRIeiPWhka+7BqPn+oSIpWJAHak5tmB/WZrJ2a21JhCeFyNnnlroSl8c+MtVndzA==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   dependencies:
     camelcase "^5.3.1"
@@ -3962,11 +4005,14 @@ electron-to-chromium@^1.3.322:
   integrity sha512-kaBmGWJlLW5bGEbm7/HWG9jt4oH+uecBIIfzFWfFkgqssPT2I6RDenGqo4wmKzm7seNu7DSCRZBXCuf7w8dtkQ==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 electron@^7.1.8:
   version "7.1.9"
   resolved "https://registry.yarnpkg.com/electron/-/electron-7.1.9.tgz#5053195d2e476a3ecd881ece4edf64f0a8c32fa3"
   integrity sha512-gkzDr08XxRaNZhwPLRXYNXDaPuiAeCrRPcClowlDVfCLKi+kRNhzekZpfYUBq8DdZCD29D3rCtgc9IHjD/xuHw==
 =======
+=======
+>>>>>>> modemb/dev
 electron-to-chromium@^1.3.361:
   version "1.3.362"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.362.tgz#9ed33f9d0673888d6a2614347b4b63b490009408"
@@ -3976,6 +4022,9 @@ electron@^7.1.12:
   version "7.1.13"
   resolved "https://registry.yarnpkg.com/electron/-/electron-7.1.13.tgz#f98838de70d74890cf639bbbbbe1f3b4b341ae78"
   integrity sha512-WFfjhAG/B2iVjZcGoQkwkn/Zf1YN3U5Ux/hTcnANRiM6qPMAX23CINQC+vhlHspcjM9/jbF310fHCSrsXMGlAg==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   dependencies:
     "@electron/get" "^1.0.1"
@@ -8632,15 +8681,21 @@ qs@~6.5.2:
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 quasar@^1.7.0:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.7.1.tgz#06c22f833e02bbc766aab22f9958e9229e509b21"
   integrity sha512-Qq9VvgO43DuHNpeqqeybVqHh7BMIWkp/+9yix0IWkqSuZB+HWowqWNCQgZW6D9R4RzaKwcqFQBsLxz0jbFBN8g==
 =======
+=======
+>>>>>>> modemb/dev
 quasar@^1.9.4:
   version "1.9.4"
   resolved "https://registry.yarnpkg.com/quasar/-/quasar-1.9.4.tgz#23dcb87bf8a5ea62fa60366016a496fffbe9702b"
   integrity sha512-u7PWj+0pQCiK/nDcjFFGQP+GGCzBC+FljP40FtRcrmKENBt/jnD9UBcDn0tc1k87Gli56D9MJXuRDfbxl8jhCw==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
 query-string@^4.1.0:
@@ -9287,15 +9342,21 @@ sass-loader@8.0.2:
     semver "^6.3.0"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 sass@^1.24.4:
   version "1.24.4"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.24.4.tgz#aa50575a9ed2b9e9645b5599156fd149bdad9eaa"
   integrity sha512-SqizkIEEcVPzmK1tYdlNRl/RSXMEwGcifL9GD+S2p9rEPdj6ycRbk4PWZs0jwlajNSyBPo/SXRB81i22SG0jmw==
 =======
+=======
+>>>>>>> modemb/dev
 sass@^1.26.0:
   version "1.26.1"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.26.1.tgz#79a36c957530c1dfffa2958968b90cb736794e91"
   integrity sha512-DWtzW0jDu+96MYkEdM8vUigjpisvM9qSlDwNvTFcr+XC7o2+3aXSAbHNcJ+8HzD1857uW9Opbxgu39esytVUKA==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   dependencies:
     chokidar ">=2.0.0 <4.0.0"
@@ -9386,15 +9447,21 @@ semver@7.0.0:
   integrity sha512-+GB6zVA9LWh6zovYQLALHwv5rb2PHGlJi3lfiqIHxR0uuwCgefcOJc59v9fv1w8GbStwxuuqqAjI9NMAOOgq1A==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 semver@7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.1.1.tgz#29104598a197d6cbe4733eeecbe968f7b43a9667"
   integrity sha512-WfuG+fl6eh3eZ2qAf6goB7nhiCd7NPXhmyFxigB/TOkQyeLP8w8GsVehvtGNtnNmyboz4TgeK40B1Kbql/8c5A==
 =======
+=======
+>>>>>>> modemb/dev
 semver@7.1.3:
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.1.3.tgz#e4345ce73071c53f336445cfc19efb1c311df2a6"
   integrity sha512-ekM0zfiA9SCBlsKa2X1hxyxiI4L3B6EbVJkkdgQXnSEEaHlGdvyodMruTiulSRWMMB4NeIuYNMC9rTKTz97GxA==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
 
 semver@^6.0.0, semver@^6.2.0, semver@^6.3.0:
@@ -10118,15 +10185,21 @@ term-size@^1.2.0:
     execa "^0.7.0"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 terser-webpack-plugin@2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/terser-webpack-plugin/-/terser-webpack-plugin-2.3.2.tgz#6d3d1b0590c8f729bfbaeb7fb2528b8b62db4c74"
   integrity sha512-SmvB/6gtEPv+CJ88MH5zDOsZdKXPS/Uzv2//e90+wM1IHFUhsguPKEILgzqrM1nQ4acRXN/SV4Obr55SXC+0oA==
 =======
+=======
+>>>>>>> modemb/dev
 terser-webpack-plugin@2.3.4:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/terser-webpack-plugin/-/terser-webpack-plugin-2.3.4.tgz#ac045703bd8da0936ce910d8fb6350d0e1dee5fe"
   integrity sha512-Nv96Nws2R2nrFOpbzF6IxRDpIkkIfmhvOws+IqMvYdFLO7o6wAILWFKONFgaYy8+T4LVz77DQW0f7wOeDEAjrg==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   dependencies:
     cacache "^13.0.1"
@@ -10783,15 +10856,21 @@ webpack-bundle-analyzer@3.6.0:
     ws "^6.0.0"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 webpack-chain@6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/webpack-chain/-/webpack-chain-6.3.0.tgz#a6098eb89a43dbe6533538f4647b283b99bf66ed"
   integrity sha512-Kri8p/JrfcQtBRghyxKN8r9E1mbxzywQPAnQbyvXN+rtSa8au1Qb7JOoyAGfEBFkOvU3XH4JeGd57CHa0QXfMQ==
 =======
+=======
+>>>>>>> modemb/dev
 webpack-chain@6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/webpack-chain/-/webpack-chain-6.4.0.tgz#22f0b27b6a9bc9ee3cba4f9e6513cf66394034e2"
   integrity sha512-f97PYqxU+9/u0IUqp/ekAHRhBD1IQwhBv3wlJo2nvyELpr2vNnUqO3XQEk+qneg0uWGP54iciotszpjfnEExFA==
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
 >>>>>>> modemb/dev
   dependencies:
     deepmerge "^1.5.2"
@@ -10843,8 +10922,11 @@ webpack-dev-middleware@^3.7.2:
     webpack-log "^2.0.0"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 webpack-dev-server@3.10.1, webpack-dev-server@^3.1.14:
 =======
+=======
+>>>>>>> modemb/dev
 webpack-dev-server@3.10.3:
   version "3.10.3"
   resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-3.10.3.tgz#f35945036813e57ef582c2420ef7b470e14d3af0"
@@ -10962,8 +11044,11 @@ webpack-sources@^1.0.1, webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-
     source-map "~0.6.1"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 webpack@4.41.5, webpack@^4.27.1:
 =======
+=======
+>>>>>>> modemb/dev
 webpack@4.41.6:
   version "4.41.6"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.41.6.tgz#12f2f804bf6542ef166755050d4afbc8f66ba7e1"

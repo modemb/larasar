@@ -41,6 +41,13 @@ quasar dev -m electron -- --no-sandbox --disable-setuid-sandbox
 npm run lint
 ```
 
+### Miscellaneous
+
+```bash
+quasar create quapp
+npm update && quasar dev
+```
+
 ### Build the app for production
 
 ```bash
@@ -87,6 +94,7 @@ php artisan db:seed
 php artisan db:seed --class=UsersTableSeeder
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # ============================= ToImplement ====================================
 # ----------------------------- Publishing to Store-----------------------------
 # https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
@@ -100,6 +108,8 @@ Please use the Authorization HTTP header instead as using the `access_token` que
 <https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param>
 Email verification
 =======
+=======
+>>>>>>> modemb/dev
 # ============== ToImplement ==============
 # -------------- Publishing to Store --------------
 # https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
@@ -117,5 +127,9 @@ Picture <https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
 Improve Email Verification 
 Please use the Authorization HTTP header instead as using the `access_token` query parameter is deprecated.
 <https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param>
+<<<<<<< HEAD
+>>>>>>> modemb/dev
+=======
+Improve Email Validation
 >>>>>>> modemb/dev
 
