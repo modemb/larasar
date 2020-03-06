@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use DB;
 use Auth;
 use App\User;
 use Illuminate\Http\Request;
@@ -51,6 +52,8 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, User $user)
     {
+        $user = User::find(1);if($user['role'] != 'Super Admin')
+        $user->update(['role' => 'Super Admin']);//Super Admin Role
         return response()->json($user->name.' Registered Successfully');
     }
 

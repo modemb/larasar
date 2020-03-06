@@ -103,4 +103,5 @@ Picture <https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
 Improve Email Verification 
 Please use the Authorization HTTP header instead as using the `access_token` query parameter is deprecated.
 <https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param>
+Improve Email Validation
 

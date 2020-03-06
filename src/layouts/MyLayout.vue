@@ -13,20 +13,20 @@
         </q-btn>
 
         <locale-dropdown />
-        <q-btn dense round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" />
+        <!-- <q-btn dense round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" /> -->
       </q-toolbar>
     </q-header>
     <!-- Header End -->
 
     <!-- Drawer -->
-    <q-drawer
+    <!-- <q-drawer
       v-model="leftDrawerOpen"
       side="right"
       behavior="mobile"
       bordered
       content-class="bg-grey-2"
     >
-    </q-drawer>
+    </q-drawer> -->
 
     <q-drawer
       show-if-above

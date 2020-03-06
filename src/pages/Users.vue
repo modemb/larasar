@@ -27,7 +27,7 @@
               v-model="role"
               class="q-pb-md"
               :hint="role_data"
-              :options="options"
+              :options="(authGetter.id == 1 || authGetter.role == 'Admin')?admin:seller"
               :label="role || $t('role')"
               :rules="[val => val && val.length > 0 || role_data]"
             />
@@ -165,8 +165,11 @@ export default {
       filter: '',
       loading: false,
       // rowCount: 10,
-      options: [
-        'Admin', 'Seller', 'User'
+      admin: [
+        'Admin', 'Seller', 'Buyer'
+      ],
+      seller: [
+        'Seller', 'Buyer'
       ],
       pagination: {
         // sortBy: 'desc',

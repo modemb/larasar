@@ -54,11 +54,10 @@ class UserController extends Controller
     public function store(Request $request)
     { //return $request->auth['role'];
       if ($request->locale) config(['app.locale' => $request->locale]);
-      if($request->auth['id'] == 1 || $request->auth['role'] != 'Super Admin')
-      User::find(1)->update(['role' => 'Super Admin']);//Super Admin Role
       if ($request->api) {
 
         $this->validate($request, [
+            'role' => 'required|string|max:10',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
