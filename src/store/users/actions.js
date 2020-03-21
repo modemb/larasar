@@ -8,7 +8,7 @@ export async function loginAction ({ commit, dispatch, getters }, payload) {
       const token = response.data
       commit('loginMutation', { ...token, ...payload })
       let user = { ...await dispatch('authAction'), ...payload }
-      let verifyEemail = true// process.env.MUST_VERIFY_EMAIL
+      let verifyEemail = process.env.MUST_VERIFY_EMAIL
       if (!user.email_verified_at & verifyEemail) { // Email Verification========================
         axiosInstance.post(`api/email/verify/${user.id}/${user.hash}?${user.query}`)// ToFix
           .then(rep => {
