@@ -6,6 +6,8 @@
     RewriteEngine On
 
     # RewriteBase /
+
+    #Local Server
     RewriteBase /larasar/public
 
     # Handle Authorization Header

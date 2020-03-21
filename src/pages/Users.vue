@@ -236,15 +236,16 @@ export default {
           this.password_data = [error.response.data.errors.password][0] || error.response.data.message
         })
     },
-    edit (user) {
-      this.user = user
-      this.avatar = user.new.avatar
+    async edit (user) {
+      const img = await this.$axios.get(`api/users/${user.id}?avatar=1`)
+      this.avatar = img.data
       this.role = user.role
       this.name = user.name
       this.email = user.email
       this.editUser = true
+      this.user = user
       // this.addUser = false
-      this.password = user.password
+      // this.password = user.password
     },
     update (user) {
       const data = {
@@ -286,14 +287,12 @@ export default {
               filter: undefined
             })
           })
-          alert(response)
-
-          // this.$q.notify.create({
-          //   color: 'positive',
-          //   position: 'top',
-          //   message: response,
-          //   icon: 'check'
-          // })
+          this.$q.notify({
+            color: 'positive',
+            position: 'top',
+            message: response,
+            icon: 'check'
+          })
         })
     },
     onRequest (props) {

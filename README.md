@@ -46,6 +46,7 @@ npm run lint
 ```bash
 quasar create quapp
 npm update && quasar dev
+npm update && quasar build -m pwa
 ```
 
 ### Build the app for production
@@ -94,21 +95,30 @@ php artisan db:seed
 php artisan db:seed --class=UsersTableSeeder
 
 # ============== ToImplement ==============
-# -------------- Publishing to Store --------------
+# -------------- Publishing to Store ------
 # https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
 # -------------- Data Table --------------
 Improve users update <https://quasar.dev/vue-components/popup-edit#QPopupEdit-API>
 # -------------- Profile.vue --------------
-Picture <https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
-        <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/>
-        <https://serversideup.net/uploading-files-vuejs-axios/>
-        <https://forum.quasar-framework.org/topic/3444/quploader-laravel-sample/4>
-        <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/#Vue_js_Laravel_File_Upload>
-        <https://quasar.dev/vue-components/img#Image-style>
-        <https://quasar.dev/vue-components/uploader#QUploader-API>
+Picture Upload
+<https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
+<https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/>
+<https://serversideup.net/uploading-files-vuejs-axios/>
+<https://forum.quasar-framework.org/topic/3444/quploader-laravel-sample/4>
+<https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/#Vue_js_Laravel_File_Upload>
+<https://quasar.dev/vue-components/img#Image-style>
+<https://quasar.dev/vue-components/uploader#QUploader-API>
 # -------------- Authentication --------------
 Improve Email Verification 
-Please use the Authorization HTTP header instead as using the `access_token` query parameter is deprecated.
+Github: Please use the Authorization HTTP header instead as using the `access_token` query parameter is deprecated.
 <https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param>
 Improve Email Validation
+# -------------- Real Time -------------------
+<https://socket.io/>
+<https://quasar.dev/vue-components/chat#Introduction>
+<https://github.com/mattmezza/vue-beautiful-chat>
+<https://github.com/botui/botui>
+<https://github.com/theomessin/vue-chat-scroll>
+<https://github.com/aws-samples/aws-lex-web-ui>
+<https://github.com/microzz/vue-chat>
 

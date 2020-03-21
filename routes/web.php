@@ -13,17 +13,39 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//   // return view('welcome');
-//   return view('index');
-// });
+if(env('MUST_VERIFY_EMAIL')){
+  $verified = 'verified';
+  $verify = ['verify' => true];
+} else $verify = $verified = [];
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', function () {
+  // return view('welcome');
+  return view('index');
+});
+
+Route::get('/home', 'HomeController@index')
+  // ->middleware($verified)
+  ->name('home');
+
+Auth::routes($verify);
+
+Route::any('/login', function () {
+  return view('index');
+});
+
+Route::get('/register', function () {
+  return view('index');
+});
+
+Route::get('email/verify', function () {
+  return view('index');
+});
+
+Route::get('email/verify/{id}/{hash}', function () {
+  return view('index');
+});
 
 Route::get('{path}', function () {
   // return view('welcome');
   return view('index');
-})->where('path', '.*');//->middleware('verified');
-
-// Auth::routes(['verify' => true]);
-Auth::routes();
+})->where('path', '.*')->middleware($verified);

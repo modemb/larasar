@@ -2,15 +2,15 @@ import { Notify, Cookies, LocalStorage } from 'quasar'
 import { i18n } from './i18n'
 import axios from 'axios'
 
-// Use Cookies
-const cookie = false
+const cookie = false // Use Cookies
 let locale = cookie ? Cookies.get('locale') : LocalStorage.getItem('locale') || i18n.locale
+let env = process.env
 
 // We create our own axios instance and set a custom base URL.
 // Note that if we wouldn't set any config here we do not need
 // a named export, as we could just `import axios from 'axios'`
 const axiosInstance = axios.create({
-  baseURL: process.env.DEV ? process.env.DEV_URL : process.env.API_URL
+  baseURL: env.DEV ? env.DEV_URL : env.LOCAL_PROD ? env.DEV_URL : env.API_URL
 })
 
 export default ({ router, store, Vue }) => {

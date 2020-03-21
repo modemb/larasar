@@ -8,17 +8,37 @@ export async function loginAction ({ commit, dispatch, getters }, payload) {
       const token = response.data
       commit('loginMutation', { ...token, ...payload })
       let user = { ...await dispatch('authAction'), ...payload }
-      let verifyEemail = false
-      if (!user.email_verified_at && verifyEemail) { // Email Verification========================
-        axiosInstance.get(`api/email/verify/${user.id}/${user.hash}?${user.query}`).then(() => {
-          commit('loginAction', payload)
-        }).catch(() => {
-          if (confirm(i18n.t('verify_email_address') + '\n' + i18n.t('resend_verification_link')) === true) {
-            axiosInstance.post('/api/email/resend').then(() => {
-              alert(i18n.t('verify_email_address'))
-            }).catch(e => { alert(e) })
-          } dispatch('logoutAction')
-        }); return
+      let verifyEemail = true// process.env.MUST_VERIFY_EMAIL
+      if (!user.email_verified_at & verifyEemail) { // Email Verification========================
+        axiosInstance.post(`api/email/verify/${user.id}/${user.hash}?${user.query}`)// ToFix
+          .then(rep => {
+            Notify.create({
+              color: 'positive',
+              position: 'top',
+              message: i18n.t(rep.data),
+              icon: 'check'
+            })
+            this.$router.push({ path: '/' })
+          })
+          .catch(() => {
+            if (confirm(i18n.t('verify_email_address') + '\n' + i18n.t('resend_verification_link')) === true) {
+              axiosInstance.post('api/email/resend').then(() => {
+                Notify.create({
+                  color: 'positive',
+                  position: 'top',
+                  message: i18n.t('verify_email_address'),
+                  icon: 'check'
+                })
+              }).catch(e => {
+                Notify.create({
+                  color: 'negative',
+                  position: 'top',
+                  message: e.response.data.message,
+                  icon: 'report_problem'
+                })
+              })
+            } dispatch('logoutAction')
+          }); return
       }// ==============================================Email Verification End====================
       // Redirect home.
       this.$router.push({ path: '/' })

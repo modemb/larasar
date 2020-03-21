@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="ConfirmPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132223568450000000" remote="132278095860000000" Dst="1" />
-<file name="ForgotPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132234956801259033" remote="132278095860000000" Dst="1" />
-<file name="LoginController.php" server="home682217311.1and1-data.host/larasar/" local="132278640010893862" remote="132278640920000000" Dst="1" />
-<file name="OAuthController.php" server="home682217311.1and1-data.host/larasar/" local="132223568460000000" remote="132278095860000000" Dst="1" />
-<file name="RegisterController.php" server="home682217311.1and1-data.host/larasar/" local="132278341036639929" remote="132278343750000000" Dst="1" />
-<file name="ResetPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132251698950000000" remote="132278095870000000" Dst="1" />
-<file name="VerificationController.php" server="home682217311.1and1-data.host/larasar/" local="132267295250000000" remote="132278095870000000" Dst="1" />
+<file name="ConfirmPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132223568450000000" remote="132282608530000000" Dst="2" />
+<file name="ForgotPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132284982953195899" remote="132284983430000000" Dst="2" />
+<file name="LoginController.php" server="home682217311.1and1-data.host/larasar/" local="132283908486301033" remote="132284946040000000" Dst="2" />
+<file name="RegisterController.php" server="home682217311.1and1-data.host/larasar/" local="132280009965849634" remote="132282608530000000" Dst="2" />
+<file name="ResetPasswordController.php" server="home682217311.1and1-data.host/larasar/" local="132251698950000000" remote="132282608540000000" Dst="2" />
+<file name="VerificationController.php" server="home682217311.1and1-data.host/larasar/" local="132286789308840386" remote="132286816520000000" Dst="2" />
 </dwsync>

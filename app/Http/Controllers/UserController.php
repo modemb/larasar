@@ -102,13 +102,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
-    { //return $user->role == 'Seller'?1:0;
+    public function show(Request $request, User $user)
+    { //$request->avatar;
       $admins = $user->id == 1 || $user->role == 'Admin'?1:0;
       $sellers = $user->role == 'Seller'?1:0;
-      $buyers = $user->role == 'Buyer'?1:0;
-      if($admins) return User::all();
-      if($sellers) return User::where('user_id', $user['id'])->get();
+      $buyers = $user->role == 'Buyer'?1:0;//UserModule: TagShow
+      if($request->avatar) return $user->new['avatar'];
+      if($admins) return DB::table('users')->get();
+      if($sellers) return DB::table('users')->where('user_id', $user['id'])->get();
     }
 
     /**
@@ -179,6 +180,6 @@ class UserController extends Controller
       if ($id == 1 || Auth::id() == $id)
         return 'You Cannot Delete Super Admin or Your Own Account';
         //back()->with('status', 'You Cannot Delete Super Admin or Your Own Account');
-      else User::find($id)->delete();return 'User Deleted Successfully';//TagDestroy: UserModule
+      else User::destroy($id);return 'User Deleted Successfully';//TagDestroy: UserModule
     }
 }

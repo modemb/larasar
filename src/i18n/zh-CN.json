@@ -39,5 +39,11 @@
   "password_updated": "您的密码已经更新!",
   "new_password": "新密码",
   "login_with": "登录",
-  "register_with": "注册"
+  "register_with": "注册",
+  "verify_email": "检查电子邮件",
+  "send_verification_link": "发送验证链接",
+  "resend_verification_link": "重新发送验证链接？",
+  "failed_to_verify_email": "无法验证电子邮件。",
+  "email_verified_successfully": "已成功验证电子邮件",
+  "verify_email_address": "我们向您发送了一封包含验证链接的电子邮件。"
 }

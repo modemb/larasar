@@ -108,15 +108,6 @@
               <q-item-label caption>@QuasarFramework</q-item-label>
             </q-item-section>
           </q-item>
-          <!-- Authenticated -->
-          <div v-if="user" class="q-pa-md">
-            <q-btn icon="lock_open" :label="$t('logout')" @click.prevent="logout" />
-          </div>
-          <!-- Guest -->
-          <div v-else class="q-pa-md">
-            <q-btn icon="vpn_key" :label="$t('login')" :to="{name: 'public.login'}" />
-            <q-btn icon="add_to_queue" :label="$t('register')" :to="{name: 'public.register'}" />
-          </div>
         </q-list>
         <q-list v-else>
           <q-item clickable to='/profile'>
@@ -147,6 +138,13 @@
             </q-item-section>
           </q-item>
         </q-list>
+        <div v-if="user" class="q-pa-md"><!-- Authenticated ====-->
+          <q-btn icon="lock_open" :label="$t('logout')" @click.prevent="logout" />
+        </div><!--=========================== Authenticated End -->
+        <div v-else class="q-pa-md"><!--===== Guest ============-->
+          <q-btn icon="vpn_key" :label="$t('login')" :to="{name: 'public.login'}" />
+          <q-btn icon="add_to_queue" :label="$t('register')" :to="{name: 'public.register'}" />
+        </div><!--=========================== Guest End ========-->
       </q-scroll-area>
     </q-drawer>
     <!-- Drawer End -->
@@ -201,6 +199,7 @@ export default {
         .then(() => {
           // Redirect to login.
           this.$router.push({ name: 'public.login' })
+          this.authDrawer = true
         })
     }
   }

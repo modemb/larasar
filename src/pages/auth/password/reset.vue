@@ -19,27 +19,28 @@
                   filled
                   type="email"
                   :label="$t('email')"
-                  :hint="email_data"
                   lazy-rules
-                  :rules="[val => val && val.length > 0 || email_data,
-                    val => val !== null && val !== '' || email_data]"
+                  :rules="[val => val && val.length > 0 || 'null']"
+                  :error="email_data ? true : false"
+                  :error-message='email_data'
                 />
 
                 <q-input
-                  filled
+                  filled lazy-rules
                   v-model="password"
                   :label="$t('password')"
                   :type="isPwd ? 'password' : 'text'"
-                  :hint="password_data"
-                  lazy-rules
-                  :rules="[val => val && val.length > 0 || password_data]"
+                  :rules="[val => val && val.length > 7 || 'min 8']"
+                  :error="password_data ? true : false"
+                  :error-message='password_data'
                 />
 
                 <q-input
                   v-model="password_confirmation"
-                  filled
+                  filled lazy-rules
                   :type="isPwd ? 'password' : 'text'"
                   :label="$t('confirm_password')"
+                  :rules="[val => val && val.length > 7 || 'min 8']"
                   >
                   <template v-slot:append>
                     <q-icon
@@ -91,7 +92,7 @@ export default {
   methods: {
     async reset () {
       const data = {
-        user: 'login',
+        api: 'login',
         locale: locale,
         token: this.token,
         email: this.email,
@@ -109,8 +110,9 @@ export default {
           })
         })
         .catch(error => {
-          this.email_data = error.response.data.email || [error.response.data.errors.email][0] || error.response.data.message
-          this.password_data = [error.response.data.errors.password][0] || error.response.data.message
+          const data = error.response.data
+          this.email_data = data['email'] || data.message
+          this.password_data = data.errors.password[0] || data.message
         })
     }
   }
