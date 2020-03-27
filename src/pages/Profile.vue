@@ -72,6 +72,7 @@
 
           </div>
           <!-- Profile Info End -->
+
           <!-- Password Reset -->
           <div class="col-md-6 q-pa-md">
 
