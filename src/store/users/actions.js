@@ -1,5 +1,5 @@
 import { axiosInstance, locale } from 'boot/axios'
-import { i18n } from 'boot/i18n'
+// import { i18n } from 'boot/i18n'
 import { Notify } from 'quasar'
 
 export async function loginAction ({ commit, dispatch, getters }, payload) {
@@ -7,39 +7,7 @@ export async function loginAction ({ commit, dispatch, getters }, payload) {
     .then(async response => {
       const token = response.data
       commit('loginMutation', { ...token, ...payload })
-      let user = { ...await dispatch('authAction'), ...payload }
-      let verifyEemail = process.env.MUST_VERIFY_EMAIL
-      if (!user.email_verified_at & verifyEemail) { // Email Verification========================
-        axiosInstance.post(`api/email/verify/${user.id}/${user.hash}?${user.query}`)// ToFix
-          .then(rep => {
-            Notify.create({
-              color: 'positive',
-              position: 'top',
-              message: i18n.t(rep.data),
-              icon: 'check'
-            })
-            this.$router.push({ path: '/' })
-          })
-          .catch(() => {
-            if (confirm(i18n.t('verify_email_address') + '\n' + i18n.t('resend_verification_link')) === true) {
-              axiosInstance.post('api/email/resend').then(() => {
-                Notify.create({
-                  color: 'positive',
-                  position: 'top',
-                  message: i18n.t('verify_email_address'),
-                  icon: 'check'
-                })
-              }).catch(e => {
-                Notify.create({
-                  color: 'negative',
-                  position: 'top',
-                  message: e.response.data.message,
-                  icon: 'report_problem'
-                })
-              })
-            } dispatch('logoutAction')
-          }); return
-      }// ==============================================Email Verification End====================
+      dispatch('authAction')
       // Redirect home.
       this.$router.push({ path: '/' })
     })

@@ -74,7 +74,7 @@ module.exports = function (ctx) {
       // ================= \\
       // vueCompiler: true,
       // https://quasar.dev/app-extensions/discover#Introduction
-      // env: localProdServer ? { LOCAL_PROD: 1 } : '',
+      env: localProdServer ? { LOCAL_PROD: 1 } : { LOCAL_PROD: 0 },
       distDir: 'public/quasar', // Comment for dist folder
       publicPath: localProdServer ? '/larasar/public' : '/',
 

@@ -45,5 +45,5 @@
   "resend_verification_link": "Renvoyer le lien de vérification?",
   "failed_to_verify_email": "Échec de la vérification du courrier électronique.",
   "email_verified_successfully": "E-mail vérifié avec succès",
-  "verify_email_address": "Nous vous avons envoyé un email avec un lien de vérification."
+  "verify_email_address": "Nous vous avons envoyé un e-mail avec le lien de vérification."
 }

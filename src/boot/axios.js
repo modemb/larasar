@@ -2,9 +2,8 @@ import { Notify, Cookies, LocalStorage } from 'quasar'
 import { i18n } from './i18n'
 import axios from 'axios'
 
-const cookie = false // Use Cookies
+let env = process.env; const cookie = false // Use Cookies
 let locale = cookie ? Cookies.get('locale') : LocalStorage.getItem('locale') || i18n.locale
-let env = process.env
 
 // We create our own axios instance and set a custom base URL.
 // Note that if we wouldn't set any config here we do not need
@@ -13,13 +12,7 @@ const axiosInstance = axios.create({
   baseURL: env.DEV ? env.DEV_URL : env.LOCAL_PROD ? env.DEV_URL : env.API_URL
 })
 
-export default ({ router, store, Vue }) => {
-  // Router Authentication
-  router.beforeEach((to, from, next) => {
-    if (store.getters['users/tokenGetter']) next()
-    else next(!to.meta.requiresAuth || { path: '/login' })
-  })
-
+export default async ({ router, store, Vue }) => {
   // Request interceptor
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
@@ -78,11 +71,22 @@ export default ({ router, store, Vue }) => {
   // for use inside Vue files through this.$axios
   Vue.prototype.$axios = axiosInstance
 
-  // Auth User Check
-  store.dispatch('users/authAction')
-
   // Config
   store.dispatch('config/configAction', locale)
+
+  // Auth User Check
+  let auth = await store.dispatch('users/authAction') || []
+
+  // Verify Email - Boolean or Binary
+  let verifyEmail = env.PROD ? env.MUST_VERIFY_EMAIL : 1
+
+  // Authentication Router
+  router.beforeEach((to, from, next) => {
+    let verify = !auth.email_verified_at && verifyEmail
+      ? to.meta.requiresVerify || { path: '/email/verify' } : 0
+    if (store.getters['users/tokenGetter']) next(verify)
+    else next(!to.meta.requiresAuth || { path: '/login' })
+  })
 }
 
 // Here we define a named export

@@ -18,6 +18,8 @@ if(env('MUST_VERIFY_EMAIL')){
   $verify = ['verify' => true];
 } else $verify = $verified = [];
 
+Auth::routes($verify);
+
 Route::get('/', function () {
   // return view('welcome');
   return view('index');
@@ -27,21 +29,25 @@ Route::get('/home', 'HomeController@index')
   // ->middleware($verified)
   ->name('home');
 
-Auth::routes($verify);
+Route::group(['middleware' => 'guest'], function () {
+  Route::any('/login', function () {
+    return view('index');
+  });
 
-Route::any('/login', function () {
-  return view('index');
-});
+  Route::get('/register', function () {
+    return view('index');
+  });
 
-Route::get('/register', function () {
-  return view('index');
-});
-
-Route::get('email/verify', function () {
-  return view('index');
+  Route::get('/password/reset', function () {
+    return view('index');
+  });
 });
 
 Route::get('email/verify/{id}/{hash}', function () {
+  return view('index');
+})->name('verification.verify');
+
+Route::get('email/verify', function () {
   return view('index');
 });
 
