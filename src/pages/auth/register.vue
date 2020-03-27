@@ -19,29 +19,33 @@
                   filled
                   v-model="name"
                   :label="$t('name')"
-                  :hint="name_data"
                   lazy-rules
-                  :rules="[val => val && val.length > 0 || name_data]"
+                  :rules="[val => val && val.length > 0 || 'null']"
+                  :error="name_data ? true : false"
+                  :error-message='name_data'
                 />
 
                 <q-input
                   filled
-                  v-model="email"
-                  :label="$t('email')"
                   type="email"
-                  :hint="email_data"
+                  v-model="email"
                   lazy-rules
-                  :rules="[val => val && val.length > 0 || email_data]"
-                />
+                  bottom-slots counter
+                  :label="$t('email')"
+                  :rules="[val => val && val.length > 0 || 'null']"
+                  :error="email_data ? true : false"
+                  :error-message='email_data'
+                /><!-- https://quasar.dev/vue-components/field#Validation -->
 
                 <q-input
                   filled
                   v-model="password"
                   :label="$t('password')"
                   :type="isPwd ? 'password' : 'text'"
-                  :hint="password_data"
                   lazy-rules
-                  :rules="[val => val && val.length > 0 || password_data]"
+                  :rules="[val => val && val.length > 7 || 'min 8']"
+                  :error="password_data ? true : false"
+                  :error-message='password_data'
                 />
 
                 <q-input
@@ -49,6 +53,7 @@
                   filled
                   :type="isPwd ? 'password' : 'text'"
                   :label="$t('confirm_password')"
+                  :rules="[val => val && val.length > 7 || 'min 8']"
                   >
                   <template v-slot:append>
                     <q-icon
@@ -106,9 +111,9 @@ export default {
       })
         .catch(error => {
           this.role_data = [error.response.data.errors.role][0] || error.response.data.message
-          this.name_data = [error.response.data.errors.name][0] || error.response.data.message
-          this.email_data = [error.response.data.errors.email][0] || error.response.data.message
-          this.password_data = [error.response.data.errors.password][0] || error.response.data.message
+          this.name_data = error.response.data.errors.name[0] || error.response.data.message
+          this.email_data = error.response.data.errors.email[0] || error.response.data.message
+          this.password_data = error.response.data.errors.password[0] || error.response.data.message
         })
     }
   }

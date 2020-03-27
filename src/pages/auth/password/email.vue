@@ -21,8 +21,9 @@
                   :label="$t('email')"
                   :hint="email_data"
                   lazy-rules
-                  :rules="[val => val && val.length > 0 || email_data,
-                    val => val !== null && val !== '' || email_data]"
+                  :rules="[val => val && val.length > 0 || 'null']"
+                  :error="email_data ? true : false"
+                  :error-message='email_data'
                 />
 
                 <q-btn color="primary" :label="$t('send_password_reset_link')" class="q-ma-sm" @click.prevent="send" />

@@ -39,5 +39,11 @@
   "password_updated": "¡Tu contraseña ha sido actualizada!",
   "new_password": "Nueva Contraseña",
   "login_with": "Iniciar Sesión con",
-  "register_with": "Registro con"
+  "register_with": "Registro con",
+  "verify_email": "Verificar correo electrónico",
+  "send_verification_link": "Enviar enlace de verificación",
+  "resend_verification_link": "¿Reenviar enlace de verificación?",
+  "failed_to_verify_email": "No se pudo verificar el correo electrónico.",
+  "email_verified_successfully": "Correo electrónico verificado con éxito",
+  "verify_email_address": "Le enviamos un correo electrónico con el enlace de verificación."
 }

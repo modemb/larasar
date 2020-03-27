@@ -10,7 +10,7 @@
       </li>
       <li>
         <div class="collapsible-body">
-          <a  target="_blank" href="https://github.com/modemb/larasar"><h4 class="fab fa-github q-mr-sm">Github</h4></a>
+          <a  target="_blank" href="https://github.com/modemb/larasar"><h4 class="fab fa-github *q-mr-sm">Github</h4></a>
           <a  target="_blank" href="https://www.facebook.com/modemb.dev"><h4 class="fab fa-facebook">Facebook</h4></a>
         </div>
         <a target="_blank"  href="https://quasar.dev" class="logo">

@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<file name="api.php" server="home682217311.1and1-data.host/larasar/" local="132266952290000000" remote="132266952290000000" Dst="1" />
-<file name="channels.php" server="home682217311.1and1-data.host/larasar/" local="132202526610000000" remote="132202526610000000" Dst="1" />
-<file name="console.php" server="home682217311.1and1-data.host/larasar/" local="132202526620000000" remote="132202526620000000" Dst="1" />
-<file name="web.php" server="home682217311.1and1-data.host/larasar/" local="132267266170000000" remote="132267266170000000" Dst="1" />
-=======
-<file name="api.php" server="home682217311.1and1-data.host/larasar/" local="132266890922906305" remote="132266952290000000" Dst="1" />
-<file name="channels.php" server="home682217311.1and1-data.host/larasar/" local="132202526610000000" remote="132202526610000000" Dst="1" />
-<file name="console.php" server="home682217311.1and1-data.host/larasar/" local="132202526620000000" remote="132202526620000000" Dst="1" />
-<file name="web.php" server="home682217311.1and1-data.host/larasar/" local="132267266005813523" remote="132267266170000000" Dst="1" />
->>>>>>> modemb/dev
-=======
-<file name="api.php" server="home682217311.1and1-data.host/larasar/" local="132266952290000000" remote="132266952290000000" Dst="1" />
-<file name="channels.php" server="home682217311.1and1-data.host/larasar/" local="132202526610000000" remote="132202526610000000" Dst="1" />
-<file name="console.php" server="home682217311.1and1-data.host/larasar/" local="132202526620000000" remote="132202526620000000" Dst="1" />
-<file name="web.php" server="home682217311.1and1-data.host/larasar/" local="132278644857934198" remote="132278645240000000" Dst="1" />
->>>>>>> modemb/dev
+<file name="api.php" server="home682217311.1and1-data.host/larasar/" local="132297737100000000" remote="132297737100000000" Dst="2" />
+<file name="channels.php" server="home682217311.1and1-data.host/larasar/" local="132280009619399634" remote="132285018060000000" Dst="2" />
+<file name="console.php" server="home682217311.1and1-data.host/larasar/" local="132280009619409632" remote="132285018060000000" Dst="2" />
+<file name="web.php" server="home682217311.1and1-data.host/larasar/" local="132297737100000000" remote="132297737100000000" Dst="2" />
 </dwsync>

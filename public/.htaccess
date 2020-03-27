@@ -6,6 +6,11 @@
     RewriteEngine On
 
     # RewriteBase /
+<<<<<<< HEAD
+=======
+
+    #Local Server
+>>>>>>> modemb/dev
     RewriteBase /larasar/public
 
     # Handle Authorization Header

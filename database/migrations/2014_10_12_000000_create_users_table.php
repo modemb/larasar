@@ -14,12 +14,12 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-<<<<<<< HEAD
-            $table->bigIncrements('id');
-=======
+
             $table->id();
             // $table->bigIncrements('id');
->>>>>>> modemb/dev
+
+            $table->id();
+            // $table->bigIncrements('id');
             $table->bigInteger('user_id')->default(0);
             $table->string('role')->default('Buyer');
             $table->string('status')->default('Active');
@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('avatar')->default('images/profile/default.jpg');
-            $table->string('address')->nullable();;
+            $table->string('address')->nullable();
             $table->string('city')->nullable();;
             $table->string('postal_code', 20)->nullable();
             $table->char('region_code', 2)->nullable();

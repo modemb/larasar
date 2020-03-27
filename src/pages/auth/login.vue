@@ -19,10 +19,11 @@
                   filled
                   v-model="email"
                   type="email"
-                  :label="$t('email')"
-                  :hint="email_data"
                   lazy-rules
-                  :rules="[val => val && val.length > 0 || email_data]"
+                  :label="$t('email')"
+                  :rules="[val => val && val.length > 0 || 'null']"
+                  :error="email_data ? true : false"
+                  :error-message='email_data'
                 />
 
                 <q-input
@@ -30,9 +31,10 @@
                   v-model="password"
                   :type="isPwd ? 'password' : 'text'"
                   :label="$t('password')"
-                  :hint="password_data"
                   lazy-rules
-                  :rules="[val => val && val.length > 0 || password_data]"
+                  :rules="[val => val && val.length > 7 || 'min 8']"
+                  :error="password_data ? true : false"
+                  :error-message='password_data'
                   >
                   <template v-slot:append>
                     <q-icon
@@ -102,8 +104,8 @@ export default {
         })
         .catch(error => {
           this.loader = false
-          this.email_data = [error.response.data.errors.email][0] || error.response.data.message
-          this.password_data = [error.response.data.errors.password][0] || error.response.data.message
+          this.email_data = error.response.data.errors.email[0] || error.response.data.message
+          this.password_data = error.response.data.errors.password[0] || error.response.data.message
         })
     }
   }

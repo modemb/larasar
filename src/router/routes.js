@@ -35,18 +35,7 @@ const routes = [
         component: () => import('pages/auth/password/reset'),
         meta: { requiresAuth: false }
       },
-      { path: '/email/verify/:id/:hash',
-        name: 'public.verification.verify.id.token',
-        component: () => import('pages/auth/login'),
-        meta: { requiresAuth: false }
-      },
       // Auth Routes
-      { path: '/email/verify',
-        name: 'auth.verification.verify',
-        component: () => import('pages/auth/login'),
-        // component: () => import('pages/auth/verification/verify'),
-        meta: { requiresAuth: true }
-      },
       {
         path: '/profile',
         name: 'auth.profile',
@@ -64,6 +53,17 @@ const routes = [
         name: 'auth.test',
         component: () => import('pages/Test'),
         meta: { requiresAuth: true }
+      },
+      // Verify Route
+      { path: '/email/verify/:id/:hash',
+        name: 'auth.verification.verify',
+        component: () => import('pages/auth/verify'),
+        meta: { requiresVerify: true }
+      },
+      { path: '/email/verify',
+        name: 'auth.verify',
+        component: () => import('pages/auth/verify'),
+        meta: { requiresVerify: true }
       }
     ]
   }

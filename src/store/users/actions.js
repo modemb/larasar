@@ -1,5 +1,5 @@
 import { axiosInstance, locale } from 'boot/axios'
-import { i18n } from 'boot/i18n'
+// import { i18n } from 'boot/i18n'
 import { Notify } from 'quasar'
 
 export async function loginAction ({ commit, dispatch, getters }, payload) {
@@ -7,19 +7,7 @@ export async function loginAction ({ commit, dispatch, getters }, payload) {
     .then(async response => {
       const token = response.data
       commit('loginMutation', { ...token, ...payload })
-      let user = { ...await dispatch('authAction'), ...payload }
-      let verifyEemail = false
-      if (!user.email_verified_at && verifyEemail) { // Email Verification========================
-        axiosInstance.get(`api/email/verify/${user.id}/${user.hash}?${user.query}`).then(() => {
-          commit('loginAction', payload)
-        }).catch(() => {
-          if (confirm(i18n.t('verify_email_address') + '\n' + i18n.t('resend_verification_link')) === true) {
-            axiosInstance.post('/api/email/resend').then(() => {
-              alert(i18n.t('verify_email_address'))
-            }).catch(e => { alert(e) })
-          } dispatch('logoutAction')
-        }); return
-      }// ==============================================Email Verification End====================
+      dispatch('authAction')
       // Redirect home.
       this.$router.push({ path: '/' })
     })

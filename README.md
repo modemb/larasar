@@ -46,6 +46,10 @@ npm run lint
 ```bash
 quasar create quapp
 npm update && quasar dev
+<<<<<<< HEAD
+=======
+npm update && quasar build -m pwa
+>>>>>>> modemb/dev
 ```
 
 ### Build the app for production
@@ -95,6 +99,7 @@ php artisan db:seed --class=UsersTableSeeder
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # ============================= ToImplement ====================================
 # ----------------------------- Publishing to Store-----------------------------
 # https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
@@ -112,10 +117,15 @@ Email verification
 >>>>>>> modemb/dev
 # ============== ToImplement ==============
 # -------------- Publishing to Store --------------
+=======
+# ============== ToImplement ==============
+# -------------- Publishing to Store ------
+>>>>>>> modemb/dev
 # https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
 # -------------- Data Table --------------
 Improve users update <https://quasar.dev/vue-components/popup-edit#QPopupEdit-API>
 # -------------- Profile.vue --------------
+<<<<<<< HEAD
 Picture <https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
         <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/>
         <https://serversideup.net/uploading-files-vuejs-axios/>
@@ -131,5 +141,28 @@ Please use the Authorization HTTP header instead as using the `access_token` que
 >>>>>>> modemb/dev
 =======
 Improve Email Validation
+>>>>>>> modemb/dev
+=======
+Picture Upload
+<https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
+<https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/>
+<https://serversideup.net/uploading-files-vuejs-axios/>
+<https://forum.quasar-framework.org/topic/3444/quploader-laravel-sample/4>
+<https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/#Vue_js_Laravel_File_Upload>
+<https://quasar.dev/vue-components/img#Image-style>
+<https://quasar.dev/vue-components/uploader#QUploader-API>
+# -------------- Authentication --------------
+Improve Email Verification 
+Github: Please use the Authorization HTTP header instead as using the `access_token` query parameter is deprecated.
+<https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param>
+Improve Email Validation
+# -------------- Real Time -------------------
+<https://socket.io/>
+<https://quasar.dev/vue-components/chat#Introduction>
+<https://github.com/mattmezza/vue-beautiful-chat>
+<https://github.com/botui/botui>
+<https://github.com/theomessin/vue-chat-scroll>
+<https://github.com/aws-samples/aws-lex-web-ui>
+<https://github.com/microzz/vue-chat>
 >>>>>>> modemb/dev
 

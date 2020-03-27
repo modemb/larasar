@@ -1,6 +1,4 @@
 _notes/
-!_*/
-# /node_modules
 /public/hot
 /public/quasar
 /public/storage
@@ -11,6 +9,7 @@ _notes/
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
+# /node_modules
 # npm-debug.log
 # yarn-error.log
 
