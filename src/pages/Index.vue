@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex *flex-center text-center">
     <ul class="collapsible">
       <li>
         <!-- <div class="collapsible-header">
