@@ -3,7 +3,9 @@ import { i18n } from './i18n'
 import axios from 'axios'
 
 let env = process.env; const cookie = false // Use Cookies
-let locale = cookie ? Cookies.get('locale') : LocalStorage.getItem('locale') || i18n.locale
+let verifyEmail = false // Verify Email - Boolean or Binary
+let locale = cookie ? Cookies.get('locale') || i18n.locale
+  : LocalStorage.getItem('locale') || i18n.locale
 
 // We create our own axios instance and set a custom base URL.
 // Note that if we wouldn't set any config here we do not need
@@ -75,17 +77,17 @@ export default async ({ router, store, Vue }) => {
   store.dispatch('config/configAction', locale)
 
   // Auth User Check
-  let auth = await store.dispatch('users/authAction') || []
-
-  // Verify Email - Boolean or Binary
-  let verifyEmail = env.PROD ? env.MUST_VERIFY_EMAIL : 1
+  let auth = await store.dispatch('users/authAction')
+    .catch(() => {
+      store.commit('users/logoutMutation')
+    }) || []
 
   // Authentication Router
   router.beforeEach((to, from, next) => {
     let verify = !auth.email_verified_at && verifyEmail
-      ? to.meta.requiresVerify || { path: '/email/verify' } : 0
+      ? to.meta.requiresVerify || { path: '/email/verify' } : 1
     if (store.getters['users/tokenGetter']) next(verify)
-    else next(!to.meta.requiresAuth || { path: '/login' })
+    else next(!to.meta.requiresVerify || { path: '/login' })
   })
 }
 

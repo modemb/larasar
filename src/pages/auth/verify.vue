@@ -3,7 +3,6 @@
 
       <div class="row flex justify-center">
           <q-card class="my-card text-white">
-              <!-- <div class="card-header">{{ __('Verify Your Email Address') }}</div> -->
               <q-card-section class="bg-primary">
                 <div class="text-h6">{{$t('verify_email')}}</div>
               </q-card-section>
@@ -39,7 +38,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
 const qs = (params) => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
 import { axiosInstance } from 'boot/axios'
 
@@ -75,11 +73,6 @@ export default {
       })
     }
   },
-  // mounted () {
-  //   if (this.$route.params.id) {
-  //     this.param_id = this.$route.params.id
-  //   }
-  // },
   created () {
     if (this.$route.params.id) {
       this.param_id = this.$route.params.id

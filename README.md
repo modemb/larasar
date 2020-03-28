@@ -108,11 +108,6 @@ Picture Upload
 <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/#Vue_js_Laravel_File_Upload>
 <https://quasar.dev/vue-components/img#Image-style>
 <https://quasar.dev/vue-components/uploader#QUploader-API>
-# -------------- Authentication --------------
-Improve Email Verification 
-Github: Please use the Authorization HTTP header instead as using the `access_token` query parameter is deprecated.
-<https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param>
-Improve Email Validation
 # -------------- Real Time -------------------
 <https://socket.io/>
 <https://quasar.dev/vue-components/chat#Introduction>
