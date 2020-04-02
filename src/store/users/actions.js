@@ -30,11 +30,8 @@ export async function registerAction ({ commit, dispatch }, payload) {
 }
 
 export async function logoutAction ({ commit }, user) {
-  // axiosInstance.post('api/logout', payload)
   axiosInstance.post('api/logout', { ...{ locale: locale }, ...user })
-    .then(repomse => {
-      commit('logoutMutation')
-    })
+    .then(() => { commit('logoutMutation') })
 }
 
 export async function updateAction ({ commit, dispatch }, payload) {

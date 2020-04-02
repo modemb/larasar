@@ -190,6 +190,7 @@ export default {
   },
   computed: mapGetters({
     user: 'users/authGetter',
+    token: 'users/tokenGetter',
     appName: 'config/appNameGetter'
   }),
   methods: {
@@ -197,8 +198,6 @@ export default {
       // Log out the user.
       this.$store.dispatch('users/logoutAction', this.user)
         .then(() => {
-          // Redirect to login.
-          this.$router.push({ name: 'public.login' })
           this.authDrawer = true
         })
     }

@@ -45,11 +45,11 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::get('email/verify/{id}/{hash}', function () {
   return view('index');
-})->name('verification.verify');
+});
 
 Route::get('email/verify', function () {
   return view('index');
-});
+});//ToFixVerifyLink
 
 Route::get('{path}', function () {
   // return view('welcome');

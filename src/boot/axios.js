@@ -2,8 +2,7 @@ import { Notify, Cookies, LocalStorage } from 'quasar'
 import { i18n } from './i18n'
 import axios from 'axios'
 
-let env = process.env; const cookie = false // Use Cookies
-let verifyEmail = false // Verify Email - Boolean or Binary
+let env = process.env; const cookie = env.APP_COOKIE
 let locale = cookie ? Cookies.get('locale') || i18n.locale
   : LocalStorage.getItem('locale') || i18n.locale
 
@@ -14,7 +13,7 @@ const axiosInstance = axios.create({
   baseURL: env.DEV ? env.DEV_URL : env.LOCAL_PROD ? env.DEV_URL : env.API_URL
 })
 
-export default async ({ router, store, Vue }) => {
+export default ({ router, store, Vue }) => {
   // Request interceptor
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
@@ -76,19 +75,23 @@ export default async ({ router, store, Vue }) => {
   // Config
   store.dispatch('config/configAction', locale)
 
-  // Auth User Check
-  let auth = await store.dispatch('users/authAction')
-    .catch(() => {
-      store.commit('users/logoutMutation')
-    }) || []
+  // Verify Email - Boolean or Binary
+  let verifyEmail = env.PROD ? env.MUST_VERIFY_EMAIL : 1
 
   // Authentication Router
-  router.beforeEach((to, from, next) => {
-    let verify = !auth.email_verified_at && verifyEmail
-      ? to.meta.requiresVerify || { path: '/email/verify' } : 1
-    if (store.getters['users/tokenGetter']) next(verify)
-    else next(!to.meta.requiresVerify || { path: '/login' })
+  router.beforeEach(async (to, from, next) => {
+    if (store.getters['users/tokenGetter']) { // Auth Check
+      let auth = await store.dispatch('users/authAction')
+      let verify = !auth.email_verified_at & verifyEmail
+        ? to.meta.verify || { path: '/email/verify' }
+        : !to.meta.verify || { path: '/' }; next(verify)
+    } else next(!to.meta.auth & !to.meta.verify || { path: '/login' })
   })
+
+  // router.beforeEach((to, from, next) => {
+  //   if (store.getters['users/tokenGetter']) next()
+  //   else next(!to.meta.auth || { path: '/login' })
+  // })// https://quasar.dev/quasar-cli/cli-documentation/boot-files#Router-authentication
 }
 
 // Here we define a named export

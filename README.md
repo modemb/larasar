@@ -98,6 +98,7 @@ php artisan db:seed --class=UsersTableSeeder
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # ============================= ToImplement ====================================
 # ----------------------------- Publishing to Store-----------------------------
 # https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
@@ -118,6 +119,12 @@ Email verification
 # ============== ToImplement ==============
 # -------------- Publishing to Store --------------
 =======
+=======
+## Comment Flow
+
+Backend: Routes -> Controllers - Frontend: Blade -> Vue
+
+>>>>>>> modemb/dev
 # ============== ToImplement ==============
 # -------------- Publishing to Store ------
 >>>>>>> modemb/dev
@@ -135,15 +142,6 @@ Picture <https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
         <https://quasar.dev/vue-components/uploader#QUploader-API>
 # -------------- Authentication --------------
 Improve Email Verification 
-Please use the Authorization HTTP header instead as using the `access_token` query parameter is deprecated.
-<https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param>
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> modemb/dev
-=======
-Improve Email Validation
->>>>>>> modemb/dev
-=======
 Picture Upload
 <https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
 <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/>
@@ -160,7 +158,4 @@ Picture Upload
 <https://github.com/theomessin/vue-chat-scroll>
 <https://github.com/aws-samples/aws-lex-web-ui>
 <https://github.com/microzz/vue-chat>
->>>>>>> modemb/dev
-=======
->>>>>>> a3eb21ceff07ad913cea5eb7a11bfd343a16a903
 
