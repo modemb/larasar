@@ -80,18 +80,15 @@ export default ({ router, store, Vue }) => {
 
   // Authentication Router
   router.beforeEach(async (to, from, next) => {
-    if (store.getters['users/tokenGetter']) { // Auth Check
-      let auth = await store.dispatch('users/authAction')
+    if (store.getters['users/tokenGetter']) {
+      let auth = await store.dispatch('users/authAction').catch(() => {
+        store.commit('users/logoutMutation')
+      }) // Auth Check
       let verify = !auth.email_verified_at & verifyEmail
         ? to.meta.verify || { path: '/email/verify' }
         : !to.meta.verify || { path: '/' }; next(verify)
     } else next(!to.meta.auth & !to.meta.verify || { path: '/login' })
   })
-
-  // router.beforeEach((to, from, next) => {
-  //   if (store.getters['users/tokenGetter']) next()
-  //   else next(!to.meta.auth || { path: '/login' })
-  // })// https://quasar.dev/quasar-cli/cli-documentation/boot-files#Router-authentication
 }
 
 // Here we define a named export
