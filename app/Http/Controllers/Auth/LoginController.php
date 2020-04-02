@@ -7,7 +7,6 @@ use Auth;
 use Hash;
 use App\User;
 use Socialite;
-// use App\OAuthProvider;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 // use App\Exceptions\EmailTakenException;

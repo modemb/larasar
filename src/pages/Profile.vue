@@ -88,7 +88,6 @@
                   v-model="password"
                   :type="isPwd ? 'password' : 'text'"
                   :label="$t('your_password')"
-                  :hint="password_data"
                   lazy-rules
                   :rules="[val => val && val.length > 0 || $t('your_password')]"
                 />
@@ -98,7 +97,6 @@
                   :type="isPwd ? 'password' : 'text'"
                   v-model="new_password"
                   :label="$t('new_password')"
-                  :hint="new_password_data"
                   lazy-rules
                   :rules="[val => val && val.length > 0 || $t('new_password')]"
                 />

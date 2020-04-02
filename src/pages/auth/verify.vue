@@ -49,17 +49,17 @@ export default {
   }),
   async beforeRouteEnter (to, from, next) {
     try {
-      const { data } = await axiosInstance.get(`/api/email/verify/${to.params.id}/${to.params.hash}?${qs(to.query)}`)
+      const { data } = await axiosInstance.get(`api/email/verify/${to.params.id}/${to.params.hash}?${qs(to.query)}`)
       next(vm => {
         vm.$q.notify({
           color: 'positive',
           position: 'top',
           message: vm.$t(data),
           icon: 'check'
-        })
-      }); next({ path: '/' })
+        }); next({ path: '/' })
+      })
     } catch {
-      axiosInstance.post('/api/email/resend').then(rep => {
+      axiosInstance.post('api/email/resend').then(rep => {
         next(vm => { vm.success = rep.status })
       }).catch(e => {
         next(vm => {
@@ -68,8 +68,8 @@ export default {
             position: 'top',
             message: e.response.data.message,
             icon: 'report_problem'
-          })
-        }); next(vm => { vm.error = e.response.status })
+          }); next(vm => { vm.error = e.response.status })
+        })
       })
     }
   },
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     resend () {
-      this.$axios.post('/api/email/resend').then(rep => {
+      this.$axios.post('api/email/resend').then(rep => {
         this.success = rep.status
         this.$q.notify({
           color: 'positive',
@@ -99,7 +99,7 @@ export default {
       // this.$axios.reset()
     },
     verify () {
-      this.$axios.get(`/api/email/verify/${this.$route.params.id}/${this.$route.params.hash}?${qs(this.$route.query)}`)
+      this.$axios.get(`api/email/verify/${this.$route.params.id}/${this.$route.params.hash}?${qs(this.$route.query)}`)
         .then(rep => {
           // this.success = rep.data
           this.$q.notify({

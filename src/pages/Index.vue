@@ -1,6 +1,6 @@
 <template>
-  <q-page class="flex *flex-center text-center">
-    <ul class="collapsible">
+  <q-page class="flex flex-center">
+    <ul class="collapsible *text-center">
       <li>
         <!-- <div class="collapsible-header">
           <i class="material-icons">filter_drama</i> -->
@@ -10,8 +10,9 @@
       </li>
       <li>
         <div class="collapsible-body">
-          <a  target="_blank" href="https://github.com/modemb/larasar"><h4 class="fab fa-github *q-mr-sm">Github</h4></a>
-          <a  target="_blank" href="https://www.facebook.com/modemb.dev"><h4 class="fab fa-facebook">Facebook</h4></a>
+          <a  target="_blank" href="https://github.com/modemb/larasar"><i class="fab fa-github fa-5x q-mr-lg"/></a>
+          <a  target="_blank" href="https://www.facebook.com/modemb.dev"><i class="fab fa-facebook fa-5x q-mr-lg"/></a>
+          <a  target="_blank" href="https://www.linkedin.com/in/mohamed-dembele-85051197/"><i class="fab fa-linkedin fa-5x q-mr-lg"/></a>
         </div>
         <a target="_blank"  href="https://quasar.dev" class="logo">
           <img alt="Larasar logo" src="~assets/quasar-logo-full.svg">

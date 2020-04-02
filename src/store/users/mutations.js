@@ -21,4 +21,6 @@ export function logoutMutation (state) {
   if (state.cookie) Cookies.remove('token')
   else LocalStorage.remove('token')
   // localStorage.removeItem('token')
+  // Redirect to login.
+  this.$router.push({ name: 'public.login' })
 }

@@ -94,6 +94,10 @@ Network: php -S 192.168.2.11:8000 -t public
 php artisan db:seed
 php artisan db:seed --class=UsersTableSeeder
 
+## Comment Flow
+
+Backend: Routes -> Controllers - Frontend: Blade -> Vue
+
 # ============== ToImplement ==============
 # -------------- Publishing to Store ------
 # https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
