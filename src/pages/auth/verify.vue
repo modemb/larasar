@@ -38,8 +38,8 @@
 </template>
 
 <script>
-const qs = (params) => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
 import { axiosInstance } from 'boot/axios'
+const qs = (params) => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
 
 export default {
   data: () => ({
@@ -49,7 +49,7 @@ export default {
   }),
   async beforeRouteEnter (to, from, next) {
     try {
-      const { data } = await axiosInstance.get(`api/email/verify/${to.params.id}/${to.params.hash}?${qs(to.query)}`)
+      const { data } = await axiosInstance.post(`api/email/verify/${to.params.id}/${to.params.hash}?${qs(to.query)}`)
       next(vm => {
         vm.$q.notify({
           color: 'positive',
@@ -99,7 +99,7 @@ export default {
       // this.$axios.reset()
     },
     verify () {
-      this.$axios.get(`api/email/verify/${this.$route.params.id}/${this.$route.params.hash}?${qs(this.$route.query)}`)
+      this.$axios.post(`api/email/verify/${this.$route.params.id}/${this.$route.params.hash}?${qs(this.$route.query)}`)
         .then(rep => {
           // this.success = rep.data
           this.$q.notify({

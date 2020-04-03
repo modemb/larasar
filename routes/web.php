@@ -20,10 +20,10 @@ if(env('MUST_VERIFY_EMAIL')){
 
 Auth::routes($verify);
 
-Route::get('/', function () {
-  // return view('welcome');
-  return view('index');
-});
+// Route::get('/', function () {
+//   // return view('welcome');
+//   return view('index');
+// });
 
 Route::get('/home', 'HomeController@index')
   // ->middleware($verified)
@@ -43,13 +43,17 @@ Route::group(['middleware' => 'guest'], function () {
   });
 });
 
+Route::get('api/email/verify/{id}/{hash}', function () {
+  return view('index');
+});
+
 Route::get('email/verify/{id}/{hash}', function () {
   return view('index');
 });
 
-Route::get('email/verify', function () {
-  return view('index');
-});//ToFixVerifyLink
+// Route::get('email/verify', function () {
+//   return view('index');
+// });//ToFixVerifyLink
 
 Route::get('{path}', function () {
   // return view('welcome');
