@@ -30,7 +30,7 @@
                   type="email"
                   v-model="email"
                   lazy-rules
-                  bottom-slots counter
+                  bottom-slots
                   :label="$t('email')"
                   :rules="[val => val && val.length > 0 || 'null']"
                   :error="email_data ? true : false"
@@ -110,8 +110,7 @@ export default {
         scope: ''
       })
         .catch(error => {
-          this.role_data = [error.response.data.errors.role][0] || error.response.data.message
-          this.name_data = error.response.data.errors.name[0] || error.response.data.message
+          this.name_data = [error.response.data.errors.name][0] || error.response.data.message
           this.email_data = error.response.data.errors.email[0] || error.response.data.message
           this.password_data = error.response.data.errors.password[0] || error.response.data.message
         })
