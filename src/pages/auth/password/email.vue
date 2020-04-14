@@ -61,7 +61,12 @@ export default {
         .catch(error => {
           this.email_data = error.response.data.email || error.response.data.errors.email[0]
         })
-      alert(data.status)
+      this.$q.notify({
+        color: 'positive',
+        position: 'top',
+        message: data.status,
+        icon: 'check'
+      })
     }
   }
 }

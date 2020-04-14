@@ -8,8 +8,6 @@ export async function loginAction ({ commit, dispatch, getters }, payload) {
       const token = response.data
       commit('loginMutation', { ...token, ...payload })
       dispatch('authAction')
-      // Redirect home.
-      this.$router.push({ path: '/' })
     })
   return data
 }
@@ -35,16 +33,17 @@ export async function logoutAction ({ commit }, user) {
 }
 
 export async function updateAction ({ commit, dispatch }, payload) {
-  axiosInstance.put('api/users/' + payload.id, payload)
-    .then(response => {
-      dispatch('authAction')
-      Notify.create({
-        color: 'positive',
-        position: 'top',
-        message: response.data,
-        icon: 'check'
-      })
+  try {
+    const { data } = await axiosInstance.put('api/users/' + payload.id, payload)
+    dispatch('authAction')
+    Notify.create({
+      color: 'positive',
+      position: 'top',
+      message: data.success,
+      icon: 'check'
     })
+    return data
+  } catch {}
 }
 
 export async function deleteAction (context, user) {

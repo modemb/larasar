@@ -1,5 +1,5 @@
 <template>
-    <q-page class="q-pa-md flex-center">
+    <q-page class="*flex flex-center q-pa-md">
 
       <div class="q-gutter-md">
         <div class="row">
@@ -15,27 +15,27 @@
               <q-form class="q-pa-md">
 
                 <q-img
-                  :src="user.new.avatar || url+'/'+user.avatar"
+                  :src="avatar"
                   style="width: 100%"
                   class="q-mb-xl"
                   native-context-menu
-                />
+                /><!-- TagAvatar: UserModule -->
 
-                <!-- <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
-                <q-input type="file" v-model="avatar" />
+                <q-card class="row q-ma-xl">
+                    <div class="col-md-6">
+                        <input type="file" v-on:change="onImageChange" class="q-ma-lg">
+                    </div>
+                    <div class="col-md-6">
+                      <q-btn color="primary" class="q-ma-md" :label="$t('remove_image')" @click="deleteImage"/>
+                    </div><!-- https://quasar.dev/vue-components/uploader#Introduction -->
+                </q-card>
 
-                <q-uploader
+                <!-- <q-uploader
                   style="max-width: 100%"
                   class="q-mb-xl"
                   label="Upload"
                   auto-upload
                   :factory="factoryFn"
-                />
-
-                <q-uploader
-                  url='http://localhost/larasar/public/api/users/1'
-                  method='PUT'
-                  style="max-width: 100%"
                 /> -->
 
                 <q-input
@@ -135,15 +135,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-const qs = params => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
+// const qs = params => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
 
 export default {
-  name: 'updatePage',
+  name: 'ProfilePage',
   data () {
     return {
       name: null,
       email: null,
-      avatar: null,
       password: null,
       new_password: null,
       password_confirmation: null,
@@ -152,29 +151,31 @@ export default {
       url: process.env.DEV ? process.env.DEV_URL : process.env.API_URL
     }
   },
-  computed: mapGetters({
-    user: 'users/authGetter'
-  }),
+  computed: {
+    ...mapGetters({
+      user: 'users/authGetter'
+    }),
+    avatar () {
+      if (this.user.avatar !== 'images/profile/default.jpg') {
+        return this.url + '/' + this.user.avatar
+      } else return this.user.new.avatar
+    }
+  },
   methods: {
-    factoryFn (file) {
-      return new Promise((resolve, reject) => {
-        // Retrieve JWT token from your store.
-        // const token = this.token
-        // console.log(file[0])
-        let fd = new FormData()
-        fd.append('avatar', file)
-        // fd.append('avatar', file[0])
-        // fd = qs(file[0])
-        // fd = { avatar: qs(file[0]) }
-        // console.log(fd)
-        resolve({
-          url: `${this.url}/api/users/${this.user.id}?${qs(fd)}`,
-          method: 'PUT'
-          // headers: [
-          //   { name: 'Content-Type', value: 'application/json-patch+json' }
-          // ]
-        })
-      })
+    info () {
+      // eslint-disable-next-line no-unused-vars
+      const data = {
+        id: this.user.id,
+        name: this.name,
+        email: this.email,
+        avatar: this.file
+      }
+
+      // const formData = new FormData()// ToFix
+      // formData.append('avatar', this.file)
+      // console.log(formData, this.file)
+
+      this.$store.dispatch('users/updateAction', data)
     },
     pwd () {
       this.$store.dispatch('users/updateAction', {
@@ -185,22 +186,58 @@ export default {
         password_confirmation: this.password_confirmation
       })
     },
+    onImageChange (e) {
+      let files = e.target.files || e.dataTransfer.files
+      if (!files.length) return; this.createImage(files[0])
+    }, // TagAvatar: UserModule
+    createImage (files) {
+      let reader = new FileReader()
+      reader.onload = (e) => {
+        this.file = e.target.result
+      }; reader.readAsDataURL(files)
+      setTimeout(() => { this.info() }, 500)
+    },
+    deleteImage () {
+      this.$axios.delete(`api/users/${this.user.id}?avatar=delete`).then(response => {
+        this.$store.dispatch('users/authAction')
+        this.$q.notify({
+          color: 'positive',
+          position: 'top',
+          message: this.$t(response.data.success),
+          icon: 'check'
+        })
+      })
+    }, // ============================================== \\
+    factoryFn (files) {
+      return new Promise((resolve, reject) => {
+        // Retrieve JWT token from your store.
+        // const token = this.token
+        console.log(files[0])
+        // let fd = new FormData()
+        // fd.append('avatar', file)
+        // fd.append('avatar', file[0])
+        // fd = qs(file[0])
+        this.createImage(files[0])
+        resolve(
+          this.$axios.put(`api/users/${this.user.id}`, { avatar: this.avatar }).then(response => {
+            console.log(response)
+            if (response.data) {
+              // alert(response.data)
+              this.$q.notify({
+                color: 'positive',
+                position: 'top',
+                message: this.$t(response.data),
+                icon: 'check'
+              })
+            }
+          })
+        )
+      })
+    },
     handleFileUpload () {
       // console.log(this.$refs.file.files[0])
-      this.file = this.$refs.file.files[0]
-    },
-    info () {
-      // eslint-disable-next-line no-unused-vars
-      const data = {
-        id: this.user.id,
-        name: this.name,
-        email: this.email
-        // avatar: this.avatar
-      }
-      const formData = new FormData()// ToFix
-      formData.append('avatar', this.avatar)
-      // console.log(formData, this.avatar)
-      this.$store.dispatch('users/updateAction', { ...formData, ...data })
+      // this.image = this.$refs.file.files[0]
+      this.createImage(this.$refs.file.files[0])
     }
   }
 }

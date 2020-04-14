@@ -38,8 +38,8 @@
         <div class="absolute-bottom bg-transparent text-center">
           <template v-if="user">
             <q-avatar size="70px" class="*q-mb-sm">
-              <img :src="user.new.avatar">
-            </q-avatar>
+              <img :src="avatar || user.new.avatar">
+            </q-avatar><!-- TagAvatar: UserModule -->
             <div class="text-weight-bold">
               <q-btn-dropdown
                 rounded
@@ -154,13 +154,23 @@
     </q-page-container>
 
     <!-- Footer -->
-    <q-footer elevated>
+    <q-footer elevated v-if="desktop">
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
           </q-avatar>
-          MoDemb.com Quasar v{{ $q.version }}
+          Quasar v{{ $q.version }} Desktop View
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-footer>
+    <q-footer elevated v-else>
+      <q-toolbar>
+        <q-toolbar-title>
+          <q-avatar>
+            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
+          </q-avatar>
+          Quasar v{{ $q.version }} Mobile View
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
@@ -183,16 +193,25 @@ export default {
   },
   data () {
     return {
+      url: process.env.DEV ? process.env.DEV_URL : process.env.API_URL,
       leftDrawerOpen: false, // this.$q.platform.is.desktop,
       rightDrawer: false,
-      authDrawer: true
+      authDrawer: true,
+      desktop: this.$q.platform.is.desktop
     }
   },
-  computed: mapGetters({
-    user: 'users/authGetter',
-    token: 'users/tokenGetter',
-    appName: 'config/appNameGetter'
-  }),
+  computed: {
+    ...mapGetters({
+      user: 'users/authGetter',
+      token: 'users/tokenGetter',
+      appName: 'config/appNameGetter'
+    }),
+    avatar () {
+      if (this.user.avatar !== 'images/profile/default.jpg') {
+        return this.url + '/' + this.user.avatar
+      } else return null
+    }
+  },
   methods: {
     async logout () {
       // Log out the user.

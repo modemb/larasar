@@ -20,11 +20,6 @@ if(env('MUST_VERIFY_EMAIL')){
 
 Auth::routes($verify);
 
-// Route::get('/', function () {
-//   // return view('welcome');
-//   return view('index');
-// });
-
 Route::get('/home', 'HomeController@index')
   // ->middleware($verified)
   ->name('home');

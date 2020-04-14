@@ -40,6 +40,7 @@
   "new_password": "New Password",
   "login_with": "Login with",
   "register_with": "Register with",
+  "remove_image": "Remove Image",
   "verify_email": "Verify Email",
   "send_verification_link": "Send Verification Link",
   "resend_verification_link": "Resend Verification Link ?",

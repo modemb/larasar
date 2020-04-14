@@ -2,7 +2,7 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 module.exports = function (ctx) {
   // https://quasar.dev/quasar-cli/quasar-conf-js#Example-setting-env-for-dev%2Fbuild
-  let localProdServer = 0 // WampServer
+  let localProdServer = 1 // WampServer
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
@@ -109,7 +109,7 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
-      pwa: true
+      pwa: false
     },
 
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa

@@ -5,6 +5,8 @@ export function loginMutation (state, data) {
   if (state.cookie) Cookies.set('token', data.access_token, { expires: data.remember ? data.expires_in : null })
   else LocalStorage.set('token', data.access_token, { expires: data.remember ? data.expires_in : null })
   // localStorage.setItem('token', data.access_token, { expires: data.expires_in ? 365 : null })
+  // Redirect home.
+  this.$router.push({ name: 'index' })
 }
 
 export function authMutation (state, { user }) {

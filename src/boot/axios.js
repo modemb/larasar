@@ -2,7 +2,7 @@ import { Notify, Cookies, LocalStorage } from 'quasar'
 import { i18n } from './i18n'
 import axios from 'axios'
 
-let env = process.env; const cookie = env.APP_COOKIE
+let env = process.env; let cookie = env.APP_COOKIE
 let locale = cookie ? Cookies.get('locale') || i18n.locale
   : LocalStorage.getItem('locale') || i18n.locale
 
@@ -19,10 +19,9 @@ export default ({ router, store, Vue }) => {
     const token = store.getters['users/tokenGetter']
     locale = store.getters['config/localeGetter']
     if (token) request.headers.common['Authorization'] = `Bearer ${token}`
-    if (locale) request.headers.common['Accept-Language'] = locale
-    request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-    request.headers.common['Content-Type'] = 'multipart/form-data'
-
+    if (locale) request.headers.common['Accept-Language'] = 'en'
+    // request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    // request.headers.common['Content-Type'] = 'multipart/form-data'
     // request.headers['X-Socket-Id'] = Echo.socketId()
 
     return request

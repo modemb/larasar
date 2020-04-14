@@ -7,7 +7,7 @@ const routes = [
       // Public Routes
       {
         path: '/',
-        name: 'public.index',
+        name: 'index',
         component: () => import('pages/Index.vue'),
         meta: { auth: false }
       },
@@ -55,12 +55,12 @@ const routes = [
         meta: { auth: true }
       },
       // Verify Route
-      { path: 'email/verify/:id/:hash/',
+      { path: 'email/verify/:id/:hash',
         name: 'auth.verification.verify',
         component: () => import('pages/auth/verify'),
         meta: { verify: true }
       },
-      { path: 'api/email/verify/:id/:hash/',
+      { path: 'api/email/verify/:id/:hash',
         name: 'auth.api.verification.verify',
         component: () => import('pages/auth/verify'),
         meta: { verify: true }

@@ -110,7 +110,7 @@ export default {
         scope: ''
       })
         .catch(error => {
-          this.name_data = [error.response.data.errors.name][0] || error.response.data.message
+          this.name_data = error.response.data.errors.name[0] || error.response.data.message
           this.email_data = error.response.data.errors.email[0] || error.response.data.message
           this.password_data = error.response.data.errors.password[0] || error.response.data.message
         })

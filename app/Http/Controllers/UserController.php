@@ -14,7 +14,7 @@ use DB;
 /**
  * Tags: UserModule - BitgoModule
  *
- * @for UserController - Users.vue
+ * @for UserController - Profile.vue - Users.vue
  */
 class UserController extends Controller
 {
@@ -52,7 +52,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { //return $request->auth['role'];
+    { //return $request;
       if ($request->locale) config(['app.locale' => $request->locale]);
       if ($request->api) {
 
@@ -75,7 +75,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ]); //UserModule: TagStore
+        ]); //TagStore: UserModule
 
         $content_role = [
             'title'=> 'The '.$request->auth['role'].' Added You As '.$request['role'],
@@ -106,7 +106,7 @@ class UserController extends Controller
     { //$request->avatar;
       $admins = $user->id == 1 || $user->role == 'Admin'?1:0;
       $sellers = $user->role == 'Seller'?1:0;
-      $buyers = $user->role == 'Buyer'?1:0;//UserModule: TagShow
+      $buyers = $user->role == 'Buyer'?1:0;//TagShow: UserModule
       if($request->avatar) return $user->new['avatar'];
       if($admins) return DB::table('users')->get();
       if($sellers) return DB::table('users')->where('user_id', $user['id'])->get();
@@ -131,7 +131,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { //return $request;
+    { //return$request->get('avatar');
+
       $put = User::find($id);
       $check = Auth::validate([
           'email'    => $put->email,
@@ -153,11 +154,11 @@ class UserController extends Controller
             $check = true;
           }
           if (!$check) {
-            return 'Current Password Do Not Match Our Record';
+            return ['success' => 'Current Password Do Not Match Our Record'];
             // return back()->with('status', 'Current Password Do Not Match Our Record');
           }
           if (!$request->new_password || $request->new_password != $request->password_confirmation) {
-            return 'Password Confirmation Do Not Match';
+            return ['success' => 'Password Confirmation Do Not Match'];
             // return back()->with('status', 'Password Confirmation Do Not Match');
           }   $put->password = bcrypt($request->new_password);
       }   if ($request->hasFile('avatar')) {
@@ -165,8 +166,22 @@ class UserController extends Controller
             $path = $file->storeAs('images/profile', $id.'jpg');
             $file->move('images/profile', $id.'jpg');
             $put->avatar = $path;
-      }     $put->update();//UserModule: TagUpdate
-      return response()->json('Updated successfully', 200);
+      }//https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/
+      if ($request->get('avatar')) {
+        $avatar = $request->get('avatar');
+        $name = time().'.' . explode('/', explode(':', substr($avatar, 0, strpos($avatar, ';')))[1])[1];
+        \Image::make($avatar)->save(public_path('images/profile/').$name);
+        $put->avatar = 'images/profile/'.$name;
+        // $image= new FileUpload();
+        // $image->image_name = $name;
+        // $image->save();
+
+        // return 'You have successfully uploaded an image';
+      } $put->update();//TagUpdate: UserModule
+      return response()->json([
+        'success' => 'Updated successfully',
+        'user' => $put
+      ]);
     }
 
     /**
@@ -175,8 +190,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy(Request $request, $id)
+    { //return $request;
+      if ($request->avatar) {
+        $user = User::where('id', $id);
+        $user->update(['avatar' => 'images/profile/default.jpg']);
+        return [
+          'success' => 'Image Deleted Successfully',
+          'user' => $user->first()
+        ];
+      }
       if ($id == 1 || Auth::id() == $id)
         return 'You Cannot Delete Super Admin or Your Own Account';
         //back()->with('status', 'You Cannot Delete Super Admin or Your Own Account');

@@ -105,13 +105,10 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 Improve users update <https://quasar.dev/vue-components/popup-edit#QPopupEdit-API>
 # -------------- Profile.vue --------------
 Picture Upload
-<https://forum.quasar-framework.org/topic/3729/uploader-with-axios>
+<https://blog.usejournal.com/file-upload-with-laravel-and-vuejs-a70ae85e34a1>
 <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/>
 <https://serversideup.net/uploading-files-vuejs-axios/>
-<https://forum.quasar-framework.org/topic/3444/quploader-laravel-sample/4>
 <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/#Vue_js_Laravel_File_Upload>
-<https://quasar.dev/vue-components/img#Image-style>
-<https://quasar.dev/vue-components/uploader#QUploader-API>
 # -------------- Real Time -------------------
 <https://socket.io/>
 <https://quasar.dev/vue-components/chat#Introduction>

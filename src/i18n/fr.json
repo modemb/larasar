@@ -40,6 +40,7 @@
   "new_password": "nouveau mot de passe",
   "login_with": "Connectez-vous avec",
   "register_with": "Inscrivez-vous avec",
+  "remove_image": "Supprimer l'image",
   "verify_email": "Vérifier le courriel",
   "send_verification_link": "Envoyer le lien de vérification",
   "resend_verification_link": "Renvoyer le lien de vérification?",

@@ -5,7 +5,7 @@
       rounded class="q-mb-md"
       :label="$t('add_user')"
       @click="addUser = true, editUser = false, role = name = email = avatar = null"
-    /><!-- UserModule: TagAdd -->
+    /><!-- TagAdd: UserModule -->
     <!--============ Add Update Users PopUp ============-->
     <q-dialog v-model="addUser">
         <q-card class="my-card text-white" style='width:800px'>
@@ -15,12 +15,21 @@
 
           <div class="q-pa-md">
 
-            <q-img
+            <q-img v-if="editUser"
               :src="avatar"
               style="width: 100%"
               class="q-mb-xl"
               native-context-menu
-            />
+            /><!-- TagAvatar: UserModule -->
+
+            <q-card class="row q-ma-xl" v-if="editUser">
+                <div class="col-md-6">
+                    <input type="file" v-on:change="onImageChange" class="q-ma-lg">
+                </div>
+                <div class="col-md-6">
+                  <q-btn color="primary" class="q-ma-md" :label="$t('remove_image')" @click="deleteImage"/>
+                </div>
+            </q-card>
 
             <q-select
               filled
@@ -89,7 +98,7 @@
     </q-dialog>
     <!--============ Add Update Users PopUp End ========-->
 
-    <!--============ Data Table =================-->
+    <!--============ Data Table ========================-->
     <q-table
       :title="$t('users_list')"
       :data="data"
@@ -123,8 +132,8 @@
             </q-popup-edit>
           </q-td>
           <q-td key="role" :props="props">{{ props.row.role }}</q-td>
-          <q-td key="edit" :props="props"><!-- UserModule: TagEdit -->
-            <q-btn icon="edit" rounded class="q-ma-md" @click="edit(props.row), addUser = true" />
+          <q-td key="edit" :props="props"><!-- TagEdit: UserModule -->
+            <q-btn icon="edit" rounded class="q-ma-md" @click="edit(props.row)" />
           </q-td>
           <q-td key="delete" :props="props">
             <q-btn icon="delete_forever" rounded class="*q-mb-md" @click.prevent="Delete(props.row)"/>
@@ -140,7 +149,7 @@
       </template>
 
     </q-table>
-    <!--============ Data Table End =============-->
+    <!--============ Data Table End ====================-->
   </div>
 </template>
 
@@ -154,6 +163,7 @@ export default {
       editUser: false,
       html: null,
       role: null,
+      role_data: null,
       name: null,
       name_data: null,
       email: null,
@@ -161,9 +171,14 @@ export default {
       password: null,
       password_data: null,
       password_confirmation: null,
+      user_new_avatar: null,
+      user: null,
       isPwd: true,
       filter: '',
       loading: false,
+      file: null,
+      img: null,
+      url: process.env.DEV ? process.env.DEV_URL : process.env.API_URL,
       // rowCount: 10,
       admin: [
         'Admin', 'Seller', 'Buyer'
@@ -191,9 +206,6 @@ export default {
       original: []
     }
   },
-  computed: {
-    ...mapGetters('users', ['usersGetter', 'authGetter'])
-  },
   mounted () {
     this.$store.dispatch('users/usersAction').then(() => {
       // this.data = this.usersGetter
@@ -204,6 +216,14 @@ export default {
         filter: undefined
       })
     })
+  },
+  computed: {
+    ...mapGetters('users', ['usersGetter', 'authGetter']),
+    avatar () {
+      if (this.img !== 'images/profile/default.jpg') {
+        return this.url + '/' + this.img
+      } else return this.user_new_avatar.data
+    }
   },
   methods: {
     add (user) {
@@ -237,13 +257,14 @@ export default {
         })
     },
     async edit (user) {
-      const img = await this.$axios.get(`api/users/${user.id}?avatar=1`)
-      this.avatar = img.data
+      this.user_new_avatar = await this.$axios.get(`api/users/${user.id}?avatar=1`)
+      this.img = user.avatar // TagAvatar: UserModule
       this.role = user.role
       this.name = user.name
       this.email = user.email
       this.editUser = true
       this.user = user
+      this.addUser = true
       // this.addUser = false
       // this.password = user.password
     },
@@ -255,25 +276,27 @@ export default {
         name: this.name,
         email: this.email,
         update_password: this.password,
-        password_confirmation: this.password_confirmation
-        // avatar: this.avatar
+        password_confirmation: this.password_confirmation,
+        avatar: this.file
       }
+
       const formData = new FormData()// ToFix
-      formData.append('avatar', this.avatar)
-      // console.log(formData, this.avatar)
-      this.$store.dispatch('users/updateAction', { ...formData, ...data })
-        .then(() => {
-          this.password = this.password_confirmation = null
-          this.$store.dispatch('users/usersAction').then(() => {
-            // this.data = this.usersGetter
-            this.original = this.usersGetter
-            // get initial data from server (1st page)
-            this.onRequest({
-              pagination: this.pagination,
-              filter: undefined
-            })
+      formData.append('avatar', this.file)
+      console.log(formData, this.avatar)
+
+      this.$store.dispatch('users/updateAction', data).then(response => {
+        this.edit(response.user)
+        this.password = this.password_confirmation = null
+        this.$store.dispatch('users/usersAction').then(() => {
+          // this.data = this.usersGetter
+          this.original = this.usersGetter
+          // get initial data from server (1st page)
+          this.onRequest({
+            pagination: this.pagination,
+            filter: undefined
           })
         })
+      })
     },
     Delete (user) {
       this.$store.dispatch('users/deleteAction', user)
@@ -294,7 +317,30 @@ export default {
             icon: 'check'
           })
         })
+    }, // ================= TagAvatar =================
+    onImageChange (e) {
+      let files = e.target.files || e.dataTransfer.files
+      if (!files.length) return; this.createImage(files[0])
+    }, // TagAvatar: UserModule
+    createImage (files) {
+      let reader = new FileReader()
+      reader.onload = (e) => {
+        this.file = e.target.result
+      }; reader.readAsDataURL(files)
+      setTimeout(() => { this.update(this.user) }, 500)
     },
+    deleteImage () {
+      this.$axios.delete(`api/users/${this.user.id}?avatar=delete`).then(response => {
+        this.edit(response.data.user)
+        this.$store.dispatch('users/authAction')
+        this.$q.notify({
+          color: 'positive',
+          position: 'top',
+          message: this.$t(response.data.success),
+          icon: 'check'
+        })
+      })
+    }, // ================= TagAvatar End =================
     onRequest (props) {
       const { page, rowsPerPage, sortBy, descending } = props.pagination
       const filter = props.filter
