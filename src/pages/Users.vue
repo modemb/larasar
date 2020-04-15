@@ -155,6 +155,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { url } from 'boot/axios'
 
 export default {
   data () {
@@ -177,8 +178,7 @@ export default {
       filter: '',
       loading: false,
       file: null,
-      img: null,
-      url: process.env.DEV ? process.env.DEV_URL : process.env.API_URL,
+      url: url,
       // rowCount: 10,
       admin: [
         'Admin', 'Seller', 'Buyer'
@@ -220,8 +220,9 @@ export default {
   computed: {
     ...mapGetters('users', ['usersGetter', 'authGetter']),
     avatar () {
-      if (this.img !== 'images/profile/default.jpg') {
-        return this.url + '/' + this.img
+      if (this.user.avatar) {
+        if (this.user.avatar.includes('images/profile')) return this.url + '/' + this.user.avatar
+        else return this.user.avatar
       } else return this.user_new_avatar.data
     }
   },
@@ -258,18 +259,15 @@ export default {
     },
     async edit (user) {
       this.user_new_avatar = await this.$axios.get(`api/users/${user.id}?avatar=1`)
-      this.img = user.avatar // TagAvatar: UserModule
+      this.editUser = true
+      this.addUser = true
       this.role = user.role
       this.name = user.name
       this.email = user.email
-      this.editUser = true
       this.user = user
-      this.addUser = true
-      // this.addUser = false
-      // this.password = user.password
     },
     update (user) {
-      const data = {
+      this.$store.dispatch('users/updateAction', {
         id: user.id,
         user: true,
         role: this.role,
@@ -278,13 +276,7 @@ export default {
         update_password: this.password,
         password_confirmation: this.password_confirmation,
         avatar: this.file
-      }
-
-      const formData = new FormData()// ToFix
-      formData.append('avatar', this.file)
-      console.log(formData, this.avatar)
-
-      this.$store.dispatch('users/updateAction', data).then(response => {
+      }).then(response => {
         this.edit(response.user)
         this.password = this.password_confirmation = null
         this.$store.dispatch('users/usersAction').then(() => {

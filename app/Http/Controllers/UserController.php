@@ -194,7 +194,7 @@ class UserController extends Controller
     { //return $request;
       if ($request->avatar) {
         $user = User::where('id', $id);
-        $user->update(['avatar' => 'images/profile/default.jpg']);
+        $user->update(['avatar' => null]);
         return [
           'success' => 'Image Deleted Successfully',
           'user' => $user->first()

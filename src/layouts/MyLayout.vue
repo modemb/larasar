@@ -38,7 +38,7 @@
         <div class="absolute-bottom bg-transparent text-center">
           <template v-if="user">
             <q-avatar size="70px" class="*q-mb-sm">
-              <img :src="avatar || user.new.avatar">
+              <img :src="avatar">
             </q-avatar><!-- TagAvatar: UserModule -->
             <div class="text-weight-bold">
               <q-btn-dropdown
@@ -183,6 +183,7 @@
 <script>
 import { openURL, QAjaxBar } from 'quasar'
 import { mapGetters } from 'vuex'
+import { url } from 'boot/axios'
 import LocaleDropdown from '../components/LocaleDropdown'
 
 export default {
@@ -193,11 +194,11 @@ export default {
   },
   data () {
     return {
-      url: process.env.DEV ? process.env.DEV_URL : process.env.API_URL,
+      desktop: this.$q.platform.is.desktop,
       leftDrawerOpen: false, // this.$q.platform.is.desktop,
       rightDrawer: false,
       authDrawer: true,
-      desktop: this.$q.platform.is.desktop
+      url: url
     }
   },
   computed: {
@@ -207,9 +208,10 @@ export default {
       appName: 'config/appNameGetter'
     }),
     avatar () {
-      if (this.user.avatar !== 'images/profile/default.jpg') {
-        return this.url + '/' + this.user.avatar
-      } else return null
+      if (this.user.avatar) {
+        if (this.user.avatar.includes('images/profile')) return this.url + '/' + this.user.avatar
+        else return this.user.avatar
+      } else return this.user.new.avatar
     }
   },
   methods: {

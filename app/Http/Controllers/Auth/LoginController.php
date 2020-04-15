@@ -170,6 +170,7 @@ class LoginController extends Controller
         $avatar = ($user->avatar)?$user->avatar:'';
 
         $localUser = User::where('email', $user->email)->first();
+        $localAvatar = stristr($localUser['avatar'], 'images/profile');
 
         //$this->validator();
 
@@ -188,7 +189,7 @@ class LoginController extends Controller
 
         User::where('email',$email)
           ->update([
-              'avatar' => $avatar,
+              'avatar' => $localAvatar?$localUser->avatar:$avatar,
               'password' => Hash::make($password)
           ]); //Update Avatar
 

@@ -21,7 +21,7 @@
                   native-context-menu
                 /><!-- TagAvatar: UserModule -->
 
-                <q-card class="row q-ma-xl">
+                <q-card class="row q-mb-xl">
                     <div class="col-md-6">
                         <input type="file" v-on:change="onImageChange" class="q-ma-lg">
                     </div>
@@ -135,6 +135,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { url } from 'boot/axios'
 // const qs = params => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
 
 export default {
@@ -148,7 +149,7 @@ export default {
       password_confirmation: null,
       isPwd: true,
       file: '',
-      url: process.env.DEV ? process.env.DEV_URL : process.env.API_URL
+      url: url
     }
   },
   computed: {
@@ -156,26 +157,20 @@ export default {
       user: 'users/authGetter'
     }),
     avatar () {
-      if (this.user.avatar !== 'images/profile/default.jpg') {
-        return this.url + '/' + this.user.avatar
+      if (this.user.avatar) {
+        if (this.user.avatar.includes('images/profile')) return this.url + '/' + this.user.avatar
+        else return this.user.avatar
       } else return this.user.new.avatar
     }
   },
   methods: {
     info () {
-      // eslint-disable-next-line no-unused-vars
-      const data = {
+      this.$store.dispatch('users/updateAction', {
         id: this.user.id,
         name: this.name,
         email: this.email,
         avatar: this.file
-      }
-
-      // const formData = new FormData()// ToFix
-      // formData.append('avatar', this.file)
-      // console.log(formData, this.file)
-
-      this.$store.dispatch('users/updateAction', data)
+      })
     },
     pwd () {
       this.$store.dispatch('users/updateAction', {
@@ -191,6 +186,9 @@ export default {
       if (!files.length) return; this.createImage(files[0])
     }, // TagAvatar: UserModule
     createImage (files) {
+      // const formData = new FormData()// ToFix
+      // formData.append('avatar', files)
+      // console.log(formData, files)
       let reader = new FileReader()
       reader.onload = (e) => {
         this.file = e.target.result
@@ -212,7 +210,7 @@ export default {
       return new Promise((resolve, reject) => {
         // Retrieve JWT token from your store.
         // const token = this.token
-        console.log(files[0])
+        // console.log(files[0])
         // let fd = new FormData()
         // fd.append('avatar', file)
         // fd.append('avatar', file[0])
@@ -220,7 +218,6 @@ export default {
         this.createImage(files[0])
         resolve(
           this.$axios.put(`api/users/${this.user.id}`, { avatar: this.avatar }).then(response => {
-            console.log(response)
             if (response.data) {
               // alert(response.data)
               this.$q.notify({

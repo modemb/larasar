@@ -2,7 +2,7 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 module.exports = function (ctx) {
   // https://quasar.dev/quasar-cli/quasar-conf-js#Example-setting-env-for-dev%2Fbuild
-  let localProdServer = 1 // WampServer
+  let localProdServer = 0 // WampServer
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
