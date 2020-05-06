@@ -30,6 +30,29 @@ class CreateUsersTable extends Migration
             $table->string('postal_code', 20)->nullable();
             $table->char('region_code', 2)->nullable();
             $table->char('country_code', 2)->nullable();
+            $table->string('ip')->nullable();
+            //====================ip=====================\\
+            $table->string('continent_code')->nullable();
+            $table->string('country')->nullable();
+            $table->string('country_area')->nullable();
+            $table->string('country_calling_code')->nullable();
+            $table->string('country_capital')->nullable();
+            $table->string('country_code_iso3')->nullable();
+            $table->string('country_name')->nullable();
+            $table->string('country_population')->nullable();
+            $table->string('country_tld')->nullable();
+            $table->string('currency')->nullable();
+            $table->string('currency_name')->nullable();
+            $table->string('in_eu')->nullable();
+            $table->string('languages')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('org')->nullable();
+            $table->string('postal')->nullable();
+            $table->string('region')->nullable();
+            $table->string('timezone')->nullable();
+            $table->string('utc_offset')->nullable();
+            //====================ip end==================\\
             $table->rememberToken();
             $table->timestamps();
         });

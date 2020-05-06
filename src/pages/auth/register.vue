@@ -65,7 +65,7 @@
                 </q-input>
 
                 <div class="q-pt-md">
-                  <q-btn color="primary" :label="$t('register')" @click.prevent="register" />
+                  <q-btn color="primary" :loading="loader" :label="$t('register')" @click.prevent="register" />
                 </div>
 
               </div>
@@ -86,6 +86,7 @@ export default {
   name: 'registerPage',
   data () {
     return {
+      loader: false,
       name: null,
       name_data: null,
       email: null,
@@ -101,6 +102,7 @@ export default {
   },
   methods: {
     register () {
+      this.loader = true
       this.$store.dispatch('users/registerAction', {
         name: this.name,
         email: this.email,
@@ -109,9 +111,13 @@ export default {
         api: 'register',
         scope: ''
       })
+        .then(() => {
+          this.loader = false
+        })
         .catch(error => {
-          this.name_data = error.response.data.errors.name[0] || error.response.data.message
+          this.loader = false
           this.email_data = error.response.data.errors.email[0] || error.response.data.message
+          this.name_data = error.response.data.errors.name[0] || error.response.data.message
           this.password_data = error.response.data.errors.password[0] || error.response.data.message
         })
     }

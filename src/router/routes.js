@@ -24,9 +24,15 @@ const routes = [
         meta: { auth: false }
       },
       {
-        path: '/password/reset',
-        name: 'public.password.reset',
+        path: '/password/email',
+        name: 'public.password.email',
         component: () => import('pages/auth/password/email'),
+        meta: { auth: false }
+      },
+      {
+        path: 'api/password/reset',
+        name: 'public.password.reset',
+        component: () => import('pages/auth/password/reset'),
         meta: { auth: false }
       },
       {

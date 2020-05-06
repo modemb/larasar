@@ -55,12 +55,37 @@ class LoginController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function login(Request $request)
-    {
-        if($request->api) config(['app.locale' => $request->locale]);//Api
+    {   //return $request;
+        if ($request->api) config(['app.locale' => $request->locale]);//Api
 
         $this->validateLogin($request);
 
-        if($request->api) return $this->authenticated($request);//Api
+        try {
+
+          $guzzle = new \GuzzleHttp\Client;$passport = config('services.passport');
+
+          $response = $guzzle->post($passport['login_endpoint'], [
+              'form_params' => [
+                'grant_type' => 'password',
+                'client_id' => $passport['client_id'],
+                'client_secret' => $passport['client_secret'],
+                'username' => $request->email,
+                'password' => $request->password,
+                'scope' => '',
+              ],
+          ]); $res = json_decode((string) $response->getBody(), true);
+
+          if ($request->api) return $res;
+          elseif ($request->_token) return;
+          return  view('oauth/callback', [
+              'token' => $res['access_token'],
+              'token_type' => $res['token_type'],
+              'expires_in' => $res['expires_in'],
+              'transfer' => 'http://larasar.modemb.com'
+          ]);
+        } catch (\Throwable $th) {
+          //throw $th;
+        }
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
@@ -82,38 +107,6 @@ class LoginController extends Controller
         $this->incrementLoginAttempts($request);
 
         return $this->sendFailedLoginResponse($request);
-    }
-
-    /**
-     * The user has been authenticated.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
-     * @return mixed
-     */
-    protected function authenticated(Request $request)
-    {
-        $guzzle = new \GuzzleHttp\Client;$passport = config('services.passport');
-
-        $response = $guzzle->post($passport['login_endpoint'], [
-            'form_params' => [
-              'grant_type' => 'password',
-              'client_id' => $passport['client_id'],
-              'client_secret' => $passport['client_secret'],
-              'username' => $request->email,
-              'password' => $request->password,
-              'scope' => '',
-            ],
-        ]); $res = json_decode((string) $response->getBody(), true);
-
-        if ($request->api) return $res;
-        elseif ($request->_token) return;
-        return  view('oauth/callback', [
-            'token' => $res['access_token'],
-            'token_type' => $res['token_type'],
-            'expires_in' => $res['expires_in'],
-            'transfer' => 'http://larasar.modemb.com'
-        ]);
     }
 
     /**
@@ -152,6 +145,10 @@ class LoginController extends Controller
     public function handleProviderCallback(Request $request, $provider)
     {
         if($request->input('error') !== null) return $request->input('error');
+
+        // $loc = file_get_contents('https://ipapi.co/json/');
+        // echo $loc;
+        // $obj = json_decode($loc);
 
         $this->driver($provider);$password = '88888888';
 
@@ -198,7 +195,7 @@ class LoginController extends Controller
 
         $request['email'] = $email;
         $request['password'] = $password;
-        return$this->authenticated($request);
+        return $this->login($request);
     }
 
     /**

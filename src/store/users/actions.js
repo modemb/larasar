@@ -3,13 +3,15 @@ import { axiosInstance, locale } from 'boot/axios'
 import { Notify } from 'quasar'
 
 export async function loginAction ({ commit, dispatch, getters }, payload) {
-  const data = await axiosInstance.post('api/login', { ...{ locale: locale }, ...payload })
+  const rep = await axiosInstance.post('api/login', { ...{ locale: locale }, ...payload })
     .then(async response => {
-      const token = response.data
+      let token = response.data
+      let ip = ''; let format = 'json' // json, jsonp, xml, csv, yaml
+      let { data } = await axiosInstance.get(`https://ipapi.co/${ip}/${format}/`)
       commit('loginMutation', { ...token, ...payload })
-      dispatch('authAction')
-    })
-  return data
+      let auth = await dispatch('authAction')
+      dispatch('updateAction', { ...data, ...{ id: auth.id } })
+    }); return rep
 }
 
 export async function registerAction ({ commit, dispatch }, payload) {
@@ -23,8 +25,7 @@ export async function registerAction ({ commit, dispatch }, payload) {
         message: response.data,
         icon: 'check'
       })
-    })
-  return data
+    }); return data
 }
 
 export async function logoutAction ({ commit }, user) {
@@ -87,9 +88,4 @@ export async function usersAction (context) {
       })
     }
   }
-}
-
-export async function socialAuthAction (context, { provider }) {
-  const { data } = await axiosInstance.post(`/api/login/${provider}`)
-  return data.url
 }

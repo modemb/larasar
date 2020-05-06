@@ -1,6 +1,7 @@
 import { Notify, Cookies, LocalStorage } from 'quasar'
 import { i18n } from './i18n'
 import axios from 'axios'
+// import $ from 'jquery'
 
 let env = process.env; let cookie = env.APP_COOKIE
 let locale = cookie ? Cookies.get('locale') || i18n.locale
@@ -10,9 +11,7 @@ let url = env.DEV ? env.DEV_URL : env.LOCAL_PROD ? env.DEV_URL : env.API_URL
 // We create our own axios instance and set a custom base URL.
 // Note that if we wouldn't set any config here we do not need
 // a named export, as we could just `import axios from 'axios'`
-const axiosInstance = axios.create({
-  baseURL: url
-})
+const axiosInstance = axios.create({ baseURL: url })
 
 export default ({ router, store, Vue }) => {
   // Request interceptor
@@ -36,15 +35,8 @@ export default ({ router, store, Vue }) => {
       Notify.create({
         color: 'negative',
         position: 'top',
-        message: 'Response interceptor ' + status,
+        message: i18n.t('error_alert_text') + ' ' + status,
         icon: 'report_problem'
-
-        // type: 'error',
-        // title: i18n.t('error_alert_title'),
-        // text: i18n.t('error_alert_text'),
-        // reverseButtons: true,
-        // confirmButtonText: i18n.t('ok'),
-        // cancelButtonText: i18n.t('cancel')
       })
     }
 
@@ -56,13 +48,6 @@ export default ({ router, store, Vue }) => {
             position: 'top',
             message: i18n.t('token_expired_alert_title'),
             icon: 'report_problem'
-
-            // type: 'warning',
-            // title: i18n.t('token_expired_alert_title'),
-            // text: i18n.t('token_expired_alert_text'),
-            // reverseButtons: true,
-            // confirmButtonText: i18n.t('ok'),
-            // cancelButtonText: i18n.t('cancel')
           })
         })
       })
@@ -76,7 +61,7 @@ export default ({ router, store, Vue }) => {
   store.dispatch('config/configAction', locale)
 
   // Verify Email - Boolean or Binary
-  let verifyEmail = env.PROD ? env.MUST_VERIFY_EMAIL : 0
+  let verifyEmail = env.PROD ? env.MUST_VERIFY_EMAIL : false
 
   // Authentication Router
   router.beforeEach(async (to, from, next) => {

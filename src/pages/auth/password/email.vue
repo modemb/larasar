@@ -26,7 +26,7 @@
                   :error-message='email_data'
                 />
 
-                <q-btn color="primary" :label="$t('send_password_reset_link')" class="q-ma-sm" @click.prevent="send" />
+                <q-btn color="primary" :loading="loader" :label="$t('send_password_reset_link')" class="q-ma-sm" @click.prevent="send" />
 
               </div>
 
@@ -48,25 +48,31 @@ export default {
   name: 'resetPage',
   data () {
     return {
+      loader: false,
       email: '',
       email_data: ''
     }
   },
   methods: {
-    async send () {
-      const { data } = await this.$axios.post('/api/password/email', {
+    send () {
+      this.loader = true
+      this.$axios.post('/api/password/email', {
         email: this.email,
         locale: locale
       })
+        .then(rep => {
+          this.loader = false
+          this.$q.notify({
+            color: 'positive',
+            position: 'top',
+            message: rep.data.status,
+            icon: 'check'
+          })
+        })
         .catch(error => {
+          this.loader = false
           this.email_data = error.response.data.email || error.response.data.errors.email[0]
         })
-      this.$q.notify({
-        color: 'positive',
-        position: 'top',
-        message: data.status,
-        icon: 'check'
-      })
     }
   }
 }

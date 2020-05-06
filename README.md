@@ -91,26 +91,43 @@ Network: php -S 192.168.2.11:8000 -t public
 
 ## Running Seeders - Super Admin id = 1
 
-php artisan db:seed
 php artisan db:seed --class=UsersTableSeeder
 
 ## Comment Flow
 
 Backend: Routes -> Controllers - Frontend: Blade -> Vue
 
+## Features
+
+- [✔] Users Authentication
+- [✔] Email Verification
+- [✔] State Management
+- [✔] Reset Password
+- [✔] Social Login
+- [✔] Validation
+- [✔] CRUD
+- [x] File Storage
+- [x] Notification
+- [x] Cron jobs
+- [x] Real Time
+- [x] IP
+- [x] Tests
+- [x] docker
+
 # ============== ToImplement ==============
-# -------------- Publishing to Store ------
+# -------------- Publishing to Stores ------
 # https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
 # -------------- Data Table --------------
 Improve users update <https://quasar.dev/vue-components/popup-edit#QPopupEdit-API>
 # -------------- Profile.vue --------------
-Picture Upload
+Improve Files or Picture Upload
 <https://blog.usejournal.com/file-upload-with-laravel-and-vuejs-a70ae85e34a1>
 <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/>
 <https://serversideup.net/uploading-files-vuejs-axios/>
 <https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/#Vue_js_Laravel_File_Upload>
 # -------------- Real Time -------------------
-<https://socket.io/>
+<https://socket.io/><https://pusher.com/>
+<https://www.codechief.org/article/real-time-chat-app-with-laravel-6-vue-js-and-pusher>
 <https://quasar.dev/vue-components/chat#Introduction>
 <https://github.com/mattmezza/vue-beautiful-chat>
 <https://github.com/botui/botui>

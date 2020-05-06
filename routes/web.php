@@ -33,7 +33,11 @@ Route::group(['middleware' => 'guest'], function () {
     return view('index');
   });
 
-  Route::get('/password/reset', function () {
+  Route::get('api/password/reset', function () {
+    return view('index');
+  });
+
+  Route::get('/password/reset/{token}', function () {
     return view('index');
   });
 });

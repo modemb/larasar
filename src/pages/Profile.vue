@@ -14,21 +14,29 @@
 
               <q-form class="q-pa-md">
 
-                <q-img
+                <q-card class="q-mb-md">
+                  <q-img :src="avatar"/>
+                  <!-- <q-card-section> -->
+                    <input type="file" v-on:change="onImageChange" class="q-ma-lg">
+                    <q-btn color="primary" class="q-ma-md" :label="$t('remove_image')" @click="deleteImage"/>
+                  <!-- </q-card-section> --><!-- TagAvatar: UserModule -->
+                </q-card>
+
+                <!-- <q-img
                   :src="avatar"
                   style="width: 100%"
                   class="q-mb-xl"
                   native-context-menu
-                /><!-- TagAvatar: UserModule -->
+                />
 
                 <q-card class="row q-mb-xl">
                     <div class="col-md-6">
-                        <input type="file" v-on:change="onImageChange" class="q-ma-lg">
+                      <input type="file" v-on:change="onImageChange" class="q-ma-lg">
                     </div>
                     <div class="col-md-6">
                       <q-btn color="primary" class="q-ma-md" :label="$t('remove_image')" @click="deleteImage"/>
-                    </div><!-- https://quasar.dev/vue-components/uploader#Introduction -->
-                </q-card>
+                    </div>
+                </q-card> -->
 
                 <!-- <q-uploader
                   style="max-width: 100%"
@@ -157,10 +165,10 @@ export default {
       user: 'users/authGetter'
     }),
     avatar () {
-      if (this.user.avatar) {
+      if (this.user.avatar) { // Stored Avatar
         if (this.user.avatar.includes('images/profile')) return this.url + '/' + this.user.avatar
-        else return this.user.avatar
-      } else return this.user.new.avatar
+        else return this.user.avatar // Social Avatar
+      } else return this.user.new.avatar // Email Avatar
     }
   },
   methods: {

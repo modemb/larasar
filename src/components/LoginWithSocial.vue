@@ -39,11 +39,8 @@ export default {
   methods: {
     async login (driver) {
       const newWindow = openWindow('', this.$t('login'))
-      // console.log(driver)
-      const url = await this.$store.dispatch('users/socialAuthAction', {
-        provider: driver
-      })
-      newWindow.location.href = url
+      const { data } = await this.$axios.post(`/api/login/${driver}`)
+      newWindow.location.href = data.url
     },
 
     /**

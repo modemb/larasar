@@ -5,7 +5,7 @@
       <q-toolbar>
         <q-btn dense round icon="menu" behavior="mobile" @click="rightDrawer = !rightDrawer" />
 
-        <q-btn to="/"  class="q-ma-md">
+        <q-btn to="/" class="q-ma-md">
           <q-toolbar-title>
             <q-icon name="home" />
             {{ appName }}
@@ -13,7 +13,7 @@
         </q-btn>
 
         <locale-dropdown />
-        <!-- <q-btn dense round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" /> -->
+        <!-- <q-btn dense round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen"/> -->
       </q-toolbar>
     </q-header>
     <!-- Header End -->
@@ -119,7 +119,7 @@
               <q-item-label caption>{{user.role}}</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-if="(user.id == 1 || user.role == 'Admin') || user.role == 'Seller'" to='/users'>
+          <q-item clickable v-if="admins" to='/users'>
             <q-item-section avatar><!-- Admins and Sellers View ====-->
               <q-icon name="people" />
             </q-item-section>
@@ -155,7 +155,7 @@
 
     <!-- Footer -->
     <q-footer elevated v-if="desktop">
-      <q-toolbar>
+      <q-toolbar><!-- Desktop View -->
         <q-toolbar-title>
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
@@ -165,12 +165,23 @@
       </q-toolbar>
     </q-footer>
     <q-footer elevated v-else>
-      <q-toolbar>
+      <q-toolbar><!-- Mobile View -->
         <q-toolbar-title>
-          <q-avatar>
+          <!--<q-avatar>
             <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
           </q-avatar>
-          Quasar v{{ $q.version }} Mobile View
+           Quasar v{{ $q.version }} Mobile View -->
+          <div class="q-pa-md q-gutter-sm text-center">
+            <q-btn color="primary" text-color="white" glossy unelevated icon="home" to="/" />
+            <template v-if="user" class="*q-pa-md">
+              <q-btn color="primary" text-color="white" glossy unelevated icon="person" to="/profile" />
+              <q-btn color="primary" text-color="white" glossy unelevated icon="people" to="/users"  v-if="admins" />
+            </template>
+            <template v-else class="*q-pa-md">
+              <q-btn color="primary" text-color="white" glossy unelevated icon="vpn_key" to="/login" />
+              <q-btn color="primary" text-color="white" glossy unelevated icon="add_to_queue" to="/register" />
+            </template>
+          </div>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
@@ -212,6 +223,9 @@ export default {
         if (this.user.avatar.includes('images/profile')) return this.url + '/' + this.user.avatar
         else return this.user.avatar
       } else return this.user.new.avatar
+    },
+    admins () {
+      return this.user.id === 1 || this.user.role === 'Admin' || this.user.role === 'Seller'
     }
   },
   methods: {

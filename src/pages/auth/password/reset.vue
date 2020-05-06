@@ -52,7 +52,7 @@
                 </q-input>
 
                 <div class="q-pt-md">
-                  <q-btn color="primary" :label="$t('reset_password')" @click.prevent="reset" />
+                  <q-btn color="primary" :loading="loader" :label="$t('reset_password')" @click.prevent="reset" />
                 </div>
 
               </div>
@@ -76,6 +76,7 @@ export default {
   name: 'resetPage',
   data () {
     return {
+      loader: false,
       token: '',
       email: '',
       email_data: '',
@@ -87,10 +88,11 @@ export default {
   },
   created () {
     this.email = this.$route.query.email
-    this.token = this.$route.params.token
+    this.token = this.$route.query.token || this.$route.params.token
   },
   methods: {
     async reset () {
+      this.loader = true
       const data = {
         api: 'login',
         locale: locale,
@@ -101,6 +103,7 @@ export default {
       }
       this.$axios.post('/api/password/reset', data)
         .then(() => {
+          this.loader = false
           this.$store.dispatch('users/loginAction', data)
           this.$q.notify({
             color: 'positive',
@@ -110,6 +113,7 @@ export default {
           })
         })
         .catch(error => {
+          this.loader = false
           const data = error.response.data
           this.email_data = data['email'] || data.message
           this.password_data = data.errors.password[0] || data.message

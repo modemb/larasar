@@ -27,6 +27,7 @@
               <q-btn
                 color="primary"
                 v-if="param_id"
+                :loading="loader"
                 :label="$t('verify_email')"
                 class="q-ma-sm"
                 @click.prevent="verify"
@@ -43,6 +44,7 @@ const qs = (params) => Object.keys(params).map(key => `${key}=${params[key]}`).j
 
 export default {
   data: () => ({
+    loader: false,
     param_id: '',
     success: '',
     error: ''
@@ -99,9 +101,11 @@ export default {
       // this.$axios.reset()
     },
     verify () {
+      this.loader = true
       this.$axios.post(`api/email/verify/${this.$route.params.id}/${this.$route.params.hash}?${qs(this.$route.query)}`)
         .then(rep => {
           // this.success = rep.data
+          this.loader = false
           this.$q.notify({
             color: 'positive',
             position: 'top',
@@ -109,6 +113,7 @@ export default {
             icon: 'check'
           }); this.$router.push({ path: '/' })
         }).catch(e => {
+          this.loader = false
           this.$q.notify({
             color: 'negative',
             position: 'top',

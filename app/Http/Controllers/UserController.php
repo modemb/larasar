@@ -131,8 +131,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { //return$request->get('avatar');
-
+    { //return$request;
       $put = User::find($id);
       $check = Auth::validate([
           'email'    => $put->email,
@@ -144,7 +143,10 @@ class UserController extends Controller
       if ($request->phone) $put->phone = $request->phone;
       if ($request->address) $put->address = $request->address;
       if ($request->city) $put->city = $request->city;
-      if ($request->zip_code) $put->zip_code = $request->zip_code;
+      if ($request->postal_code) $put->postal_code = $request->postal_code;
+      if ($request->region_code) $put->region_code = $request->region_code;
+      if ($request->country_code) $put->country_code = $request->country_code;
+      // if ($request->ip) $put->ip = $request->ip;
       if ($request->pwd || $request->update_password) {
           $this->validate($request, [
             // 'new_password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -178,6 +180,10 @@ class UserController extends Controller
 
         // return 'You have successfully uploaded an image';
       } $put->update();//TagUpdate: UserModule
+      if ($request->ip) return response()->json([
+        'success' => 'Login successfully',
+        'user' => $put
+      ]);
       return response()->json([
         'success' => 'Updated successfully',
         'user' => $put
