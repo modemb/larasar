@@ -106,11 +106,11 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 - [✔] Social Login
 - [✔] Validation
 - [✔] CRUD
+- [✔] IP
 - [x] File Storage
 - [x] Notification
 - [x] Cron jobs
 - [x] Real Time
-- [x] IP
 - [x] Tests
 - [x] docker
 
