@@ -6,11 +6,12 @@ export async function loginAction ({ commit, dispatch, getters }, payload) {
   const rep = await axiosInstance.post('api/login', { ...{ locale: locale }, ...payload })
     .then(async response => {
       let token = response.data
-      let ip = ''; let format = 'json' // json, jsonp, xml, csv, yaml
-      let { data } = await axiosInstance.get(`https://ipapi.co/${ip}/${format}/`)
+      // let ip = ''; let format = 'json' // json, jsonp, xml, csv, yaml
+      // // let { data } = await axiosInstance.get(`http://ip-api.com/${format}/${ip}`)
+      // let { data } = await axiosInstance.get(`https://ipapi.co/${ip}/${format}/`)
       commit('loginMutation', { ...token, ...payload })
-      let auth = await dispatch('authAction')
-      dispatch('updateAction', { ...data, ...{ id: auth.id } })
+      dispatch('authAction')
+      // dispatch('updateAction', { ...data, ...{ id: auth.id } })
     }); return rep
 }
 

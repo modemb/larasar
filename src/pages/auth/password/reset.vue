@@ -52,7 +52,12 @@
                 </q-input>
 
                 <div class="q-pt-md">
-                  <q-btn color="primary" :loading="loader" :label="$t('reset_password')" @click.prevent="reset" />
+                  <q-btn color="primary"
+                    icon="fas fa-history"
+                    :loading="loader"
+                    :label="$t('reset_password')"
+                    @click.prevent="reset"
+                  />
                 </div>
 
               </div>

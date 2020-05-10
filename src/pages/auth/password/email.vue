@@ -26,7 +26,13 @@
                   :error-message='email_data'
                 />
 
-                <q-btn color="primary" :loading="loader" :label="$t('send_password_reset_link')" class="q-ma-sm" @click.prevent="send" />
+                <q-btn
+                  color="primary"
+                  icon="fas fa-link"
+                  :loading="loader"
+                  :label="$t('send_password_reset_link')"
+                  class="q-ma-sm" @click.prevent="send"
+                />
 
               </div>
 

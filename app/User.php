@@ -56,4 +56,12 @@ class User extends Authenticatable //implements MustVerifyEmail
           'avatar' => 'https://www.gravatar.com/avatar/'.md5(strtolower($this->email)).'.jpg?s=200&d=mm'
         ];
     }
+
+    /**
+     * Get user's analytics
+     */
+    public function analytics()
+    {
+        return $this->hasMany('App\Analytic');
+    }
 }

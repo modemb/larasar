@@ -146,9 +146,12 @@ class LoginController extends Controller
     {
         if($request->input('error') !== null) return $request->input('error');
 
-        // $loc = file_get_contents('https://ipapi.co/json/');
-        // echo $loc;
-        // $obj = json_decode($loc);
+        $ip = \Request::ip();//$request->ip();
+        $format = 'json'; // json, jsonp, xml, csv, yaml
+        // $loc = file_get_contents("https://ipapi.co/$ip/$format/");
+        $loc = file_get_contents("http://ip-api.com/$format/$ip");
+        echo $loc;
+        $obj = json_decode($loc);
 
         $this->driver($provider);$password = '88888888';
 

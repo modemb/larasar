@@ -65,7 +65,11 @@
                 </q-input>
 
                 <div class="q-pt-md">
-                  <q-btn color="primary" :loading="loader" :label="$t('register')" @click.prevent="register" />
+                  <q-btn color="primary"
+                    icon="fas fa-plus-circle"
+                    :loading="loader" :label="$t('register')"
+                    @click.prevent="register"
+                  />
                 </div>
 
               </div>

@@ -5,12 +5,11 @@
       <q-toolbar>
         <q-btn dense round icon="menu" behavior="mobile" @click="rightDrawer = !rightDrawer" />
 
-        <q-btn to="/" class="q-ma-md">
-          <q-toolbar-title>
-            <q-icon name="home" />
-            {{ appName }}
-          </q-toolbar-title>
-        </q-btn>
+        <q-toolbar-title>
+          <q-btn to="/" class="q-ma-md">
+              <q-icon name="home" /> {{ appName }}
+          </q-btn>
+        </q-toolbar-title>
 
         <locale-dropdown />
         <!-- <q-btn dense round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen"/> -->
@@ -162,6 +161,9 @@
           </q-avatar>
           Quasar v{{ $q.version }} Desktop View
         </q-toolbar-title>
+        <!-- <q-btn type="a" target="_blank" glossy unelevated href="https://www.patreon.com/modemb">
+            <i class="fab fa-patreon fa-2x"/>
+        </q-btn> -->
       </q-toolbar>
     </q-footer>
     <q-footer elevated v-else>
@@ -181,6 +183,9 @@
               <q-btn color="primary" text-color="white" glossy unelevated icon="vpn_key" to="/login" />
               <q-btn color="primary" text-color="white" glossy unelevated icon="add_to_queue" to="/register" />
             </template>
+            <!-- <q-btn type="a" target="_blank" glossy unelevated href="https://www.patreon.com/modemb">
+                <i class="fab fa-patreon fa-2x"/>
+            </q-btn> -->
           </div>
         </q-toolbar-title>
       </q-toolbar>

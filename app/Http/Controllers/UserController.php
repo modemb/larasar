@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use neto737\BitGoSDK\Enum\CurrencyCode;
 use neto737\BitGoSDK\BitGoSDK;
 use Illuminate\Http\Request;
+use App\Analytic;
 use App\User;
 use Hash;
 use Auth;
@@ -132,6 +133,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     { //return$request;
+      $analytic = Analytic::where('ip', $request->ip);
       $put = User::find($id);
       $check = Auth::validate([
           'email'    => $put->email,

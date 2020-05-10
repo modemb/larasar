@@ -14,6 +14,10 @@ php artisan passport:keys or php artisan passport:install
 npm install
 npm run dev
 ```
+## Create Update Columns From AddColumnsToTable
+
+https://laravel.com/docs/7.x/migrations#columns
+php artisan migrate -- migrate:rollback
 
 ### Cordova Setup: Android Studio – Configure – Default Project Structure
 
@@ -99,14 +103,14 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 
 ## Features
 
-- [✔] Users Authentication
-- [✔] Email Verification
-- [✔] State Management
-- [✔] Reset Password
-- [✔] Social Login
-- [✔] Validation
-- [✔] CRUD
-- [✔] IP
+- ✔ Users Authentication
+- ✔ Email Verification
+- ✔ State Management
+- ✔ Reset Password
+- ✔ Social Login
+- ✔ Validation
+- ✔ Analytics
+- ✔ CRUD
 - [x] File Storage
 - [x] Notification
 - [x] Cron jobs

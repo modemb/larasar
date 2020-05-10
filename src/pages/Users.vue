@@ -169,11 +169,11 @@
           color="primary"
           icon-right="archive"
           class="q-ma-md"
-          label="Export to csv"
+          :label="$t('export_to_csv')"
           no-caps
           @click="exportTable"
         /><!-- TagExport: UserModule -->
-        <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+        <q-input borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -262,8 +262,8 @@ export default {
         { name: 'status', align: 'center', label: this.$t('status'), field: 'status', sortable: true },
         { name: 'role', align: 'center', label: this.$t('role'), field: 'role', sortable: true },
         { name: 'updated_at', align: 'center', label: this.$t('updated_at'), field: 'updated_at', sortable: true },
-        { name: 'edit', align: 'center', label: this.$t('edit'), field: 'edit', sortable: true },
-        { name: 'delete', align: 'center', label: this.$t('delete'), field: 'delete', sortable: true }
+        { name: 'edit', align: 'center', label: this.$t('edit'), field: 'edit', sortable: false },
+        { name: 'delete', align: 'center', label: this.$t('delete'), field: 'delete', sortable: false }
       ],
       data: [],
       original: []

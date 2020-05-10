@@ -13,7 +13,7 @@ let url = env.DEV ? env.DEV_URL : env.LOCAL_PROD ? env.DEV_URL : env.API_URL
 // a named export, as we could just `import axios from 'axios'`
 const axiosInstance = axios.create({ baseURL: url })
 
-export default ({ router, store, Vue }) => {
+export default async ({ router, store, Vue }) => {
   // Request interceptor
   axiosInstance.interceptors.request.use(request => {
     const token = store.getters['users/tokenGetter']
@@ -63,16 +63,22 @@ export default ({ router, store, Vue }) => {
   // Verify Email - Boolean or Binary
   let verifyEmail = env.PROD ? env.MUST_VERIFY_EMAIL : false
 
+  let auth = []; let ip = ''; let format = 'json' // json, jsonp, xml, csv, yaml
+  // let { data } = await axios.get(`http://ip-api.com/${format}/${ip}`)
+  let { data } = await axios.get(`https://ipapi.co/${ip}/${format}/`)
+
   // Authentication Router
   router.beforeEach(async (to, from, next) => {
     if (store.getters['users/tokenGetter']) {
-      let auth = await store.dispatch('users/authAction').catch(() => {
+      auth = await store.dispatch('users/authAction').catch(() => {
         store.commit('users/logoutMutation')
       }) // Auth Check
       let verify = !auth.email_verified_at & verifyEmail
         ? to.meta.verify || { path: '/email/verify' }
         : !to.meta.verify || { path: '/' }; next(verify)
     } else next(!to.meta.auth & !to.meta.verify || { path: '/login' })
+    // dispatch('updateAction', { ...data, ...{ id: this.user.id } })
+    console.log(data, auth)
   })
 }
 
