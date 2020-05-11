@@ -25,11 +25,11 @@ class AddColumnsToTable extends Migration
      */
     public function up()
     {
-        $t = DB::table('migrations')
+        DB::table('migrations')
           ->where('migration', '2020_05_11_105435_remove_columns_from_migrations')
           ->delete();
 
-        if($t) Schema::table($this->table, function (Blueprint $table) {
+        Schema::table($this->table, function (Blueprint $table) {
             // $table->string('profile')->nullable()->after('user_id');
             // $table->string('bio')->nullable()->after('user_id');
             // $table->bigInteger('analytic_id')->default(0)->after('id');
