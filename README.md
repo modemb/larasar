@@ -17,7 +17,7 @@ npm run dev
 ## Create Update Columns From AddColumnsToTable
 
 https://laravel.com/docs/7.x/migrations#columns
-php artisan migrate -- migrate:rollback
+php artisan migrate:rollback -- migrate
 
 ### Cordova Setup: Android Studio – Configure – Default Project Structure
 

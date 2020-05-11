@@ -89,6 +89,7 @@ class UserController extends Controller
         return $request['role'].' Created Successfully';
         // return back()->with('status', $request['role'].' Created Successfully');
       }
+      
       return [
         'appName' => config('app.name'),
         'locale' => app()->getLocale(),

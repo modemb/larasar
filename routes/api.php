@@ -23,6 +23,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('email/resend', 'Auth\VerificationController@resend');
     Route::post('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
     Route::get('/user', function (Request $request) {
+      DB::table('migrations')
+        ->where('migration', '2020_05_10_213215_add_columns_to_table')
+        ->delete();
       return $request->user();
     });
 });
