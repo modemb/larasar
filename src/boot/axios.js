@@ -66,9 +66,8 @@ export default async ({ router, store, Vue }) => {
   // Users Analytics
   let auth = []; let ip = ''; let format = 'json' // json, jsonp, xml, csv, yaml
   // let { data } = await axios.get(`http://ip-api.com/${format}/${ip}`)
-  let { data } = await axios.get(`https://ipapi.co/${ip}/${format}/`)
-  let rep = data
-  console.log('API call')
+  let { data } = await axios.get(`https://ipapi.co/${ip}/${format}/`); let rep = data
+  // console.log('API call')
 
   // Authenticated Router
   router.beforeEach(async (to, from, next) => {

@@ -97,8 +97,8 @@ class UserController extends Controller
       } //TagStore: AnalyticModule from Analytics.vue
 
       try {
-        $analytics->where('user_id', $request->id)
-          ->update(['ip' => $request->ip]); // User Check
+        if ($request->ip) $analytics->where('user_id', $request->id)
+          ->update(['ip' => $request->ip]); // AuthAction
       } catch (\Throwable $th) {
         //throw $th;
       }
