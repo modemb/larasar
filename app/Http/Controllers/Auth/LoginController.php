@@ -110,6 +110,18 @@ class LoginController extends Controller
     }
 
     /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        //
+    }
+
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -146,12 +158,12 @@ class LoginController extends Controller
     {
         if($request->input('error') !== null) return $request->input('error');
 
-        $ip = \Request::ip();//$request->ip();
-        $format = 'json'; // json, jsonp, xml, csv, yaml
+        // $ip = \Request::ip();//$request->ip();
+        // $format = 'json'; // json, jsonp, xml, csv, yaml
         // $loc = file_get_contents("https://ipapi.co/$ip/$format/");
-        $loc = file_get_contents("http://ip-api.com/$format/$ip");
-        echo $loc;
-        $obj = json_decode($loc);
+        // $loc = file_get_contents("http://ip-api.com/$format/$ip");
+        // echo $loc;
+        // $obj = json_decode($loc);
 
         $this->driver($provider);$password = '88888888';
 
@@ -187,7 +199,7 @@ class LoginController extends Controller
         $user = User::find(1);if($user['role'] != 'Super Admin')
         $user->update(['role' => 'Super Admin']);//Super Admin Role
 
-        User::where('email',$email)
+        User::where('email', $email)
           ->update([
               'avatar' => $localAvatar?$localUser->avatar:$avatar,
               'password' => Hash::make($password)
@@ -224,9 +236,7 @@ class LoginController extends Controller
           DB::table('oauth_refresh_tokens')
             ->where('access_token_id', $token->id)
             ->delete();
-        });
-
-        $oauth_access_tokens->delete();
+        }); $oauth_access_tokens->delete();
 
         return $this->loggedOut($request) ?: 'logged Out Successfully';
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use App\Analytic;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -51,8 +52,11 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, User $user)
     {
+        Analytic::create(['user_id' => $user->id]); // User Analytic
+
         $user = User::find(1);if($user['role'] != 'Super Admin')
-        $user->update(['role' => 'Super Admin']);//Super Admin Role
+        $user->update(['role' => 'Super Admin']); // Super Admin Role
+
         return response()->json($user->name.' Registered Successfully');
     }
 

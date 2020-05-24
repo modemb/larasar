@@ -55,6 +55,12 @@ const routes = [
         meta: { auth: true }
       },
       {
+        path: '/analytics',
+        name: 'auth.analytics',
+        component: () => import('pages/Analytics'),
+        meta: { auth: true }
+      },
+      {
         path: '/test',
         name: 'auth.test',
         component: () => import('pages/Test'),

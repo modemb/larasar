@@ -43,7 +43,7 @@ class CreateAnalyticsTable extends Migration
             $table->string('org')->nullable();//"Virgin Home Quebec"
             $table->string('postal')->nullable();
             //----------------region---------------\\
-            $table->string('region')->nullable();
+            $table->string('region')->nullable();//Quebec
             $table->char('region_code', 2)->nullable();
             //----------------timezone---------------\\
             $table->string('timezone')->nullable();//"America/Toronto"
@@ -51,15 +51,15 @@ class CreateAnalyticsTable extends Migration
             //=========IPAPI End==========\\
             //=========IP-API==============\\
             $table->string('as')->nullable();
-            $table->char('countryCode'); //"CA"
-            $table->string('isp'); // "Bell Canada"
+            $table->char('countryCode')->nullable(); //"CA"
+            $table->string('isp')->nullable(); // "Bell Canada"
             $table->decimal('lat', 8, 2)->nullable();// 45.4738
             $table->decimal('lon', 8, 2)->nullable();// -73.5875
-            $table->string('query');// "142.118.246.20"
+            $table->string('query')->nullable();// "142.118.246.20"
             // $table->string('region');// "QC"
-            $table->string('regionName');// "Quebec"
-            $table->string('status');// "success"
-            $table->string('zip');// "H4C"
+            $table->string('regionName')->nullable();// "Quebec"
+            // $table->string('status')->nullable();// "success"
+            $table->string('zip')->nullable();// "H4C"
             //=========IP-API End=============\\
             $table->timestamps();
         });

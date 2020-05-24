@@ -38,13 +38,14 @@ export async function updateAction ({ commit, dispatch }, payload) {
   try {
     const { data } = await axiosInstance.put('api/users/' + payload.id, payload)
     dispatch('authAction')
-    Notify.create({
-      color: 'positive',
-      position: 'top',
-      message: data.success,
-      icon: 'check'
-    })
-    return data
+    if (data.success) {
+      Notify.create({
+        color: 'positive',
+        position: 'top',
+        message: data.success,
+        icon: 'check'
+      })
+    } return data
   } catch {}
 }
 
@@ -67,9 +68,9 @@ export async function authAction (context) {
           message: 'authAction ' + error,
           icon: 'report_problem'
         })
-      })
-    context.commit('authMutation', { user: data })
-    return data
+      }); context.commit('authMutation', { user: data })
+    axiosInstance.post('api/users', { id: data.id }) // TagAuthAction: AnalyticModule
+    return { ...data[0], ...data }
   }
 }
 

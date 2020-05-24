@@ -174,6 +174,7 @@ export default {
   methods: {
     info () {
       this.$store.dispatch('users/updateAction', {
+        update: true,
         id: this.user.id,
         name: this.name,
         email: this.email,
@@ -183,6 +184,7 @@ export default {
     pwd () {
       this.$store.dispatch('users/updateAction', {
         pwd: true,
+        update: true,
         id: this.user.id,
         password: this.password,
         new_password: this.new_password,
@@ -238,12 +240,12 @@ export default {
           })
         )
       })
-    },
+    }, // NotInUse
     handleFileUpload () {
       // console.log(this.$refs.file.files[0])
       // this.image = this.$refs.file.files[0]
       this.createImage(this.$refs.file.files[0])
-    }
+    } // NotInUse
   }
 }
 </script>

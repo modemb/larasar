@@ -136,18 +136,6 @@
               <q-input type="textarea" v-model="props.row.email" dense autofocus />
             </q-popup-edit>
           </q-td>
-          <q-td key="city" :props="props">
-            {{ props.row.city }}
-            <q-popup-edit v-model="props.row.city" title="Update city" buttons persistent>
-              <q-input type="text" v-model="props.row.city" dense autofocus hint="Use buttons to close" />
-            </q-popup-edit>
-          </q-td>
-          <q-td key="region_code" :props="props">
-            {{ props.row.region_code }}
-            <q-popup-edit v-model="props.row.region_code" title="Update region" buttons persistent>
-              <q-input type="text" v-model="props.row.region_code" dense autofocus hint="Use buttons to close" />
-            </q-popup-edit>
-          </q-td>
           <q-td key="status" :props="props">
             {{ props.row.status }}
             <q-popup-edit v-model="props.row.status" title="Update carbs" buttons persistent>
@@ -155,7 +143,6 @@
             </q-popup-edit>
           </q-td>
           <q-td key="role" :props="props">{{ props.row.role }}</q-td>
-          <q-td key="updated_at" :props="props">{{ props.row.updated_at }}</q-td>
           <q-td key="edit" :props="props"><!-- TagEdit: UserModule -->
             <q-btn icon="edit" rounded class="q-ma-md" @click="edit(props.row)" />
           </q-td>
@@ -165,14 +152,6 @@
         </q-tr>
       </template>
       <template v-slot:top-right>
-        <q-btn
-          color="primary"
-          icon-right="archive"
-          class="q-ma-md"
-          :label="$t('export_to_csv')"
-          no-caps
-          @click="exportTable"
-        /><!-- TagExport: UserModule -->
         <q-input borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
           <template v-slot:append>
             <q-icon name="search" />
@@ -192,29 +171,8 @@
 </template>
 
 <script>
-import { exportFile } from 'quasar'
 import { mapGetters } from 'vuex'
 import { url } from 'boot/axios'
-
-function wrapCsvValue (val, formatFn) {
-  let formatted = formatFn !== void 0
-    ? formatFn(val)
-    : val
-
-  formatted = formatted === void 0 || formatted === null
-    ? ''
-    : String(formatted)
-
-  formatted = formatted.split('"').join('""')
-  /**
-   * Excel accepts \n and \r in strings, but some other CSV parsers do not
-   * Uncomment the next two lines to escape new lines
-   */
-  // .split('\n').join('\\n')
-  // .split('\r').join('\\r')
-
-  return `"${formatted}"`
-}
 
 export default {
   data () {
@@ -222,7 +180,7 @@ export default {
       height: screen.height / 1.4,
       addUser: false,
       editUser: false,
-      html: null,
+      // html: null,
       role: null,
       role_data: null,
       name: null,
@@ -257,11 +215,8 @@ export default {
         { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
         { name: 'name', align: 'center', label: this.$t('name'), field: 'name', sortable: true },
         { name: 'email', align: 'center', label: this.$t('email'), field: 'email', sortable: true },
-        { name: 'city', align: 'center', label: this.$t('city'), field: 'city', sortable: true },
-        { name: 'region_code', align: 'center', label: this.$t('region'), field: 'region_code', sortable: true },
         { name: 'status', align: 'center', label: this.$t('status'), field: 'status', sortable: true },
         { name: 'role', align: 'center', label: this.$t('role'), field: 'role', sortable: true },
-        { name: 'updated_at', align: 'center', label: this.$t('updated_at'), field: 'updated_at', sortable: true },
         { name: 'edit', align: 'center', label: this.$t('edit'), field: 'edit', sortable: false },
         { name: 'delete', align: 'center', label: this.$t('delete'), field: 'delete', sortable: false }
       ],
@@ -291,31 +246,31 @@ export default {
     }
   },
   methods: {
-    exportTable () {
-      // naive encoding to csv format
-      const content = [ this.columns.map(col => wrapCsvValue(col.label)) ].concat(
-        this.data.map(row => this.columns.map(col => wrapCsvValue(
-          typeof col.field === 'function'
-            ? col.field(row)
-            : row[col.field === void 0 ? col.name : col.field],
-          col.format
-        )).join(','))
-      ).join('\r\n')
+    // exportTable () {
+    //   // naive encoding to csv format
+    //   const content = [ this.columns.map(col => wrapCsvValue(col.label)) ].concat(
+    //     this.data.map(row => this.columns.map(col => wrapCsvValue(
+    //       typeof col.field === 'function'
+    //         ? col.field(row)
+    //         : row[col.field === void 0 ? col.name : col.field],
+    //       col.format
+    //     )).join(','))
+    //   ).join('\r\n')
 
-      const status = exportFile(
-        'table-export.csv',
-        content,
-        'text/csv'
-      )
+    //   const status = exportFile(
+    //     'table-export.csv',
+    //     content,
+    //     'text/csv'
+    //   )
 
-      if (status !== true) {
-        this.$q.notify({
-          message: 'Browser denied file download...',
-          color: 'negative',
-          icon: 'warning'
-        })
-      }
-    }, // TagExport: UserModule
+    //   if (status !== true) {
+    //     this.$q.notify({
+    //       message: 'Browser denied file download...',
+    //       color: 'negative',
+    //       icon: 'warning'
+    //     })
+    //   }
+    // }, // TagExport: UserModule
     add (user) {
       this.$store.dispatch('users/registerAction', {
         auth: this.authGetter,
@@ -359,6 +314,7 @@ export default {
       this.$store.dispatch('users/updateAction', {
         id: user.id,
         user: true,
+        update: true,
         role: this.role,
         name: this.name,
         email: this.email,

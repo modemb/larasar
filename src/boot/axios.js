@@ -63,11 +63,14 @@ export default async ({ router, store, Vue }) => {
   // Verify Email - Boolean or Binary
   let verifyEmail = env.PROD ? env.MUST_VERIFY_EMAIL : false
 
+  // Users Analytics
   let auth = []; let ip = ''; let format = 'json' // json, jsonp, xml, csv, yaml
   // let { data } = await axios.get(`http://ip-api.com/${format}/${ip}`)
   let { data } = await axios.get(`https://ipapi.co/${ip}/${format}/`)
+  let rep = data
+  console.log('API call')
 
-  // Authentication Router
+  // Authenticated Router
   router.beforeEach(async (to, from, next) => {
     if (store.getters['users/tokenGetter']) {
       auth = await store.dispatch('users/authAction').catch(() => {
@@ -76,9 +79,11 @@ export default async ({ router, store, Vue }) => {
       let verify = !auth.email_verified_at & verifyEmail
         ? to.meta.verify || { path: '/email/verify' }
         : !to.meta.verify || { path: '/' }; next(verify)
-    } else next(!to.meta.auth & !to.meta.verify || { path: '/login' })
-    // dispatch('updateAction', { ...data, ...{ id: this.user.id } })
-    console.log(data, auth)
+      if (auth[0].ip !== data.ip) store.dispatch('users/updateAction', { ...data, ...{ id: auth.id } })
+    } else { // Unauthenticated Route
+      next(!to.meta.auth & !to.meta.verify || { path: '/login' })
+      if (rep) store.dispatch('users/updateAction', { ...rep, ...{ id: 'store' } }); rep = null
+    } // console.log(auth) //TagBoot: AnalyticModule
   })
 }
 

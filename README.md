@@ -10,15 +10,10 @@ composer require laravel/ui --dev
 php artisan ui vue --auth
 cp .env.example .env
 php artisan key:generate
-php artisan passport:keys or php artisan passport:install
+php artisan passport:install
 npm install
 npm run dev
 ```
-## Create Update Columns From AddColumnsToTable
-
-https://laravel.com/docs/7.x/migrations#columns
-php artisan migrate:rollback -- migrate
-
 ### Cordova Setup: Android Studio – Configure – Default Project Structure
 
 ```bash
@@ -50,7 +45,7 @@ npm run lint
 ```bash
 quasar create quapp
 npm update && quasar dev
-npm update && quasar build -m pwa
+npm update && quasar build -m pwa && quasar dev
 ```
 
 ### Build the app for production
@@ -93,9 +88,14 @@ Network:<http://192.168.2.11:8080>
 Local:<http://localhost:8000>
 Network: php -S 192.168.2.11:8000 -t public
 
-## Running Seeders - Super Admin id = 1
+## Running Seeders - Super Admin id = 1 - Social Login = Seller
 
 php artisan db:seed --class=UsersTableSeeder
+
+## Create Update Columns From AddColumnsToTable
+
+https://laravel.com/docs/7.x/migrations#columns
+php artisan migrate:rollback -- migrate
 
 ## Comment Flow
 
@@ -104,11 +104,12 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 ## Features
 
 - ✔ Users Authentication
+- ✔ IP Authentication
 - ✔ Email Verification
 - ✔ State Management
 - ✔ Reset Password
 - ✔ Social Login
-- ✔ Validation
+- ✔ Form Validation
 - ✔ Analytics
 - ✔ CRUD
 - [x] File Storage
@@ -123,6 +124,7 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 # https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool
 # -------------- Data Table --------------
 Improve users update <https://quasar.dev/vue-components/popup-edit#QPopupEdit-API>
+Fix user role: user cannot change their own role
 # -------------- Profile.vue --------------
 Improve Files or Picture Upload
 <https://blog.usejournal.com/file-upload-with-laravel-and-vuejs-a70ae85e34a1>

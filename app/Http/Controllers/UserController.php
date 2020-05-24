@@ -13,9 +13,9 @@ use Auth;
 use DB;
 
 /**
- * Tags: UserModule - BitgoModule
+ * Tags: UserModule - AnalyticModule - BitgoModule
  *
- * @for UserController - Profile.vue - Users.vue
+ * @for UserController - Profile.vue - Users.vue - Analytics.vue
  */
 class UserController extends Controller
 {
@@ -54,8 +54,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     { //return $request;
+
+      $analytics = DB::table('analytics');
+
       if ($request->locale) config(['app.locale' => $request->locale]);
-      if ($request->api) {
+      if ($request->api) { // Add User
 
         $this->validate($request, [
             'role' => 'required|string|max:10',
@@ -88,8 +91,18 @@ class UserController extends Controller
         // if($request->form == 'admin')
         return $request['role'].' Created Successfully';
         // return back()->with('status', $request['role'].' Created Successfully');
+      } elseif ($request->analytics) { // Get Users Analytics
+        return $analytics->leftJoin('users', 'users.id', 'analytics.user_id')
+          ->select('users.*', 'analytics.*')->get();
+      } //TagStore: AnalyticModule from Analytics.vue
+
+      try {
+        $analytics->where('user_id', $request->id)
+          ->update(['ip' => $request->ip]); // User Check
+      } catch (\Throwable $th) {
+        //throw $th;
       }
-      
+
       return [
         'appName' => config('app.name'),
         'locale' => app()->getLocale(),
@@ -105,13 +118,13 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, User $user)
-    { //$request->avatar;
+    { //return $user;
       $admins = $user->id == 1 || $user->role == 'Admin'?1:0;
       $sellers = $user->role == 'Seller'?1:0;
       $buyers = $user->role == 'Buyer'?1:0;//TagShow: UserModule
-      if($request->avatar) return $user->new['avatar'];
-      if($admins) return DB::table('users')->get();
-      if($sellers) return DB::table('users')->where('user_id', $user['id'])->get();
+      if ($request->avatar) return $user->new['avatar'];
+      if ($admins) return DB::table('users')->get();
+      if ($sellers) return DB::table('users')->where('user_id', $user['id'])->get();
     }
 
     /**
@@ -134,63 +147,80 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     { //return$request;
-      $analytic = Analytic::where('ip', $request->ip);
-      $put = User::find($id);
-      $check = Auth::validate([
-          'email'    => $put->email,
-          'password' => $request->password
-      ]); $file = $request->file('avatar');
-      if ($request->role) $put->role = $request->role;
-      if ($request->name) $put->name = $request->name;
-      if ($request->email) $put->email = $request->email;
-      if ($request->phone) $put->phone = $request->phone;
-      if ($request->address) $put->address = $request->address;
-      if ($request->city) $put->city = $request->city;
-      if ($request->postal_code) $put->postal_code = $request->postal_code;
-      if ($request->region_code) $put->region_code = $request->region_code;
-      if ($request->country_code) $put->country_code = $request->country_code;
-      // if ($request->ip) $put->ip = $request->ip;
-      if ($request->pwd || $request->update_password) {
-          $this->validate($request, [
-            // 'new_password' => ['required', 'string', 'min:8', 'confirmed'],
-          ]);
-          if ($request->update_password) {
-            $request->new_password = $request->update_password;
-            $check = true;
-          }
-          if (!$check) {
-            return ['success' => 'Current Password Do Not Match Our Record'];
-            // return back()->with('status', 'Current Password Do Not Match Our Record');
-          }
-          if (!$request->new_password || $request->new_password != $request->password_confirmation) {
-            return ['success' => 'Password Confirmation Do Not Match'];
-            // return back()->with('status', 'Password Confirmation Do Not Match');
-          }   $put->password = bcrypt($request->new_password);
-      }   if ($request->hasFile('avatar')) {
-            $FileName = $file->getClientOriginalName();
-            $path = $file->storeAs('images/profile', $id.'jpg');
-            $file->move('images/profile', $id.'jpg');
-            $put->avatar = $path;
-      }//https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/
-      if ($request->get('avatar')) {
-        $avatar = $request->get('avatar');
-        $name = time().'.' . explode('/', explode(':', substr($avatar, 0, strpos($avatar, ';')))[1])[1];
-        \Image::make($avatar)->save(public_path('images/profile/').$name);
-        $put->avatar = 'images/profile/'.$name;
-        // $image= new FileUpload();
-        // $image->image_name = $name;
-        // $image->save();
 
-        // return 'You have successfully uploaded an image';
-      } $put->update();//TagUpdate: UserModule
-      if ($request->ip) return response()->json([
-        'success' => 'Login successfully',
-        'user' => $put
-      ]);
-      return response()->json([
-        'success' => 'Updated successfully',
-        'user' => $put
-      ]);
+      $analytic = Analytic::where('user_id', $request->id);
+
+      if ($id == 'store' && !$analytic->first()) {
+        $analytic = new Analytic;
+        if ($request->ip) $analytic->ip = $request->ip;
+        if ($request->city) $analytic->city = $request->city;
+        if ($request->region) $analytic->region = $request->region;
+        if ($request->country) $analytic->country = $request->country;
+        $analytic->save();//TagUpdate: AnalyticModule from axios.js
+        return response()->json([
+          'success' => 'Welcome'
+        ]); // New users
+      } else $analytic->update([
+        'ip' => $request->ip,
+        'city' => $request->city,
+        'region' => $request->region,
+        'country' => $request->country,
+      ]); // Returning Users
+
+      if ($request->update) {
+        $put = User::find($id);
+        $check = Auth::validate([
+            'email'    => $put->email,
+            'password' => $request->password
+        ]); $file = $request->file('avatar');
+        if ($request->role) $put->role = $request->role;
+        if ($request->name) $put->name = $request->name;
+        if ($request->email) $put->email = $request->email;
+        if ($request->phone) $put->phone = $request->phone;
+        if ($request->address) $put->address = $request->address;
+        if ($request->city) $put->city = $request->city;
+        if ($request->postal_code) $put->postal_code = $request->postal_code;
+        if ($request->region_code) $put->region_code = $request->region_code;
+        if ($request->country_code) $put->country_code = $request->country_code;
+        // if ($request->ip) $put->ip = $request->ip;
+        if ($request->pwd || $request->update_password) {
+            $this->validate($request, [
+              // 'new_password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+            if ($request->update_password) {
+              $request->new_password = $request->update_password;
+              $check = true;
+            }
+            if (!$check) {
+              return ['success' => 'Current Password Do Not Match Our Record'];
+              // return back()->with('status', 'Current Password Do Not Match Our Record');
+            }
+            if (!$request->new_password || $request->new_password != $request->password_confirmation) {
+              return ['success' => 'Password Confirmation Do Not Match'];
+              // return back()->with('status', 'Password Confirmation Do Not Match');
+            }   $put->password = bcrypt($request->new_password);
+        }   if ($request->hasFile('avatar')) {
+              $FileName = $file->getClientOriginalName();
+              $path = $file->storeAs('images/profile', $id.'jpg');
+              $file->move('images/profile', $id.'jpg');
+              $put->avatar = $path;
+        }//https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial/
+        if ($request->get('avatar')) {
+          $avatar = $request->get('avatar');
+          $name = time().'.' . explode('/', explode(':', substr($avatar, 0, strpos($avatar, ';')))[1])[1];
+          \Image::make($avatar)->save(public_path('images/profile/').$name);
+          $put->avatar = 'images/profile/'.$name;
+          // $image= new FileUpload();
+          // $image->image_name = $name;
+          // $image->save();
+
+          // return 'You have successfully uploaded an image';
+        } $put->update();//TagUpdate: UserModule
+        return response()->json([
+          'success' => 'Updated successfully',
+          'user' => $put
+        ]);
+      }
     }
 
     /**
@@ -208,10 +238,10 @@ class UserController extends Controller
           'success' => 'Image Deleted Successfully',
           'user' => $user->first()
         ];
-      }
+      } // Remove Imaeg
       if ($id == 1 || Auth::id() == $id)
         return 'You Cannot Delete Super Admin or Your Own Account';
         //back()->with('status', 'You Cannot Delete Super Admin or Your Own Account');
       else User::destroy($id);return 'User Deleted Successfully';//TagDestroy: UserModule
-    }
+    } // Delete User
 }

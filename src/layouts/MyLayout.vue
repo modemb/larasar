@@ -126,6 +126,15 @@
               <q-item-label>{{$t('users')}}</q-item-label>
               <q-item-label caption>{{user.role}}'s Users</q-item-label>
             </q-item-section>
+          </q-item>
+          <q-item clickable v-if="admins" to='/analytics'>
+            <q-item-section avatar><!-- Admins and Sellers View ====-->
+              <q-icon name="assessment" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{$t('analytics')}}</q-item-label>
+              <q-item-label caption>{{user.role}}'s Analytics</q-item-label>
+            </q-item-section>
           </q-item><!--==============-- Admins and Sellers View End -->
           <q-item clickable :to="{name: 'auth.test'}">
             <q-item-section avatar>
@@ -169,15 +178,12 @@
     <q-footer elevated v-else>
       <q-toolbar><!-- Mobile View -->
         <q-toolbar-title>
-          <!--<q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
-          </q-avatar>
-           Quasar v{{ $q.version }} Mobile View -->
           <div class="q-pa-md q-gutter-sm text-center">
             <q-btn color="primary" text-color="white" glossy unelevated icon="home" to="/" />
             <template v-if="user" class="*q-pa-md">
               <q-btn color="primary" text-color="white" glossy unelevated icon="person" to="/profile" />
-              <q-btn color="primary" text-color="white" glossy unelevated icon="people" to="/users"  v-if="admins" />
+              <q-btn color="primary" text-color="white" glossy unelevated icon="people" to="/users" v-if="admins" />
+              <q-btn color="primary" text-color="white" glossy unelevated icon="assessment" to="/analytics" v-if="admins" />
             </template>
             <template v-else class="*q-pa-md">
               <q-btn color="primary" text-color="white" glossy unelevated icon="vpn_key" to="/login" />
