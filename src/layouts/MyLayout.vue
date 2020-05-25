@@ -118,24 +118,24 @@
               <q-item-label caption>{{user.role}}</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-if="admins" to='/users'>
-            <q-item-section avatar><!-- Admins and Sellers View ====-->
+          <q-item clickable v-if="admins || sellers" to='/users'><!-- Admins and Sellers View ====-->
+            <q-item-section avatar>
               <q-icon name="people" />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{$t('users')}}</q-item-label>
               <q-item-label caption>{{user.role}}'s Users</q-item-label>
             </q-item-section>
-          </q-item>
-          <q-item clickable v-if="admins" to='/analytics'>
-            <q-item-section avatar><!-- Admins and Sellers View ====-->
+          </q-item><!--============================================== Admins and Sellers View End -->
+          <q-item clickable v-if="admins" to='/analytics'><!--======= Admins View ================-->
+            <q-item-section avatar>
               <q-icon name="assessment" />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{$t('analytics')}}</q-item-label>
               <q-item-label caption>{{user.role}}'s Analytics</q-item-label>
             </q-item-section>
-          </q-item><!--==============-- Admins and Sellers View End -->
+          </q-item><!--============================================== Admins View End ============-->
           <q-item clickable :to="{name: 'auth.test'}">
             <q-item-section avatar>
               <q-icon name="check_circle_outline" />
@@ -236,8 +236,11 @@ export default {
       } else return this.user.new.avatar
     },
     admins () {
-      return this.user.id === 1 || this.user.role === 'Admin' || this.user.role === 'Seller'
-    }
+      return this.user.id === 1 || this.user.role === 'Admin'
+    }, // Admins View
+    sellers () {
+      return this.user.role === 'Seller'
+    } // Seller View
   },
   methods: {
     async logout () {

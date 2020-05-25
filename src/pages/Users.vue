@@ -246,31 +246,6 @@ export default {
     }
   },
   methods: {
-    // exportTable () {
-    //   // naive encoding to csv format
-    //   const content = [ this.columns.map(col => wrapCsvValue(col.label)) ].concat(
-    //     this.data.map(row => this.columns.map(col => wrapCsvValue(
-    //       typeof col.field === 'function'
-    //         ? col.field(row)
-    //         : row[col.field === void 0 ? col.name : col.field],
-    //       col.format
-    //     )).join(','))
-    //   ).join('\r\n')
-
-    //   const status = exportFile(
-    //     'table-export.csv',
-    //     content,
-    //     'text/csv'
-    //   )
-
-    //   if (status !== true) {
-    //     this.$q.notify({
-    //       message: 'Browser denied file download...',
-    //       color: 'negative',
-    //       icon: 'warning'
-    //     })
-    //   }
-    // }, // TagExport: UserModule
     add (user) {
       this.$store.dispatch('users/registerAction', {
         auth: this.authGetter,
@@ -295,10 +270,10 @@ export default {
           })
         })
         .catch(error => {
-          this.email_data = error.response.data.errors.email[0] || error.response.data.message
-          this.role_data = error.response.data.errors.role[0] || error.response.data.message
-          this.name_data = error.response.data.errors.name[0] || error.response.data.message
-          this.password_data = error.response.data.errors.password[0] || error.response.data.message
+          try { this.email_data = error.response.data.errors.email[0] || error.response.data.message } catch (e) {}
+          try { this.role_data = error.response.data.errors.role[0] || error.response.data.message } catch (e) {}
+          try { this.name_data = error.response.data.errors.name[0] || error.response.data.message } catch (e) {}
+          try { this.password_data = error.response.data.errors.password[0] || error.response.data.message } catch (e) {}
         })
     },
     async edit (user) {
