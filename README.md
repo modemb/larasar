@@ -1,6 +1,8 @@
 # Quasar App (client) & Laravel Backend (server)
 
-A Laravel + Quasar Framework App
+A Laravel + Quasar Vue Framework App
+
+<https://github.com/modemb/larasar>
 
 ## Install the dependencies
 
@@ -114,7 +116,7 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 
 ## TODO
 
-- [x] File Storage
+- [] File Storage
 - [x] Notification
 - [x] Cron jobs
 - [x] Real Time
