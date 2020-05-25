@@ -154,7 +154,7 @@ class UserController extends Controller
         if ($request->city) $analytic->city = $request->city;
         if ($request->region) $analytic->region = $request->region;
         if ($request->country) $analytic->country = $request->country_name;
-        $analytic->save();//TagUpdate: AnalyticModule from axios.js
+        $analytic->save(); // TagUpdate: AnalyticModule from axios.js
         return response()->json([
           'success' => 'Welcome'
         ]); // New users
@@ -180,7 +180,6 @@ class UserController extends Controller
         if ($request->postal_code) $put->postal_code = $request->postal_code;
         if ($request->region_code) $put->region_code = $request->region_code;
         if ($request->country_code) $put->country_code = $request->country_code;
-        // if ($request->ip) $put->ip = $request->ip;
         if ($request->pwd || $request->update_password) {
             $this->validate($request, [
               // 'new_password' => ['required', 'string', 'min:8', 'confirmed'],

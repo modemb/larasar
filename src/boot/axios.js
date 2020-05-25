@@ -65,9 +65,8 @@ export default async ({ router, store, Vue }) => {
 
   // Users Analytics
   let auth = []; let ip = ''; let format = 'json' // json, jsonp, xml, csv, yaml
-  // let { data } = await axios.get(`http://ip-api.com/${format}/${ip}`)
+  // let { data } = await axios.get(`http://ip-api.com/${format}/${ip}`) let rep = data
   let { data } = await axios.get(`https://ipapi.co/${ip}/${format}/`); let rep = data
-  // console.log('API call')
 
   // Authenticated Router
   router.beforeEach(async (to, from, next) => {
@@ -82,7 +81,7 @@ export default async ({ router, store, Vue }) => {
     } else { // Unauthenticated Route
       next(!to.meta.auth & !to.meta.verify || { path: '/login' })
       if (rep) store.dispatch('users/updateAction', { ...rep, ...{ id: 'store' } }); rep = null
-    } // console.log(auth) //TagBoot: AnalyticModule
+    } // TagBoot: AnalyticModule
   })
 }
 
