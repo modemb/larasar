@@ -103,14 +103,17 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 
 ## Features
 
-✔ Users Authentication by Role
-✔ Email Verification
-✔ State Management
-✔ Reset Password
-✔ Social Login
-✔ Form Validation
-✔ Users Analytics
-✔ CRUD
+- [x] Users Authentication by Role
+- [x] Email Verification
+- [x] State Management
+- [x] Reset Password
+- [x] Social Login
+- [x] Form Validation
+- [x] Users Analytics
+- [x] CRUD
+
+## TODO
+
 - [x] File Storage
 - [x] Notification
 - [x] Cron jobs
