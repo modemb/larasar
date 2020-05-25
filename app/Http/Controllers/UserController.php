@@ -79,7 +79,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ]); //TagStore: UserModule
+        ]); Analytic::create(['user_id' => $user->id]); // User Analytic//TagStore: UserModule
 
         $content_role = [
             'title'=> 'The '.$request->auth['role'].' Added You As '.$request['role'],
@@ -148,23 +148,21 @@ class UserController extends Controller
     public function update(Request $request, $id)
     { //return$request;
 
-      $analytic = Analytic::where('user_id', $request->id);
-
-      if ($id == 'store' && !$analytic->first()) {
+      if ($id == 'store' && !Analytic::where('ip', $request->ip)) {
         $analytic = new Analytic;
         if ($request->ip) $analytic->ip = $request->ip;
         if ($request->city) $analytic->city = $request->city;
         if ($request->region) $analytic->region = $request->region;
-        if ($request->country) $analytic->country = $request->country;
+        if ($request->country) $analytic->country = $request->country_name;
         $analytic->save();//TagUpdate: AnalyticModule from axios.js
         return response()->json([
           'success' => 'Welcome'
         ]); // New users
-      } else $analytic->update([
+      } else Analytic::where('user_id', $request->id)->update([
         'ip' => $request->ip,
         'city' => $request->city,
         'region' => $request->region,
-        'country' => $request->country,
+        'country' => $request->country_name,
       ]); // Returning Users
 
       if ($request->update) {
