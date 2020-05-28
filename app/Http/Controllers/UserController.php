@@ -53,7 +53,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { //return $request;
+    { //return $request->ip;
 
       $analytics = DB::table('analytics');
 
@@ -97,8 +97,8 @@ class UserController extends Controller
       } //TagStore: AnalyticModule from Analytics.vue
 
       try {
-        if ($request->ip) $analytics->where('user_id', $request->id)
-          ->update(['ip' => $request->ip]); // AuthAction
+        if ($request->ip  && $request->id) $analytics->where('user_id', $request->id)
+          ->update(['ip' => $request->ip]); // AuthAction Check
       } catch (\Throwable $th) {
         //throw $th;
       }
@@ -146,9 +146,9 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { //return$request;
+    { //return$request->id;
 
-      if ($id == 'store' && !Analytic::where('ip', $request->ip)) {
+      if ($id == 'store' && !Analytic::where('ip', $request->ip)->first()) {
         $analytic = new Analytic;
         if ($request->ip) $analytic->ip = $request->ip;
         if ($request->city) $analytic->city = $request->city;
@@ -158,7 +158,7 @@ class UserController extends Controller
         return response()->json([
           'success' => 'Welcome'
         ]); // New users
-      } else Analytic::where('user_id', $request->id)->update([
+      } elseif ($request->id > 0) Analytic::where('user_id', $request->id)->update([
         'ip' => $request->ip,
         'city' => $request->city,
         'region' => $request->region,

@@ -182,7 +182,7 @@
             <q-btn color="primary" text-color="white" glossy unelevated icon="home" to="/" />
             <template v-if="user" class="*q-pa-md">
               <q-btn color="primary" text-color="white" glossy unelevated icon="person" to="/profile" />
-              <q-btn color="primary" text-color="white" glossy unelevated icon="people" to="/users" v-if="admins" />
+              <q-btn color="primary" text-color="white" glossy unelevated icon="people" to="/users" v-if="admins|| sellers" />
               <q-btn color="primary" text-color="white" glossy unelevated icon="assessment" to="/analytics" v-if="admins" />
             </template>
             <template v-else class="*q-pa-md">
@@ -217,9 +217,9 @@ export default {
   data () {
     return {
       desktop: this.$q.platform.is.desktop,
+      authDrawer: true,
       leftDrawerOpen: false, // this.$q.platform.is.desktop,
       rightDrawer: false,
-      authDrawer: true,
       url: url
     }
   },
@@ -235,12 +235,15 @@ export default {
         else return this.user.avatar
       } else return this.user.new.avatar
     },
-    admins () {
+    admins () { // ================ Users Roles ============== \\
       return this.user.id === 1 || this.user.role === 'Admin'
     }, // Admins View
     sellers () {
       return this.user.role === 'Seller'
     } // Seller View
+  }, // ========================== Users Role End ============ \\
+  mounted () {
+    if (this.user) this.authDrawer = this.user ? 0 : 1
   },
   methods: {
     async logout () {

@@ -105,10 +105,10 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 
 ## Features
 
-- [x] Users Authentication by Role
+- [x] Users Authentication by Roles
 - [x] Email Verification
 - [x] State Management
-- [x] Reset Password
+- [x] Password Reset 
 - [x] Social Login
 - [x] Form Validation
 - [x] Users Analytics
@@ -116,7 +116,7 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 
 ## TODO
 
-- [] File Storage
+- [x] File Storage
 - [x] Notification
 - [x] Cron jobs
 - [x] Real Time
