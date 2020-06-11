@@ -146,18 +146,20 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { //return$request->id;
+    { //return;
 
-      if ($id == 'store' && !Analytic::where('ip', $request->ip)->first()) {
+      $Analytic = Analytic::where('ip', $request->ip)->first();
+
+      if ($id == 'store' && !$Analytic) {
         $analytic = new Analytic;
         if ($request->ip) $analytic->ip = $request->ip;
         if ($request->city) $analytic->city = $request->city;
         if ($request->region) $analytic->region = $request->region;
         if ($request->country) $analytic->country = $request->country_name;
-        $analytic->save(); // TagUpdate: AnalyticModule from axios.js
+        $analytic->save();// New users
         return response()->json([
           'success' => 'Welcome'
-        ]); // New users
+        ]); // TagUpdate: AnalyticModule from axios.js
       } elseif ($request->id > 0) Analytic::where('user_id', $request->id)->update([
         'ip' => $request->ip,
         'city' => $request->city,

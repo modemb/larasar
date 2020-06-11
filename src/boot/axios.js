@@ -68,9 +68,9 @@ export default async ({ router, store, Vue }) => {
   // let { data } = await axios.get(`http://ip-api.com/${format}/${ip}`) let rep = data
   let { data } = await axios.get(`https://ipapi.co/${ip}/${format}/`); let rep = data
 
-  // Authenticated Router
+  // Authentication
   router.beforeEach(async (to, from, next) => {
-    if (store.getters['users/tokenGetter']) {
+    if (store.getters['users/tokenGetter']) { // Authenticated Router
       auth = await store.dispatch('users/authAction').catch(() => {
         store.commit('users/logoutMutation')
       }) // Auth Check

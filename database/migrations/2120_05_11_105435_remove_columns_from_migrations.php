@@ -13,10 +13,10 @@ class RemoveColumnsFromMigrations extends Migration
     public function up()
     {
         DB::table('migrations')
-          ->where('migration', '2020_05_10_213215_add_columns_to_table')
+          ->where('migration', '2120_05_10_213215_add_columns_to_table')
           ->delete();
         DB::table('migrations')
-          ->where('migration', '2020_05_13_195110_delete_columns_from_migrations')
+          ->where('migration', '2120_05_13_195110_delete_columns_from_migrations')
           ->delete();
     }
 }

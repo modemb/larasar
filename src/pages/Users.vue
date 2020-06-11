@@ -323,7 +323,7 @@ export default {
             })
           })
           this.$q.notify({
-            color: 'positive',
+            color: 'negative',
             position: 'top',
             message: response,
             icon: 'check'
