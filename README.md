@@ -45,7 +45,7 @@ npm run lint
 ### Miscellaneous
 
 ```bash
-quasar create quapp
+quasar create qupdate
 npm update && quasar dev
 npm update && quasar build -m pwa && quasar dev
 ```
@@ -108,6 +108,7 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 - [x] Users Authentication by Roles
 - [x] Email Verification
 - [x] State Management
+- [x] Live Migration
 - [x] Password Reset 
 - [x] Social Login
 - [x] Form Validation
