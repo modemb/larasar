@@ -108,7 +108,6 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 - [x] Users Authentication by Roles
 - [x] Email Verification
 - [x] State Management
-- [x] Live Migration
 - [x] Password Reset 
 - [x] Social Login
 - [x] Form Validation
