@@ -48,12 +48,6 @@ import qboot_Bootaxios from 'boot/axios'
 
 
 
-Vue.config.devtools = true
-Vue.config.productionTip = false
-
-
-
-console.info('[Quasar] Running SPA.')
 
 
 
@@ -113,11 +107,18 @@ async function start () {
     
 
     
-      new Vue(app)
-    
 
     
 
+    
+      let vApp = null
+      window.QBexInit = function (shell) {
+        shell.connect(bridge => {
+          window.QBexBridge = bridge
+          Vue.prototype.$q.bex = window.QBexBridge
+          vApp = new Vue(app)
+        })
+      }
     
 
   

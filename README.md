@@ -30,6 +30,7 @@ php artisan serve
 quasar dev
 quasar dev -m ssr
 quasar dev -m pwa
+quasar dev -m bex
 quasar dev -m android|ios
 quasar dev -m electron
 quasar dev -m ios -- some params --and options --here
@@ -45,7 +46,8 @@ npm run lint
 ### Miscellaneous
 
 ```bash
-quasar create qupdate
+php artisan make:model Example -mcr
+quasar create quapp
 npm update && quasar dev
 npm update && quasar build -m pwa && quasar dev
 ```
@@ -56,6 +58,7 @@ npm update && quasar build -m pwa && quasar dev
 quasar build
 quasar build -m ssr
 quasar build -m pwa
+quasar build -m bex
 quasar build -m android|ios
 quasar build -m electron
 quasar build -m ios -- some params --and options --here
@@ -65,15 +68,6 @@ quasar build -m electron -- --no-sandbox --disable-setuid-sandbox
 ### Publishing to Store
 
 <https://quasar.dev/quasar-cli/developing-cordova-apps/publishing-to-store#Introduction>
-
-## Navigate to the folder that contains keytool.exe or add this folder to your path
-
-## Open a Command Prompt window running as an administrator
-
-```bash
-cd 'E:\Apps\Android\Android Studio\jre\jre\bin'
-keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 20000
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore 'D:\Projects\wamp\www\larasar\dist\cordova\android\apk\release' alias_name
 ```
 
 ### Customize the configuration
@@ -93,6 +87,7 @@ Network: php -S 192.168.2.11:8000 -t public
 ## Running Seeders - Super Admin id = 1 - Social Login = Seller
 
 php artisan db:seed --class=UsersTableSeeder
+TRUNCATE TABLE users;
 
 ## Create Update Columns From AddColumnsToTable
 
