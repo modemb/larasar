@@ -1,6 +1,9 @@
 export default {
   locale: '',
   locales: '',
-  services: null,
-  appName: null
+  laravel: null,
+  ipDebug: null,
+  appName: null,
+  sanctumApi: false,
+  vapidPublicKey: null
 }

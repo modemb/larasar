@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="login.blade.php" server="home682217311.1and1-data.host/larasar/" local="132297849060086791" remote="132313831370000000" Dst="2" />
-<file name="register.blade.php" server="home682217311.1and1-data.host/larasar/" local="132297849060116784" remote="132313831380000000" Dst="2" />
-<file name="verify.blade.php" server="home682217311.1and1-data.host/larasar/" local="132297849060126789" remote="132313831380000000" Dst="2" />
+<file name="confirm-password.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132723566206593508" remote="132891910600000000" Dst="1" />
+<file name="forgot-password.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132601738145661237" remote="132891910600000000" Dst="1" />
+<file name="login.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132723566206603532" remote="132891910610000000" Dst="1" />
+<file name="register.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132723566206613522" remote="132891910610000000" Dst="1" />
+<file name="reset-password.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132601738145691254" remote="132891910610000000" Dst="1" />
+<file name="two-factor-challenge.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132723566206613522" remote="132891910610000000" Dst="1" />
+<file name="verify-email.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132723566206623511" remote="132891910610000000" Dst="1" />
 </dwsync>

@@ -18,15 +18,6 @@
     <!-- Header End -->
 
     <!-- Drawer -->
-    <!-- <q-drawer
-      v-model="leftDrawerOpen"
-      side="right"
-      behavior="mobile"
-      bordered
-      content-class="bg-grey-2"
-    >
-    </q-drawer> -->
-
     <q-drawer
       show-if-above
       v-model="rightDrawer"

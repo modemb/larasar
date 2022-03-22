@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="home.blade.php" server="home682217311.1and1-data.host/larasar/" local="132297849060146786" remote="132313831400000000" Dst="2" />
-<file name="index.blade.php" server="home682217311.1and1-data.host/larasar/" local="132297849060156784" remote="132313831400000000" Dst="2" />
-<file name="welcome.blade.php" server="home682217311.1and1-data.host/larasar/" local="132297849060196784" remote="132313831420000000" Dst="2" />
-<file name="weather_dashboard.blade.php" server="home682217311.1and1-data.host/larasar/" local="132348037528492478" remote="132348065180000000" Dst="2" />
+<file name="app.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132889929975252022" remote="132891910600000000" Dst="1" />
+<file name="dashboard.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132601738145961299" remote="132891910630000000" Dst="1" />
+<file name="index.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132723566206654237" remote="132891910640000000" Dst="1" />
+<file name="navigation-dropdown.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132596647585862722" remote="132891910660000000" Dst="1" />
+<file name="weather_dashboard.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132882937919013665" remote="132891910790000000" Dst="1" />
+<file name="welcome.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132601738147596765" remote="132891910790000000" Dst="1" />
+<file name="navigation-menu.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132723566206673491" remote="132891910660000000" Dst="1" />
+<file name="policy.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132723566206683519" remote="132891910680000000" Dst="1" />
+<file name="terms.blade.php" server="home682217311.1and1-data.host//suguffie/" local="132723566206743536" remote="132891910720000000" Dst="1" />
 </dwsync>

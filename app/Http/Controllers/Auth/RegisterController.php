@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use App\User;
-use App\Analytic;
+use Log;
+use App\Models\Team;
+use App\Models\User;
+use App\Models\Analytic;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -24,14 +27,14 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    // use RegistersUsers;
 
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    // protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -44,36 +47,36 @@ class RegisterController extends Controller
     }
 
     /**
-     * The user has been registered.
+     * Handle an incoming registration request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
-    protected function registered(Request $request, User $user)
+    public function register(Request $request)
     {
-        Analytic::create(['user_id' => $user->id]); // User Analytic
+        $emailExist = User::onlyTrashed()->whereNotNull('deleted')
+          ->where('email', $request['email'])
+          ->first();
+        $this->userDeleted = $emailExist?$emailExist:
+          User::onlyTrashed()->whereNotNull('deleted')->first();
 
-        $user = User::find(1);if($user['role'] != 'Super Admin')
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => $emailExist?'':['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $user = $this->create($request);
+
+        Log::emergency('$user '.$user);
+
+        if($user->id==1&$user['role'] != 'Super Admin')
         $user->update(['role' => 'Super Admin']); // Super Admin Role
 
-        return response()->json($user->name.' Registered Successfully');
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        if(isset($data['locale']))config(['app.locale' =>  $data['locale']]);
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        return response()->json('Registered Successfully');
     }
 
     /**
@@ -82,12 +85,59 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data)
+    protected function create($request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $user_name = strtolower($request['first_name'].$request['last_name']); do {
+          $user = User::where('name', $user_name)->first();
+          if ($user) {
+            $id = DB::table('users')->count();
+            $id = rand(1, $id);
+            $user_name = $user_name.$id;
+          } $user_name;
+        } while ($user); $this->userData = [
+          'status' => 'Registration lr',
+          'name' => $user_name,
+          'first_name' => $request['first_name'],
+          'last_name' => $request['last_name'],
+          'email' => $request['email'],
+          'password' => Hash::make($request['password']),
+
+          'gain' => 500,
+
+          'deleted' => null,
+          'email_verified_at' => null,
+          'role' => 'User',
+        ];
+
+        if ($this->userDeleted) {
+          $this->userDeleted->restore();
+          $this->userDeleted->update($this->userData);
+          $teamTrashed = Team::onlyTrashed()->first();
+          if ($teamTrashed) {
+            $teamTrashed->restore();
+            $teamTrashed->update(['user_id' => $this->userDeleted->id]);
+          } else $this->createTeam($this->userDeleted); return $this->userDeleted;
+        } // TagStore: UserModule
+
+        return DB::transaction(function () use ($request) {
+            return tap(User::create($this->userData), function (User $user) {
+                $this->createTeam($user);
+            });
+        });
+    }
+
+    /**
+     * Create a personal team for the user.
+     *
+     * @param  \App\Models\User  $user
+     * @return void
+     */
+    protected function createTeam(User $user)
+    {
+        $user->ownedTeams()->save(Team::forceCreate([
+            'user_id' => $user->id,
+            'name' => $user->first_name."'s Team",
+            'personal_team' => true,
+        ]));
     }
 }

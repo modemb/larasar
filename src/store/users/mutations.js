@@ -1,12 +1,9 @@
-import { Cookies, LocalStorage } from 'quasar'
+import { Cookies } from 'quasar'
 
-export function loginMutation (state, data) {
-  state.token = data.access_token
-  if (state.cookie) Cookies.set('token', data.access_token, { expires: data.remember ? data.expires_in : null })
-  else LocalStorage.set('token', data.access_token, { expires: data.remember ? data.expires_in : null })
-  // localStorage.setItem('token', data.access_token, { expires: data.expires_in ? 365 : null })
-  // Redirect home.
-  this.$router.push({ name: 'index' })
+export function loginMutation (state, payload) {
+  state.token = payload.access_token || false
+  if (state.token) Cookies.set('token', state.token, { expires: payload.remember ? payload.expires_in : null })
+  return this.$router.push({ name: 'index' })
 }
 
 export function authMutation (state, { user }) {
@@ -17,12 +14,21 @@ export function usersMutation (state, { users }) {
   state.users = users
 }
 
+export function rolesMutation (state, { roles }) {
+  state.roles = roles
+}
+
+export function analyticsMutation (state, { analytics }) {
+  state.analytics = analytics
+}
+
+export function locationMutation (state, { location }) {
+  Cookies.set('location', location, { expires: 365 })
+  state.location = location
+}
+
 export function logoutMutation (state) {
-  state.user = null
-  state.token = null
-  if (state.cookie) Cookies.remove('token')
-  else LocalStorage.remove('token')
-  // localStorage.removeItem('token')
-  // Redirect to login.
-  this.$router.push({ name: 'public.login' })
+  state.user = null; state.token = null
+  Cookies.remove('token')
+  this.$router.push({ path: '/login' })
 }

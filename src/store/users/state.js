@@ -1,9 +1,10 @@
-import { Cookies, LocalStorage } from 'quasar'
-import { cookie } from 'boot/axios'
+import { Cookies } from 'quasar'
 
 export default {
   user: null,
   users: [],
-  token: cookie ? Cookies.get('token') : LocalStorage.getItem('token'),
-  cookie
+  roles: [],
+  analytics: [],
+  token: Cookies.get('token'),//||Cookies.get('XSRF-TOKEN'),
+  location: null
 }

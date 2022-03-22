@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="api.php" server="home682217311.1and1-data.host/larasar/" local="132348037528522486" remote="132348065190000000" Dst="2" />
-<file name="channels.php" server="home682217311.1and1-data.host/larasar/" local="132297849060226786" remote="132304288430000000" Dst="2" />
-<file name="console.php" server="home682217311.1and1-data.host/larasar/" local="132297849060226786" remote="132304288430000000" Dst="2" />
-<file name="web.php" server="home682217311.1and1-data.host/larasar/" local="132332055843988626" remote="132348065190000000" Dst="2" />
+<file name="api.php" server="home682217311.1and1-data.host//suguffie/" local="132921633657180267" remote="132921932050000000" Dst="2" />
+<file name="channels.php" server="home682217311.1and1-data.host//suguffie/" local="132890015745515742" remote="132921932060000000" Dst="2" />
+<file name="console.php" server="home682217311.1and1-data.host//suguffie/" local="132888205420474447" remote="132921932060000000" Dst="2" />
+<file name="web.php" server="home682217311.1and1-data.host//suguffie/" local="132921633628013556" remote="132921932060000000" Dst="2" />
+<file name="spa.php" server="home682217311.1and1-data.host//suguffie/" local="132634196517228492" remote="132921932060000000" Dst="2" />
+<file name="auth.php" server="home682217311.1and1-data.host//suguffie/" local="132921633748140206" remote="132921932050000000" Dst="2" />
 </dwsync>

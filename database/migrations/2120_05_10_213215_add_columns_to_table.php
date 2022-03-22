@@ -4,30 +4,28 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnsToTable extends Migration
+return new class extends Migration
 {
     /**
-     * Create Update Columns.
-     * https://laravel.com/docs/7.x/migrations#columns
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->table = 'categories'; // Table
-    }
-
-    /**
-     * Run the migrations.
-     * php artisan migrate:rollback --step=5 -- migrate
+     * Add table and columns accordingly
+     * Run the migrations: php artisan migrate
      * @return void
      */
     public function up()
     {
-        Schema::table($this->table, function (Blueprint $table) {
-            // $table->bigInteger('user_id')->default(0)->after('id'); // Example
-            $table->dropColumn([
-            // 'user_id', // Example
-            ]);
-        });
+      Schema::table('posts', function (Blueprint $table) {
+          $table->dropColumn([ // 'user_id', // Example
+              // 'post_title',
+              // 'phone',
+              // 'address',
+              // 'postal_code',
+              // 'description'
+          ]); // $table->bigInteger('user_id')->default(0)->after('id'); // Example
+          // $table->decimal('amount', 8, 2)->default(0)->after('payment');
+          // $table->dateTime('sale_date')->nullable()->after('pics');
+          // $table->foreignId('message_id')->nullable()->after('user_id');
+          // $table->string('link')->nullable()->after('name');
+          // $table->string('name')->nullable()->after('id');
+      });
     }
-}
+};

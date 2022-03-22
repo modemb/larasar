@@ -47,7 +47,7 @@ class ResetPasswordController extends Controller
      */
     public function reset(Request $request)
     {
-        config(['app.locale' => $request->locale]);
+        // config(['app.locale' => $request->locale]);
         $request->validate($this->rules(), $this->validationErrorMessages());
 
         // Here we will attempt to reset the user's password. If it is successful we

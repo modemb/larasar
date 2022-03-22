@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="AppServiceProvider.php" server="home682217311.1and1-data.host/larasar/" local="132348092675384179" remote="132348268880000000" Dst="2" />
-<file name="AuthServiceProvider.php" server="home682217311.1and1-data.host/larasar/" local="132297849057381623" remote="132304288220000000" Dst="2" />
-<file name="BroadcastServiceProvider.php" server="home682217311.1and1-data.host/larasar/" local="132297849057381623" remote="132304288220000000" Dst="2" />
-<file name="EventServiceProvider.php" server="home682217311.1and1-data.host/larasar/" local="132297849057391620" remote="132304288220000000" Dst="2" />
-<file name="RouteServiceProvider.php" server="home682217311.1and1-data.host/larasar/" local="132297849057481620" remote="132304288220000000" Dst="2" />
+<file name="AppServiceProvider.php" server="home682217311.1and1-data.host//suguffie/" local="132922491080396960" remote="132922669410000000" Dst="2" />
+<file name="AuthServiceProvider.php" server="home682217311.1and1-data.host//suguffie/" local="132922491080406673" remote="132922669410000000" Dst="2" />
+<file name="BroadcastServiceProvider.php" server="home682217311.1and1-data.host//suguffie/" local="132919087736231910" remote="132922669410000000" Dst="2" />
+<file name="EventServiceProvider.php" server="home682217311.1and1-data.host//suguffie/" local="132922491080416609" remote="132922669410000000" Dst="2" />
+<file name="FortifyServiceProvider.php" server="home682217311.1and1-data.host//suguffie/" local="132922491080426622" remote="132922669420000000" Dst="2" />
+<file name="JetstreamServiceProvider.php" server="home682217311.1and1-data.host//suguffie/" local="132922491080436620" remote="132922669420000000" Dst="2" />
+<file name="RouteServiceProvider.php" server="home682217311.1and1-data.host//suguffie/" local="132922491080456628" remote="132922669420000000" Dst="2" />
 </dwsync>

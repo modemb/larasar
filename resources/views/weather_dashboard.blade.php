@@ -198,7 +198,7 @@
             var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60 // Current UTC date/time expressed as seconds since midnight, January 1, 1970 UTC
             var apikey = '{{ env('MAP_API_KEY') }}'
             var apicall = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + loc + '&timestamp=' + timestamp + '&key=' + apikey
-            var xhr = new XMLHttpRequest() // create new XMLHttpRequest2 object
+            var xhr = new XMLHttpRequest() // create new XMLHttpRequest object
             xhr.open('GET', apicall) // open GET request
             xhr.onload = () => {
                 if (xhr.status === 200){ // if Ajax request successful

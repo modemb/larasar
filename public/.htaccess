@@ -5,10 +5,16 @@
 
     RewriteEngine On
 
+    #Production Server
     # RewriteBase /
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # RewriteCond %{HTTP_HOST} ^www\.
+    # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 
     #Local Server
-    RewriteBase /larasar/public
+    RewriteBase /www/larasar/public
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
@@ -19,7 +25,7 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Handle Front Controller...
+    # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]

@@ -1,6 +1,8 @@
 <?php
-
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,48 +15,54 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-if(env('MUST_VERIFY_EMAIL')){
-  $verified = 'verified';
-  $verify = ['verify' => true];
-} else $verify = $verified = [];
+if (env('JETSTREAM_FRONTEND')) { // Inertia/Livewire Demo
 
-Auth::routes($verify);
+  Route::get('/', function () {
+    $data = [
+      'canLogin' => Route::has('login'),
+      'canRegister' => Route::has('register'),
+      'laravelVersion' => Application::VERSION,
+      'phpVersion' => PHP_VERSION,
+    ];if (env('LIVEWIRE')) return view('welcome', $data);
+    else return Inertia::render('Welcome', $data);
+  });
 
-Route::get('/home', 'HomeController@index')
-  // ->middleware($verified)
-  ->name('home');
+  Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+      if (env('LIVEWIRE')) return view('dashboard');
+      else return Inertia::render('Dashboard');
+  })->name('dashboard');
 
-Route::group(['middleware' => 'guest'], function () {
-  Route::any('/login', function () {
-    return view('index');
+} elseif (env('SANCTUM_API')) Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+  // return $request->user(); // return $request->user()->with('analytics');
+  return array_merge($request->user()->toArray(), $request->user()->analytics->toArray());
+}); // env('SANCTUM_API') - config('sanctumApi')
+
+Route::middleware(['guest'])->group(function () { // Suguffiè Application
+
+  Route::get('/login', function () {
+      return view('index');
   });
 
   Route::get('/register', function () {
-    return view('index');
+      return view('index');
   });
 
-  Route::get('api/password/reset', function () {
+});
+
+Route::get('/email/verify', function () {
     return view('index');
-  });
-
-  Route::get('/password/reset/{token}', function () {
-    return view('index');
-  });
 });
 
-Route::get('api/email/verify/{id}/{hash}', function () {
-  return view('index');
-});
+// ==================================================================================
 
-Route::get('email/verify/{id}/{hash}', function () {
-  return view('index');
-});
-
-// Route::get('email/verify', function () {
-//   return view('index');
-// });//ToFixVerifyLink
+// Manifest file (optional if VAPID is used)
+// Route::get('manifest.json', function () {
+//   return [
+//       'name' => config('app.name'),
+//       'gcm_sender_id' => config('webpush.gcm.sender_id'),
+//   ];
+// });
 
 Route::get('{path}', function () {
-  // return view('welcome');
-  return view('index');
-})->where('path', '.*')->middleware($verified);
+    return view('index');
+})->where('path', '.*');

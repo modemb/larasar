@@ -1,19 +1,12 @@
-import { Notify, LocalStorage, Cookies } from 'quasar'
-import { axiosInstance, cookie } from 'boot/axios'
-import { i18n } from 'boot/i18n'
+import { Cookies } from 'quasar'
+import { i18n, api, notifyAction } from 'boot/axios'
+// import { i18n } from 'boot/i18n'
 
-export function configAction ({ commit }, locale) {
-  cookie ? Cookies.set('locale', locale, { expires: 365 }) : LocalStorage.set('locale', locale, { expires: 365 })
-  i18n.locale = locale
-  axiosInstance.post('api/users', { locale: locale }).then((response) => {
+export function configAction ({ commit }, payload) {
+  i18n.global.locale = payload.locale
+  Cookies.set('locale', payload.locale, { expires: 365 })
+  api.post('api/users', payload).then(response => {
     const config = response.data
-    commit('configMutation', { config, locale })
-  }).catch(error => {
-    Notify.create({
-      color: 'negative',
-      position: 'top',
-      message: 'configAction' + error,
-      icon: 'report_problem'
-    })
-  })
+    commit('configMutation', { config, payload })
+  }).catch(e => notifyAction({error: 'configAction', e}))
 }

@@ -1,7 +1,18 @@
 <?php
-
-use Illuminate\Http\Request;
+// use App\Http\Controllers\Auth\ForgotPasswordController;
+// use App\Http\Controllers\Auth\ResetPasswordController;
+// use App\Http\Controllers\Auth\VerificationController;//EmailVerificationNotificationController
+use App\Http\Controllers\Auth\PushSubscriptionController;
+use App\Http\Controllers\Auth\NotificationController;
+use App\Http\Controllers\Auth\BroadcastController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,26 +25,51 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/test', function () {
+  return env('SANCTUM_API').' - '.config('sanctumApi');
+});
+
+Route::post('/tokens/create', function (Request $request) {
+  // return 'jjjj';
+  $token = $request->user()->createToken($request->token_name);
+
+  return $token->plainTextToken;
+  return ['token' => $token->plainTextToken];
+});// https://laravel.com/docs/9.x/sanctum#issuing-api-tokens
+
 Route::apiResources([
-  'users' => 'UserController'
+  'users' => UserController::class,
+  'pages' => PageController::class,
+  'messages' => MessageController::class,
+  'categories' => CategoryController::class,
+  'notifications' => NotificationController::class, // Notifications
+  // 'subscriptions' => PushSubscriptionController::class // Push Subscriptions
 ]);
 
-Route::group(['middleware' => 'auth:api'], function () {
-    Route::post('logout', 'Auth\LoginController@logout');
-    Route::post('email/resend', 'Auth\VerificationController@resend');
-    Route::post('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
-    Route::get('/user', function (Request $request) {
-        return array_merge($request->user()->toArray(), $request->user()->analytics->toArray());
+// Push Subscriptions
+Route::post('subscriptions', [PushSubscriptionController::class, 'update']);
+Route::post('subscriptions/delete', [PushSubscriptionController::class, 'destroy']);
+
+// Illuminate\Broadcasting\BroadcastController@authenticate
+Route::post('/broadcasting/auth', [BroadcastController::class, 'authenticate']);
+
+// if (!env('SANCTUM_API')) // env('SANCTUM_API') - config('sanctumApi')
+Route::middleware(['auth:api'])->group(function () {
+    Route::post('logout', [LoginController::class, 'logout']);
+    // Route::post('email/resend', [VerificationController::class, 'resend']); env('SANCTUM_API')??
+    // Route::post('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+    Route::get('/user', function (Request $request) { // Disable Email Verify Route In Sanctum ^^^
+      return array_merge($request->user()->toArray(), $request->user()->analytics->toArray());
     });
 });
 
-Route::group(['middleware' => 'guest:api'], function () {
-    Route::post('login', 'Auth\LoginController@login');
-    Route::post('register', 'Auth\RegisterController@register');
+Route::middleware(['guest:api'])->group(function () {
+    Route::post('login', [LoginController::class, 'loginApi']);
+    Route::post('register', [RegisterController::class, 'register']);
 
-    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
-    Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
+    // Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+    // Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
 
-    Route::post('login/{driver}', 'Auth\LoginController@redirectToProvider');
-    Route::get('login/{driver}/callback', 'Auth\LoginController@handleProviderCallback')->name('oauth.callback');
+    Route::post('login/{driver}', [LoginController::class, 'redirect']);
+    Route::get('login/{driver}/callback', [LoginController::class, 'callback'])->name('oauth.callback');
 });

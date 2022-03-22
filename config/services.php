@@ -40,12 +40,18 @@ return [
     ],
     'facebook' => [
       'client_id' => env('FACEBOOK_CLIENT_ID'),
-      'client_secret' => env('FACEBOOK_CLIENT_SECRET')
+      'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+      // 'redirect' => env('API_URL').'/api/login/facebook/callback'
     ],
     'google' => [
       'client_id' => env('GOOGLE_CLIENT_ID'),
       'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-      // 'redirect' => env('APP_URL').'api/login/google/callback'
+      // 'redirect' => env('API_URL').'/api/login/google/callback'
+    ],
+    'twitter' => [
+      'client_id' => env('TWITTER_CLIENT_ID'),
+      'client_secret' => env('TWITTER_CLIENT_SECRET'),
+      // 'redirect' => env('API_URL').'/api/login/twitter/callback'
     ],
     'twilio' => [
       'token'  => env('TWILIO_TOKEN'),
@@ -57,5 +63,24 @@ return [
       'token' => env('BITGO_TOKEN'),
       'host'  => env('BITGO_HOST'),
       'port'  => env('BITGO_PORT'),
+    ],
+    'stripe' => [
+        'model' => App\Models\User::class,
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+    ],
+    'paypal' => [//ToBeFixed
+        'clientId' => env('PAYPAL_ID'),
+        'clientSecret' => env('PAYPAL_SECRET'),
+        'AccessToken' => env('PAYPAL_ACCESS'),
+        'WebhookId' => env('WEBHOOK_ID'),
+        // ----------------------------------------- \\
+        'clientSandboxId' => env('PAYPAL_SANDBOX_ID'),
+        'clientSandboxSecret' => env('PAYPAL_SANDBOX_SECRET'),
+        'AccessSandboxToken' => env('PAYPAL_SANDBOX_ACCESS'),
+        'WebhookSandboxId' => env('WEBHOOK_SANDBOX_ID')
+        // 'ApiContext' => env('PAYPAL_ID'),
+        // 'OAuthTokenCredential' => env('PAYPAL_SECRET'),
+        //'redirect' => $app->runningInConsole() ? config('app.url') : url('/') . '/auth/google/callback',
     ],
 ];

@@ -3,12 +3,8 @@
   <meta charset='utf-8'>
   <title>{{ config('app.name') }}</title>
   <script>
-    window.opener.postMessage({
-        token: {
-          access_token: '{{ $token }}',
-          expires_in: '{{ $expires_in }}'
-        }
-    },  '{{$transfer}}'); window.close()
+    window.opener.postMessage(@json(['token' => $token]), "{{ url('/') }}")
+    window.close()
   </script>
 </head>
 <body>

@@ -14,7 +14,8 @@ class BroadcastServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Broadcast::routes();
+        $api = config('sanctumApi')?[]:['middleware' => 'api']; // env('SANCTUM_API') - config('sanctumApi')
+        Broadcast::routes($api);
 
         require base_path('routes/channels.php');
     }

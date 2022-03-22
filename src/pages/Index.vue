@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <div class="text-center">
       <div class="*col-12">
-        <h4 v-if="user">{{$t('you_are_logged_in')}}</h4>
+        <h4 v-if="auth">{{$t('you_are_logged_in')}}</h4>
       </div>
       <div class="*col-12">
         <a  target="_blank" href="https://github.com/modemb/larasar"><i class="fab fa-github fa-3x q-mr-lg"/></a>
@@ -34,17 +34,24 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { useQuasar } from 'quasar'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
-  name: 'PageIndex',
-  computed: mapGetters({
-    user: 'users/authGetter'
-  })
+  setup () {
+    const $q = useQuasar()
+    const $store = useStore()
+
+    return {
+      auth: computed(() => $store.getters['users/authGetter']),
+      height: screen.height/($q.platform.is.mobile?1.8:1.66)
+    }
+  } // The Full Navigation Resolution Flow: https://router.vuejs.org/guide/advanced/navigation-guards.html#the-full-navigation-resolution-flow
 }
 </script>
 
-<style lang="css" scoped>
+<style scoped>
   form {
       display: inline-block;
   }

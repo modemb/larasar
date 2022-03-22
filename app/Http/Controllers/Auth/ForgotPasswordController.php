@@ -39,7 +39,7 @@ class ForgotPasswordController extends Controller
      */
     protected function validateEmail(Request $request)
     {
-        config(['app.locale' => $request->locale]);
+        // config(['app.locale' => $request->locale]);
         $request->validate(['email' => 'required|email']);
     }
 

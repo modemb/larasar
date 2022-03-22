@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class DeleteColumnsFromMigrations extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,4 +19,4 @@ class DeleteColumnsFromMigrations extends Migration
           ->where('migration', '2120_05_11_105435_remove_columns_from_migrations')
           ->delete();
     }
-}
+};

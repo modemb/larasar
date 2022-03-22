@@ -3,57 +3,119 @@
     <!--============ Data Table ========================-->
     <q-table
       :style="'height:' + height + 'px'"
+      class="my-sticky-virtscroll-table"
       ref="table"
       :title="$t('Analytics')"
-      :data="data"
+      :rows="rows"
       :columns="columns"
-      row-key="id"
+      row-key="name"
       virtual-scroll
-      :virtual-scroll-item-size="48"
-      :pagination="pagination"
+      :virtual-scroll-item-size="100/*48*/"
       :rows-per-page-options="[0]"
       :loading="loading"
       :filter="filter"
-      @request="onRequest"
       binary-state-sort
     >
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <q-td key="id" :props="props">{{ props.row.id }}</q-td>
-          <q-td key="ip" :props="props">{{ props.row.ip }}</q-td>
-          <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-          <q-td key="email" :props="props">{{ props.row.email }}</q-td>
-          <q-td key="city" :props="props">{{ props.row.city }}</q-td>
-          <q-td key="region" :props="props">{{ props.row.region }}</q-td>
-          <q-td key="country" :props="props">{{ props.row.country }}</q-td>
-          <q-td key="status" :props="props">{{ props.row.status }}</q-td>
-          <q-td key="role" :props="props">{{ props.row.role }}</q-td>
-          <q-td key="updated_at" :props="props">{{ props.row.updated_at }}</q-td>
-        </q-tr>
-      </template>
-      <template v-slot:top-right>
-        <q-btn
-          color="primary"
-          icon-right="archive"
-          class="q-ma-md"
-          :label="$t('export_to_csv')"
-          no-caps
-          @click="exportTable"
-        /><!-- TagExport: UserModule -->
-        <q-input borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
+    <!--
+      :pagination="pagination"
+      @request="onRequest"
+    -->
+
+      <template v-slot:top-right class="row">
+          <q-btn
+            color="primary"
+            icon-right="archive"
+            class="*q-ma-xs *col-md-1"
+            :label="$t('export_to_csv')"
+            no-caps
+            @click="exportTable"
+          /><!-- TagExport: UserModule -->
+          <q-btn icon="event" color="primary" class="q-ma-xs *col-md-1" :label="JSON.stringify(proxyDate)">
+            <q-popup-proxy @before-show="updateProxy" transition-show="scale" transition-hide="scale">
+              <q-date v-model="proxyDate" :range="range" ><!-- :setToday="!range" -->
+                <div class="row items-center justify-end q-gutter-sm">
+                  <q-btn label="Cancel" color="primary" flat v-close-popup />
+                  <q-toggle v-model="range" label="Range" />
+                  <q-btn label="OK" color="primary" flat @click="save" v-close-popup />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-btn><!-- TagPeriod: PeriodModule -->
+          <q-btn-toggle
+            v-model="period"
+            push
+            glossy class="*q-ma-xs *col-md-3"
+            toggle-color="primary"
+            :options="[
+              {icon: 'fas fa-sync', value: 'today'},
+              {label: 'Day', value: '-1 day'},
+              {label: 'Week', value: '-1 week'},
+              {label: 'Month', value: '-1 month'},
+              {label: 'Year', value: '-1 year'}
+            ]"
+          /><!-- TagPeriod: PeriodModule -->
+          <q-input class="q-ma-xs col-md-3" borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
       </template>
 
-    </q-table>
-    <!--============ Data Table End ====================-->
+      <template v-slot:header="props" v-if="period=='today'">
+        <q-tr :props="props">
+          <q-th auto-width />
+          <q-th
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+          >
+            {{ col.label }}
+          </q-th>
+        </q-tr>
+      </template>
+
+      <template v-slot:body="props" v-if="period=='today'">
+        <q-tr :props="props">
+          <q-td auto-width>
+            <q-btn size="sm" color="accent" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'" />
+          </q-td>
+          <q-td
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+          >
+            {{ col.value }}
+          </q-td>
+        </q-tr>
+        <q-tr v-show="props.expand" :props="props">
+          <q-td colspan="100%">
+            <div class="row text-left" v-for="(session, i) in props.row.sessions" :key="i">
+              <div class="text-h6">
+                <i class="fab fa-chrome"/> {{session.user_agent}} <i class="far fa-clock"/>
+                <!-- <timeago :datetime="new Date(session.last_activity * 1000)" :auto-update="60"/> -->
+                {{timeago(new Date(session.last_activity * 1000))}}
+              </div><!-- ['sessions'] -->
+            </div>
+          </q-td>
+        </q-tr>
+      </template><!-- ExpandingRowModule -->
+
+    </q-table><!--== Data Table End ====================-->
   </div>
 </template>
 
 <script>
-import { exportFile } from 'quasar'
+import { ref, watch, onMounted } from 'vue'
+import { exportFile, useQuasar, date } from 'quasar'
+// import { useStore, mapGetters } from 'vuex'
+import { i18n, timeago, crudAction, notifyAction } from 'boot/axios'
+// import { i18n } from 'boot/i18n'
+
+/**
+ * Tags: PeriodModule - ExpandingRowModule
+ *
+ * @from
+ */
 
 function wrapCsvValue (val, formatFn) {
   let formatted = formatFn !== void 0
@@ -76,14 +138,90 @@ function wrapCsvValue (val, formatFn) {
 }
 
 export default {
-  data () {
+  setup () {
+    const $q = useQuasar()
+    const $t = i18n?.global?.t
+    const timeStamp = Date.now()
+    const formattedString = date.formatDate(timeStamp, 'YYYY/MM/DD')//YYYY-MM-DDTHH:mm:ss.SSSZ
+    const proxyDate = ref(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
+    const period = ref('today')
+    const rows = ref([])
+    const columns = ref([])
+    const loading = ref(false)
+
+    function crud(rowsData) {
+      crudAction(rowsData).then(crud => rows.value = crud)
+        .catch(e => notifyAction({error: 'analyticsAction', e}))
+    } watch(period,  val => !val||onLoad (val))
+
+    function onLoad (period) {
+      crud({
+        url: 'api/users/1',
+        method: 'get',
+        analytics: true,
+        period: period
+      })
+    } onMounted(() => onLoad (period.value))
+
     return {
-      height: screen.height / 1.4,
-      role: null,
-      name: null,
-      email: null,
-      filter: '',
-      rowCount: 10,
+      period,
+      proxyDate, // 'YYYY-MM-DD',
+      height: ref(screen.height / 1.4),
+      filter: ref(''),
+      range: ref(false),
+      loading,
+      timeago,
+      rows,
+
+      save () {
+        period.value = null
+        crud({
+          expandingRow: true,
+          url: 'api/users/1',
+          method: 'get',
+          analytics: true,
+          from: proxyDate.value.from,
+          to: proxyDate.value.to,
+          proxyDate: proxyDate.value
+        })
+      }, // TagPeriod: PeriodModule
+
+      fnum (x) {
+        if (isNaN(x)) return x
+        if (x < 9999) return x
+        if (x < 1000000) return Math.round(x / 1000) + 'K'
+        if (x < 10000000) return (x / 1000000).toFixed(2) + 'M'
+        if (x < 1000000000) return Math.round((x / 1000000)) + 'M'
+        if (x < 1000000000000) return Math.round((x / 1000000000)) + 'B'
+        return '1T+'
+      }, // TagNum: AppModule
+
+      exportTable () {
+        // naive encoding to csv format
+        const content = [columns.value.map(col => wrapCsvValue(col.label))].concat(
+          rows.value.map(row => columns.value.map(col => wrapCsvValue(
+            typeof col.field === 'function'
+              ? col.field(row)
+              : row[ col.field === void 0 ? col.name : col.field ],
+            col.format
+          )).join(','))
+        ).join('\r\n')
+
+        const status = exportFile(
+          'table-export.csv',
+          content,
+          'text/csv'
+        )
+
+        if (status !== true) {
+          $q.notify({
+            message: 'Browser denied file download...',
+            color: 'negative',
+            icon: 'warning'
+          })
+        }
+      }, // TagExport: UserModule
+
       pagination: {
         sortBy: 'asc',
         descending: false,
@@ -91,129 +229,28 @@ export default {
         rowsPerPage: 0,
         rowsNumber: 10
       },
+
       columns: [
         { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
         { name: 'ip', align: 'center', label: 'IP', field: 'ip', sortable: true },
-        { name: 'name', align: 'center', label: this.$t('name'), field: 'name', sortable: true },
-        { name: 'email', align: 'center', label: this.$t('email'), field: 'email', sortable: true },
-        { name: 'city', align: 'center', label: this.$t('city'), field: 'city', sortable: true },
-        { name: 'region', align: 'center', label: this.$t('region'), field: 'region', sortable: true },
-        { name: 'country', align: 'center', label: this.$t('country'), field: 'country', sortable: true },
-        { name: 'status', align: 'center', label: this.$t('status'), field: 'status', sortable: true },
-        { name: 'role', align: 'center', label: this.$t('role'), field: 'role', sortable: true },
-        { name: 'updated_at', align: 'center', label: this.$t('updated_at'), field: 'updated_at', sortable: true }
-      ],
-      data: [],
-      original: []
-    }
-  },
-  mounted () {
-    this.$axios.post('api/users', { analytics: true }).then(res => {
-      this.original = res.data
-    }); this.$refs.table.$refs.virtScroll.scrollTo(5000)
-    // get initial data from server (1st page)
-    this.onRequest({
-      pagination: this.pagination,
-      filter: undefined
-    })
-  },
-  methods: {
-    exportTable () {
-      // naive encoding to csv format
-      const content = [ this.columns.map(col => wrapCsvValue(col.label)) ].concat(
-        this.data.map(row => this.columns.map(col => wrapCsvValue(
-          typeof col.field === 'function'
-            ? col.field(row)
-            : row[col.field === void 0 ? col.name : col.field],
-          col.format
-        )).join(','))
-      ).join('\r\n')
-
-      const status = exportFile(
-        'table-export.csv',
-        content,
-        'text/csv'
-      )
-
-      if (status !== true) {
-        this.$q.notify({
-          message: 'Browser denied file download...',
-          color: 'negative',
-          icon: 'warning'
-        })
-      }
-    }, // TagExport: UserModule
-    onRequest (props) {
-      const { page, rowsPerPage, sortBy, descending } = props.pagination
-      const filter = props.filter
-
-      this.loading = true
-
-      // emulate server
-      setTimeout(() => {
-        // update rowsCount with appropriate value
-        this.pagination.rowsNumber = this.getRowsNumberCount(filter)
-
-        // get all rows if "All" (0) is selected
-        const fetchCount = rowsPerPage === 0 ? this.pagination.rowsNumber : rowsPerPage
-
-        // calculate starting row of data
-        const startRow = (page - 1) * rowsPerPage
-
-        // fetch data from "server"
-        const returnedData = this.fetchFromServer(startRow, fetchCount, filter, sortBy, descending)
-
-        // clear out existing data and add new
-        this.data.splice(0, this.data.length, ...returnedData)
-
-        // don't forget to update local pagination object
-        this.pagination.page = page
-        this.pagination.rowsPerPage = rowsPerPage
-        this.pagination.sortBy = sortBy
-        this.pagination.descending = descending
-
-        // ...and turn of loading indicator
-        this.loading = false
-      }, 1500)
-    },
-
-    // emulate ajax call
-    // SELECT * FROM ... WHERE...LIMIT...
-    fetchFromServer (startRow, count, filter, sortBy, descending) {
-      const data = filter
-        ? this.original.filter(row => row.name.includes(filter))
-        : this.original.slice()
-
-      // handle sortBy
-      if (sortBy) {
-        const sortFn = sortBy === 'desc'
-          ? (descending
-            ? (a, b) => (a.name > b.name ? -1 : a.name < b.name ? 1 : 0)
-            : (a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
-          )
-          : (descending
-            ? (a, b) => (parseFloat(b[sortBy]) - parseFloat(a[sortBy]))
-            : (a, b) => (parseFloat(a[sortBy]) - parseFloat(b[sortBy]))
-          )
-        data.sort(sortFn)
-      }
-
-      return data.slice(startRow, startRow + count)
-    },
-
-    // emulate 'SELECT count(*) FROM ...WHERE...'
-    getRowsNumberCount (filter) {
-      if (!filter) {
-        return this.original.length
-      }
-      let count = 0
-      this.original.forEach((treat) => {
-        if (treat.name.includes(filter)) {
-          ++count
-        }
-      })
-      return count
+        { name: 'session', align: 'center', label: $t('session'), field: 'session', sortable: true },
+        { name: 'city', align: 'center', label: $t('city'), field: 'city', sortable: true },
+        { name: 'region', align: 'center', label: $t('region'), field: 'region', sortable: true },
+        { name: 'country', align: 'center', label: $t('country'), field: 'country', sortable: true },
+        { name: 'updated_at', align: 'center', label: $t('updated_at'), field: 'updated_at', sortable: true },
+        { name: 'created_at', align: 'center', label: $t('created_at'), field: 'created_at', sortable: true },
+        { name: 'first_name', align: 'center', label: $t('first_name'), field: 'first_name', sortable: true },
+        { name: 'last_name', align: 'center', label: $t('last_name'), field: 'last_name', sortable: true },
+        { name: 'email', align: 'center', label: $t('email'), field: 'email', sortable: true },
+        { name: 'status', align: 'center', label: $t('status'), field: 'status', sortable: true },
+        { name: 'role', align: 'center', label: $t('role'), field: 'role', sortable: true },
+        { name: 'app', align: 'center', label: $t('app'), field: 'app', sortable: true },
+        { name: 'email_verified_at', align: 'center', label: $t('email_verified_at'), field: 'email_verified_at', sortable: true }
+      ]
     }
   }
 }
 </script>
+
+<style lang="sass">
+</style>

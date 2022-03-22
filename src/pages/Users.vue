@@ -1,168 +1,103 @@
 <template>
+
+  <q-dialog v-model="addUser"><!--============ Add Users PopUp ============-->
+      <q-card class="my-card text-white" style="width: 100%">
+        <add-user :auth="auth" />
+      </q-card>
+  </q-dialog><!--============================= Add Users PopUp End ========-->
+
+  <q-dialog v-model="editUser"><!--============ Add Update Users PopUp ====-->
+    <q-card class="my-card text-black col-1" style="width: 800px">
+        <profile :user="user"/><!-- TagProfile v-on:reload="Edit"  -->
+    </q-card><!-- TagUser: ProfileModule -->
+  </q-dialog><!--============================= Add Update Users PopUp End =-->
+
   <div class="q-pa-md">
-
-    <q-dialog v-model="addUser"><!--============ Add Update Users PopUp ============-->
-        <q-card class="my-card text-white" style='width:800px'>
-          <q-card-section class="bg-primary">
-            <q-btn color="primary" text-color="white" class="float-right" dense round icon="close" v-close-popup />
-            <div class="text-h6">{{editUser?$t('update_user'):$t('add_user')}}</div>
-          </q-card-section>
-
-          <div class="q-pa-sm">
-
-            <q-card class="q-mb-md" v-if="editUser">
-              <q-img :src="avatar"/>
-              <input type="file" v-on:change="onImageChange" class="q-ma-lg">
-              <q-btn color="primary" class="q-ma-md" :label="$t('remove_image')" @click="deleteImage"/>
-            </q-card><!-- TagAvatar: UserModule -->
-
-            <q-select
-              filled
-              v-model="role"
-              class="q-pa-md"
-              :options="(authGetter.id == 1 || authGetter.role == 'Admin')?admin:seller"
-              :label="role || $t('role')"
-              :rules="[val => val && val.length > 0 || 'null']"
-              :error="role_data ? true : false"
-              :error-message='role_data'
-            />
-
-            <q-input
-              filled
-              ref="input"
-              v-model="name"
-              class="q-pa-md"
-              lazy-rules
-              :label="name || $t('name')"
-              :rules="[val => val && val.length > 0 || 'null']"
-              :error="name_data ? true : false"
-              :error-message='name_data'
-            />
-
-            <q-input
-              filled
-              v-model="email"
-              class="q-pa-md"
-              type="email"
-              lazy-rules
-              :label="email || $t('email')"
-              :rules="[val => val && val.length > 0 || 'null']"
-              :error="email_data ? true : false"
-              :error-message='email_data'
-            />
-
-            <q-input
-              filled
-              v-model="password"
-              lazy-rules
-              class="q-pa-md"
-              :label="$t('password')"
-              :type="isPwd ? 'password' : 'text'"
-              :rules="[val => val && val.length > 0 || 'null']"
-              :error="password_data ? true : false"
-              :error-message='password_data'
-            />
-
-            <q-input
-              filled
-              v-model="password_confirmation"
-              class="q-pa-md"
-              :type="isPwd ? 'password' : 'text'"
-              :label="$t('confirm_password')"
-              >
-              <template v-slot:append>
-                <q-icon
-                  :name="isPwd ? 'visibility_off' : 'visibility'"
-                  class="cursor-pointer"
-                  @click="isPwd = !isPwd"
-                />
-              </template>
-            </q-input>
-
-            <div class="q-pa-md">
-              <q-btn color="primary" v-if="editUser" :label="$t('update_user')" @click.prevent="update(user)" />
-              <q-btn color="primary" v-else if="addUser" :label="$t('add_user')" @click.prevent="add" />
-              <q-btn no-caps :label="$t('close')" color="primary" class="q-ma-md" v-close-popup />
-            </div>
-
-          </div>
-
-        </q-card>
-    </q-dialog><!--============================= Add Update Users PopUp End ========-->
-
-    <!--============ Data Table ========================-->
-    <!-- <q-table
-      :title="$t('users_list')"
-      :data="data"
-      :columns="columns"
-      row-key="id"
-      :pagination.sync="pagination"
-      :loading="loading"
-      :filter="filter"
-      @request="onRequest"
-      binary-state-sort
-    > -->
 
     <q-table
       :style="'height:' + height + 'px'"
+      class="my-sticky-virtscroll-table"
       ref="table"
       :title="$t('users_list')"
-      :data="data"
+      :rows="rows"
       :columns="columns"
       row-key="id"
       virtual-scroll
       :virtual-scroll-item-size="48"
-      :pagination="pagination"
       :rows-per-page-options="[0]"
 
-      :loading="loading"
       :filter="filter"
-      @request="onRequest"
+
       binary-state-sort
-    >
+    ><!-- @request="onRequest" :loading="loading"-->
 
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td key="id" :props="props">{{ props.row.id }}</q-td>
-          <q-td key="name" :props="props">
+          <q-td key="user_name" :props="props">
             {{ props.row.name }}
-            <q-popup-edit v-model="props.row.name" title="Update calories" buttons >
-              <q-input v-model="props.row.name" dense autofocus />
-            </q-popup-edit>
+          </q-td>
+          <q-td key="first_name" :props="props">
+            {{ props.row.first_name }}
+          </q-td>
+          <q-td key="last_name" :props="props">
+            {{ props.row.last_name }}
           </q-td>
           <q-td key="email" :props="props">
             <div class="text-pre-wrap">{{ props.row.email }}</div>
-            <q-popup-edit v-model="props.row.email">
-              <q-input type="textarea" v-model="props.row.email" dense autofocus />
-            </q-popup-edit>
           </q-td>
           <q-td key="status" :props="props">
             {{ props.row.status }}
-            <q-popup-edit v-model="props.row.status" title="Update carbs" buttons persistent>
-              <q-input type="number" v-model="props.row.status" dense autofocus hint="Use buttons to close" />
-            </q-popup-edit>
           </q-td>
           <q-td key="role" :props="props">{{ props.row.role }}</q-td>
-          <q-td key="edit" :props="props"><!-- TagEdit: UserModule -->
-            <q-btn icon="edit" rounded class="q-ma-md" @click="edit(props.row)" />
-          </q-td>
-          <q-td key="delete" :props="props">
-            <q-btn icon="delete_forever" rounded class="*q-mb-md" @click.prevent="Delete(props.row)"/>
-          </q-td>
+          <template v-if="roles.admins">
+            <q-td key="login" :props="props">
+              <q-btn icon="fas fa-sign-in-alt" rounded class="*q-mb-md" @click.prevent="login(props.row)"/>
+            </q-td>
+            <template v-if="usersData=='users'||usersData=='my_users'">
+              <q-td key="edit" :props="props"><!-- TagEdit: UserModule -->
+                <q-btn icon="edit" rounded class="q-ma-md" @click.prevent="Edit(props.row)"/>
+              </q-td>
+              <q-td key="delete" :props="props">
+                <q-btn icon="delete" rounded class="*q-mb-md" @click.prevent="Delete(props.row)"/>
+              </q-td>
+            </template>
+            <template v-else>
+              <q-td key="edit" :props="props"><!-- TagRestore: UserModule -->
+                <q-btn icon="restore" rounded class="q-ma-md" @click="restore(props.row)"/>
+              </q-td>
+              <q-td key="delete" :props="props">
+                <q-btn icon="delete_forever" rounded class="*q-mb-md" @click.prevent="delete_forever(props.row)"/>
+              </q-td>
+            </template>
+          </template>
         </q-tr>
       </template>
-      <template v-slot:top-right>
-        <q-input borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
+      <template v-slot:top-right class="*row">
+        <q-btn-toggle
+          v-model="usersData"
+          push v-if="roles.admins"
+          glossy class="q-ma-xs col-md-3"
+          toggle-color="primary"
+          :options="[
+            {label: $t('users'), value: 'users'},
+            {label: $t('trashed'), value: 'trashed'},
+            {label: $t('my_users'), value: 'my_users'}
+          ]"
+        /><!-- TagPeriod: PeriodModule -->
+        <q-btn icon="add_circle_outline"
+          rounded class="q-ma-xs col-md-3"
+          :label="$t('add_user')" v-if="roles.admins"
+          @click="addUser = true"
+        /><!-- TagAdd: UserModule , role = name = first_name = last_name = email = password = password_confirmation = null-->
+
+        <share :shareData="shareData" /><!-- TagShare: UserModule -->
+
+        <q-input class="q-ma-xs col-md-3" borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
         </q-input>
-        <q-btn
-          icon="add_circle_outline"
-          rounded class="q-ma-md"
-          :label="$t('add_user')"
-          @click="addUser = true, editUser = false, role = name = email = null"
-        /><!-- TagAdd: UserModule -->
       </template>
 
     </q-table>
@@ -171,39 +106,82 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { url } from 'boot/axios'
+import { useQuasar } from 'quasar'
+import { ref, computed, watch } from 'vue'
+import {  useStore } from 'vuex'
+import { i18n, url, api, crudAction, notifyAction } from 'boot/axios'
+// import { i18n } from 'boot/i18n'
+import Profile from '../components/Profile'
+import AddUser from '../components/Auth'
+import Share from '../components/Share'
 
+/**
+ * Tags: TagAvatar - TagShare
+ *
+ * @from UserController
+ */
 export default {
-  data () {
+  components: {
+    Profile, // TagProfile
+    AddUser, // add-user
+    Share
+  },
+  setup () {
+    const $t = i18n?.global?.t
+    const $q = useQuasar()
+    // const $route = useRoute()
+    const editUser = ref(false)
+    const $store = useStore()
+    const user = ref(null)
+    const usersData = ref('users')
+
+    const ipDebug = computed(() => $store.getters['config/ipDebugGetter'])
+    const auth = computed(() => $store.getters['users/authGetter'])
+    const roles = $store.getters['users/rolesGetter']
+
+    const copyLink = window.origin + '?hostUser=' + auth.value.name // TagShare: UserModule
+    const shareData = ref({
+      gain: auth.value.gain,
+      title: $t('One minute to register, share and earn money'),
+      text:  $t('One minute to register, share and earn money'),
+      tooltip: $t('Share, put the link in your social description and earn money'),
+      url: copyLink
+    }) // TagShare: UserModule - Navigator Share
+
+    onload({ usersData: roles.admins?'users':'my_users' })
+    watch(usersData, val => onload({ usersData: val}))
+
+    function onload (payload) {
+      $store.dispatch('users/usersAction', payload)
+    }
+    function Delete (user) {
+      const token = $store.getters['users/tokenGetter']
+      if (token && confirm('Are You Sure You Want To '+(user.forever?'Delete Forever':'Delete')+' User '+ user.first_name) === true) {
+        crudAction({
+          url: `/api/users/${user.id}`,//?${qs(user)}
+          method: 'delete',
+          authID: auth.value.id
+        }).then(onload({ usersData: usersData.value}))
+          .catch(e => notifyAction({error: 'deleteAction', e}))
+      }
+    } // TagDelete: UserModule
+
     return {
+      ipDebug,
+      desktop: $q.platform.is.desktop,
       height: screen.height / 1.4,
-      addUser: false,
-      editUser: false,
-      // html: null,
-      role: null,
-      role_data: null,
-      name: null,
-      name_data: null,
-      email: null,
-      email_data: null,
-      password: null,
-      password_data: null,
-      password_confirmation: null,
-      user_new_avatar: null,
-      user: null,
-      isPwd: true,
-      filter: '',
-      loading: false,
-      file: null,
-      url: url,
-      rowCount: 10,
-      admin: [
-        'Admin', 'Seller', 'Buyer'
-      ],
-      seller: [
-        'Seller', 'Buyer'
-      ],
+      price: '0.00',
+      shareLink: ref(false),
+      addUser: ref(false),
+      editUser,
+      copyLink,
+      shareData,
+      usersData,
+      roles,
+      auth,
+      user,
+      url,
+
       pagination: {
         sortBy: 'asc',
         descending: false,
@@ -211,218 +189,52 @@ export default {
         rowsPerPage: 0,
         rowsNumber: 10
       },
-      columns: [
-        { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
-        { name: 'name', align: 'center', label: this.$t('name'), field: 'name', sortable: true },
-        { name: 'email', align: 'center', label: this.$t('email'), field: 'email', sortable: true },
-        { name: 'status', align: 'center', label: this.$t('status'), field: 'status', sortable: true },
-        { name: 'role', align: 'center', label: this.$t('role'), field: 'role', sortable: true },
-        { name: 'edit', align: 'center', label: this.$t('edit'), field: 'edit', sortable: false },
-        { name: 'delete', align: 'center', label: this.$t('delete'), field: 'delete', sortable: false }
-      ],
-      data: [],
-      original: []
-    }
-  },
-  mounted () {
-    this.$store.dispatch('users/usersAction').then(() => {
-      // this.data = this.usersGetter
-      this.original = this.usersGetter
-      this.$refs.table.$refs.virtScroll.scrollTo(5000)
-      // get initial data from server (1st page)
-      this.onRequest({
-        pagination: this.pagination,
-        filter: undefined
-      })
-    })
-  },
-  computed: {
-    ...mapGetters('users', ['usersGetter', 'authGetter']),
-    avatar () {
-      if (this.user.avatar) {
-        if (this.user.avatar.includes('images/profile')) return this.url + '/' + this.user.avatar
-        else return this.user.avatar
-      } else return this.user_new_avatar.data
-    }
-  },
-  methods: {
-    add (user) {
-      this.$store.dispatch('users/registerAction', {
-        auth: this.authGetter,
-        role: this.role,
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.password_confirmation,
-        api: 'add',
-        scope: ''
-      })
-        .then(() => {
-          this.role = this.name = this.email = this.password = this.password_confirmation = null
-          this.$store.dispatch('users/usersAction').then(() => {
-            // this.data = this.usersGetter
-            this.original = this.usersGetter
-            // get initial data from server (1st page)
-            this.onRequest({
-              pagination: this.pagination,
-              filter: undefined
-            })
-          })
-        })
-        .catch(error => {
-          try { this.email_data = error.response.data.errors.email[0] || error.response.data.message } catch (e) {}
-          try { this.role_data = error.response.data.errors.role[0] || error.response.data.message } catch (e) {}
-          try { this.name_data = error.response.data.errors.name[0] || error.response.data.message } catch (e) {}
-          try { this.password_data = error.response.data.errors.password[0] || error.response.data.message } catch (e) {}
-        })
-    },
-    async edit (user) {
-      this.user_new_avatar = await this.$axios.get(`api/users/${user.id}?avatar=1`)
-      this.role_data = this.name_data = this.email_data = this.password_data = null
-      this.editUser = this.addUser = true
-      this.role = user.role
-      this.name = user.name
-      this.email = user.email
-      this.user = user
-    },
-    update (user) {
-      this.$store.dispatch('users/updateAction', {
-        id: user.id,
-        user: true,
-        update: true,
-        role: this.role,
-        name: this.name,
-        email: this.email,
-        update_password: this.password,
-        password_confirmation: this.password_confirmation,
-        avatar: this.file
-      }).then(response => {
-        this.edit(response.user)
-        this.password = this.password_confirmation = null
-        this.$store.dispatch('users/usersAction').then(() => {
-          // this.data = this.usersGetter
-          this.original = this.usersGetter
-          // get initial data from server (1st page)
-          this.onRequest({
-            pagination: this.pagination,
-            filter: undefined
-          })
-        })
-      })
-    },
-    Delete (user) {
-      this.$store.dispatch('users/deleteAction', user)
-        .then((response) => {
-          this.$store.dispatch('users/usersAction').then(() => {
-            // this.data = this.usersGetter
-            this.original = this.usersGetter
-            // get initial data from server (1st page)
-            this.onRequest({
-              pagination: this.pagination,
-              filter: undefined
-            })
-          })
-          this.$q.notify({
-            color: 'negative',
-            position: 'top',
-            message: response,
-            icon: 'check'
-          })
-        })
-    }, // ================= TagAvatar =================
-    onImageChange (e) {
-      let files = e.target.files || e.dataTransfer.files
-      if (!files.length) return; this.createImage(files[0])
-    }, // TagAvatar: UserModule
-    createImage (files) {
-      let reader = new FileReader()
-      reader.onload = (e) => {
-        this.file = e.target.result
-      }; reader.readAsDataURL(files)
-      setTimeout(() => { this.update(this.user) }, 500)
-    },
-    deleteImage () {
-      this.$axios.delete(`api/users/${this.user.id}?avatar=delete`).then(response => {
-        this.edit(response.data.user)
-        this.$store.dispatch('users/authAction')
-        this.$q.notify({
-          color: 'positive',
-          position: 'top',
-          message: this.$t(response.data.success),
-          icon: 'check'
-        })
-      })
-    }, // ================= TagAvatar End =================
-    onRequest (props) {
-      const { page, rowsPerPage, sortBy, descending } = props.pagination
-      const filter = props.filter
 
-      this.loading = true
+      login (user) {
+        if (auth.value) {
+          $store.dispatch('users/logoutAction', auth.value)
+          $q.cookies.set('authID', auth.value.id , {expires: '1h'})
 
-      // emulate server
-      setTimeout(() => {
-        // update rowsCount with appropriate value
-        this.pagination.rowsNumber = this.getRowsNumberCount(filter)
-
-        // get all rows if "All" (0) is selected
-        const fetchCount = rowsPerPage === 0 ? this.pagination.rowsNumber : rowsPerPage
-
-        // calculate starting row of data
-        const startRow = (page - 1) * rowsPerPage
-
-        // fetch data from "server"
-        const returnedData = this.fetchFromServer(startRow, fetchCount, filter, sortBy, descending)
-
-        // clear out existing data and add new
-        this.data.splice(0, this.data.length, ...returnedData)
-
-        // don't forget to update local pagination object
-        this.pagination.page = page
-        this.pagination.rowsPerPage = rowsPerPage
-        this.pagination.sortBy = sortBy
-        this.pagination.descending = descending
-
-        // ...and turn of loading indicator
-        this.loading = false
-      }, 1500)
-    },
-
-    // emulate ajax call
-    // SELECT * FROM ... WHERE...LIMIT...
-    fetchFromServer (startRow, count, filter, sortBy, descending) {
-      const data = filter
-        ? this.original.filter(row => row.name.includes(filter))
-        : this.original.slice()
-
-      // handle sortBy
-      if (sortBy) {
-        const sortFn = sortBy === 'desc'
-          ? (descending
-            ? (a, b) => (a.name > b.name ? -1 : a.name < b.name ? 1 : 0)
-            : (a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
-          )
-          : (descending
-            ? (a, b) => (parseFloat(b[sortBy]) - parseFloat(a[sortBy]))
-            : (a, b) => (parseFloat(a[sortBy]) - parseFloat(b[sortBy]))
-          )
-        data.sort(sortFn)
-      }
-
-      return data.slice(startRow, startRow + count)
-    },
-
-    // emulate 'SELECT count(*) FROM ...WHERE...'
-    getRowsNumberCount (filter) {
-      if (!filter) {
-        return this.original.length
-      }
-      let count = 0
-      this.original.forEach((treat) => {
-        if (treat.name.includes(filter)) {
-          ++count
+          // api.post('logout', auth.value)
+          setTimeout(() => {
+              api({
+                url: 'api/users',
+                method: 'post',
+                data: { log: true, userId: user.id }
+              }).then(() => {$store.dispatch('users/loginAction')})
+                .catch(e => notifyAction({error: 'logUser', e}))
+          }, 500)
         }
-      })
-      return count
+      },
+
+      Edit (userEdit) {
+        editUser.value = true; user.value = userEdit
+      }, // TagEdit: UserModule
+
+      Delete, // TagDelete: UserModule
+      delete_forever (user) { // AddPasswordBeforeDeleteForever
+        Delete({...user, ...{forever: 1}})
+      },// TagDeleteForever: UserModule
+      restore (user) {
+        api.post('api/users', user).then(() => {
+          onload({ usersData: 'trashed' })
+        })
+      }, // TagRestore: UserModule
+
+      rows: computed(() => $store.getters['users/usersGetter']),
+      columns: [ // Users
+        { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
+        { name: 'user_name', align: 'center', label: $t('user_name'), field: 'user_name', sortable: true },
+        { name: 'first_name', align: 'center', label: $t('first_name'), field: 'first_name', sortable: true },
+        { name: 'last_name', align: 'center', label: $t('last_name'), field: 'last_name', sortable: true },
+        { name: 'email', align: 'center', label: $t('email'), field: 'email', sortable: true },
+        { name: 'status', align: 'center', label: $t('status'), field: 'status', sortable: true },
+        { name: 'role', align: 'center', label: $t('role'), field: 'role', sortable: true }
+        ].concat(roles.admins?[ // Admin CRUD
+        { name: 'login', align: 'center', label: $t('login'), field: 'login', sortable: false },
+        { name: 'edit', align: 'center', label: $t('edit/restore'), field: 'edit', sortable: false },
+        { name: 'delete', align: 'center', label: $t('delete/foreve'), field: 'delete', sortable: false }
+      ]:[]), filter: ref('')
     }
   }
 }

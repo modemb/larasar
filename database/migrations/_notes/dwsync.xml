@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="2014_10_12_000000_create_users_table.php" server="home682217311.1and1-data.host//suguffie/" local="132596647582742693" remote="132627421490000000" Dst="2" />
+<file name="2014_10_12_100000_create_password_resets_table.php" server="home682217311.1and1-data.host//suguffie/" local="132596647582742693" remote="132627421490000000" Dst="2" />
+<file name="2014_10_12_200000_add_two_factor_columns_to_users_table.php" server="home682217311.1and1-data.host//suguffie/" local="132596647582752696" remote="132627421490000000" Dst="2" />
+<file name="2019_08_19_000000_create_failed_jobs_table.php" server="home682217311.1and1-data.host//suguffie/" local="132596647582752696" remote="132627421500000000" Dst="2" />
+<file name="2019_12_14_000001_create_personal_access_tokens_table.php" server="home682217311.1and1-data.host//suguffie/" local="132596647582762710" remote="132627421500000000" Dst="2" />
+<file name="2020_05_06_192118_create_analytics_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890131568572767" remote="132891910120000000" Dst="1" />
+<file name="2020_05_21_100000_create_teams_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890009250847440" remote="132891910120000000" Dst="1" />
+<file name="2020_05_21_200000_create_team_user_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890009668514304" remote="132891910120000000" Dst="1" />
+<file name="2020_06_11_112030_create_categories_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890131836086138" remote="132891910130000000" Dst="1" />
+<file name="2020_06_12_093745_create_posts_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890132077158904" remote="132891910130000000" Dst="1" />
+<file name="2020_06_12_094223_create_pages_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890132304204554" remote="132891910130000000" Dst="1" />
+<file name="2020_06_19_112812_create_subcategories_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890132466159918" remote="132891910130000000" Dst="1" />
+<file name="2020_07_16_021846_create_pics_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890132610784316" remote="132891910140000000" Dst="1" />
+<file name="2020_08_07_103859_create_reports_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890132751475403" remote="132891910140000000" Dst="1" />
+<file name="2020_09_09_142000_create_payments_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890132945447555" remote="132891910140000000" Dst="1" />
+<file name="2020_09_17_023624_create_flags_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890133071672979" remote="132891910140000000" Dst="1" />
+<file name="2020_10_04_163001_create_locales_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890133222818520" remote="132891910150000000" Dst="1" />
+<file name="2020_12_18_142356_create_sessions_table.php" server="home682217311.1and1-data.host//suguffie/" local="132891538993454896" remote="132891910150000000" Dst="1" />
+<file name="2021_02_17_040149_create_locations_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890133632594692" remote="132891910150000000" Dst="1" />
+<file name="2120_05_10_213215_add_columns_to_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890134663597287" remote="132891910160000000" Dst="1" />
+<file name="2120_05_11_105435_remove_columns_from_migrations.php" server="home682217311.1and1-data.host//suguffie/" local="132890134890747271" remote="132891910170000000" Dst="1" />
+<file name="2120_05_13_195110_delete_columns_from_migrations.php" server="home682217311.1and1-data.host//suguffie/" local="132890135120717299" remote="132891910170000000" Dst="1" />
+<file name="2016_07_30_000002_create_notifications_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890130867723532" remote="132891909480000000" Dst="1" />
+<file name="2017_02_11_202057_create_messages_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890131245093512" remote="132891909480000000" Dst="1" />
+<file name="2017_12_07_122845_create_oauth_providers_table.rar" server="home682217311.1and1-data.host//suguffie/" local="132658079664076681" remote="132891909480000000" Dst="1" />
+<file name="2020_05_21_300000_create_team_invitations_table.php" server="home682217311.1and1-data.host//suguffie/" local="132889929978872022" remote="132891910130000000" Dst="1" />
+<file name="2021_05_10_204654_create_push_subscriptions_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890133778820561" remote="132891910150000000" Dst="1" />
+<file name="2021_06_07_094454_create_favorites_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890133936140595" remote="132891910150000000" Dst="1" />
+<file name="2021_06_19_215908_create_rooms_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890134136455831" remote="132891910150000000" Dst="1" />
+<file name="2021_09_28_221529_create_views_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890134297701206" remote="132891910160000000" Dst="1" />
+<file name="2021_12_05_215516_create_chats_table.php" server="home682217311.1and1-data.host//suguffie/" local="132890134414447451" remote="132891910160000000" Dst="1" />
+<file name="2022_02_10_185619_create_sessions_table.php" server="home682217311.1and1-data.host//suguffie/" local="132889929793065522" remote="132891910160000000" Dst="1" />
+</dwsync>
