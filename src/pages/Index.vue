@@ -17,7 +17,8 @@
       </div>
       <div class="*col-12">
         <a target="_blank"  href="https://quasar.dev" class="logo">
-          <img alt="Larasar logo" src="~assets/quasar-logo-full.svg">
+          <!-- <img alt="Larasar logo" src="~assets/quasar-logo-full.svg"> -->
+          <img alt="Larasar logo" src="~assets/quasar-logo-vertical.svg">
         </a>
       </div>
       <div class="*col-12">

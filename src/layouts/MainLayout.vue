@@ -224,7 +224,7 @@
             </q-item-section>
           </q-item>
         </q-list>
-        <div v-if="user" class="q-pa-md"><!-- Authenticated ====-->
+        <div v-if="auth" class="q-pa-md"><!-- Authenticated ====-->
           <q-btn icon="lock_open" :label="$t('logout')" @click.prevent="logout" />
         </div><!--=========================== Authenticated End -->
         <div v-else class="q-pa-md"><!--===== Guest ============-->
@@ -244,11 +244,14 @@
       <q-toolbar><!-- Desktop View -->
         <q-toolbar-title>
           <template v-if="superAdmin || ipDebug">
-            <q-btn round type="a" target="_blank"  href="https://quasar.dev">
-              <q-avatar>
+            <q-btn type="a" target="_blank" label="Suguffiè"
+              icon="fas fa-store" href="https://suguffie.com"
+            ><!-- Link To Suguffiè -->
+              <!-- <q-avatar>
                 <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
-              </q-avatar>
+              </q-avatar> -->
             </q-btn>
+              <q-btn icon="fas fa-bug" :label="$t('iP Debug On')" color="red" v-if="ipDebug" />
               Quasar v{{ $q.version }}
               Laravel v{{laravel}}
           </template>

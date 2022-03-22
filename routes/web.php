@@ -33,11 +33,10 @@ if (env('JETSTREAM_FRONTEND')) { // Inertia/Livewire Demo
   })->name('dashboard');
 
 } elseif (env('SANCTUM_API')) Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-  // return $request->user(); // return $request->user()->with('analytics');
   return array_merge($request->user()->toArray(), $request->user()->analytics->toArray());
 }); // env('SANCTUM_API') - config('sanctumApi')
 
-Route::middleware(['guest'])->group(function () { // Suguffiè Application
+Route::middleware(['guest'])->group(function () { // Larasar Application
 
   Route::get('/login', function () {
       return view('index');
