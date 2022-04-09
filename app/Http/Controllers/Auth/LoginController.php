@@ -134,7 +134,7 @@ class LoginController extends Controller
         ]);// If does not exist, create it
 
         $localUser->update([
-            'status' => $provider.' lr',
+            'status' => $provider,
             'email_verified_at' => now(),
             'avatar' => $localAvatar?$localUser->avatar:$avatar
         ]); // Update Avatar

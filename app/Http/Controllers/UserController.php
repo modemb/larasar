@@ -8,6 +8,7 @@ use neto737\BitGoSDK\Enum\CurrencyCode;
 // use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use App\Models\Notification;
+use Illuminate\Support\Str;
 use App\Models\Subcategory;
 use App\Mail\InfoSuguffie;
 use App\Models\Analytic;
@@ -76,6 +77,15 @@ class UserController extends Controller
       Analytic::where('user_id', 0)->where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 year')))->delete();
       // Analytic::where([['user_id', 0], ['updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 year'))]])->delete();
       return 'Analytic Cron Job Done'; // TagIndex: AnalyticModule
+      // ===========================or=========================
+      // $analytics = Analytic::where('user_id', 0)->get();
+      // $current_date = date_create(date('Y-m-d H:i:s'));
+      // foreach ($analytics as $key => $analytic) { // Show Guest Analytic
+      //   $analytic_updated_at = date_create($analytic->updated_at);
+      //   $analytic_expiry = date_diff($current_date, $analytic_updated_at);
+      //   $analytic_expiry = $analytic_expiry->format('%a'); // Analytic Expiry Date
+      //   if ($analytic_expiry >= 365) $analytic->delete();
+      // } return 'Analytic Cron Job Done'; // TagIndex: AnalyticModule
     } // https://laravel.com/docs/9.x/logging#writing-log-messages
 
     /**
@@ -123,8 +133,19 @@ class UserController extends Controller
 
         $sessions = DB::table('sessions')->where('ip_address', $request->ip());
         $sessionTrue = $sessions->update([
+            // Session::where('ip_address', $request->ip())->update([
             'user_id' => $request->id
-        ]); // User Sessions - https://laravel.com/docs/8.x/session
+        ]); // User Sessions - https://laravel.com/docs/9.x/session
+
+        // if (!$sessionTrue) $sessions = $sessions->first() ?? new Session;
+        // if (!$sessionTrue) $sessions->save([
+        //   'id' => (string) Str::uuid(),
+        //   'user_id' => $request?->id,
+        //   'ip_address' => $request->ip(),
+        //   'user_agent' => $request->header('User-Agent')??$request->server('HTTP_USER_AGENT'),
+        //   'payload' => '',
+        //   'last_activity' => time()
+        // ]); // E:\Apps\xampp\htdocs\www\suguffie\vendor\laravel\framework\src\Illuminate\Session
 
         // ----------------- TagSave: PageViewModule --------------------------- \\
         $view = View::where('slug', $request->slug)->where(function ($query) use ($request) {
@@ -247,7 +268,7 @@ class UserController extends Controller
         foreach ($request->restorePics as $pic) {
           Pic::onlyTrashed()->whereNull('deleted')
             ->where('pic', $pic)
-              ->restore(); // TagUpdate: restoreFilePostModule
+              ->restore(); // TagStore: restoreFilePostModule
         } // TagStore: FileModule
       } elseif ($request->location_id) { // Restore Location
         $locationTrashed = Location::onlyTrashed()->where('id', $request->location_id)->first();
@@ -284,6 +305,9 @@ class UserController extends Controller
      */
     public function show(Request $request, $id)
     { // return $request->session()->all();
+      // Session::get('a');
+      // return session('a');
+      // return session('a', 'default');
 
       $pics = Pic::whereNull('deleted')->orderBy('pic', 'asc');  // Pic::all()
       $picsAchieved = Pic::onlyTrashed()->whereNull('deleted'); // Show Admins' Achieved Users
@@ -293,13 +317,23 @@ class UserController extends Controller
        $pics->where('user_id', $request->auth_id)->get(); // Show Auth's Pics
       if ($request->show == 'trashed') return // TagShow: FileModule
         $picsAchieved->where('user_id', $request->auth_id)->get(); // Show Auth's Achieved Pics
-      if ($request->show == 'all_pics') return $pics->get(); // TagShow: LibraryModule
+      if ($request->show == 'all_pics') return $pics->get(); // TagShow: LibraryModule;
+        // DB::table('pics')->whereNull('deleted')
+        //   ->orderBy('pic', 'asc')->get();
 
       if ($request->location||$request->search) return $this->location($request); // TagShow: LocationModule
 
       if ($request->getUser) return $user; // Get Chat User
       elseif ($request->analytics) { // Get Users Analytics
+
+        // return DB::table('analytics')->get();
+        // return Analytic::all();
+
+        // $analytics = DB::table('analytics')->leftJoin('users', 'users.id', 'analytics.user_id');
         $analytics = Analytic::leftJoin('users', 'users.id', 'analytics.user_id');
+
+        // $analytics = $request->expandingRow?Analytic::leftJoin('users', 'users.id', 'analytics.user_id'):
+        //                       DB::table('analytics')->leftJoin('users', 'users.id', 'analytics.user_id');
 
         $analytics->whereNull('analytics.deleted_at')->select('users.*','analytics.*'); // return '$request';
 
@@ -320,6 +354,8 @@ class UserController extends Controller
         if ($request->period) $views->whereBetween('views.updated_at', [date('Y-m-d H:i:s', strtotime($request->period)), date('Y-m-d H:i:s')]);
         return $views->get(); // TagShow: ViewModule
       } elseif ($request->reports) { // Get Users reports
+
+        // $reports = DB::table('reports')->whereNotNull('start_date');
         $reports = Report::whereNotNull('start_date'); //return 'reports';
 
         if ($request->role == 'User') $reports->where('user_id', $request->id);
@@ -335,6 +371,7 @@ class UserController extends Controller
       elseif ($request->usersData == 'users') return User::whereNull(['deleted_at', 'deleted'])->get(); // Show Admins' Users
       elseif ($request->locationsData == 'locations') return Location::get(); // Show Locations
       elseif ($request->locationsData == 'trashed') return Location::onlyTrashed()->whereNull('deleted')->get(); // Show Trashed location
+      // elseif ($request->usersData == 'users') return DB::table('users')->whereNull(['deleted_at', 'deleted'])->get(); // Show Admins' Users
 
     }
 
@@ -381,7 +418,9 @@ class UserController extends Controller
         ]); // Invited User's Analytic
 
         return [
-          'ip' => $request->ip()
+          'ip' => $request->ip(),
+          // 'session' => $value = $request->session()->get('key'), // TODO https://laravel.com/docs/8.x/session#interacting-with-the-session
+          // 'user' => $request->user()
         ];
       } elseif ($request->update) { // Update Users
         $put = User::find($id); //$picUploaded = false;
@@ -435,8 +474,8 @@ class UserController extends Controller
           foreach ($request->pics as $pic) {
             $post = $request->post; try {
               $name = time().'.' . explode('/', explode(':', substr($pic, 0, strpos($pic, ';')))[1])[1];
-              Image::make($pic)->save(public_path('files/').$name);
-            } catch (\Throwable $th) { $name = false; }
+              Image::make($pic)->save(public_path('files/').$name, 80, 'jpg');
+            } catch (\Throwable $th) { $name = false; } // https://image.intervention.io/v2/api/encode
 
             $picData = [
               'post_id' => isset($post['id'])?$post['id']:0,
@@ -451,6 +490,7 @@ class UserController extends Controller
             $pic = Pic::where('pic', $pic)
               ->where('post_id', $picData['post_id'])
               ->first();
+            // $pic = Pic::where([['pic', $pic], ['post_id', $request->post_id]])->first();
 
             if ($pic) $pic->update($picData); // Assign Existing Pic
             elseif ($picDeleted) {
@@ -461,7 +501,7 @@ class UserController extends Controller
           } $picUploaded = 'Picture Uploaded Successfully';
         } // TagUpdate: FileModule
         return response()->json([
-          'success' => $picUploaded??'Updated successfully',
+          'success' => $picUploaded??'Updated Successfully',
           'user' => $put
         ]);
       } elseif ($request->chat) { // Update Message
@@ -602,10 +642,12 @@ class UserController extends Controller
           if ($this->place!='  ') $query->orWhere('place', 'like', "%$this->place%");
       }); // TagLocation: LocationModule
 
-      if ($request?->search) return $location->get();
-      if ($request?->location) return $location->first();
-      // if (isset($request->search)) return $location->get();
-      // if (isset($request->location)) return $location->first();
+      if (isset($request->location)) { // return $request;
+        $location = $location->first(); $id = $location?->id;
+        // Log::warning('$id '.$location?->place=='  ');
+        if ($location?->place=='  ') $this->destroy($request, $id);
+        else return $location;
+      } if (isset($request->search)) return $location->get();
 
       $location = $location->first(); //->whereNotNull('latitude')
       $locationDeleted = Location::onlyTrashed()->whereNotNull('deleted')->first();
@@ -624,7 +666,8 @@ class UserController extends Controller
       $location->latitude = $latitude;
       $location->longitude = $longitude;
       $location->utc_offset = $request->utc_offset;
-      $location->deleted = null; $location_save = $location->save();
+      $location->deleted = null;
+      if ($lat||$lon) $location->save();
 
     }
 }
