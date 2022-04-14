@@ -253,6 +253,7 @@
           <q-btn icon="fas fa-bug" :label="$t('iP Debug On')" color="red" v-if="ipDebug" />
           Quasar v{{ $q.version }}
           Laravel v{{laravel}}
+          Vue v{{version}}
           Desktop View
         </q-toolbar-title>
         <q-btn glossy unelevated to="/messages">
@@ -290,7 +291,7 @@
 
 <script>
 import { openURL, QAjaxBar, useQuasar, Cookies } from 'quasar'
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, version } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { url, userData, notifyAction, crudAction, api } from 'boot/axios'
@@ -395,6 +396,7 @@ export default {
     return {
       appName,
       ipDebug,
+      version,
       auth,
       pages,
       path: computed(() => $route.path),

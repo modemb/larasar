@@ -120,6 +120,7 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 - [x] CRUDAction Reusable State Management
 - [x] Realtime (Chat, Push/Notification)
 - [x] Users Authentication by Roles
+- [x] All Platforms in One Go
 - [x] Super Admin id = 1
 - [x] Email Verification
 - [x] State Management
@@ -132,8 +133,7 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 - [x] Share Button
 - [x] Soft Delete
 - [x] File upload   
-- [x] Live Chat
 - [x] Cron jobs
 - [x] ipDebug
-- [x] PayPal
+- [x] Payment
 - [x] CMS

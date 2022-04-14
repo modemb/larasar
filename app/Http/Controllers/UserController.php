@@ -101,21 +101,20 @@ class UserController extends Controller
 
         if ($request->id) { // Auth Analytic
           if ($request->newAuth) {
-            $analytic->session = 'NewAuth';
+            $analytic->session = 'NewAuth lr';
             $analytic->user_id = $request->id;
           } elseif ($analytic->ip != $request->ip) $analytic->session = 'ReturningAuthNewIP';
-          else $analytic->session = 'ReturningAuth';
+          else $analytic->session = 'ReturningAuth lr';
         } elseif ($request->hostUser!='undefined') { // Assign Invited User's Analytic to Host User
           $hostUser = User::where('name', $request->hostUser)->first();
           if ($hostUser) { // IP Has To Be Different
             $analytic->host_id = $hostUser->id;
-            $analytic->session = 'InvitedGuest';
+            $analytic->session = 'InvitedGuest lr';
           } // TagSave: InvitedUserAnalyticModule
         } else { // Guest Analytic
-
-          if ($analytic->user_id) $analytic->session = 'GuestRecorded';
-          elseif ($analytic->session) $analytic->session = 'ReturningGuest';
-          else $analytic->session = 'NewGuest';
+          if ($analytic->user_id) $analytic->session = 'GuestRecorded lr';
+          elseif ($analytic->session) $analytic->session = 'ReturningGuest lr';
+          else $analytic->session = 'NewGuest lr';
         } $this->location($request); // TagSave: LocationModule
 
         if ($request->city) $analytic->city = $request->city;

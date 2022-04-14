@@ -98,7 +98,11 @@ return [
       'zh-CN' => '中文'
     ] : [ // Production
       'en' => 'EN',
-      'fr' => 'FR'
+      'es' => 'ES',
+      'fr' => 'FR',
+      'pt-BR' => 'BR',
+      'ar' => 'العربية',
+      'zh-CN' => '中文'
     ],
 
     /*
