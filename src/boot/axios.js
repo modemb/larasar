@@ -65,13 +65,12 @@ export default boot(async ({ app, router, store }) => {
       e: status
     })
 
-    if (status === 401 && store.getters['users/authGetter']) {
+    if (status === 401 && store.getters['users/authGetter']) 
       store.dispatch('users/logoutAction').then(() => {
         router.push({ path: '/login' }).then(() => notifyAction({
           message: $t('token_expired_alert_title')+' '+status
         }))
-      })
-    } return Promise.reject(error)
+      }); return Promise.reject(error)
   }) // Response interceptor
 
   // for use inside Vue files (Options API) through this.$axios and this.$api

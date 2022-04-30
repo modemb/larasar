@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 // use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Http\Controllers\Auth\RegisterController;
 use neto737\BitGoSDK\Enum\CurrencyCode;
 // use neto737\BitGoSDK\BitGoSDK;
 // use App\Events\MessageSent;
@@ -101,20 +102,21 @@ class UserController extends Controller
 
         if ($request->id) { // Auth Analytic
           if ($request->newAuth) {
-            $analytic->session = 'NewAuth lr';
+            $analytic->session = 'NewAuth LR';
             $analytic->user_id = $request->id;
           } elseif ($analytic->ip != $request->ip) $analytic->session = 'ReturningAuthNewIP';
-          else $analytic->session = 'ReturningAuth lr';
-        } elseif ($request->hostUser!='undefined') { // Assign Invited User's Analytic to Host User
+          else $analytic->session = 'ReturningAuth LR';
+        } elseif ($request->hostUser) { // Assign Invited User's Analytic to Host User
           $hostUser = User::where('name', $request->hostUser)->first();
           if ($hostUser) { // IP Has To Be Different
             $analytic->host_id = $hostUser->id;
-            $analytic->session = 'InvitedGuest lr';
+            $analytic->session = 'InvitedGuest LR';
           } // TagSave: InvitedUserAnalyticModule
         } else { // Guest Analytic
-          if ($analytic->user_id) $analytic->session = 'GuestRecorded lr';
-          elseif ($analytic->session) $analytic->session = 'ReturningGuest lr';
-          else $analytic->session = 'NewGuest lr';
+
+          if ($analytic->user_id) $analytic->session = 'GuestRecorded LR';
+          elseif ($analytic->session) $analytic->session = 'ReturningGuest LR';
+          else $analytic->session = 'NewGuest LR';
         } $this->location($request); // TagSave: LocationModule
 
         if ($request->city) $analytic->city = $request->city;
@@ -178,6 +180,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     { //return $request->session()->all();
+
 
       if ($request->ip) { // Add Guest Analytic
 
@@ -250,6 +253,8 @@ class UserController extends Controller
           'room_id' => $room->id,
           'message' => $chat->message
         ]; // TagStore: MessageModule
+      } elseif ($request->api) { // Add User
+        return redirect()->action([RegisterController::class, 'register']);
       } elseif ($request->id) { // Restore User
         $userTrashed = User::onlyTrashed()->where('id', $request->id)->first();
         $userTrashed->restore();

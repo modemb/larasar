@@ -95,7 +95,7 @@ class RegisterController extends Controller
             $user_name = $user_name.$id;
           } $user_name;
         } while ($user); $this->userData = [
-          'status' => 'Registration lr',
+          'status' => 'Registration LR',
           'name' => $user_name,
           'first_name' => $request['first_name'],
           'last_name' => $request['last_name'],

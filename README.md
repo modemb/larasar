@@ -120,19 +120,20 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 - [x] CRUDAction Reusable State Management
 - [x] Realtime (Chat, Push/Notification)
 - [x] Users Authentication by Roles
+- [x] Weather Location Distance
 - [x] All Platforms in One Go
-- [x] Super Admin id = 1
+- [x] Super Admin ID = 1
 - [x] Email Verification
 - [x] State Management
 - [x] Users Analytics
 - [x] Form Validation
 - [x] Password Reset
-- [x]	Live Migration 
+- [x] Live Migration 
 - [x] Users Sessions
 - [x] Social Login
 - [x] Share Button
 - [x] Soft Delete
-- [x] File upload   
+- [x] File upload  
 - [x] Cron jobs
 - [x] ipDebug
 - [x] Payment

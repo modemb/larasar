@@ -126,6 +126,7 @@ class LoginController extends Controller
         if (!$localUser) $localUser = $this->createUser([
           'position' => 'firsTime',
           'role' => 'User',
+          'gain' => 500,
           'first_name' => $first_name,
           'last_name' => $last_name,
           'name' => $user_name,
