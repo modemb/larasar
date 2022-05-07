@@ -51,7 +51,7 @@ return [
             'port' => env('DB_PORT', '3306'),
             'database' => !$dev?env('DB_DATABASE'):env('DB_DATABASE_DEV'),
             'username' => !$dev?env('DB_USERNAME'):env('DB_USERNAME_DEV'),
-            'password' => !$dev?env('DB_PASSWORD'):'',
+            'password' => !$dev?env('DB_PASSWORD'):env('DB_PASSWORD_DEV'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
