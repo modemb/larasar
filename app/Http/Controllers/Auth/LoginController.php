@@ -124,9 +124,9 @@ class LoginController extends Controller
         } while ($user);
 
         if (!$localUser) $localUser = $this->createUser([
+          'gain' => 500,
           'position' => 'firsTime',
           'role' => 'User',
-          'gain' => 500,
           'first_name' => $first_name,
           'last_name' => $last_name,
           'name' => $user_name,

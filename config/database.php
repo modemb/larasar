@@ -49,7 +49,7 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => !$dev?env('DB_HOST'):env('DB_HOST_DEV'),
             'port' => env('DB_PORT', '3306'),
-            'database' => !$dev?env('DB_DATABASE'):env('DB_DATABASE_DEV'),
+            'database' => !$dev?env('DB_DATABASE'):env('DB_DATABASE_DEV', 'test'),
             'username' => !$dev?env('DB_USERNAME'):env('DB_USERNAME_DEV'),
             'password' => !$dev?env('DB_PASSWORD'):'',
             'unix_socket' => env('DB_SOCKET', ''),

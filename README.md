@@ -13,8 +13,8 @@ A Laravel + Quasar Vue Framework App
 # php artisan jetstream:install livewire --teams
 # php artisan jetstream:install inertia --teams
 # composer require laravel/passport
-# php artisan passport:install / If No Key - php artisan passport:keys
 composer install
+php artisan passport:install / If No Key - php artisan passport:keys
 cp .env.example .env
 php artisan key:generate
 npm install && npm run dev
@@ -108,7 +108,7 @@ See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
 
 ## Create Update Columns From AddColumnsToTable
 
-https://laravel.com/docs/8.x/migrations#columns
+https://laravel.com/docs/9.x/migrations#columns
 php artisan migrate
 
 ## Comment Flow

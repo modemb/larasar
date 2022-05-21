@@ -46,7 +46,7 @@ export default boot(async ({ app, router, store }) => {
       api.get('/sanctum/csrf-cookie').catch(e => notifyAction({error: 'XSRF-TOKEN-GET', e}))
         .then(() => store.dispatch('users/loginAction', JSON.parse(request.data))
           .catch(e => notifyAction({error: 'XSRF-TOKEN-POST', e})))
-    }, 1500) // Make Sure Sanctum Csrf Cookie Is Set
+    }, 1500) // Making Sure Sanctum Csrf Cookie Is Set
 
     locale = store.getters['config/localeGetter']
     const token = store.getters['users/tokenGetter']
@@ -65,7 +65,7 @@ export default boot(async ({ app, router, store }) => {
       e: status
     })
 
-    if (status === 401 && store.getters['users/authGetter']) 
+    if (status === 401 && store.getters['users/authGetter'])
       store.dispatch('users/logoutAction').then(() => {
         router.push({ path: '/login' }).then(() => notifyAction({
           message: $t('token_expired_alert_title')+' '+status

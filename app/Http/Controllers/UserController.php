@@ -104,7 +104,7 @@ class UserController extends Controller
           if ($request->newAuth) {
             $analytic->session = 'NewAuth LR';
             $analytic->user_id = $request->id;
-          } elseif ($analytic->ip != $request->ip) $analytic->session = 'ReturningAuthNewIP';
+          } elseif ($analytic->ip != $request->ip) $analytic->session = 'ReturningAuthNewIP LR';
           else $analytic->session = 'ReturningAuth LR';
         } elseif ($request->hostUser) { // Assign Invited User's Analytic to Host User
           $hostUser = User::where('name', $request->hostUser)->first();
@@ -189,7 +189,7 @@ class UserController extends Controller
 
         if (!$analytic&&$analyticTrashed) $analyticTrashed->restore();
 
-        $analytic = $analytic?->user_id?$analyticTrashed:$analytic;
+        $analytic = $analytic?->user_id?$analytic:$analyticTrashed;
 
         $this->analytic = $analytic ?? new Analytic; // Guest
 
@@ -308,7 +308,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $id)
-    { // return $request->session()->all();
+    { //return $request;
       // Session::get('a');
       // return session('a');
       // return session('a', 'default');
