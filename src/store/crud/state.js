@@ -1,3 +1,6 @@
+import { Cookies } from 'quasar'
+
 export default {
-  crud: []
+  crud: [],
+  [Cookies.get('type')]: []
 }

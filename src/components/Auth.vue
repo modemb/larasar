@@ -18,7 +18,7 @@
     <q-page-container>
       <q-page :class="auth||'flex'+' flex-center q-pa-md'">
         <q-form class="q-gutter-md">
-          <div class="q-pa-sm" v-if="!$route.path.includes('/email/verify')">
+          <div class="q-pa-sm" v-if="!$route.path.includes('email/verify')">
             <q-select
               filled class="col-12"
               v-model="role" v-if="auth"
@@ -32,7 +32,7 @@
               filled
               v-model="first_name"
               :label="$t('first_name')"
-              lazy-rules v-if="auth||$route.path == '/register'"
+              lazy-rules v-if="auth||$route.path.includes('register')"
               :rules="[val => val && val.length > 0 || 'null']"
               :error="first_name_data ? true : false"
               :error-message='first_name_data'
@@ -42,7 +42,7 @@
               filled
               v-model="last_name"
               :label="$t('last_name')"
-              lazy-rules v-if="auth||$route.path == '/register'"
+              lazy-rules v-if="auth||$route.path.includes('register')"
               :rules="[val => val && val.length > 0 || 'null']"
               :error="last_name_data ? true : false"
               :error-message='last_name_data'
@@ -61,11 +61,10 @@
             /><!-- https://quasar.dev/vue-components/field#Validation -->
 
             <q-input
-              filled
-              v-model="password"
+              v-model="password" filled lazy-rules
+              v-if="!$route.path.includes('password/email')"
               :label="$t('password')"
               :type="isPwd ? 'password' : 'text'"
-              lazy-rules v-if="$route.path != '/password/email'"
               :rules="[val => val && val.length > 7 || 'min 8']"
               :error="password_data ? true : false"
               :error-message='password_data'
@@ -80,16 +79,16 @@
             </q-input>
 
             <q-input
-              v-model="password_confirmation"
-              filled v-if="auth||$route.path == '/register'||$route.path == '/api/password/reset'"
+              v-model="password_confirmation" filled
+              v-if="auth||$route.path.includes('register')||$route.path.includes('reset-password')"
               :type="isPwd ? 'password' : 'text'"
               :label="$t('confirm_password')"
               :rules="[val => val && val.length > 7 || 'min 8']"
-            />
+            /><!-- TagReset: reset-password - api/password/reset-->
 
           </div><!-- Form -->
 
-          <div class="row flex justify-center" v-if="$route.path.includes('/email/verify')">
+          <div class="row flex justify-center" v-if="$route.path.includes('email/verify')">
             <q-card class="my-card text-white">
                 <q-card-section class="bg-primary">
                   <div class="text-h6">{{$t('verify_email')}}</div>
@@ -128,17 +127,18 @@
           </div><!-- TagVerify: VerifyModule -->
 
 
-          <div v-if="$route.path == '/api/password/reset'||$route.path.hasOwnProperty('token')">
+          <div v-if="$route.path.includes('reset-password')">
             <q-btn color="primary"
               icon="fas fa-history"
               :loading="loader"
               :label="$t('reset_password')"
               @click.prevent="reset"
             /><!-- ('token' in $route.path.params) -->
-          </div><!-- TagReset -->
-          <div class="*row *q-pt-md" v-else-if="$route.path != '/password/email'&&!$route.path.includes('/email/verify')">
+          </div><!-- TagReset: reset-password - api/password/reset-->
+          <div class="*row *q-pt-md" v-else-if="!$route.path.includes('password/email')&&!$route.path.includes('email/verify')">
+          <!-- <div class="*row *q-pt-md" v-else-if="$route.path != '/password/email'&&!$route.path.includes('/email/verify')"> -->
             <q-btn color="primary"
-              icon="fas fa-sign-in-alt" v-if="$route.path == '/login'"
+              icon="fas fa-sign-in-alt" v-if="$route.path.includes('login')"
               :loading="loader" :label="$t('login')"
               @click.prevent="authenticateUser" class="q-ma-sm *col-lg-3"
             /><!-- TagLogin -->
@@ -152,13 +152,13 @@
               :loading="loader" :label="$t('reset')"
               @click.prevent="deleteAllCookies" class="q-ma-sm *col-lg-3"
             /><!-- TagDeleteAllCookies -->
-            <q-btn color="primary" flat :label="$t('login')" to='/login' v-if="$route.path == '/register'"/>
+            <q-btn color="primary" flat :label="$t('login')" to='/login' v-if="$route.path.includes('register')"/>
             <q-btn color="primary" flat :label="$t('register')" to='/register'  v-else-if="!auth">
               <q-btn color="primary" flat :label="$t('forgot_password')" to="/password/email" class="*q-ma-sm *col-lg-12"/>
               <q-checkbox  v-model="remember" :label="$t('remember_me')" class="*text-black *q-ma-sm *col-lg-3"/>
             </q-btn><!--  -->
           </div>
-          <div v-else-if="$route.path == '/password/email'">
+          <div v-else-if="$route.path.includes('password/email')">
             <q-btn
               color="primary"
               icon="fas fa-link"
@@ -263,8 +263,8 @@ export default {
           password: password.value,
           password_confirmation: password_confirmation.value,
           remember: remember.value,
-          api: props.auth?'add':'register'
-        }; const store = $route.path == '/login'?'users/loginAction':'users/registerAction'
+          token: 'csrf', path: $route.path
+        }; const store = $route.path.includes('login')?'users/loginAction':'users/registerAction'
         $store.dispatch(store, data).then(() => {
           loader.value = false //name.value =
           role.value =  first_name.value = last_name.value = email.value = password.value = password_confirmation.value = ''
@@ -274,36 +274,37 @@ export default {
         // loader.value = true
         const url = SANCTUM_API?'forgot-password':'api/password/email'; api.post(url, {
           email: email.value,
-          locale: i18n?.global?.locale
+          locale: i18n?.global?.locale,
+          token: 'csrf'
         }).then(res => {
-          // console.log('send', res)
+          console.log('send', res)
           loader.value = false
-          notifyAction({success: res.data.status})
+          notifyAction({success: res.data.message})
         }).catch(error => catchErr(error)); loader.value = true
       }, // Send Email To Reset Password
       reset () {
         loader.value = true
         const data = {
-          api: 'login',
+          // api: 'login',
           locale: i18n?.global?.locale,
           token: token.value,
           email: email.value,
           password: password.value,
-          password_confirmation: password_confirmation.value
-        }; const url = SANCTUM_API?'reset-password ':'api/password/reset'
+          password_confirmation: password_confirmation.value,
+          token: 'csrf'
+        }; const url = SANCTUM_API?'reset-password':'api/password/reset'
         api.post(url, data).then(() => {
           loader.value = false
           notifyAction({success: $t('password_updated')})
           $store.dispatch('users/loginAction', data)
         }).catch(error => catchErr(error))
-      }, // TagReset: Send Password Email reset
+      }, // TagReset: Reset Password
       resend () {
         const url = SANCTUM_API ? 'email/verification-notification' : 'api/email/resend'
 
         crudAction({
-          message: $t('verify_email_address'),
-          url: url,
-          method: 'post'
+          success: $t('verify_email_address'),
+          url: url, method: 'post', token: 'csrf'
         }).then(token => {
           console.log('resendAction', token)
         }).catch(e => notifyAction({error: 'resendAction', e}))

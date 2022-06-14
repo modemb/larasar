@@ -79,14 +79,20 @@ export ANDROID_SDK_ROOT='D:\Projects\Android\android-sdk'
 export JAVA_HOME='E:\Apps\Android\Android Studio\jre'
 export JAVA_HOME='C:\Program Files\Java\jdk-17.0.2'
 ```
+
 ### Developing Mobile Apps
+
 <https://quasar.dev/quasar-cli/developing-mobile-apps>
+
+### Developing Desktop Apps
+
+<https://quasar.dev/quasar-cli-webpack/developing-electron-apps>
 
 ### Publishing to Store 
 
+<https://quasar.dev/quasar-cli/developing-cordova-apps/publishing-to-store>
 <https://quasar.dev/quasar-cli/developing-capacitor-apps/publishing-to-store>
-
-<https://quasar.dev/quasar-cli/developing-cordova-apps/publishing-to-store#Introduction>
+<https://quasar.dev/quasar-cli/developing-electron-apps/configuring-electron>
 
 ## Navigate to the folder that contains keytool.exe or add this folder to your path
 

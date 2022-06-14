@@ -2,17 +2,21 @@
 // use App\Http\Controllers\Auth\ForgotPasswordController;
 // use App\Http\Controllers\Auth\ResetPasswordController;
 // use App\Http\Controllers\Auth\VerificationController;//EmailVerificationNotificationController
-use App\Http\Controllers\Auth\PushSubscriptionController;
-use App\Http\Controllers\Auth\NotificationController;
-use App\Http\Controllers\Auth\BroadcastController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+
+use App\Http\Controllers\Auth\PushSubscriptionController;
+use App\Http\Controllers\Auth\NotificationController;
+use App\Http\Controllers\Auth\BroadcastController;
+use App\Http\Controllers\Auth\MessageController;
+// ==================================================== \\
+// use Illuminate\Support\Facades\Auth;
+// use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,18 +28,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('/test', function () {
-  return env('SANCTUM_API').' - '.config('sanctumApi');
-});
-
-Route::post('/tokens/create', function (Request $request) {
-  // return 'jjjj';
-  $token = $request->user()->createToken($request->token_name);
-
-  return $token->plainTextToken;
-  return ['token' => $token->plainTextToken];
-});// https://laravel.com/docs/9.x/sanctum#issuing-api-tokens
 
 Route::apiResources([
   'users' => UserController::class,
@@ -70,6 +62,23 @@ Route::middleware(['guest:api'])->group(function () {
     // Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
     // Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
 
-    Route::post('login/{driver}', [LoginController::class, 'redirect']);
-    Route::get('login/{driver}/callback', [LoginController::class, 'callback'])->name('oauth.callback');
+    // Route::post('login/{driver}', [LoginController::class, 'redirect']);
+    // Route::get('login/{driver}/callback', [LoginController::class, 'callback'])->name('oauth.callback');
 });
+
+// require __DIR__.'/auth.php';
+
+// Route::post('/broadcasting/auth', function (Request $request) {
+//   return $request->user();
+//     Auth::login(User::find(1), $remember = true);
+// });//Illuminate\Broadcasting\BroadcastController@authenticate
+
+// Notifications
+// Route::post('notifications', [NotificationController::class, 'store']);
+// Route::get('notifications', [NotificationController::class, 'index']);
+// Route::patch('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+// Route::post('notifications/mark-all-read', [NotificationController::class, 'markAllRead']);
+// Route::post('notifications/{id}/dismiss', [NotificationController::class, 'dismiss']);
+
+// Route::get('messages', [UserController::class, 'fetchMessages']);
+// Route::post('messages', [UserController::class, "sendMessage"]);

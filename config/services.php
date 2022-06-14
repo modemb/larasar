@@ -68,8 +68,9 @@ return [
         'model' => App\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
-    'paypal' => [//ToBeFixed
+    'paypal' => [
         'clientId' => env('PAYPAL_ID'),
         'clientSecret' => env('PAYPAL_SECRET'),
         'AccessToken' => env('PAYPAL_ACCESS'),

@@ -1,18 +1,24 @@
 import { Cookies } from 'quasar'
 import { boot } from 'quasar/wrappers'
 import { format, register } from 'timeago.js'
-import Echo from 'laravel-echo'
 import { i18n } from './i18n'
+import Echo from 'laravel-echo'
 import axios from 'axios'
+
+const qs = params => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
 
 window.Pusher = require('pusher-js')
 
 const location = Cookies.get('location'); let locale = Cookies.get('locale') || 'en';
-let userData; let ipDebug = 0; let crudAction; let notifyAction; let timeago
-const url = (process.env.DEV||(process.env.LOCAL_PROD==='1'?1:0))
+let userData; let ipDebug = 0; let crudAction; let notifyAction; let timeago //; let i18n
+
+const mobil = (process.env.MODE === 'capacitor')||(process.env.MODE === 'cordova')
+const API_URL = (process.env.DEV||(process.env.LOCAL_PROD==='1'?1:0))
               ?process.env.DEV_URL:process.env.API_URL
-const SANCTUM = process.env.SANCTUM_API==='true'?true:false
-const SANCTUM_API = (process.env.DEV&&url==process.env.DEV_URL)?false:SANCTUM
+const url = mobil?(process.env.PROD?API_URL:process.env.DEV_MOBIL_URL):API_URL
+
+// const SANCTUM = process.env.SANCTUM_API==='true'?true:false
+const SANCTUM_API = true//(process.env.DEV&&url==process.env.DEV_URL)?false:SANCTUM
 
 const ipDebugData = [ // Add Your IP To Debug App
   process.env.DEV_1_IP
@@ -23,14 +29,19 @@ const ipDebugData = [ // Add Your IP To Debug App
 // If any client changes this (global) instance, it might be a
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
-// for each client)
-const api = axios.create({ baseURL: url })
-
-api.defaults.withCredentials = true
+// for each client) api.defaults.withCredentials = true
+const api = axios.create({ baseURL: url, withCredentials: true })
 
 export default boot(async ({ app, router, store }) => {
 
+  // i18n = app?.__VUE_I18N__
+  // i18n = app?.i18n
   const $t = i18n.global.t
+
+  // https://quasar.dev/quasar-plugins/cookies#introduction
+  // const allCookies = $q.cookies.getAll() // {index: data}
+  // console.log('cookies', Cookies.getAll().location)
+  // console.log('process.env.MODE', process.env.MODE)
 
   crudAction = payload => store.dispatch('crud/Action', {
     ...payload,
@@ -42,11 +53,22 @@ export default boot(async ({ app, router, store }) => {
 
   api.interceptors.request.use(request => {
 
-    if (SANCTUM_API&!Cookies.get('XSRF-TOKEN')) setTimeout(() => {
+    console.log(
+      `%curl: %c${url}`,
+      'color: red; font-size: 24px', 'color: green; font-size: 24px',
+      'includes', request.data?.token?.includes('csrf'),
+    ) // Console With Style
+
+    // if (SANCTUM_API&!Cookies.get('XSRF-TOKEN')) setTimeout(() => {
+    //   api.get('/sanctum/csrf-cookie').catch(e => notifyAction({error: 'XSRF-TOKEN-GET', e}))
+    //     .then(() => store.dispatch('users/loginAction', JSON.parse(request.data))
+    //       .catch(e => notifyAction({error: 'XSRF-TOKEN-POST', e})))
+    // }, 1500) // Making Sure Sanctum Csrf Cookie Is Set
+
+    if (request.data?.token?.includes('csrf')&!Cookies.get('XSRF-TOKEN'))
       api.get('/sanctum/csrf-cookie').catch(e => notifyAction({error: 'XSRF-TOKEN-GET', e}))
         .then(() => store.dispatch('users/loginAction', JSON.parse(request.data))
-          .catch(e => notifyAction({error: 'XSRF-TOKEN-POST', e})))
-    }, 1500) // Making Sure Sanctum Csrf Cookie Is Set
+          .catch(e => notifyAction({error: 'XSRF-TOKEN-POST', e}))) // https://laravel.com/docs/9.x/sanctum#issuing-api-tokens
 
     locale = store.getters['config/localeGetter']
     const token = store.getters['users/tokenGetter']
@@ -54,23 +76,26 @@ export default boot(async ({ app, router, store }) => {
     if (locale) request.headers.common['Accept-Language'] = locale
     request.headers.common['DEV'] = process.env.DEV
     request.headers.common['IP-DEBUG'] = ipDebug
+    // if (window.Echo.socketId()) request.headers['X-Socket-ID'] = window.Echo.socketId()
+    // request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+    // request.headers.common['Content-Type'] = 'multipart/form-data'
     return request
-  }) // Request interceptor
+  })// Request interceptor
 
   api.interceptors.response.use(response => response, error => {
     const { status } = error.response
-
-    if (status >= 500) notifyAction({
-      error: $t('error_alert_text'),
-      e: status
-    })
 
     if (status === 401 && store.getters['users/authGetter'])
       store.dispatch('users/logoutAction').then(() => {
         router.push({ path: '/login' }).then(() => notifyAction({
           message: $t('token_expired_alert_title')+' '+status
         }))
-      }); return Promise.reject(error)
+      })
+
+    if (status >= 500) {
+      notifyAction({ error: $t('error_alert_text'), e: status })
+      notifyAction({ message: $t('Please Reload'), timeout: 0 })
+    } return Promise.reject(error)
   }) // Response interceptor
 
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -84,6 +109,9 @@ export default boot(async ({ app, router, store }) => {
 
   app.config.globalProperties.$crudAction = crudAction
   app.config.globalProperties.$notifyAction = notifyAction
+
+  // $t = app.__VUE_I18N__.global.t
+  // $t = i18n?.global?.t
 
   const localeFn = (_number, index) => {
     // number: the time ago / time in number;
@@ -109,29 +137,27 @@ export default boot(async ({ app, router, store }) => {
 
   timeago = date => format(date, locale) // https://timeago.org
 
-  const echoUrl = SANCTUM_API?'/broadcasting/auth':'/api/broadcasting/auth'; window.Echo = new Echo({
+  const echoUrl = (process.env.APP_URL===url)?'/broadcasting/auth':'/api/broadcasting/auth'
+  // const echoUrl = SANCTUM_API?'/broadcasting/auth':'/api/broadcasting/auth'
+
+  window.Echo = new Echo({
     broadcaster: 'pusher',
     cluster: process.env.PUSHER_APP_CLUSTER,
     key: process.env.PUSHER_APP_KEY,
+    // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    // key: process.env.MIX_PUSHER_APP_KEY,
     forceTLS: true,
     encrypted: true,
+    // authEndpoint: url + '/broadcasting/auth'
     authorizer: (channel, options) => {
       console.log('options', options)
       return {
-        authorize: (socketId, callback) => {
-          api.post(echoUrl, {
-            socket_id: socketId,
-            channel_name: channel.name
-          })
-          .then(response => {
-              callback(false, response.data);
-          })
-          .catch(error => {
-              callback(true, error);
-          })
-        }
-      }
-      // client: window.Pusher // https://pusher.com/docs/channels/server_api/http-api#publishing-events
+        authorize: (socketId, callback) => api.post(echoUrl, {
+          socket_id: socketId,
+          channel_name: channel.name
+        }).then(response => callback(false, response.data))
+          .catch(error => callback(true, error))
+      }// client: window.Pusher // https://pusher.com/docs/channels/server_api/http-api#publishing-events
     } // https://www.youtube.com/watch?v=zooUbo0tz6U&t=341s
   }) // https://laravel.com/docs/9.x/broadcasting#server-side-installation
 
@@ -148,8 +174,8 @@ export default boot(async ({ app, router, store }) => {
   }) // TagIpDebug: IpDebugModule
 
   store.dispatch('config/configAction',{ locale, ipDebug }) // Config
-  store.dispatch('users/locationAction', {
-    location: location || (data.city+', '+data.region||data.country).toLowerCase()
+  store.commit('users/locationMutation', {
+    location: location || (data?.city+' '+data?.region||data?.country).toLowerCase()
   }) // TagAddLocation: LocationModule
 
   router.beforeEach(async (to, _from, next) => {
@@ -185,4 +211,4 @@ export default boot(async ({ app, router, store }) => {
 
 // Here we define a named export
 // that we can later use inside .js files:
-export { api, url, SANCTUM_API, i18n, timeago, crudAction, notifyAction, userData, ipDebug }
+export { qs, api, url, SANCTUM_API, i18n, timeago, crudAction, notifyAction, userData, ipDebug }

@@ -135,7 +135,7 @@ class UserController extends Controller
         $sessions = DB::table('sessions')->where('ip_address', $request->ip());
         $sessionTrue = $sessions->update([
             // Session::where('ip_address', $request->ip())->update([
-            'user_id' => $request->id
+            'user_id' => $request->id??0
         ]); // User Sessions - https://laravel.com/docs/9.x/session
 
         // if (!$sessionTrue) $sessions = $sessions->first() ?? new Session;
