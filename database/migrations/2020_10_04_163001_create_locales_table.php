@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('locales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->default(0);
-            $table->foreignId('subcategory_id')->default(0);
+            $table->foreignId('category_id')->nullable();
+            $table->foreignId('subcategory_id')->nullable();
             $table->string('categoryName')->nullable();
             $table->string('subcategoryName')->nullable();
             $table->string('description')->nullable(); // Category Description

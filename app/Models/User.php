@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
+use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 // use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -24,6 +25,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasPushSubscriptions;
     // use TwoFactorAuthenticatable;
     use SoftDeletes;
+    use Billable;
 
     /**
      * The attributes that are mass assignable.

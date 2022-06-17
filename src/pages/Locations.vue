@@ -215,9 +215,7 @@ export default {
     GoogleAutocomplete, // google-autocomplete
   },
   setup () {
-    const $t = i18n?.global?.t
-    // const $q = useQuasar()
-    // const $route = useRoute()
+    const $t = i18n.global.t
     const loader = ref(false)
     const editLocation = ref(false)
     const $store = useStore()
@@ -231,21 +229,19 @@ export default {
     const longitude = ref(null)
     const utc_offset = ref(null)
 
+    const token = $store.getters['users/tokenGetter']
+
     const onload = payload => $store.dispatch('users/usersAction', payload)
 
     onMounted(() => onload({ locationsData: 'locations' }))
     watch(locationsData, val => onload({ locationsData: val }))
 
     function Delete (location) {
-      const token = $store.getters['users/tokenGetter']
-      if (token && confirm('Are You Sure You Want To '+(location.forever?'Delete Forever':'Delete')+' Location '+ location.place) === true) {
-        crudAction({
-          url: `/api/users/${location.id}`,//?${qs(location)}
-          method: 'delete',
-          location: true
+      if (token && confirm('Are You Sure You Want To '+(location.forever?'Delete Forever':'Delete')+' Location '+ location.place) === true) crudAction({
+          url: `/api/users/${location.id}`,
+          method: 'delete', location: true
         }).then(onload({ locationsData: locationsData.value}))
           .catch(e => notifyAction({error: 'deleteAction', e}))
-      }
     } // TagDelete: locationModule
 
     return {
@@ -311,7 +307,8 @@ export default {
         })
       }, // TagRestore: locationModule
       fromAnalytics () {
-        loader.value = true
+        if (token && confirm('Are You Sure You Want To Add Locations From Analytics') === true)
+        loader.value = true; else return
         api.post('api/users', {fromAnalytics: true}).then(() => {
           onload({ locationsData: 'locations' })
           loader.value = false
@@ -319,7 +316,8 @@ export default {
       },
 
       truncate () {
-        loader.value = true
+        if (token && confirm('Are You Sure You Want To Truncate Locations') === true)
+        loader.value = true; else return
         api.delete('api/users/truncate', {truncate: true}).then(() => {
           onload({ locationsData: 'locations' })
           loader.value = false

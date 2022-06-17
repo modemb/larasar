@@ -33,8 +33,8 @@ return new class extends Migration
             $table->char('phone')->nullable();
             $table->string('location')->nullable();
             $table->string('place')->nullable();
-            // $table->smallInteger('lat')->nullable(); // 45
-            // $table->smallInteger('lon')->nullable();// -73
+            $table->decimal('lat', 10, 8)->nullable();// 45.4738
+            $table->decimal('lon', 11, 8)->nullable();// -73.5875
             $table->char('postal_code', 20)->nullable();
             $table->longText('description')->nullable();
             $table->json('flags')->nullable();

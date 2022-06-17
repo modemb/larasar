@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-      Schema::table('posts', function (Blueprint $table) {
+      Schema::table('reports', function (Blueprint $table) {
           $table->dropColumn([ // 'user_id', // Example
               // 'post_title',
               // 'phone',
@@ -25,7 +25,7 @@ return new class extends Migration
           // $table->dateTime('sale_date')->nullable()->after('pics');
           // $table->foreignId('message_id')->nullable()->after('user_id');
           // $table->string('link')->nullable()->after('name');
-          // $table->string('name')->nullable()->after('id');
+          // $table->string('product')->nullable()->after('end_date');
       });
     }
 };

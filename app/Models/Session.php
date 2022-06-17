@@ -17,4 +17,13 @@ class Session extends Model
     'payload',
     'last_activity'
   ];
+
+  /**
+   * The attributes that should be hidden for arrays.
+   *
+   * @var array
+   */
+  protected $hidden = [
+    'updated_at', 'created_at'
+  ];
 }

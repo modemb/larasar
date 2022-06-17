@@ -27,8 +27,8 @@ class Post extends Model
     'flags',
     'location',
     'place',
-    // 'lat',
-    // 'lon',
+    'lat',
+    'lon',
     'start_date',
     'end_date',
     'extend_date',
@@ -80,12 +80,21 @@ class Post extends Model
   }
 
   /**
+   * Get Post's Category
+   */
+  // public function getUserAttribute()
+  public function category()
+  {
+    return $this->belongsTo(Category::class, 'category_id');//, 'user_id'
+  }
+
+  /**
    * Get Post's Subcategory
    */
   // public function getUserAttribute()
   public function subcategory()
   {
-    return $this->belongsTo(Subcategory::class);//, 'user_id'
+    return $this->belongsTo(Subcategory::class, 'subcategory_id');//, 'user_id'
   }
 
   /**

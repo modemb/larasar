@@ -23,12 +23,12 @@ return new class extends Migration
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
 
+            $table->string('product')->nullable();
             $table->char('plan', 20)->default('Basic');
             $table->char('currency_code', 3)->nullable();
             $table->decimal('payment', 8, 2)->default(0);
             $table->decimal('amount', 8, 2)->default(0); // Total Payments
 
-            // $table->json('links')->nullable();
             $table->boolean('deleted')->nullable();
             $table->softDeletes();
             $table->timestamps();

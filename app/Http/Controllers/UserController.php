@@ -113,7 +113,6 @@ class UserController extends Controller
             $analytic->session = 'InvitedGuest LR';
           } // TagSave: InvitedUserAnalyticModule
         } else { // Guest Analytic
-
           if ($analytic->user_id) $analytic->session = 'GuestRecorded LR';
           elseif ($analytic->session) $analytic->session = 'ReturningGuest LR';
           else $analytic->session = 'NewGuest LR';
@@ -132,21 +131,9 @@ class UserController extends Controller
         $analytic->lon = $request->longitude??$request->lon;
         $analytic->utc_offset = $request->utc_offset; $analytic->save();
 
-        $sessions = DB::table('sessions')->where('ip_address', $request->ip());
-        $sessionTrue = $sessions->update([
-            // Session::where('ip_address', $request->ip())->update([
-            'user_id' => $request->id??0
+        DB::table('sessions')->where('ip_address', $request->ip())->update([
+            'user_id' => $analytic->user_id
         ]); // User Sessions - https://laravel.com/docs/9.x/session
-
-        // if (!$sessionTrue) $sessions = $sessions->first() ?? new Session;
-        // if (!$sessionTrue) $sessions->save([
-        //   'id' => (string) Str::uuid(),
-        //   'user_id' => $request?->id,
-        //   'ip_address' => $request->ip(),
-        //   'user_agent' => $request->header('User-Agent')??$request->server('HTTP_USER_AGENT'),
-        //   'payload' => '',
-        //   'last_activity' => time()
-        // ]); // E:\Apps\xampp\htdocs\www\suguffie\vendor\laravel\framework\src\Illuminate\Session
 
         // ----------------- TagSave: PageViewModule --------------------------- \\
         $view = View::where('slug', $request->slug)->where(function ($query) use ($request) {

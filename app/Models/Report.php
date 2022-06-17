@@ -16,6 +16,7 @@ class Report extends Model
     'sale_date',
     'start_date',
     'end_date',
+    'product',
     'plan',
     'currency_code',
     'payment',

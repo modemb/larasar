@@ -71,7 +71,7 @@ class Analytic extends Model
      * Get the user's sessions.
      */
     public function  getSessionsAttribute()
-    {
+    { // 'foreign_key', 'local_key'
       return $this->hasMany(Session::class, 'ip_address', 'ip')->get();
       // return $this->hasMany(Session::class, 'user_id')->get();
     }
