@@ -18,13 +18,18 @@ export function rolesMutation (state, { roles }) {
   state.roles = roles
 }
 
-export function analyticsMutation (state, { analytics }) {
-  state.analytics = analytics
+export function analyticsMutation (state, crud) {
+  state.analytics = crud
 }
 
 export function locationMutation (state, { location }) {
   Cookies.set('location', location, { expires: 365 })
   state.location = location
+}
+
+export function distanceMutation (state, distance) {
+  Cookies.set('distance', distance, { expires: '1h' })
+  state.distance = distance
 }
 
 export function logoutMutation (state) {

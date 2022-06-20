@@ -3,8 +3,9 @@ import { Cookies } from 'quasar'
 export default {
   user: null,
   users: [],
-  roles: [],
+  roles: {},
   analytics: [],
-  token: Cookies.get('token'),//||Cookies.get('XSRF-TOKEN'),
-  location: null
+  distance: {},
+  location: null,
+  token: Cookies.get('token'),
 }

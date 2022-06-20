@@ -21,3 +21,7 @@ export function tokenGetter (state) {
 export function locationGetter (state) {
   return state.location
 }
+
+export function distanceGetter (state) {
+  return state.distance
+}
