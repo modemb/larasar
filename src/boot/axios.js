@@ -59,12 +59,6 @@ export default boot(async ({ app, router, store }) => {
       'includes', request.data?.token?.includes('csrf'),
     ) // Console With Style
 
-    // if (SANCTUM_API&!Cookies.get('XSRF-TOKEN')) setTimeout(() => {
-    //   api.get('/sanctum/csrf-cookie').catch(e => notifyAction({error: 'XSRF-TOKEN-GET', e}))
-    //     .then(() => store.dispatch('users/loginAction', JSON.parse(request.data))
-    //       .catch(e => notifyAction({error: 'XSRF-TOKEN-POST', e})))
-    // }, 1500) // Making Sure Sanctum Csrf Cookie Is Set
-
     if (request.data?.token?.includes('csrf')&!Cookies.get('XSRF-TOKEN'))
       api.get('/sanctum/csrf-cookie').catch(e => notifyAction({error: 'XSRF-TOKEN-GET', e}))
         .then(() => store.dispatch('users/loginAction', JSON.parse(request.data))

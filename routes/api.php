@@ -65,20 +65,3 @@ Route::middleware(['guest:api'])->group(function () {
     // Route::post('login/{driver}', [LoginController::class, 'redirect']);
     // Route::get('login/{driver}/callback', [LoginController::class, 'callback'])->name('oauth.callback');
 });
-
-// require __DIR__.'/auth.php';
-
-// Route::post('/broadcasting/auth', function (Request $request) {
-//   return $request->user();
-//     Auth::login(User::find(1), $remember = true);
-// });//Illuminate\Broadcasting\BroadcastController@authenticate
-
-// Notifications
-// Route::post('notifications', [NotificationController::class, 'store']);
-// Route::get('notifications', [NotificationController::class, 'index']);
-// Route::patch('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
-// Route::post('notifications/mark-all-read', [NotificationController::class, 'markAllRead']);
-// Route::post('notifications/{id}/dismiss', [NotificationController::class, 'dismiss']);
-
-// Route::get('messages', [UserController::class, 'fetchMessages']);
-// Route::post('messages', [UserController::class, "sendMessage"]);

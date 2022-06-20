@@ -21,8 +21,8 @@ class SetDev
         $true = $dev && config('app.dev'); config([
             'app.env' => $true?'local':'production',
             'app.debug' => $ipDebug,
-            // 'sanctumApi' => env('SANCTUM_API')
-            'sanctumApi' => $dev?false:env('SANCTUM_API')
+            'sanctumApi' => env('SANCTUM_API')
+            // 'sanctumApi' => $dev?false:env('SANCTUM_API')
         ]); return $next($request);
     }
 }

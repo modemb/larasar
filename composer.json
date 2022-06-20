@@ -11,6 +11,7 @@
         "inertiajs/inertia-laravel": "^0.5.2",
         "intervention/image": "^2.7",
         "laravel-notification-channels/webpush": "^6.0",
+        "laravel/cashier": "^13.10",
         "laravel/framework": "^9.0",
         "laravel/jetstream": "^2.6",
         "laravel/passport": "^10.3",

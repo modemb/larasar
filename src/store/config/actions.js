@@ -1,6 +1,5 @@
 import { Cookies } from 'quasar'
 import { i18n, api, notifyAction } from 'boot/axios'
-// import { i18n } from 'boot/i18n'
 
 export function configAction ({ commit }, payload) {
   i18n.global.locale = payload.locale
