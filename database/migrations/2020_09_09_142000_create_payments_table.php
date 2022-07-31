@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('post_id')->default(0);
+            $table->foreignId('post_id')->nullable();
             $table->string('token')->nullable(); // 9P927075LU9488235
             $table->string('PayerID')->nullable(); // UZHCGG3Q6VG5Y
 
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
 
-            $table->char('plan', 20)->default('Basic');
+            $table->char('plan', 20)->nullable();
             $table->char('currency_code', 3)->nullable();
             $table->decimal('amount', 8, 2)->default(0);
             $table->json('links')->nullable();

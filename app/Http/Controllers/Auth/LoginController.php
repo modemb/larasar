@@ -46,6 +46,7 @@ class LoginController extends Controller
     public function __construct(/*$param*/)
     {
         $this->middleware('guest')->except('logout');
+        // $this->param = $param;
     }
 
     /**
@@ -93,6 +94,10 @@ class LoginController extends Controller
             .'0123456789!@#$%^&*()'); // and any other characters
         shuffle($seed); // probably optional since array_is randomized; this may be redundant
         $rand = ''; foreach (array_rand($seed, 8) as $k) $rand .= $seed[$k]; $password = $rand;
+
+        // All providers...
+        // $user->getId();
+        // $user->getNickname();
 
         $email = $user->email??$user->getEmail();
         $avatar = $user->avatar??$user->getAvatar();
@@ -212,9 +217,9 @@ class LoginController extends Controller
             'scope' => '*'
         ] + $client; $response = Http::asForm()->post($passport['login_endpoint'], $data);
 
-        Log::alert($passport);
-        Log::alert($data);
-        Log::alert($response->json());
+        // Log::alert($passport);
+        // Log::alert($data);
+        // Log::alert($response->json());
 
         $user = User::where('email', $request['email'])->first();
         // if ($user) Analytic::where('user_id', $user['id'])->update(['session' => 'Login']); // ToImproveLogOutWithSession

@@ -19,9 +19,10 @@ class BroadcastController extends Controller
      */
     public function authenticate(Request $request)
     {   //return auth()->user();
+        if ($request->hasSession()) $request->session()->reflash();
+
         $string = $request->channel_name; // Authenticate Passport
         $user = User::find(preg_replace('/[^0-9]/', '', $string));
-        if ($request->hasSession()) $request->session()->reflash();
         Auth::login($user, $remember = true);
 
         return Broadcast::auth($request);

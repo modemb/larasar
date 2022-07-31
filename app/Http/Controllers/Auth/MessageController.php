@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Notifications\MessageNotification;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Events\MessageSent;
 use App\Models\Message;
@@ -63,8 +64,7 @@ class MessageController extends Controller
       $message = [
         'message' => $request->input('message'),
         'room_id' => $request->room_id,
-        'user_id' => $auth['id'],
-        // 'post_id' => $request->post_id
+        'user_id' => $auth['id']
       ];$messageTrashed = Message::onlyTrashed()->first();
 
       if ($messageTrashed) {
@@ -74,7 +74,7 @@ class MessageController extends Controller
       } else $chat = Message::create($message);
       // $auth = collect($auth)->forget('posts');
 
-      event(new MessageSent($auth->id, $chat->room_id, $chat->message));
+      event(new MessageSent($auth->id, $chat->room_id, $request->typing, $chat->message));
       // broadcast(new MessageSent($auth['id'], $chat->room_id, $chat->message))->toOthers();
 
       foreach (Chat::where('room_id', $chat->room_id)->get() as $chat)
@@ -101,7 +101,7 @@ class MessageController extends Controller
       if ($request->messages) // Get Rom's Chat Messages
       // return Room::with('messages')->get(); // TagShow: MessageModule
       return Room::find($id); // TagShow: RoomModule - MessageModule
-      elseif ($request->rooms) { // Get User Chat Rooms
+      elseif ($id==='rooms') { // Get User Chat Rooms
         // return Room::Get();
         // return Room::with('messages')->where('user_id', $request->user_id)->get();
         return Chat::with('post', 'room')->where('user_id', $request->user_id)->get();

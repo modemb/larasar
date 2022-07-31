@@ -11,15 +11,15 @@ use PayPalCheckoutSdk\Core\ProductionEnvironment;
 // Before capture, Order should be approved by the buyer using the approval URL returned in the create order response.
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 
-class paypal
+class Checkout
 {
     /**
-     * User' Payment
+     * User's PayPal
      *
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function log($request)
+    public function paypal($request)
     {
       $paypal = config('services.paypal'); // Creating an environment
       if ($request->sAdminIP) $environment = new ProductionEnvironment($paypal['clientId'], $paypal['clientSecret']);
@@ -37,8 +37,8 @@ class paypal
             "purchase_units" => [[
                 "reference_id" => $request->plan, //"test_ref_id1",
                 "amount" => [
-                    "value" => $request->payment, //$payment['amount'],
-                    "currency_code" => $request->currency_code //$payment['currency_code']
+                    "value" => $request->paymentAmount,
+                    "currency_code" => $request->currency_code
                 ]
             ]],
             "application_context" => [

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-      Schema::table('reports', function (Blueprint $table) {
+      Schema::table('payments', function (Blueprint $table) {
           $table->dropColumn([ // 'user_id', // Example
               // 'post_title',
               // 'phone',
@@ -24,7 +24,7 @@ return new class extends Migration
           // $table->decimal('amount', 8, 2)->default(0)->after('payment');
           // $table->dateTime('sale_date')->nullable()->after('pics');
           // $table->foreignId('message_id')->nullable()->after('user_id');
-          // $table->string('link')->nullable()->after('name');
+          $table->char('plan', 20)->nullable()->after('end_date');
           // $table->string('product')->nullable()->after('end_date');
       });
     }

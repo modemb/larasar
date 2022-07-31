@@ -15,6 +15,7 @@ use App\Mail\InfoSuguffie;
 use App\Models\Analytic;
 use App\Models\Category;
 use App\Models\Location;
+use App\Models\Payment;
 use App\Models\Message;
 use App\Models\Session;
 use App\Models\Report;
@@ -102,20 +103,20 @@ class UserController extends Controller
 
         if ($request->id) { // Auth Analytic
           if ($request->newAuth) {
-            $analytic->session = 'NewAuth LR';
-            $analytic->user_id = $request->id;
-          } elseif ($analytic->ip != $request->ip) $analytic->session = 'ReturningAuthNewIP LR';
-          else $analytic->session = 'ReturningAuth LR';
+            $analytic->session = 'NewAuth';
+            $analytic->user_id = $request->id; // Store New Auth Id To It's Guest Analytic
+          } elseif ($analytic->ip != $request->ip) $analytic->session = 'ReturningAuthNewIP';
+          else $analytic->session = 'ReturningAuth';
         } elseif ($request->hostUser) { // Assign Invited User's Analytic to Host User
           $hostUser = User::where('name', $request->hostUser)->first();
           if ($hostUser) { // IP Has To Be Different
             $analytic->host_id = $hostUser->id;
-            $analytic->session = 'InvitedGuest LR';
+            $analytic->session = 'InvitedGuest';
           } // TagSave: InvitedUserAnalyticModule
         } else { // Guest Analytic
-          if ($analytic->user_id) $analytic->session = 'GuestRecorded LR';
-          elseif ($analytic->session) $analytic->session = 'ReturningGuest LR';
-          else $analytic->session = 'NewGuest LR';
+          if ($analytic->user_id) $analytic->session = 'GuestRecorded';
+          elseif ($analytic->session) $analytic->session = 'ReturningGuest';
+          else $analytic->session = 'NewGuest';
         } $this->location($request); // TagSave: LocationModule
 
         if ($request->city) $analytic->city = $request->city;
@@ -123,7 +124,6 @@ class UserController extends Controller
         if ($request->country) $analytic->country = $request->country_name??$request->country;
 
         if ($request->app) $analytic->app = $request->app; // App installed
-        // if ($request->id) $analytic->user_id = $request->id; // Store New Auth Id To It's Guest Analytic
         if ($request->ip) $analytic->ip = $request->ip;
 
         $analytic->updated_at = date('Y-m-d H:i:s');
@@ -166,8 +166,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { //return $request->session()->all();
-
+    { //return $request;
 
       if ($request->ip) { // Add Guest Analytic
 
@@ -274,14 +273,15 @@ class UserController extends Controller
       return [
         'appEnv' => config('app.env'),
         'appDebug' => config('app.debug'),
+        'ipDebug' => config('app.debug'), // TagStore: IpDebugModule
         'sanctumApi' => config('sanctumApi'),
         'user' => config('user'),
+        'stateful' => config('sanctum.stateful'),
         // =============================== \\
         'appName' => config('app.name'),
         'laravel' => app()->version(),
         'locale' => app()->getLocale(),
         'locales' => config('app.locales'),
-        'ipDebug' => config('app.debug'), // TagStore: IpDebugModule
         'vapidPublicKey' => config('webpush.vapid.public_key'),
         'gcm_sender_id' => config('webpush.gcm.sender_id')
       ]; // TagStore: ConfigModule
@@ -295,10 +295,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $id)
-    { //return $request;
+    { //return $request->session()->regenerate();
       // Session::get('a');
       // return session('a');
       // return session('a', 'default');
+      // Log::warning($request->session()->regenerate());
 
       $pics = Pic::whereNull('deleted')->orderBy('pic', 'asc');  // Pic::all()
       $picsAchieved = Pic::onlyTrashed()->whereNull('deleted'); // Show Admins' Achieved Users
@@ -315,7 +316,7 @@ class UserController extends Controller
       if ($request->location||$request->search) return $this->location($request); // TagShow: LocationModule
 
       if ($request->getUser) return $user; // Get Chat User
-      elseif ($request->analytics) { // Get Users Analytics
+      elseif ($id==='analytics') { // Get Users Analytics
 
         // return DB::table('analytics')->get();
         // return Analytic::all();
@@ -332,7 +333,7 @@ class UserController extends Controller
           ->orWhereBetween('analytics.updated_at', [$request->from, $request->to]);
         if ($request->period) $analytics->whereBetween('analytics.updated_at', [date('Y-m-d H:i:s', strtotime($request->period)), date('Y-m-d H:i:s')]);
         return $analytics->get(); // TagShow: AnalyticModule from Analytics.vue
-      } elseif ($request->views) { // Get Posts views
+      } elseif ($id==='views') { // Get Posts views
 
         $views = View::join('analytics', function ($join) {
             $join->on('analytics.user_id', 'views.user_id')
@@ -344,18 +345,23 @@ class UserController extends Controller
           ->orWhereBetween('views.updated_at', [$request->from, $request->to]);
         if ($request->period) $views->whereBetween('views.updated_at', [date('Y-m-d H:i:s', strtotime($request->period)), date('Y-m-d H:i:s')]);
         return $views->get(); // TagShow: ViewModule
-      } elseif ($request->reports) { // Get Users reports
+      } elseif ($id==='reports') { // Get Users reports
 
         // $reports = DB::table('reports')->whereNotNull('start_date');
-        $reports = Report::whereNotNull('start_date'); //return 'reports';
+        $reports = Report::whereNotNull('end_date'); // Reports
 
-        if ($request->role == 'User') $reports->where('user_id', $request->id);
+        if ($request->post_id) $reports = Report::where('post_id', $request->post_id)
+                        ->whereNull('end_date'); // Post Pending Payments
+        if ($request->role == 'User') $reports->where('user_id', $request->id); // User Reports
+        if ($request->pending) $reports = Report::whereNull('end_date'); // Posts Pending Payments
 
         if ($request->proxyDate) $reports->whereDate('updated_at', $request->proxyDate)
           ->orWhereBetween('updated_at', [$request->from, $request->to]);
         if ($request->period) $reports->whereBetween('updated_at', [date('Y-m-d H:i:s', strtotime($request->period)), date('Y-m-d H:i:s')]);
-        return $reports->get();// TagShow: ReportModule
+        return $reports->get(); // TagShow: ReportModule
       } if ($request->avatar) $request->avatar->new['avatar']; // Show User Avatar
+
+      // elseif ($id==='cart') return Payment::whereNotNull('token')->get(); // Get Pending Payments
 
       if ($request->usersData == 'my_users') return User::where('user_id', $id)->get(); // Show User's Users  // TagShow: UserModule
       elseif ($request->usersData == 'trashed') return User::onlyTrashed()->whereNull('deleted')->get(); // Show Admins' Achieved Users
@@ -363,7 +369,6 @@ class UserController extends Controller
       elseif ($request->locationsData == 'locations') return Location::get(); // Show Locations
       elseif ($request->locationsData == 'trashed') return Location::onlyTrashed()->whereNull('deleted')->get(); // Show Trashed location
       // elseif ($request->usersData == 'users') return DB::table('users')->whereNull(['deleted_at', 'deleted'])->get(); // Show Admins' Users
-
     }
 
     /**
@@ -436,6 +441,7 @@ class UserController extends Controller
         if ($request->country_code) $put->country_code = $request->country_code;
         if ($request->country) $put->country = $request->country;
         if ($request->role) $put->role = $request->role;
+        if ($request->gain) $put->gain = $request->gain;
         if ($request->signature) $put->email_verified_at = date('Y-m-d H:i:s');
         if ($request->pwd || $request->update_password || $request->update_email) {
           if ($request->update_password) $request->new_password = $check = $request->update_password; // Admin Update Password
@@ -635,7 +641,6 @@ class UserController extends Controller
 
       if (isset($request->location)) { // return $request;
         $location = $location->first(); $id = $location?->id;
-        // Log::warning('$id '.$location?->place=='  ');
         if ($location?->place=='  ') $this->destroy($request, $id);
         else return $location;
       } if (isset($request->search)) return $location->get();
