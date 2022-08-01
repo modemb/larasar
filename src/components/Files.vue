@@ -40,7 +40,7 @@
             :options="[
               {label: $t('My Pics'), value: 1},
               {label: $t('Trash'), value: 0}
-            ].concat(role.admins?[{label: $t('all_pics'), value: 'all_pics'}]:[])"
+            ].concat(role?.admins?[{label: $t('all_pics'), value: 'all_pics'}]:[])"
           /><!-- TagPeriod: FilesModule -->
 
           <q-btn icon="add" class="*q-ma-md q-ma-xs col-md-2"
@@ -70,7 +70,7 @@
         <q-table
           :style="'height:' + height + 'px;'" grid
           :card-container-class="cardContainerClass"
-          :title="$t('galleries')"
+          :title="$t('gallery')"
           :rows="rows"
           :columns="columns"
           row-key="name"
@@ -113,7 +113,7 @@
 <script>
 import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { url, api, ipDebug, crudAction, notifyAction } from 'boot/axios'
 
@@ -135,8 +135,8 @@ export default {
     const images  = ref([])
     const Items = 0
 
-    const auth = $store.getters['users/authGetter']
-    const role = $store.getters['users/rolesGetter']
+    const auth = computed(() => $store.getters['users/authGetter'])
+    const role = computed(() => $store.getters['users/rolesGetter'])
 
     const filter = ref('')
     const pagination = ref({
@@ -153,25 +153,22 @@ export default {
 
     function crudReload (show) {
       crud({
-        // url: `api/categories/1`,
-        url: `api/users/${auth.id}`,
-        method: 'get',
-        auth_id: auth?auth.id:null,
-        show: show,
-        // update: true
+        url: `api/users/${auth.value?.id}`,
+        method: 'get', show,
+        auth_id: auth.value?.id
       }).then(() => emit('reload', props.post?'file':$route))
         .catch(e => notifyAction({error: 'onMountedPicsAction', e}))
-    } crudReload('my_pics')
+    } onMounted(() => crudReload('my_pics'))
 
     async function crud(data) {
       rows.value = await crudAction(data).catch(e => notifyAction({error: data.error, e}))
       const gridMasonryClass = document.querySelector('.grid-masonry')
-      if(gridMasonryClass) gridMasonryClass.style.height = rows.value.length*3+'00px'
+      if (gridMasonryClass) gridMasonryClass.style.height = rows.value.length*300+'px'
     } // TagCrud: CrudModule
 
     function add (selectedFiles) {
       api({
-        url: `api/users/${auth.id}`,
+        url: `api/users/${auth.value?.id}`,
         method: 'put',
         data: {
           post: props.post, // Post Data
@@ -179,20 +176,18 @@ export default {
           update: true
         }
       }).then(res => {
-        crudReload('my_pics')
+        crudReload('my_pics') // Show Picture
         notifyAction(res.data)
-      }) // Show Picture
-      .catch(e => notifyAction({error: 'storeImageAction', e}))
+      }).catch(e => notifyAction({error: 'storeImageAction', e}))
     } // TagAdd: FilesModule
 
     function cruDelete (selectedFiles) {
-      console.log('cruDelete', selectedFiles)
       return crud ({
         error: 'DeletePicsAction',
-        url: `api/users/${auth.id}`,
+        url: `api/users/${auth.value?.id}`,
         method: 'delete',
-        auth: auth||null,
-        forever: selectedFiles.forever,
+        auth: auth?.value,
+        forever: selectedFiles?.forever,
         pics: selectedFiles
       })
     }

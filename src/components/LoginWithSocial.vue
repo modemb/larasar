@@ -14,6 +14,7 @@ import { i18n, api, crudAction, notifyAction } from 'boot/axios'
 import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import {  useStore } from 'vuex'
+// import { i18n } from 'boot/i18n'
 
 export default {
   name: 'LoginWithsocial',
@@ -49,8 +50,7 @@ export default {
       const newWindow = openWindow('', $t('login'))
       const { data } = await api.post(`/api/login/${provider}`)
         .catch(e => notifyAction({error: 'logProvider', e}))
-      newWindow.location.href = data.url
-      // window.location.href = data.url
+      newWindow.location.href = data.url // window.location.href = data.url
     }
 
     /**
@@ -95,9 +95,9 @@ export default {
 
     return {
       drivers: [
-        'github',
-        // 'facebook',
-        // 'google'
+        // 'github',
+        'facebook',
+        'google'
       ],
       async login (provider) {
         if (auth.value) {

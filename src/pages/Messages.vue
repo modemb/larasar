@@ -116,7 +116,7 @@
 <script>
 import { ref, watch, computed } from 'vue'
 import { useStore } from 'vuex'
-import { i18n, url, api, timeago, crudAction, notifyAction, ipDebug } from 'boot/axios'
+import { i18n, url, api, timeago, crudAction, notifyAction, ipDebug, SANCTUM_API } from 'boot/axios'
 // import { i18n } from 'boot/i18n'
 import Chat from '../components/Chat'
 
@@ -141,6 +141,8 @@ export default {
 
     const auth = computed(() => $store.getters['users/authGetter'])
 
+    const URL = SANCTUM_API?'/messages':'api/messages'
+
     chatsAction({ user_chats: 'my_chats', user_id: auth.value.id })
 
     watch(myChats, val => {
@@ -149,9 +151,9 @@ export default {
 
     function chatsAction (payload) {
       crudAction({...payload, ...{
-        url: 'api/messages/1',
-        method: 'get',
-        rooms: true
+        url: `${URL}/rooms`,
+        method: 'get'
+        // rooms: true
       }}).then(crud => chats.value = crud)
       .catch(e => notifyAction({error: 'chatsAction', e}))
     }
@@ -162,7 +164,7 @@ export default {
 
     function Delete (chat) {
       if (confirm('Are You Sure You Want To '+(chat.forever?'Delete Forever':'Delete')+' chat'+chat.id) === true) crudAction({
-        url: `api/messages/${chat.id}`,
+        url: `${URL}/${chat.id}`,
         method: 'delete',
         // auth_id: auth.value.id,
         // deleteChat: 1

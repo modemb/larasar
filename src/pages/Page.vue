@@ -43,9 +43,8 @@ export default {
         crudAction({
           slug: slug.value,
           locale: locale.value,
-          url: 'api/pages/1',
-          method: 'get',
-          showPage: 1
+          url: 'api/pages/showPage',
+          method: 'get', // showPage: 1
         }).then(page => thenGet(page))
           .catch(e => notifyAction({error: data.e, e}))
     }

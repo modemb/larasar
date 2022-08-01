@@ -8,50 +8,39 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { crudAction, notifyAction } from 'boot/axios'
 
 export default {
-  props: ['post', 'auth'],
+  props: ['post'],
   setup (props, { emit }) {
     const $store = useStore()
-    const $route = useRoute()
     const loader = ref(false)
-    const auth = $store.getters['users/authGetter']
+    const auth = computed(() => $store.getters['users/authGetter'])
 
     return {
-      crudAction,
       loader,
+      auth,
+
+      wish: post => post?.favorite?.wish, // TagFavorite: FavoriteModule
 
       favorite (post) {
         loader.value = true
-        let id = false; try {
-          id = post.favorite.id
-          // id = posts.post.favorite.id
-        } catch (error) {}
-        let method = id ? 'put' : 'post'
+        const id = post?.favorite?.id
+        const method = id ? 'put' : 'post'
         let url = id ? `api/categories/${id}` : 'api/categories'
         crudAction({
-          // error: 'AddToFavorite',
           url: url,
           method: method,
           favorite: true,
-          user_id: auth.id,
+          user_id: auth.value.id,
           post_id: post.id
         }).then(crud => {
           loader.value = false
-          let favorite; try {
-            favorite = crud.wish // wishCycle
-          } catch (error) {}
-          if (favorite) emit('favorite', $route)
+          const favorite = crud?.wish // wishCycle
+          if (favorite) emit('favorite') // Categories
         }).catch(e => notifyAction({error: 'AddToFavorite', e}))
-      }, // TagFavorite: FavoriteModule
-      wish (post) {
-        try {
-          return post.favorite.wish
-        } catch (error) {} return false
       } // TagFavorite: FavoriteModule
     }
   }

@@ -94,7 +94,7 @@
                   <div class="text-h6">{{$t('verify_email')}}</div>
                 </q-card-section>
 
-                <div class="q-ma-sm text-black">
+                <div class="q-ma-sm q-dark *text-black">
                   <template v-if="success">
                       {{$t('verify_email_address')}} <br>
                   </template>
@@ -125,7 +125,6 @@
                 /><!-- Invalid signature. -->
             </q-card>
           </div><!-- TagVerify: VerifyModule -->
-
 
           <div v-if="$route.path.includes('reset-password')">
             <q-btn color="primary"
@@ -179,7 +178,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { LocalStorage } from 'quasar'
+import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import {  useStore } from 'vuex'
 import LoginWithSocial from './LoginWithSocial'
@@ -217,8 +217,18 @@ export default {
     const password_data = ref(null)
     const password_confirmation = ref(null)
     const remember = ref(true)
+    const darkMode = ref(LocalStorage.getItem('darkMode'))
 
-    function catchErr (error) {
+    onMounted(() => darkModeClass(darkMode.value))
+
+    function darkModeClass(val) {
+      const QDarkClass = document.querySelector('.q-dark')
+      if (val==='null') val = false
+      if (QDarkClass) QDarkClass.style.color = val?'#fff':'var(--q-dark)'
+      if (QDarkClass) QDarkClass.style.background = val?'var(--q-dark)':'#fff'
+    }
+
+    function catchErr(error) {
       const data = error?.response?.data; loader.value = false
       const errors = data?.errors; const message = data?.message
       role_data.value = errors?.role?.[0] || message
@@ -267,7 +277,7 @@ export default {
         }; const store = $route.path.includes('login')?'users/loginAction':'users/registerAction'
         $store.dispatch(store, data).then(() => {
           loader.value = false //name.value =
-          role.value =  first_name.value = last_name.value = email.value = password.value = password_confirmation.value = ''
+          role.value =  first_name.value = last_name.value = email.value = password.value = password_confirmation.value = null
         }).catch(error => catchErr(error)); loader.value = true
       }, // TagRegister - TagAdd - TagLogin TagUser
       send () {

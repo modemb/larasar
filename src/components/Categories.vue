@@ -35,6 +35,11 @@
       </div><!--============ Subcategories ======-->
     </q-card>
   </q-dialog><!-- TagEditCategory: CategoryModule -->
+  <q-dialog v-model="view"><!--============ Edit Post PopUp ===========-->
+    <q-card class="my-card *text-white" style="width:1000px">
+        <post :postData="postData" />
+    </q-card><!-- TagEditPost: PostModule -->
+  </q-dialog><!--========================== Edit Post PopUp End =======-->
   <div class="q-pa-md">
     <!--================================ Categories =======================================-->
     <q-table
@@ -142,7 +147,7 @@
               </div><!-- TagSubcategoriesSorted: SubcategoryModule -->
             </q-list><!--============ Subcategories ======-->
           </q-card>
-        </div>
+        </div><!-- TagCategories: CategoriesModule -->
       </template><!--================================================ CategoriesList End ====================================-->
 
       <template v-slot:body="props" v-else><!-- ===================== CategoryList - SubcategoryList ======================= -->
@@ -150,10 +155,9 @@
           <q-list bordered class="rounded-borders" style="max-width: 1600px">
 
             <q-item>
-              <q-item-section style="max-width: 150px; max-height: 150px;">
-                <!-- <q-img :src="!props.row.pics[0]||url+'/'+props.row.pics[0].pic" v-if="props.row.pics[0].pic"/> -->
-                <q-img :src="url+'/'+pic(props.row)" v-if="pic(props.row)"/>
-                <q-icon name="fas fa-plus-circle" color="black" size="150px" v-else/>
+              <q-item-section style="max-width: 150px; max-height: 150px; cursor: pointer;" @click="viewPost(props.row)">
+                  <q-img :src="url+'/'+pic(props.row)" v-if="pic(props.row)"/>
+                  <q-icon name="fas fa-plus-circle" color="black" size="150px" v-else/>
               </q-item-section><!-- TagTablePic: PicModule -->
 
               <q-item-section>
@@ -172,7 +176,7 @@
                 </q-item-label>
                 <q-item-label caption lines="1">
                   <!-- {{$t('created_at')}}: {{props.row.created_at}} -->
-                  <small class="timestamp timeago q-pa-md">
+                  <small class="timestamp timeago q-pa-md" v-if="ipDebug">
                     <!-- <timeago :datetime="props.row.start_date" :auto-update="60" /> -->
                     {{timeago(props.row.start_date)}}
                   </small>
@@ -193,8 +197,7 @@
                     />
                   </q-btn>TagFavorite: FavoriteModule -->
 
-                  <wish :post="props.row" :auth="auth"
-                    v-on:favorite="wish"
+                  <wish :post="props.row" v-on:favorite="wish"
                   /><!-- TagFavorite: FavoriteModule -->
                 </div>
               </q-item-section>
@@ -212,10 +215,10 @@ import { ref, watch, onMounted, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { i18n, url, timeago, api, notifyAction, ipDebug } from 'boot/axios'
-// import { i18n } from 'boot/i18n'
+import { i18n, url, timeago, crudAction, notifyAction, ipDebug } from 'boot/axios'
 import LocaleDropdown from '../components/LocaleDropdown'
 import Wish from '../components/Wish'
+import Post from '../components/Post'
 
 /**
  * Tags: CategoryModule - LocationModule - TagSubcategoriesSorted - CategoriesList - CategoryList
@@ -227,16 +230,18 @@ export default {
   props: ['height'],
   components: {
     LocaleDropdown,
-    Wish
+    Wish,
+    Post
   },
   setup () {
     const $store = useStore()
     const $route = useRoute()
     const $router = useRouter()
     const $q = useQuasar()
-    const $t = i18n?.global?.t
+    const $t = i18n.global.t
 
     const rows = ref([])
+    const getters = ref('categories/categoriesGetter')
     const loader = ref(false)
     const popCategory = ref(false)
     const categoryName = ref(null)
@@ -249,39 +254,38 @@ export default {
     const subcategory_data = ref(null)
     const subcategories = ref([])
     const getCategory = ref([])
+    const postData = ref({})
+    const view = ref(false)
     // ================================ \\
-    // height = screen.height / 1.59
     const category_id = ref(false)
     const show = ref(false)
     const title = ref(null)
     const Items = 0
 
+    const checkout = computed(() => $store.getters['crud/Getter']?.checkout)
     const location = computed(() => $store.getters['users/locationGetter'])
+    const distance = computed(() => $store.getters['users/distanceGetter'])
     const locale = computed(() => $store.getters['config/localeGetter'])
-    const auth = computed(() => $store.getters['users/authGetter'])
     const roles = computed(() => $store.getters['users/rolesGetter'])
+    const auth = computed(() => $store.getters['users/authGetter'])
 
     $router.beforeEach(async (to, from, next) => {
       categoryPosts(to); next()
     }); //onUpdated(() => {categoryPosts($route)})
 
     onMounted(() => { // https://next.router.vuejs.org/api/#onbeforerouteleave
-      // $store.dispatch('categories/postsAction', { postPage: false })
       if ($route.name === 'index') categoriesAction(); categoryPosts($route)
     }); // console.log('$router', $router)
 
-    // const filter = ref('')
     const pagination = ref({
       page: 1,
       rowsPerPage: 3, // getItemsPerPage(),
       rowsNumber: 0
     })
 
-    watch(() => $q.screen.name, () => {
-      pagination.value.rowsPerPage = getItemsPerPage()
-    })
-
-    watch(locale, () => categoriesAction())
+    watch(() => $q.screen.name, () => pagination.value.rowsPerPage = getItemsPerPage())
+    watch(locale, () => $store.dispatch('categories/categoriesAction'))
+    watch([location, distance, checkout], () => categoryPosts($route))
 
     function getItemsPerPage () {
       // const { screen } = $q
@@ -295,39 +299,67 @@ export default {
       return Items
     }
 
-    function categoriesAction () {
-      $store.dispatch('categories/categoriesAction').then(categories => {
-        show.value = 'categories'
-        title.value = $t('categories') // 'Categories'
-        try {categories.sort((a, b) => a.locales.categoryName.localeCompare(b.locales.categoryName))} catch (error) {}
-        rows.value = categories; // Categories Sorted
+    async function categoriesAction () {
 
-        const gridMasonryClass = document.querySelector('.grid-masonry')
-        if(gridMasonryClass) gridMasonryClass.style.height = categories.length*3+'00px'
-        // $refs.table.$refs.virtScroll.scrollTo(5000) // infiniteScroll
-      }).catch(e => notifyAction({error: 'categoriesAction', e}))
-    } // Show Categories
+      const gridMasonryClass = document.querySelector('.grid-masonry')
+      const hight = $store.getters[getters.value]
 
-    function categoryPosts (to) {
+      show.value = 'categories'; title.value = $t('categories')
+
+      if (!hight.length) $store.dispatch('categories/categoriesAction')
+      if (gridMasonryClass) gridMasonryClass.style.height = hight.length*50+'px'
+      // console.log(!hight.length, '200categoriesAction', hight.length*50+'px', gridMasonryClass)
+
+    } // TagCategories: CategoriesModule
+
+    function categoryPosts(to) {
       if (to.name === 'public.search.posts') { // TagSearch: SearchModule
-        $store.dispatch('categories/postsAction', { ...{ search_posts: to.params.posts }, ...to.query }).then(res => {
+
+        $q.cookies.set('type', 'searchPostsGetter' , {expires: '1h'})
+
+        getters.value = 'crud/searchPosts'
+        // getters.value = 'categories/searchPostsGetter'
+
+        return crudAction({ ...{ search_posts: to.params.posts }, ...to.query, ...{
+          url: 'api/categories/searchPosts',
+          method: 'get'
+        }}).then(crud => { // Get Search Result Data
+
+          $store.commit('crud/searchPosts', rows.value=crud)//Mutation
+          // $store.commit('categories/searchPostsMutation', crud)
+
           show.value = 'category'
           title.value = $t('search_result')
-          rows.value = res // Get Search Result Data
+
         }).catch(e => notifyAction({error: 'SearchPostsAction', e}))
+
       } else if (to.name === 'public.category.id' || to.name === 'public.subcategory.id') {
-        let True = !to.path.includes('subcategory'); let Name = True ? 'categoryName' : 'subcategoryName'
-        let authUser = { loc: location.value, auth_id: auth.value.id }
-        api.get(`api/categories/${to.params.id}?${Name}=${True}&locale=${locale.value}`).then(res => {
-          let locales = res.data.locales // Get Category or Subcategory Title
-          title.value = locales.categoryName || locales[0].subcategoryName
-        }).catch(e => notifyAction({error: 'CategorySubcategoryTitle', e}))
-        let data = True ? { category_id: to.params.id } : { subcategory_id: to.params.id }
-        $store.dispatch('categories/postsAction', { ...data, ...authUser }).then(res => {
+
+        $q.cookies.set('type', to.path, {expires: '1h'})
+
+        getters.value = 'crud/'+to.path // getters.value = 'categories/categoryPostsGetter'
+
+        const True = !to.path.includes('subcategory')
+        const authUser = { ...distance.value, ...{ loc: location.value, locale: locale.value, auth_id: auth.value?.id }}
+        const data = True ? { category_id: to.params.id } : { subcategory_id: to.params.id }
+        // console.log('categoryPosts', !$store.getters?.[getters.value])
+        return crudAction({ ...data, ...authUser, ...{
+          url: 'api/categories/SubCategory',
+          method: 'get'
+        }}).then(crud => { // Get Category Subcategory Posts Data
+
+          $store.commit('crud/'+to.path, rows.value=crud)//Mutation
+          // console.log('mutation', !$store.getters[getters.value])
+          // if (!$store.getters[getters.value]) window.location.reload()
+
+          // $store.commit('categories/categoryPostsMutation', crud)
+
           show.value = 'category'
-          rows.value = res // Get category or subcategory Data
-        }).catch(e => notifyAction({error: 'CategorySubcategoryPostsAction', e}))
-      }
+
+          title.value = True ? crud?.[0]?.categoryName : crud?.[0]?.subcategoryName
+
+        }).catch(e => notifyAction({error: 'SubCategoryPostsAction', e}))
+      } // Get Category Subcategory Posts Data
     } // TagCategory: CategoryModule - SubcategoryModule
 
     function editCategory (category) {
@@ -336,9 +368,9 @@ export default {
 
       // console.log('editCategory', category)
       category_id.value = category.id
-      categoryName.value = category.locales ? category.locales.categoryName : 'categoryName'
-      try { subcategories.value = category.subcategories } catch (error) { }
-      description.value = category.locales ? category.locales.description : 'description'
+      categoryName.value = category?.locales?.categoryName || 'categoryName'
+      subcategories.value = category?.subcategories
+      description.value = category?.locales?.description || 'description'
       icon.value = category.icon
       getCategory.value = category
     } // TagEditCategory: CategoryModule,
@@ -359,10 +391,11 @@ export default {
       filter: ref(''),
       subcategories,
       getCategory,
+      postData,
+      view,
       // ================================ \\
       url,
       timeago,
-      // height: screen.height / 1.59,
       category_id,
       show,
       title,
@@ -395,111 +428,88 @@ export default {
 
       categoryPosts,
 
+      subcategoryLangs: subcategory => subcategory?.locales, // TagSubcategoryLangs: SubcategoryModule
+      localeSubcategoryName: locale => locale?.subcategoryName, // TagLocaleSubcategoryName: SubcategoryModule
+      wish: () => categoryPosts($route), // TagFavorite: FavoriteModule
+      pic: post => post?.pics?.[0]?.pic, // TagTablePic: PicModule
+
+      viewPost(post) {
+        postData.value = post; view.value = true
+      },
+
       subcategoriesSorted (subcategories) {
         let NewSubcategories = []; if (subcategories) subcategories.forEach(subcategory => {
-          NewSubcategories.push({id: subcategory.id, locales: [subcategory.locales[0]], PostsNumber: subcategory.posts.length })
-        }); try {NewSubcategories.sort((a, b) => a.locales[0].subcategoryName.localeCompare(b.locales[0].subcategoryName))} catch (error) {}
+          NewSubcategories.push({id: subcategory.id, locales: [subcategory?.locales?.[0]], PostsNumber: subcategory?.posts.length })
+        }); NewSubcategories?.sort((a, b) => a?.locales?.[0]?.subcategoryName?.localeCompare(b?.locales?.[0]?.subcategoryName))
         return NewSubcategories // NewSubcategories.sort((a, b) => (a.locales[0].subcategoryName > b.locales[0].subcategoryName) ? 1 : -1)
       }, // TagSubcategoriesSorted: SubcategoryModule
-      subcategoryLangs (subcategory) {
-        try { return subcategory.locales } catch (error) {}
-      }, // TagSubcategoryLangs: SubcategoryModule
-      localeSubcategoryName (locale) {
-        try { return locale.subcategoryName } catch (error) {}
-      }, // TagLocaleSubcategoryName: SubcategoryModule
-      wish (route) {
-        categoryPosts(route)
-      }, // TagFavorite: FavoriteModule
-      pic (post) {
-        try {
-          return post.pics[0].pic
-        } catch (error) {} return false
-      }, // TagTablePic: PicModule
+
       addCategory () {
-        loader.value = true
-        $store.dispatch('categories/addCategoryAction', {
+        crudAction({
+          success: 'Category Added Successfully',
+          url: 'api/categories',
+          method: 'post',
           locale: locale.value,
           categoryName: categoryName.value,
           description: description.value,
           icon: icon.value
-        }).then(() => {
-          categoriesAction()
-          loader.value = false
-        }).catch(error => {
-          loader.value = false
-          try { category_data.value = error.response.data.errors.category[0] || error.response.data.message } catch (e) {}
-        })
+        }).then(() =>  $store.dispatch('categories/categoriesAction'))
+          .catch(error => category_data.value = error?.response?.data?.errors?.category?.[0] || error?.response?.data?.message)
       }, // TagAddCategory: CategoryModule
       updateCategory (categoryID) {
-        loader.value = true
-        $store.dispatch('categories/updateCategoryAction', {
-          updateCategory: true,
+        crudAction({
+          success: 'Category Updated Successfully',
+          url: `api/categories/${categoryID}`,
+          method: 'put',
           categoryID: categoryID,
           locale: locale.value,
           categoryName: categoryName.value,
           description: description.value,
           icon: icon.value
-          // category: category.value // ToFix
-        }).then(() => {
-          categoriesAction()
-          // $store.dispatch('categories/categoriesAction')
-          // rows.value = res
-          loader.value = false
-        })
+        }).then(() =>  $store.dispatch('categories/categoriesAction'))
+          .catch(e => notifyAction({error: 'updateCategoryAction', e}))
       }, // TagUpdateCategory: CategoryModule
       editCategory, // TagEditCategory: CategoryModule,
       deleteCategory (id) {
-        loader.value = true
-        $store.dispatch('categories/deleteCategoryAction', {
-          id: id, locale: locale.value
-        }).then(() => {
-          categoriesAction()
-          // rows = res
-          loader.value = false
-          // if (res) {
-          //   rows.value = res
-          //   loader.value = false
-          // }
-        })
+        if (confirm('Are You Sure You Want To Delete Category') === true) crudAction({
+          success: 'Category Deleted Successfully',
+          url: `api/categories/${id}`,
+          method: 'delete',
+          categoryName: 1
+        }).then(() => $store.dispatch('categories/categoriesAction'))
+          .catch(e => notifyAction({error: 'deleteCategoryAction', e}))
       }, // TagDeleteCategory: CategoryModule
       addSubcategory (categoryID) {
-        loader.value = true
-        $store.dispatch('categories/addSubcategoryAction', {
+        crudAction({
+          success: 'Subcategory Added Successfully',
+          url: 'api/categories',
+          method: 'post',
           categoryID: categoryID,
           locale: locale.value,
           subcategoryName: subcategoryName.value
-        }).then(() => {
-          categoriesAction() // rows.value = res
-          loader.value = false
-        }).catch(error => {
-          loader.value = false
-          try { subcategory_data.value = error.response.data.errors.subcategory[0] || error.response.data.message } catch (e) {}
-        })
+        }).then(() =>  $store.dispatch('categories/categoriesAction'))
+          .catch(error => subcategory_data.value = error?.response?.data?.errors?.subcategory?.[0] || error.response.data.message)
       }, // TagAddSubCategory: SubcategoryModule
       updateSubcategory (categoryID, id) {
-        loader.value = true
-        $store.dispatch('categories/updateSubcategoryAction', {
-          id: id,
+        crudAction({
+          success: 'Subcategory Updated Successfully',
+          url: `api/categories/${id}`,
+          method: 'put', id: id,
           categoryID: categoryID,
           locale: locale.value,
           subcategoryName: subcategoryName.value
-        }).then(() => {
-          categoriesAction() // rows.value = res
-          loader.value = false
-        })
+        }).then(() =>  $store.dispatch('categories/categoriesAction'))
+          .catch(e => notifyAction({error: 'updateSubcategoryAction', e}))
       }, // TagUpdateSubCategory: SubcategoryModule
       deleteSubcategory (id) {
-        loader.value = true
-        $store.dispatch('categories/deleteSubcategoryAction', {
-          id: id, locale: locale.value
-        }).then(() => {
-          categoriesAction() // rows = res
-          loader.value = false
-          // if (res) {
-          //   rows.value = res
-          //   loader.value = false
-          // }
-        })
+        if (confirm('Are You Sure You Want To Delete Subcategory') === true) crudAction({
+          success: 'Subcategory Deleted Successfully',
+          url: `api/categories/${id}`,
+          method: 'delete',
+          subcategoryName: 1,
+          // locale: locale.value
+        }).then(() => $store.dispatch('categories/categoriesAction'))
+          .catch(e => notifyAction({error: 'deleteCategoryAction', e}))
       }, // TagDeleteSubCategory: SubcategoryModule
 
       pagination,
@@ -508,16 +518,20 @@ export default {
         { name: 'pic', align: 'left', label: $t('picture'), field: 'pic', sortable: true }, // TagTablePic: PicModule
         { name: 'post_title', align: 'left', label: 'Post Title', field: 'post_title', sortable: true },
         { name: 'address', align: 'left', label: 'Address', field: 'address', sortable: true },
-        { name: 'city', align: 'left', label: 'City', field: 'city' },
-        { name: 'postal_code', align: 'left', label: 'Postal Code', field: 'postal_code', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-      ], rows
+        { name: 'city', align: 'left', label: 'City', field: 'city', sortable: true },
+        { name: 'postal_code', align: 'left', label: 'Postal Code', field: 'postal_code', sortable: true }
+      ],rows: computed(() => $store.getters?.[getters.value]||rows.value)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-  .q-dialog__inner--minimized > div {
-      max-width: 1000px;
-  }
+<style lang="sass" scoped>
+  .q-dialog__inner--minimized > div
+    max-width: 1000px
+
+  // .grid-masonry
+  //   flex-direction: column
+  //   height: 700px
+  //   // height: 15000px
 </style>

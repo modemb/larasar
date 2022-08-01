@@ -33,6 +33,13 @@ const routes = [
         meta: { public: true }
       },
       {
+        path: '/post/:id',
+        name: 'public.post.id',
+        component: () => import('components/Post'),
+        // component: () => import('pages/PostOld'),
+        meta: { public: true }
+      },
+      {
         path: '/page/:slug',
         name: 'public.pages',
         component: () => import('pages/Page.vue'),
@@ -77,6 +84,13 @@ const routes = [
       {
         path: '/password/reset/:token',
         name: 'guest.password.reset.token',
+        // component: () => import('pages/auth/password/reset.vue'),
+        component: () => import('components/Auth'),
+        meta: { guest: true }
+      },
+      {
+        path: '/reset-password/:token',
+        name: 'guest.reset-password.token',
         // component: () => import('pages/auth/password/reset.vue'),
         component: () => import('components/Auth'),
         meta: { guest: true }
@@ -133,6 +147,41 @@ const routes = [
         meta: { auth: true }
       },
       {
+        path: '/post',
+        // path: '/post/categories',
+        name: 'public.post.categories',
+        component: () => import('components/Post'),
+        // component: () => import('pages/PostOld'),
+        // meta: { auth: true }
+        meta: { public: true, radioCategory: true }
+      }, // TagAddPost
+      {
+        path: '/post/:id/categories',
+        name: 'post.id.categories',
+        component: () => import('components/Post'),
+        // meta: { auth: true }
+        meta: { public: true, radioCategory: true }
+      }, // TagUpdatePostCategory
+      // {
+      //   path: '/post/:subcategory',
+      //   name: 'auth.post.subcategory',
+      //   component: () => import('components/Post'),
+      //   // component: () => import('pages/Post.vue'),
+      //   meta: { auth: true }
+      // },
+      {
+        path: '/favorites',
+        name: 'auth.favorites',
+        component: () => import('pages/Favorites.vue'),
+        meta: { auth: true }
+      },
+      {
+        path: '/posts',
+        name: 'auth.posts',
+        component: () => import('pages/Posts.vue'),
+        meta: { auth: true }
+      },
+      {
         path: '/messages',
         name: 'auth.messages',
         component: () => import('pages/Messages.vue'),
@@ -153,7 +202,8 @@ const routes = [
       {
         path: '/reports',
         name: 'auth.reports',
-        component: () => import('pages/Reports.vue'),
+        component: () => import('components/Reports.vue'),
+        // component: () => import('pages/Reports.vue'),
         meta: { auth: true }
       },
       {

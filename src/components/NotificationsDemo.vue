@@ -15,7 +15,7 @@
 <script>
 import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { api, notifyAction } from 'boot/axios'
+import { api, notifyAction, SANCTUM_API } from 'boot/axios'
 
 export default {
   setup () {
@@ -25,6 +25,8 @@ export default {
     const pushButtonDisabled = ref(true)
 
     const vapidPublicKey = computed(() => $store.getters['config/vapidPublicKeyGetter'])
+
+    const url = SANCTUM_API?'/notifications':'api/notifications'
 
     onMounted(() => registerServiceWorker())
 
@@ -207,7 +209,7 @@ export default {
       sendNotification () {
         loading.value = true
 
-        api.post('api/notifications?notify=1')
+        api.post(`${url}?notify=1`)
           .then(() => { loading.value = false })
           .catch(e => notifyAction({error: 'getSubscription', e}))
       }

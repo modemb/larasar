@@ -8,12 +8,12 @@
 
       <template v-if="desktop">
         <q-btn icon="fab fa-facebook" target="_blank"
-          data-href="https://suguffie.com/post/1" class="q-ma-sm"
+          data-href="https://suguffie.com/post/1" class="q-ma-sm q-dark" color="primary"
           data-layout="button_count" data-size="small" type="a" :label="$t('share_on_facebook')"
           :href="`https://www.facebook.com/sharer/sharer.php?u=https://suguffie.com/post/${param_id}`"
         /><!-- https://developers.facebook.com/docs/plugins/share-button/ -->
 
-        <q-btn icon="fas fa-link" :label="copyLink" class="q-ma-sm" @click.stop.prevent="copy" />
+        <q-btn icon="fas fa-link" :label="copyLink" color="primary" class="q-ma-sm" @click.stop.prevent="copy" />
         <!-- <input type="hidden" id="link" :value="copyLink">TagCopyLink: ShareModule -->
       </template>
 

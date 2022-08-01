@@ -17,8 +17,8 @@
               <q-input outlined v-model="icon" :label="$t('icon')" v-if="desktop"/>
               <locale-dropdown class="bg-primary" />
               <q-btn square outlined v-if="editPage"
-                :color="Page.active?'secondary':'red'"
-                :label="Page.active?'Active':'Draft'"
+                :color="Page?.active?'secondary':'red'"
+                :label="Page?.active?'Active':'Draft'"
                 @click.prevent="active(Page)"
               /><!-- TagActive: PageModule -->
               <q-btn square outlined
@@ -211,9 +211,11 @@
 <script>
 import { useQuasar } from 'quasar'
 import { ref, watch, onMounted, computed } from 'vue'
+// import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { i18n, url, api, crudAction, notifyAction } from 'boot/axios'
 import LocaleDropdown from '../components/LocaleDropdown'
+// import { i18n } from 'boot/i18n'
 
 export default {
   components: {
@@ -223,16 +225,22 @@ export default {
     const $t = i18n?.global?.t
     const $q = useQuasar()
     const $store = useStore()
+    // const $route = useRoute()
+
     const loader = ref(false)
     const addPage = ref(false)
     const editPage = ref(false)
     const loading = ref(false)
     const rows = ref([])
     const slug = ref(null)
+    // const slug_data = ref(null)
     const icon = ref(null)
+    // const icon_data = ref(null)
     const Page = ref(null)
     const page_title = ref(null)
+    // const page_title_data = ref(null)
     const description = ref(null)
+    // const description_data = ref(null)
     const content = ref(null)
     const pagesData = ref(1)
 
@@ -243,7 +251,7 @@ export default {
     function edit (page) {
 
       watch(rows, val => val.forEach(page => {
-        if ((page.slug===Page.value.slug)&&(page.locale!==Page.value.locale))
+        if ((page?.slug===Page.value?.slug)&&(page.locale!==Page.value.locale))
           return edit(Page.value = page)
       })); editPage.value = addPage.value = true; loader.value = false
 
@@ -255,9 +263,9 @@ export default {
       content.value = page.content
     } // TagEdit: PageModule
 
-    function crud (data) {
+    function crud(data) {
       crudAction({
-        url: 'api/pages/1',
+        url: 'api/pages/pages',
         method: 'get',
         pages: pagesData.value,
         locale: locale.value,
@@ -265,14 +273,15 @@ export default {
         .catch(e => notifyAction({error: data.e, e}))
     } watch([locale, pagesData], () => crud({e: 'localePage'}))
 
-    function Delete (page) {
+    function Delete(page) {
       if (confirm('Are You Sure You Want To Delete Page ' + page.page_title) === true) {
         crudAction({
           message: page.forever ? 'Page Deleted Forever' : 'Page Deleted Successfully',
-          url: 'api/pages/1',
+          url: `api/pages/${page?.id}`,
+          // url: `api/pages/${page?.slug}`,
           method: 'delete',
           locale: locale.value,
-          slug: page.slug,
+          // slug: page?.slug,
           pages: page.forever ? 0 : 1,
           forever: page.forever
         }).then(crud => rows.value = crud)
@@ -325,7 +334,7 @@ export default {
         icon.value = page_title.value = description.value = content.value = null
       }, // TagAddTitle: PageModule
       edit,
-      update (page) {
+      update(page) {
         loader.value = true
         crudAction({
           message: 'Page Updated Successfully',
@@ -334,6 +343,7 @@ export default {
           locale: locale.value,
           page_title: page_title.value,
           slug: slug.value,
+          updateSlug: page.slug!==slug.value,
           description: description.value,
           icon: icon.value,
           content: content.value,
@@ -343,29 +353,30 @@ export default {
       }, // TagUpdate: PageModule
       async active (page) {
         loader.value = true
-        const { data } = await api.put(`api/pages/${page.slug}`, {
-          message: page.active ? 'Page Deactivated Successfully' : 'Page Activated Successfully',
+        const { data } = await api.put(`api/pages/${page?.slug}`, {
+          message: page?.active ? 'Page Deactivated Successfully' : 'Page Activated Successfully',
           active: 1,
-          activePages: page.active
-        }); Page.value = data.page
+          activePages: page?.active
+        }); Page.value = data?.page
         if (data.success) {
           loader.value = false
           notifyAction({success: data.success})
           crud({e: 'mountedPages'})
         }
       }, // TagActive: PageModule
-      restore (page) {
+      restore(page) {
         loader.value = true
         crudAction({
           message: 'Page Restored Successfully',
           url: 'api/pages',
           method: 'POST',
           slug: page.slug,
-          locale: locale.value,
-          pages: 0
+          // locale: locale.value,
+          restore: true
         }).then(crud => {rows.value = crud; loader.value = false })
           .catch(e => notifyAction({error: 'restorePage', e}))
       }, // TagRestore: PageModule
+      Delete,
       delete_forever (page) {
         Delete({...page, ...{forever: 1}})
         // AddPasswordBeforeDeleteForever

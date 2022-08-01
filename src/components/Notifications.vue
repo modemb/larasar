@@ -40,9 +40,9 @@
       </q-list><notifications-demo v-if="ipDebug" /><!-- https://quasar.dev/vue-components/list-and-list-items#example--emails -->
 
       <div v-if="hasUnread" class="text-center q-ma-xs">
-        <q-btn icon="fas fa-eye" :label="$t('View All')" @click.prevent="fetch(null)" />
+        <q-btn class="q-dark" icon="fas fa-eye" :label="$t('View All')" @click.prevent="fetch(null)" />
       </div>
-      <div v-else class="text-center">
+      <div v-else :class="'text-center '+(!darkMode||'text-white')">
         {{$t("You don't have any unread notifications.")}}
       </div>
     </q-card>
@@ -57,15 +57,17 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue'
+import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { api, timeago, url } from 'boot/axios'
+import { api, timeago, SANCTUM_API } from 'boot/axios'
 import NotificationsDemo from './NotificationsDemo'
 // import Notification from './Notification'
 
 export default {
-  components: {  NotificationsDemo },
+  components: { NotificationsDemo },
   setup () {
+    const $q = useQuasar()
     const $store = useStore()
     const $router = useRouter()
     const total = ref(0)
@@ -73,6 +75,8 @@ export default {
 
     const auth = computed(() => $store.getters['users/authGetter'])
     const notify = computed(() => $store.getters['crud/Getter']?.notify)
+
+    const url = SANCTUM_API?'/notifications':'api/notifications'
 
     onMounted(() => {
       fetch()
@@ -85,7 +89,7 @@ export default {
      * @param {Number} limit
      */
     function fetch (limit = 5) {
-      api.get('api/notifications', { params: { limit } })
+      api.get(url, { params: { limit } })
         .then(({ data: { Total, Notifications } }) => {
           total.value = Total
           notifications.value = Notifications.map(({ id, data, created }) => {
@@ -107,6 +111,7 @@ export default {
         .notification(notification => {
           total.value++
           notifications.value.unshift(notification)
+          console.log('notify', notify.value)
           if (notify.value) markAsRead(notification)
         }).listen('NotificationRead', ({ notificationId }) => {
           total.value--
@@ -131,22 +136,23 @@ export default {
       if (index > -1) {
         total.value--
         notifications.value.splice(index, 1)
-        api.patch(`api/notifications/${id}?read=1`)
+        api.patch(`${url}/${id}?read=1`)
       }
     }
 
     return {
-      url,
+      // url,
       total,
       timeago,
       PopUp: ref(false),
       notifications,
 
-      notify,
+      // notify,
 
       fetch,
 
       ipDebug: computed(() => $store.getters['config/ipDebugGetter']),
+      darkMode: ref($q.localStorage.getItem('darkMode')),
       hasUnread: computed(() => total.value > 0),
 
       markAsRead,
@@ -155,7 +161,7 @@ export default {
         total.value = 0
         notifications.value = []
 
-        api.post('api/notifications?mark_all_read=1')
+        api.post(`${url}?mark_all_read=1`)
       }, // Mark all notifications as read.
 
       actionUrl (notification) {

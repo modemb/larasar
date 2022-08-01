@@ -44,7 +44,8 @@
             {{ props.row.last_name }}
           </q-td>
           <q-td key="email" :props="props">
-            <div class="text-pre-wrap">{{ props.row.email }}</div>
+            <!-- <div class="text-pre-wrap">{{ props.row.email }}</div> -->
+            <q-btn flat :icon-right="(props.row?.email_verified_at)?'check':''" :label="props.row.email" />
           </q-td>
           <q-td key="status" :props="props">
             {{ props.row.status }}
@@ -107,7 +108,7 @@
 
 <script>
 import { useQuasar } from 'quasar'
-import { ref, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import {  useStore } from 'vuex'
 import { i18n, url, api, crudAction, notifyAction } from 'boot/axios'
 // import { i18n } from 'boot/i18n'
@@ -148,7 +149,7 @@ export default {
       url: copyLink
     }) // TagShare: UserModule - Navigator Share
 
-    onload({ usersData: roles.admins?'users':'my_users' })
+    onMounted(() => onload({ usersData: roles.admins?'users':'my_users' }))
     watch(usersData, val => onload({ usersData: val}))
 
     function onload (payload) {

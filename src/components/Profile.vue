@@ -149,10 +149,14 @@
                         :rules="[val => val && val.length > 0 || $t('add_phone')]"
                       />
                     </div>
-                  </div>
+                    <div class="col-6">
+                      <q-btn color="primary" :label="$t('update')" @click.prevent="update" />
+                    </div>
+                    <div class="col-6" v-if="user">
+                      <q-input v-model="gain" label="Gain" filled type="number" />
+                    </div>
 
-                  <q-btn color="primary" :label="$t('update')" @click.prevent="update" />
-                  <!-- <q-btn color="primary" :label="$t('update')" @click.prevent="info" /> -->
+                  </div>
 
                 </q-form>
 
@@ -214,7 +218,7 @@
                   /><!-- took off :val="auth.email" -->
 
                   <q-btn color="primary" :label="$t('update')" @click.prevent="pwd" />
-                  <q-checkbox class="text-black"  v-model="update_email" :label="$t('update_email')" />
+                  <q-checkbox class="q-dark"  v-model="update_email" :label="$t('update_email')" />
 
                 </q-form>
 
@@ -232,7 +236,7 @@
 
 <script>
 import { useQuasar } from 'quasar'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 // import { useRouter, useRoute } from 'vue-router'
 import {  useStore } from 'vuex'
 import { url, api, crudAction, notifyAction } from 'boot/axios'
@@ -248,7 +252,7 @@ export default {
     // const editUser = ref(false)
     // const user = ref(null)
     // const rows = ref([])
-    // const usersData = ref('users')
+    const gain = ref(props.user?.gain)
     const user = ref(props.user)
     const $store = useStore()
     const auth = computed(() => user.value||$store.getters['users/authGetter'])
@@ -272,12 +276,18 @@ export default {
     const new_password = ref(null)
     const password_confirmation = ref(null)
     const isPwd = ref(true)
+    const darkMode = ref($q.localStorage.getItem('darkMode'))
 
     watch(user, () => props.user||$store.dispatch('users/authAction'))
 
-    // function reloadUsers () {
-    //   return $store.dispatch('users/usersAction', { usersData: 'users' })
-    // }
+    onMounted(() => darkModeClass(darkMode.value))
+
+    function darkModeClass(val) {
+      const QDarkClass = document.querySelector('.q-dark')
+      if (val==='null') val = false
+      if (QDarkClass) QDarkClass.style.color = val?'#fff':'var(--q-dark)'
+      if (QDarkClass) QDarkClass.style.background = val?'var(--q-dark)':'#fff'
+    }
 
     function createImage (files) {
       // const formData = new FormData()// ToFix
@@ -302,7 +312,7 @@ export default {
         url: 'api/users/' + auth.value.id,
         method: 'put',
         update: true,
-        // id: auth.id,
+        gain: gain.value,
         role: role.value,
         name: name.value,
         first_name: first_name.value,
@@ -321,6 +331,7 @@ export default {
     return {
       auth,
       role,
+      gain,
       name,
       height: screen.height/($q.platform.is.mobile?1.2:1.35),
       // height: ref(screen.height / 1.4),

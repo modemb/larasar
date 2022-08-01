@@ -62,10 +62,10 @@
             toggle-color="primary"
             :options="[
               {icon: 'fas fa-sync', value: 'today'},
-              {label: 'Day', value: '-1 day'},
-              {label: 'Week', value: '-1 week'},
-              {label: 'Month', value: '-1 month'},
-              {label: 'Year', value: '-1 year'}
+              {label: $t('Day'), value: '-1 day'},
+              {label: $t('Week'), value: '-1 week'},
+              {label: $t('Month'), value: '-1 month'},
+              {label: $t('Year'), value: '-1 year'}
             ]"
           /><!-- TagPeriod: PeriodModule -->
           <q-input class="q-ma-xs col-md-3" borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
@@ -172,12 +172,11 @@ export default {
 
     function onLoad (period) {
       crud({
-        url: 'api/users/1',
+        url: 'api/users/views',
         method: 'get',
-        views: true,
-        period: period
+        period
       })
-    } onMounted(() => onLoad (period.value))
+    } onMounted(() => onLoad(period.value))
 
 
     return {
@@ -196,9 +195,8 @@ export default {
         period.value = null
         crud({
           expandingRow: true,
-          url: 'api/users/1',
+          url: 'api/users/views',
           method: 'get',
-          views: true,
           from: proxyDate.value.from,
           to: proxyDate.value.to,
           proxyDate: proxyDate.value
