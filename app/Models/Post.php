@@ -12,19 +12,20 @@ class Post extends Model
   protected $fillable = [
     'gallery_page',
     'worldwide',
+    'state',
     'count',
     'user_id',
     'category_id',
     'subcategory_id',
     'post_title',
     'price',
+    'currency_code',
     'address',
     'city',
     'country',
     'phone',
     'postal_code',
     'description',
-    'flags',
     'location',
     'place',
     'lat',
@@ -41,7 +42,15 @@ class Post extends Model
    *
    * @var array
    */
-  protected $appends = ['pics', 'payments', 'favorite'];
+  protected $appends = ['pics', 'payments', 'reports', 'favorite', 'flag'];
+
+  /**
+   * Get Post's Flag
+   */
+  public function getFlagAttribute()
+  { // 'foreign_key', 'local_key'
+    return $this->belongsTo(Flag::class, 'id', 'post_id')->first();
+  }
 
   /**
    * Get category's locales
@@ -52,11 +61,19 @@ class Post extends Model
   }
 
   /**
-   * Get category's locales
+   * Get Post's Payments
    */
   public function getPaymentsAttribute()
   {
       return $this->hasMany('App\Models\Payment')->get();
+  }
+
+  /**
+   * Get Post's Reports
+   */
+  public function getReportsAttribute()
+  {
+      return $this->hasMany('App\Models\Report')->get();
   }
 
   /**

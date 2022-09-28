@@ -28,7 +28,7 @@ class Payment extends Model
    */
   public function reports()
   {
-    return $this->hasMany(Report::class);
+    return $this->hasMany(Report::class, 'token', 'token');
     // return $this->hasMany('App\Models\Report');
   }
 }

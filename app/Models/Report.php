@@ -11,6 +11,7 @@ class Report extends Model
 
   protected $fillable = [
     'user_id',
+    'post_id',
     'payment_id',
     'token',
     'sale_date',
@@ -21,6 +22,7 @@ class Report extends Model
     'currency_code',
     'payment',
     'amount',  // Total Payments
+    'total', // Exchanged Total Payments
     // 'links',
     'deleted'
   ];

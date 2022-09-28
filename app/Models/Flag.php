@@ -15,6 +15,7 @@ class Flag extends Model
     'post_id',
     'category_id',
     'subcategory_id',
+    'ip',
     'description'
   ];
 }
