@@ -250,10 +250,16 @@
               <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
             </q-avatar> -->
           </q-btn>
-          <q-btn icon="fas fa-bug" :label="$t('iP Debug On')" color="red" v-if="ipDebug" />
+          <!-- <q-btn icon="fas fa-bug" :label="$t('iP Debug On')" color="red" v-if="ipDebug" /> -->
+
+          <q-btn icon="fas fa-bug"
+            :label="debug?$t('iP Debug On'):$t('iP Debug Off')"
+            :color="debug?'red':'grey'" v-if="ipDebug||!debug"
+            @click.prevent="Switch(debug)"
+          />
           Quasar v{{ $q.version }}
-          Laravel v{{laravel}}
           Vue v{{version}}
+          Laravel v{{laravel}}
           Desktop View
         </q-toolbar-title>
         <q-btn glossy unelevated to="/messages">
@@ -294,7 +300,7 @@ import { openURL, QAjaxBar, useQuasar, Cookies } from 'quasar'
 import { ref, computed, watch, onMounted, version } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { url, userData, notifyAction, crudAction, api } from 'boot/axios'
+import { URL, i18n, userData, notifyAction, crudAction, api } from 'boot/axios'
 import LocaleDropdown from '../components/LocaleDropdown'
 
 /**
@@ -309,6 +315,7 @@ export default {
     LocaleDropdown
   },
   setup () {
+    const $t = i18n.global.t
     const $q = useQuasar()
     const $route = useRoute()
     const $store = useStore()
@@ -410,7 +417,7 @@ export default {
       leftDrawerOpen: ref(false), // $q.platform.is.desktop,
       rightDrawer: ref(false),
       loader: ref(false),
-      url,
+      URL,
       userData,
       region,
       country,
@@ -436,10 +443,16 @@ export default {
       }),
       avatar: computed(() => {
         if (auth.value?.avatar) {
-          if (auth.value.avatar?.includes('images/profile')) return url + '/' + auth.value.avatar
+          if (auth.value.avatar?.includes('images/profile')) return URL + '/' + auth.value.avatar
           else return auth.value.avatar
         } else return auth.value?.new?.avatar
       }),
+
+      debug: computed(() => $q.localStorage.getItem('debug')),
+      Switch(debug) {
+        $q.localStorage.set('debug', !debug)
+        notifyAction({ message: $t('Please Reload') })
+      },
 
       logout () {
         $store.dispatch('users/logoutAction', auth.value)

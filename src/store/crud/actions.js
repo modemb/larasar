@@ -17,9 +17,9 @@ export function notifyAction (context, payload) {
     position: payload.position || 'top',
     message: t(payload.success || (payload.e ? payload.error + ' ' + payload.e : payload.message)),
     icon: payload.icon || payload.e ? 'report_problem' : 'check',
-    timeout: payload.timeout ?? (payload.e ? 0 : 6000),
+    timeout: payload.timeout ?? (payload.e||payload.message ? 0 : 6000),
     actions: [ // https://quasar.dev/quasar-plugins/notify#Notify-API
-      { label: !!payload.success || t('Reload'), color: 'white', handler: () => location.reload() },
+      { label: !!payload.success || t('Reload'), color: 'white', handler: () => history.go() },
       { icon: 'close', color: 'white' }
     ] // https://www.youtube.com/watch?v=1wmtI4Qo-rw&ab_channel=codepanion
   }) // https://vueschool.io/articles/vuejs-tutorials/state-management-with-composition-api

@@ -30,11 +30,11 @@
      -->
 
       <template v-slot:body="props">
-        <div class="q-pa-md q-gutter-md" v-if="messageExist(props.row)">
+        <div class="q-pa-md q-gutter-md">
           <q-list bordered class="rounded-borders ellipsis" style="max-width: 1600px">
             <q-item>
               <q-item-section style="max-width: 150px; max-height: 150px;">
-                <q-img :src="url+'/'+props.row.post.pics[0].pic" v-if="props.row.post.pics[0]"/>
+                <q-img :src="URL+'/'+props.row.post.pics[0].pic" v-if="props.row?.post?.pics[0]"/>
                 <q-icon name="fas fa-plus-circle" color="black" size="150px" v-else/>
               </q-item-section>
 
@@ -48,12 +48,12 @@
                   <q-btn flat dense :label="props.row.post.post_title" :to="'/chat/' + props.row.room_id" />
                 </q-item-label>
                 <q-item-label lines="1">
-                  <span class="text-weight-medium">{{getUser(props.row.room.messages).name}}</span>
+                  <span class="text-weight-medium">{{getUser(props.row?.room?.messages)?.name}}</span>
                   <!-- <span class="text-weight-medium">{{props.row.room.messages[0].user.first_name}}</span> -->
                 </q-item-label><!-- getUser -->
 
                 <q-item-label lines="1">
-                  <span class="text-grey-8"> {{props.row.room.messages.at(-1).message}}</span>
+                  <span class="text-grey-8"> {{props.row?.room?.messages?.at(-1).message}}</span>
                 </q-item-label>
 
                 <div class="text-grey-8 q-gutter-xs">
@@ -80,7 +80,7 @@
             </q-item>
           </q-list>
         </div>
-      </template>
+      </template><!-- TagRoomWithMessage: chatModule -->
       <template v-slot:top-right>
         <!-- <div> -->
           <q-btn-toggle
@@ -100,7 +100,7 @@
             ].concat(role.admins?[{label: $t('all'), value: 'all_chats'}]:[])"
           />
         <!-- </div>TagMyChat: chatModule -->
-        <q-input borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
+        <q-input clearable borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -116,12 +116,11 @@
 <script>
 import { ref, watch, computed } from 'vue'
 import { useStore } from 'vuex'
-import { i18n, url, api, timeago, crudAction, notifyAction, ipDebug, SANCTUM_API } from 'boot/axios'
-// import { i18n } from 'boot/i18n'
+import { i18n, URL, api, timeago, crudAction, notifyAction, ipDebug, SANCTUM_API } from 'boot/axios'
 import Chat from '../components/Chat'
 
 /**
- * Tags: TagDeleteChat
+ * Tags: TagDeleteChat - TagRoomWithMessage
  *
  * @from CategoryController
  */
@@ -141,35 +140,30 @@ export default {
 
     const auth = computed(() => $store.getters['users/authGetter'])
 
-    const URL = SANCTUM_API?'/messages':'api/messages'
+    const url = SANCTUM_API?'/messages':'api/messages'
+
+    const updateChatAction = payload => $store.dispatch('categories/updateChatAction', payload)
 
     chatsAction({ user_chats: 'my_chats', user_id: auth.value.id })
 
-    watch(myChats, val => {
-      chatsAction({ user_chats: val, user_id: auth.value.id })
-    })
+    watch(myChats, val => chatsAction({ user_chats: val, user_id: auth.value.id }))
 
-    function chatsAction (payload) {
+    function chatsAction(payload) {
       crudAction({...payload, ...{
-        url: `${URL}/rooms`,
-        method: 'get'
-        // rooms: true
-      }}).then(crud => chats.value = crud)
-      .catch(e => notifyAction({error: 'chatsAction', e}))
-    }
-
-    function updateChatAction (payload) {
-      return $store.dispatch('categories/updateChatAction', payload)
+        url: `${url}/rooms`,
+        method: 'get' // rooms: true
+      }}).then(crud => chats.value = crud.filter(chat => chat?.room?.messages?.[0]?.message))
+         .catch(e => notifyAction({error: 'chatsAction', e}))
     }
 
     function Delete (chat) {
       if (confirm('Are You Sure You Want To '+(chat.forever?'Delete Forever':'Delete')+' chat'+chat.id) === true) crudAction({
-        url: `${URL}/${chat.id}`,
+        url: `${url}/${chat.id}`,
         method: 'delete',
         // auth_id: auth.value.id,
         // deleteChat: 1
       }).then(chatsAction({user_chats: myChats.value, user_id: chat.user_id }))
-      .catch(e => notifyAction({error: 'deleteChatAction', e}))
+        .catch(e => notifyAction({error: 'deleteChatAction', e}))
     } // TagDeleteChat: chatModule
 
     return {
@@ -178,7 +172,7 @@ export default {
       filter: ref(''),
       chatData,
       viewChat,
-      url,
+      URL,
       myChats,
       roomId,
       timeago,
@@ -212,12 +206,6 @@ export default {
         .catch(e => notifyAction({error: 'restoreChatAction', e}))
       }, // TagRestore: chatModule
 
-      messageExist (chat) {
-        try {
-          return chat.room.messages[0]
-        } catch (e) {return false}
-      }, // TagRoomWithMessage: chatModule
-
       pagination: {
         sortBy: 'asc',
         descending: false,
@@ -225,7 +213,7 @@ export default {
         rowsPerPage: 0,
         rowsNumber: 10
       },
-      rows: computed(() => chats.value||$store.getters['crud/Getter']),
+
       columns: [
         { name: 'pic', align: 'center', label: $t('picture'), field: 'pic', sortable: true },
         { name: 'chat_title', align: 'center', label: $t('chat_title'), field: 'name', sortable: true },
@@ -234,13 +222,7 @@ export default {
         { name: 'end_date', align: 'center', label: $t('expiry'), field: 'end_date', sortable: true },
         { name: 'edit', align: 'center', label: $t('edit'), field: 'edit', sortable: false },
         { name: 'delete', align: 'center', label: $t('delete'), field: 'delete', sortable: false }
-      ]
-
-      // pics () {
-      //   try {
-      //     return chats.value.chat.pics
-      //   } catch { return false }
-      // }, // TagShowImage: PicModule
+      ], rows: computed(() => chats.value||$store.getters['crud/Getter'])
     }
   }
 }

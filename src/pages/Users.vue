@@ -7,8 +7,8 @@
   </q-dialog><!--============================= Add Users PopUp End ========-->
 
   <q-dialog v-model="editUser"><!--============ Add Update Users PopUp ====-->
-    <q-card class="my-card text-black col-1" style="width: 800px">
-        <profile :user="user"/><!-- TagProfile v-on:reload="Edit"  -->
+    <q-card class="my-card text-black col-1" style="width: 1000px">
+        <profile :user="user" @update="onload" /><!-- TagProfile -->
     </q-card><!-- TagUser: ProfileModule -->
   </q-dialog><!--============================= Add Update Users PopUp End =-->
 
@@ -94,7 +94,7 @@
 
         <share :shareData="shareData" /><!-- TagShare: UserModule -->
 
-        <q-input class="q-ma-xs col-md-3" borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
+        <q-input clearable class="q-ma-xs col-md-3" borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -110,8 +110,7 @@
 import { useQuasar } from 'quasar'
 import { ref, onMounted, computed, watch } from 'vue'
 import {  useStore } from 'vuex'
-import { i18n, url, api, crudAction, notifyAction } from 'boot/axios'
-// import { i18n } from 'boot/i18n'
+import { i18n, api, crudAction, notifyAction } from 'boot/axios'
 import Profile from '../components/Profile'
 import AddUser from '../components/Auth'
 import Share from '../components/Share'
@@ -145,16 +144,20 @@ export default {
       gain: auth.value.gain,
       title: $t('One minute to register, share and earn money'),
       text:  $t('One minute to register, share and earn money'),
-      tooltip: $t('Share, put the link in your social description and earn money'),
+      tooltip: $t('Share and earn money with your affiliate link'),
       url: copyLink
     }) // TagShare: UserModule - Navigator Share
 
     onMounted(() => onload({ usersData: roles.admins?'users':'my_users' }))
     watch(usersData, val => onload({ usersData: val}))
 
-    function onload (payload) {
-      $store.dispatch('users/usersAction', payload)
+    function onload(payload) {
+      crudAction({ ...payload, ...{
+        url: `api/users/${auth.value.id}`, method: 'get',
+      }}).then(users => $store.commit('users/usersMutation', { users }))
+         .catch(e => notifyAction({error: 'usersAction', e}))
     }
+
     function Delete (user) {
       const token = $store.getters['users/tokenGetter']
       if (token && confirm('Are You Sure You Want To '+(user.forever?'Delete Forever':'Delete')+' User '+ user.first_name) === true) {
@@ -162,7 +165,7 @@ export default {
           url: `/api/users/${user.id}`,//?${qs(user)}
           method: 'delete',
           authID: auth.value.id
-        }).then(onload({ usersData: usersData.value}))
+        }).then(() => onload({ usersData: usersData.value}))
           .catch(e => notifyAction({error: 'deleteAction', e}))
       }
     } // TagDelete: UserModule
@@ -181,7 +184,8 @@ export default {
       roles,
       auth,
       user,
-      url,
+
+      onload,
 
       pagination: {
         sortBy: 'asc',
@@ -208,7 +212,7 @@ export default {
         }
       },
 
-      Edit (userEdit) {
+      Edit(userEdit) {
         editUser.value = true; user.value = userEdit
       }, // TagEdit: UserModule
 
@@ -217,13 +221,11 @@ export default {
         Delete({...user, ...{forever: 1}})
       },// TagDeleteForever: UserModule
       restore (user) {
-        api.post('api/users', user).then(() => {
-          onload({ usersData: 'trashed' })
-        })
+        api.post('api/users', user)
+           .then(() => onload({ usersData: 'trashed' }))
       }, // TagRestore: UserModule
 
-      rows: computed(() => $store.getters['users/usersGetter']),
-      columns: [ // Users
+      columns: computed(() => [ // Users
         { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
         { name: 'user_name', align: 'center', label: $t('user_name'), field: 'user_name', sortable: true },
         { name: 'first_name', align: 'center', label: $t('first_name'), field: 'first_name', sortable: true },
@@ -235,7 +237,7 @@ export default {
         { name: 'login', align: 'center', label: $t('login'), field: 'login', sortable: false },
         { name: 'edit', align: 'center', label: $t('edit/restore'), field: 'edit', sortable: false },
         { name: 'delete', align: 'center', label: $t('delete/foreve'), field: 'delete', sortable: false }
-      ]:[]), filter: ref('')
+      ]:[])), rows: computed(() => $store.getters['users/usersGetter']), filter: ref('')
     }
   }
 }

@@ -68,7 +68,7 @@
               {label: $t('Year'), value: '-1 year'}
             ]"
           /><!-- TagPeriod: PeriodModule -->
-          <q-input class="q-ma-xs col-md-3" borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
+          <q-input clearable class="q-ma-xs col-md-3" borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
@@ -98,7 +98,7 @@
             />
           </q-td>
           <q-td key="pic" :props="props">
-            <q-img :src="url+'/'+views(props.row, 'pic')"/>
+            <q-img :src="URL+'/'+views(props.row, 'pic')"/>
           </q-td>
           <q-td key="post_title" :props="props">
             <div class="text-pre-wrap">{{ views(props.row, 'post_title') }}</div>
@@ -124,10 +124,10 @@
 </template>
 
 <script>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { exportFile, useQuasar, date  } from 'quasar'
 // import { useStore, mapGetters } from 'vuex'
-import { i18n, url, crudAction, notifyAction } from 'boot/axios'
+import { i18n, URL, crudAction, notifyAction } from 'boot/axios'
 // import { i18n } from 'boot/i18n'
 
 function wrapCsvValue (val, formatFn) {
@@ -153,17 +153,26 @@ function wrapCsvValue (val, formatFn) {
 export default {
   setup () {
     // const $store = useStore()
-    const $q = useQuasar()
     const $t = i18n?.global?.t
+    const $q = useQuasar()
     const timeStamp = Date.now()
     const formattedString = date.formatDate(timeStamp, 'YYYY/MM/DD')//YYYY-MM-DDTHH:mm:ss.SSSZ
     const proxyDate = ref(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
     const period = ref('today')
     const rows = ref([])
-    const columns = ref([])
-    const loading = ref(false)
-
-
+    const columns = computed(() => [ //  https://quasar.dev/vue-components/table#example--synchronizing-with-server
+      { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
+      { name: 'ip', align: 'center', label: $t('ip'), field: 'ip', sortable: true },
+      { name: 'city', align: 'center', label: $t('city'), field: 'city', sortable: true },
+      { name: 'region', align: 'center', label: $t('region'), field: 'region', sortable: true },
+      { name: 'country', align: 'center', label: $t('country'), field: 'country', sortable: true },
+      { name: 'slug', align: 'center', label: $t('slug'), field: 'slug', sortable: true },
+      { name: 'pic', align: 'center', label: $t('pic'), field: 'pic', sortable: true },
+      { name: 'post_title', align: 'left', label: $t('post_title'), field: 'post_title', sortable: true },
+      { name: 'first_name', align: 'center', label: $t('first_name'), field: 'first_name', sortable: true },
+      { name: 'last_name', align: 'center', label: $t('last_name'), field: 'last_name', sortable: true },
+      { name: 'email', align: 'center', label: $t('email'), field: 'email', sortable: true },
+    ]); const loading = ref(false)
 
     function crud(rowsData) {
       crudAction(rowsData).then(crud => rows.value = crud)
@@ -173,17 +182,16 @@ export default {
     function onLoad (period) {
       crud({
         url: 'api/users/views',
-        method: 'get',
-        period
+        method: 'get', period
       })
     } onMounted(() => onLoad(period.value))
-
 
     return {
       filter:  ref(''),
       loading,
-      url,
+      URL,
       rows,
+      columns,
       height: ref(screen.height / 1.4),
       period,
       range: ref(false),
@@ -262,21 +270,7 @@ export default {
 
       pagination: ref({
         rowsPerPage: 0
-      }),
-
-      columns: [ //  https://quasar.dev/vue-components/table#example--synchronizing-with-server
-        { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
-        { name: 'ip', align: 'center', label: $t('ip'), field: 'ip', sortable: true },
-        { name: 'city', align: 'center', label: $t('city'), field: 'city', sortable: true },
-        { name: 'region', align: 'center', label: $t('region'), field: 'region', sortable: true },
-        { name: 'country', align: 'center', label: $t('country'), field: 'country', sortable: true },
-        { name: 'slug', align: 'center', label: $t('slug'), field: 'slug', sortable: true },
-        { name: 'pic', align: 'center', label: $t('pic'), field: 'pic', sortable: true },
-        { name: 'post_title', align: 'left', label: $t('post_title'), field: 'post_title', sortable: true },
-        { name: 'first_name', align: 'center', label: $t('first_name'), field: 'first_name', sortable: true },
-        { name: 'last_name', align: 'center', label: $t('last_name'), field: 'last_name', sortable: true },
-        { name: 'email', align: 'center', label: $t('email'), field: 'email', sortable: true },
-      ] // TagRow
+      })
     }
   }
 }

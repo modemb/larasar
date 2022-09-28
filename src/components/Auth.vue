@@ -29,7 +29,7 @@
             />
 
             <q-input
-              filled
+              filled clearable
               v-model="first_name"
               :label="$t('first_name')"
               lazy-rules v-if="auth||$route.path.includes('register')"
@@ -39,7 +39,7 @@
             />
 
             <q-input
-              filled
+              filled clearable
               v-model="last_name"
               :label="$t('last_name')"
               lazy-rules v-if="auth||$route.path.includes('register')"
@@ -53,8 +53,8 @@
               type="email"
               v-model="email"
               lazy-rules
-              bottom-slots
-              :label="$t('email')"
+              bottom-slots clearable
+              :label="$t('email')" autocomplete="on"
               :rules="[val => val && val.length > 0 || 'null']"
               :error="email_data ? true : false"
               :error-message='email_data'
@@ -63,7 +63,7 @@
             <q-input
               v-model="password" filled lazy-rules
               v-if="!$route.path.includes('password/email')"
-              :label="$t('password')"
+              :label="$t('password')" clearable
               :type="isPwd ? 'password' : 'text'"
               :rules="[val => val && val.length > 7 || 'min 8']"
               :error="password_data ? true : false"
@@ -82,7 +82,7 @@
               v-model="password_confirmation" filled
               v-if="auth||$route.path.includes('register')||$route.path.includes('reset-password')"
               :type="isPwd ? 'password' : 'text'"
-              :label="$t('confirm_password')"
+              :label="$t('confirm_password')" clearable
               :rules="[val => val && val.length > 7 || 'min 8']"
             /><!-- TagReset: reset-password - api/password/reset-->
 
@@ -179,12 +179,11 @@
 
 <script>
 import { LocalStorage } from 'quasar'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUpdated } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import {  useStore } from 'vuex'
 import LoginWithSocial from './LoginWithSocial'
 import { i18n, SANCTUM_API, api, crudAction, notifyAction, ipDebug } from 'boot/axios'
-// import { i18n } from 'boot/i18n'
 
 /**
  * Tags: TagRegister - TagAdd - TagLogin TagUser - login-with-social
@@ -220,6 +219,7 @@ export default {
     const darkMode = ref(LocalStorage.getItem('darkMode'))
 
     onMounted(() => darkModeClass(darkMode.value))
+    onUpdated(() => !$route.path.includes('email/verify')||resend())
 
     function darkModeClass(val) {
       const QDarkClass = document.querySelector('.q-dark')
@@ -227,6 +227,18 @@ export default {
       if (QDarkClass) QDarkClass.style.color = val?'#fff':'var(--q-dark)'
       if (QDarkClass) QDarkClass.style.background = val?'var(--q-dark)':'#fff'
     }
+
+    function resend() {
+      const url = SANCTUM_API ? 'email/verification-notification' : 'api/email/resend'
+
+      crudAction({
+        success: $t('verify_email_address'),
+        url, method: 'post', token: 'csrf'
+      }).then(token => {
+        console.log('resendAction', token)
+      }).catch(e => notifyAction({error: 'resendAction', e}))
+
+    } // TagVerify: ResendModule
 
     function catchErr(error) {
       const data = error?.response?.data; loader.value = false
@@ -263,7 +275,7 @@ export default {
       users: [
         'User', 'Editor'
       ],
-      authenticateUser () {
+      authenticateUser() {
         const data = {
           auth: props.auth,
           role: role.value,
@@ -276,11 +288,12 @@ export default {
           token: 'csrf', path: $route.path
         }; const store = $route.path.includes('login')?'users/loginAction':'users/registerAction'
         $store.dispatch(store, data).then(() => {
-          loader.value = false //name.value =
-          role.value =  first_name.value = last_name.value = email.value = password.value = password_confirmation.value = null
+          setTimeout(() => role.value = first_name.value = last_name.value =
+            email.value = password.value = password_confirmation.value = null
+          , 2000); loader.value = false // name.value =
         }).catch(error => catchErr(error)); loader.value = true
       }, // TagRegister - TagAdd - TagLogin TagUser
-      send () {
+      send() {
         // loader.value = true
         const url = SANCTUM_API?'forgot-password':'api/password/email'; api.post(url, {
           email: email.value,
@@ -292,7 +305,7 @@ export default {
           notifyAction({success: res.data.message})
         }).catch(error => catchErr(error)); loader.value = true
       }, // Send Email To Reset Password
-      reset () {
+      reset() {
         loader.value = true
         const data = {
           // api: 'login',
@@ -309,18 +322,8 @@ export default {
           $store.dispatch('users/loginAction', data)
         }).catch(error => catchErr(error))
       }, // TagReset: Reset Password
-      resend () {
-        const url = SANCTUM_API ? 'email/verification-notification' : 'api/email/resend'
-
-        crudAction({
-          success: $t('verify_email_address'),
-          url: url, method: 'post', token: 'csrf'
-        }).then(token => {
-          console.log('resendAction', token)
-        }).catch(e => notifyAction({error: 'resendAction', e}))
-
-      }, // TagVerify: ResendModule
-      verify (route) {
+      resend, // TagVerify: ResendModule
+      verify(route) {
         loader.value = true
         if (!route.params.id) { loader.value = false; return }
         else param_id.value = route.params.id
@@ -333,15 +336,14 @@ export default {
           notifyAction({message: $t('email_verified_successfully')})
           $router.push({ path: '/' })
         }).catch(e => {
-          loader.value = false; try {
-            verify_email_data.value = e.response.data.message
-          } catch (error) { verify_email_data.value = null}
+          loader.value = false;
+          verify_email_data.value = e?.response?.data?.message
           notifyAction({error: 'verifyAction', e})
         })
       }, // TagVerify: VerifyModule
-      signature () {
+      signature() {
         crudAction({
-          url: `api/users/${$store.getters['users/authGetter'].id}`,
+          url: `api/users/${$store.getters['users/authGetter']?.id}`,
           method:'put',
           update:true,
           signature: true
@@ -350,14 +352,17 @@ export default {
           $router.push({ path: '/' })
         })
       }, // Invalid signature.
-      deleteAllCookies () {
+      deleteAllCookies() {
         let cookies = document.cookie.split(';')
+
         for (let i = 0; i < cookies.length; i++) {
           let cookie = cookies[i]
           let eqPos = cookie.indexOf('=')
           let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
           document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
-        } location.reload()
+          if (cookies.length===1) notifyAction({message: 'All Cookies Deleted', timeout: 6000})
+          // else deleteAllCookies()
+        } //location.reload() - history.go
       } // TagDeleteAllCookies
     }
   }

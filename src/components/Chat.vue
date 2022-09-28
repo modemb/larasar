@@ -31,7 +31,7 @@
       </q-scroll-area><!-- =================Message=========================== -->
       <q-separator /><q-btn flat :label="height" v-if="ipDebug" />
       <q-footer :class="darkMode" elevated>
-        <q-input outlined v-model="newMessage" @keydown="_typing" :class="col" @keyup.enter="sendMessage" :label="$t('Post Message')">
+        <q-input clearable outlined v-model="newMessage" @keydown="_typing" :class="col" @keyup.enter="sendMessage" :label="$t('Post Message')">
           <template v-slot:append>
             <q-btn flat icon="fas fa-paper-plane" @click.prevent="sendMessage" />
           </template><!-- TagMessage: sendMessageModule -->
@@ -46,7 +46,7 @@ import { useQuasar } from 'quasar'
 import { ref, computed, watch, onMounted, onBeforeUpdate } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { api, timeago, notifyAction, crudAction, url, SANCTUM_API } from 'boot/axios'
+import { api, timeago, notifyAction, crudAction, URL, SANCTUM_API } from 'boot/axios'
 
 /**
  * Tags: TagMessage
@@ -73,7 +73,7 @@ export default {
     const auth = computed(() => $store.getters['users/authGetter'])
     const roomId = computed(() => $route.params.id||props.roomId)
 
-    const URL = SANCTUM_API?'/messages':'api/messages'
+    const url = SANCTUM_API?'/messages':'api/messages'
 
     const WindowHeight = () => height.value = screen.height
     const messaging = bool => listening.value = bool
@@ -104,7 +104,7 @@ export default {
             roomId: e.roomId,
             user: await crudAction({
               url: `api/users/${e.userId}`,
-              method: 'get', getUser: true // TODO Fix https://pusher.com/tutorials/chat-laravel/#setting-up-pusher
+              method: 'get', getUser: true // https://pusher.com/tutorials/chat-laravel/#setting-up-pusher
             }).catch(e => notifyAction({error: 'userListening', e}))
           }); setTimeout(() => messaging(false), throttle) // auth.value?.id === e?.userId||
         } // dontBroadcastToCurrentUser
@@ -114,7 +114,7 @@ export default {
     } watch(roomId, () => onload())
 
     function fetchMessages () {
-      api.get(`${URL}/${roomId.value}?messages=1`).then(res => {
+      api.get(`${url}/${roomId.value}?messages=1`).then(res => {
         messages.value = res.data.messages
         roomName.value = res.data.name
         link.value = res.data.link
@@ -126,12 +126,12 @@ export default {
       try { messages.value.push(message)
       } catch (e) { notifyAction({error: 'messages', e}) }
 
-      return api.post(URL, message).then(() => {
+      return api.post(url, message).then(() => {
         // console.log('addMessage', res.data)
       })//.catch(e => notifyAction({error: 'addMessage', e}))
     } // TagMessage: addMessageModule - sendMessageModule
 
-    function scroll (i) {
+    function scroll(i) {
       const duration = 0
       const target = 'vertical'
       const offset = position.value?.[i-1]?.offsetTop // number
@@ -157,7 +157,8 @@ export default {
       darkMode: computed(() => $q.localStorage.getItem('darkMode')?'q-dark':'bg-white'),
       ipDebug: computed(() => $store.getters['config/ipDebugGetter']),
 
-      authCheck(user) {return auth.value?.id === user?.id},
+      authCheck: user => auth.value?.id === user?.id,
+      // authCheck(user) {return auth.value?.id === user?.id},
 
       typing(e) {
         console.log('key', e.key)
@@ -180,7 +181,7 @@ export default {
 
       avatar(user) {
         if (user.avatar) {
-          if (user.avatar.includes('images/profile')) return url + '/' + user.avatar
+          if (user.avatar.includes('images/profile')) return URL + '/' + user.avatar
           else return user.avatar
         } else return user?.new?.avatar
       }, // ================Message End=============================

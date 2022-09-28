@@ -31,7 +31,10 @@
     </q-card><!-- ShareModule -->
   </q-dialog><!--=================== TagShare End  =========-->
 
-  <q-btn flat icon="fas fa-dollar-sign" :label="price" />
+
+  <template v-if="price>0">
+    {{Number(price).toLocaleString(locale, { style: 'currency', currency })}}
+  </template><!-- <q-btn flat icon="fas fa-dollar-sign" :label="price" /> -->
   <q-btn flat round icon="fas fa-share-alt" id="button" /><!-- TagShare: UserModule -->
   <q-btn flat round icon="fas fa-address-book" @click="getContacts" />
   <q-btn flat round icon="fas fa-question" v-if="shareData.tooltip">
@@ -42,13 +45,10 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useQuasar, copyToClipboard } from 'quasar'
+import { useStore } from 'vuex'
 import { i18n, notifyAction, ipDebug } from 'boot/axios'
-// import { i18n } from 'boot/i18n'
-// import postLocation from './Location'
-// import Wish from './Wish'
-// import Files from './Files'
 
 /**
  * Tags: TagShare
@@ -58,15 +58,12 @@ import { i18n, notifyAction, ipDebug } from 'boot/axios'
 export default {
   props: ['shareData'],
   setup (props) {
-    // const $route = useRoute()
-    // const $router = useRouter()
+    const $store = useStore()
     const $q = useQuasar()
     const $t = i18n?.global?.t
     const copyLink = ref(!props.shareData||props.shareData.url)
     const contacts = ref(null) // TagSharePost
     const share =ref(null)
-
-    // const ipDebug = computed(() => $store.getters['config/ipDebugGetter'])
 
     onMounted(() => {
       const btn = document.querySelector('#button')
@@ -83,12 +80,14 @@ export default {
     return {
       ipDebug,
       contacts,
-      copyLink,
+      copyLink, share,
       desktop: $q.platform.is.desktop,
-      price: props.shareData.price||props.shareData.gain,
+      price: computed(() => props.shareData.price||props.shareData.gain),
+      currency: props.shareData.currency_code||'USD',
       title: props.shareData.title||props.shareData.post_title,
-      share,
-      copy () {
+      locale: computed(() => $store.getters['config/localeGetter']),
+
+      copy() {
         copyToClipboard(copyLink.value).then(() => notifyAction({message: $t('copy_successful')}))
           .catch(e => notifyAction({error: $t('copy_unsuccessful'), e}))
       }, // TagCopyLink: ShareModule

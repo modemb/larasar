@@ -64,12 +64,18 @@ return [
       'host'  => env('BITGO_HOST'),
       'port'  => env('BITGO_PORT'),
     ],
-    'stripe' => [
-        'model' => App\Models\User::class,
-        'key' => env('STRIPE_KEY'),
-        'secret' => env('STRIPE_SECRET'),
-        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
-    ],
+    // 'stripe' => [
+    //   'model' => App\Models\User::class,
+    //   'key' => env('STRIPE_KEY'),
+    //   'secret' => env('STRIPE_SECRET'),
+    //   // ----------------------------------------
+    //   // 'key' => env('STRIPE_TEST_KEY'),
+    //   // 'secret' => env('STRIPE_TEST_SECRET'),
+    //   // ----------------------------------------
+    //   // 'test_key' => env('STRIPE_TEST_KEY'),
+    //   // 'test_secret' => env('STRIPE_TEST_SECRET'),
+    //   // 'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    // ],
     'paypal' => [
         'clientId' => env('PAYPAL_ID'),
         'clientSecret' => env('PAYPAL_SECRET'),

@@ -88,7 +88,7 @@ export default {
      *
      * @param {Number} limit
      */
-    function fetch (limit = 5) {
+    function fetch(limit = 5) {
       api.get(url, { params: { limit } })
         .then(({ data: { Total, Notifications } }) => {
           total.value = Total
@@ -105,13 +105,12 @@ export default {
         })
     } // TagNotifications: fetchNotificationsModule
 
-    function listen () {
+    function listen() {
       if (auth.value) window.Echo.private(`App.Models.User.${auth.value.id}`)
       // if (auth.value) window.Echo.channel(`App.Models.Room.${roomId}`)
         .notification(notification => {
           total.value++
           notifications.value.unshift(notification)
-          console.log('notify', notify.value)
           if (notify.value) markAsRead(notification)
         }).listen('NotificationRead', ({ notificationId }) => {
           total.value--
@@ -129,9 +128,8 @@ export default {
      *
      * @param {Object} notification
      */
-    function markAsRead ({ id }) {
+    function markAsRead({ id }) {
       const index = notifications.value.findIndex(n => n.id === id)
-          console.log('notify', notify.value, id)
 
       if (index > -1) {
         total.value--
@@ -147,24 +145,21 @@ export default {
       PopUp: ref(false),
       notifications,
 
-      // notify,
-
-      fetch,
-
       ipDebug: computed(() => $store.getters['config/ipDebugGetter']),
       darkMode: ref($q.localStorage.getItem('darkMode')),
       hasUnread: computed(() => total.value > 0),
 
+      fetch,
       markAsRead,
 
-      markAllRead () {
+      markAllRead() {
         total.value = 0
         notifications.value = []
 
         api.post(`${url}?mark_all_read=1`)
       }, // Mark all notifications as read.
 
-      actionUrl (notification) {
+      actionUrl(notification) {
         // :to="notification.action_url"
         $router.push({ path: notification.action_url })
         markAsRead(notification)

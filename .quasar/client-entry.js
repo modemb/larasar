@@ -138,7 +138,7 @@ async function start ({
 createQuasarApp(createApp, quasarUserOptions)
 
   .then(app => {
-    return Promise.all([
+    return Promise.allSettled([
       
       import(/* webpackMode: "eager" */ 'boot/i18n'),
       
@@ -146,7 +146,13 @@ createQuasarApp(createApp, quasarUserOptions)
       
     ]).then(bootFiles => {
       const boot = bootFiles
-        .map(entry => entry.default)
+        .map(result => {
+          if (result.status === 'rejected') {
+            console.error('[Quasar] boot error:', result.reason)
+            return
+          }
+          return result.value.default
+        })
         .filter(entry => typeof entry === 'function')
 
       start(app, boot)

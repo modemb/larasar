@@ -5,7 +5,7 @@
       :style="'height:' + height + 'px'"
       class="my-sticky-virtscroll-table"
       ref="table"
-      :title="$t('Analytics')"
+      :title="`${$t('Analytics')}`"
       :rows="rows"
       :columns="columns"
       row-key="name"
@@ -54,14 +54,15 @@
               {label: $t('Year'), value: '-1 year'}
             ]"
           /><!-- TagPeriod: PeriodModule -->
-          <q-input class="q-ma-xs col-md-3" borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
+          <q-toggle class="q-ma-xs col-md-3" v-model="expend" left-label label="Expend" />
+          <q-input clearable class="q-ma-xs col-md-3" borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
           </q-input>
       </template>
 
-      <template v-slot:header="props" v-if="period=='today'">
+      <template v-slot:header="props" v-if="expend">
         <q-tr :props="props">
           <q-th auto-width />
           <q-th
@@ -73,7 +74,7 @@
         </q-tr>
       </template>
 
-      <template v-slot:body="props" v-if="period=='today'">
+      <template v-slot:body="props" v-if="expend">
         <q-tr :props="props">
           <q-td auto-width>
             <q-btn size="sm" color="accent" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'" />
@@ -96,7 +97,7 @@
             </div>
           </q-td>
         </q-tr>
-      </template><!-- ExpandingRowModule -->
+      </template><!-- ExpandingRowModule period==='today'-->
 
     </q-table><!--=== Data Table End ====-->
   </div>
@@ -107,26 +108,6 @@ import { ref, watch, onMounted, computed } from 'vue'
 import { exportFile, useQuasar, date } from 'quasar'
 import { useStore } from 'vuex'
 import { i18n, timeago, crudAction, notifyAction } from 'boot/axios'
-
-const $t = i18n.global.t
-
-const columns = [
-  { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
-  { name: 'ip', align: 'center', label: 'IP', field: 'ip', sortable: true },
-  { name: 'session', align: 'center', label: $t('session'), field: 'session', sortable: true },
-  { name: 'city', align: 'center', label: $t('city'), field: 'city', sortable: true },
-  { name: 'region', align: 'center', label: $t('region'), field: 'region', sortable: true },
-  { name: 'country', align: 'center', label: $t('country'), field: 'country', sortable: true },
-  { name: 'updated_at', align: 'center', label: $t('updated_at'), field: 'updated_at', sortable: true },
-  { name: 'created_at', align: 'center', label: $t('created_at'), field: 'created_at', sortable: true },
-  { name: 'first_name', align: 'center', label: $t('first_name'), field: 'first_name', sortable: true },
-  { name: 'last_name', align: 'center', label: $t('last_name'), field: 'last_name', sortable: true },
-  { name: 'email', align: 'center', label: $t('email'), field: 'email', sortable: true },
-  { name: 'status', align: 'center', label: $t('status'), field: 'status', sortable: true },
-  { name: 'role', align: 'center', label: $t('role'), field: 'role', sortable: true },
-  { name: 'app', align: 'center', label: $t('app'), field: 'app', sortable: true },
-  { name: 'email_verified_at', align: 'center', label: $t('email_verified_at'), field: 'email_verified_at', sortable: true }
-]
 
 /**
  * Tags: PeriodModule - ExpandingRowModule
@@ -157,48 +138,84 @@ function wrapCsvValue (val, formatFn) {
 export default {
   props: ['sessions'],
   setup () {
-    const $store = useStore()
+    const $t = i18n.global.t
     const $q = useQuasar()
+    const $store = useStore()
     const timeStamp = Date.now()
     const formattedString = date.formatDate(timeStamp, 'YYYY/MM/DD')//YYYY-MM-DDTHH:mm:ss.SSSZ
     const proxyDate = ref(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
     const period = ref('today')
-    // const columns = ref([])
     const loading = ref(false)
+    const columns = computed(() => [
+      { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
+      { name: 'ip', align: 'center', label: 'IP', field: 'ip', sortable: true },
+      { name: 'session', align: 'center', label: $t('session'), field: 'session', sortable: true },
+      { name: 'city', align: 'center', label: $t('city'), field: 'city', sortable: true },
+      { name: 'region', align: 'center', label: $t('region'), field: 'region', sortable: true },
+      { name: 'country', align: 'center', label: $t('country'), field: 'country', sortable: true },
+      { name: 'currency', align: 'center', label: $t('currency'), field: 'currency', sortable: true },
+      { name: 'currency_name', align: 'center', label: $t('currency_name'), field: 'currency_name', sortable: true },
+      { name: 'updated_at', align: 'center', label: $t('updated_at'), field: 'updated_at', sortable: true },
+      { name: 'created_at', align: 'center', label: $t('created_at'), field: 'created_at', sortable: true },
+      { name: 'first_name', align: 'center', label: $t('first_name'), field: 'first_name', sortable: true },
+      { name: 'last_name', align: 'center', label: $t('last_name'), field: 'last_name', sortable: true },
+      { name: 'email', align: 'center', label: $t('email'), field: 'email', sortable: true },
+      { name: 'status', align: 'center', label: $t('status'), field: 'status', sortable: true },
+      { name: 'role', align: 'center', label: $t('role'), field: 'role', sortable: true },
+      { name: 'app', align: 'center', label: $t('app'), field: 'app', sortable: true },
+      { name: 'email_verified_at', align: 'center', label: $t('email_verified_at'), field: 'email_verified_at', sortable: true }
+    ]); //const rows = computed(() => $store.getters['users/analyticsGetter'])
 
-    const rows = computed(() => $store.getters['users/analyticsGetter'])
+    const d = d => new Date(date.formatDate(d, 'YYYY-MM-DD')).getTime()
+    const rows =  computed(() =>
+      $store.getters['users/analyticsGetter']?.filter(a =>
+        d(a.updated_at) >= d(dateTimePeriod(period.value)) &&
+        d(a.updated_at) <= d(dateTimePeriod('0 day')) ||
+        d(a.updated_at) >= d(proxyDate.value?.from) &&
+        d(a.updated_at) <= d(proxyDate.value?.to) ||
+        d(a.updated_at) == d(proxyDate.value)
+      )
+    )
 
-    // const role = ref(null)
-    // const first_name = ref(null)
-    // const last_name = ref(null)
-    // const email = ref(null)
+    function dateTimePeriod(period) {
+      if (period==='today') period = '0 day'
+      if (period==='-1 week') period = '-7 day'
+      if (!period) return
+      const p = period.split(' ')
+      const d = date.addToDate(Date(), { [p[1]]: p[0] })
+      return date.formatDate(d, 'YYYY-MM-DD H:mm:ss')
+    } // Date Time Like SQL From Period
 
     function crud(rowsData) {
       crudAction(rowsData).then(crud => $store.commit('users/analyticsMutation', crud))
                           .catch(e => notifyAction({error: 'analyticsAction', e}))
-    } watch(period,  val => !val||onLoad(val))
+    } watch(period, val => !val||onLoad(val))
 
     function onLoad (period) {
+      console.log(
+        'd', d(Date()),
+        'period', dateTimePeriod(period),
+        'today', dateTimePeriod('0 day')
+      )
+
       crud({
         url: 'api/users/analytics',
-        method: 'get',
-        // analytics: true,
-        period: period
+        method: 'get', period
       })
     } onMounted(() => onLoad(period.value))
 
     return {
       period,
-      proxyDate, // 'YYYY-MM-DD',
-      height: ref(screen.height / 1.4),
-      // role,
-      // first_name,
-      // last_name,
-      // email,
-      filter: ref(''),
-      range: ref(false),
       loading,
       timeago,
+      columns,
+      rows,
+
+      filter: ref(''),
+      range: ref(false),
+      expend: ref(false),
+      proxyDate, // 'YYYY-MM-DD',
+      height: ref(screen.height / 1.4),
 
       save () {
         period.value = null
@@ -206,7 +223,6 @@ export default {
           expandingRow: true,
           url: 'api/users/analytics',
           method: 'get',
-          // analytics: true,
           from: proxyDate.value.from,
           to: proxyDate.value.to,
           proxyDate: proxyDate.value
@@ -225,8 +241,8 @@ export default {
 
       exportTable () {
         // naive encoding to csv format
-        const content = [columns.map(col => wrapCsvValue(col.label))].concat(
-          rows.value.map(row => columns.map(col => wrapCsvValue(
+        const content = [columns.value.map(col => wrapCsvValue(col.label))].concat(
+          rows.value.map(row => columns.value.map(col => wrapCsvValue(
             typeof col.field === 'function'
               ? col.field(row)
               : row[ col.field === void 0 ? col.name : col.field ],
@@ -255,10 +271,7 @@ export default {
         page: 1,
         rowsPerPage: 0,
         rowsNumber: 10
-      },
-
-      columns,
-      rows
+      }
     }
   }
 }

@@ -63,12 +63,15 @@
           <q-select
             filled class="*col-12"
             v-model="country"
+            fill-input
             use-input
             hide-selected
-            fill-input
+            transition-show="*flip-up"
+            transition-hide="*flip-down"
+            behavior="*dialog"
             input-debounce="0"
             :options="Countries"
-            @filter="filterFn"
+            @filter="filterFn" clearable
             :hint="$t(advance?'Advanced Filter':'Filter')"
             style="width: 100%; padding-bottom: 32px"
           ><!-- https://quasar.dev/vue-components/select#Example--Basic-filtering -->
@@ -506,16 +509,16 @@ export default {
 
       role: computed(() => $store.getters['users/rolesGetter']),
 
-      filterFn (val, update) { // ===== TagChooseLocation ================= \\
+      filterFn (val, update, abort) { // ===== TagChooseLocation ================= \\
         update(async () => {
           const needle = val.toLowerCase()
-          const res = []
+          const places = []
 
           if (advance.value) // TagAdvanceSearch: CountryModule
-          try { (await Place({place: needle, search: true})).forEach(loc => res.push(loc.place)) }
-          catch (e) { notifyAction({error: 'forEachFilter', e}) }
+          try { (await Place({place: needle, search: true})).forEach(loc => places.push(loc.place)) }
+          catch (e) { notifyAction({error: 'forEachFilter', e}); abort() }
 
-          Countries.value = [...countries, ...res].filter(v => v.toLowerCase().indexOf(needle) > -1)
+          Countries.value = [...countries, ...places].filter(v => v?.toLowerCase().indexOf(needle) > -1)
           Cities()
         })
       }, // TagSelectCountry: CountryModule

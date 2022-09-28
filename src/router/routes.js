@@ -11,35 +11,6 @@ const routes = [
         meta: { public: true }
       },
       {
-        path: '/category/:id',
-        name: 'public.category.id',
-        component: () => import('components/Categories.vue'),
-        // component: () => import('pages/Index.vue'),
-        // meta: { public: true }
-        meta: { auth: true }
-      },
-      {
-        path: '/subcategory/:id',
-        name: 'public.subcategory.id',
-        component: () => import('components/Categories.vue'),
-        // component: () => import('pages/Index.vue'),
-        // meta: { public: true }
-        meta: { auth: true }
-      },
-      {
-        path: '/search/:posts',
-        name: 'public.search.posts',
-        component: () => import('components/Categories.vue'),
-        meta: { public: true }
-      },
-      {
-        path: '/post/:id',
-        name: 'public.post.id',
-        component: () => import('components/Post'),
-        // component: () => import('pages/PostOld'),
-        meta: { public: true }
-      },
-      {
         path: '/page/:slug',
         name: 'public.pages',
         component: () => import('pages/Page.vue'),
@@ -138,47 +109,6 @@ const routes = [
         path: '/analytics',
         name: 'auth.analytics',
         component: () => import('pages/Analytics.vue'),
-        meta: { auth: true }
-      },
-      {
-        path: '/locations',
-        name: 'auth.locations',
-        component: () => import('pages/Locations.vue'),
-        meta: { auth: true }
-      },
-      {
-        path: '/post',
-        // path: '/post/categories',
-        name: 'public.post.categories',
-        component: () => import('components/Post'),
-        // component: () => import('pages/PostOld'),
-        // meta: { auth: true }
-        meta: { public: true, radioCategory: true }
-      }, // TagAddPost
-      {
-        path: '/post/:id/categories',
-        name: 'post.id.categories',
-        component: () => import('components/Post'),
-        // meta: { auth: true }
-        meta: { public: true, radioCategory: true }
-      }, // TagUpdatePostCategory
-      // {
-      //   path: '/post/:subcategory',
-      //   name: 'auth.post.subcategory',
-      //   component: () => import('components/Post'),
-      //   // component: () => import('pages/Post.vue'),
-      //   meta: { auth: true }
-      // },
-      {
-        path: '/favorites',
-        name: 'auth.favorites',
-        component: () => import('pages/Favorites.vue'),
-        meta: { auth: true }
-      },
-      {
-        path: '/posts',
-        name: 'auth.posts',
-        component: () => import('pages/Posts.vue'),
         meta: { auth: true }
       },
       {

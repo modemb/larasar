@@ -21,7 +21,7 @@
     ><!-- https://quasar.dev/vue-components/table#example--virtual-scroll-with-sticky-header
       -->
 
-      <template v-slot:top-right class="row" v-if="!(post_id||pending_posts)">
+      <template v-slot:top-right class="row" v-if="!(post_id||pending_payments)">
         <q-btn
           color="primary"
           icon-right="archive"
@@ -42,7 +42,7 @@
           </q-popup-proxy>
         </q-btn>TagPeriod: PeriodModule -->
 
-        <q-btn icon="event" color="primary" class="q-ma-xs *col-md-1" :label="JSON.stringify(proxyDate)">
+        <q-btn icon="event" color="primary" class="q-ma-xs *col-md-1" :label="JSON.stringify(proxyDate)" v-if="!post_reports">
           <q-popup-proxy @before-show="updateProxy" transition-show="scale" transition-hide="scale">
             <q-date v-model="proxyDate" :range="range" ><!-- :setToday="!range" -->
               <div class="row items-center justify-end q-gutter-sm">
@@ -56,7 +56,7 @@
 
         <q-btn-toggle
           v-model="period"
-          push
+          push v-if="!post_reports"
           glossy class="*q-ma-xs *col-md-3"
           toggle-color="primary"
           :options="[
@@ -84,7 +84,7 @@
               :label="props.row.product||props.row.post_id"
             />
           </q-td>
-          
+
           <q-td key="first_name" :props="props">
             {{ props.row.user.first_name }}
           </q-td>
@@ -98,6 +98,7 @@
           <q-td key="plan" :props="props">{{ props.row.plan }}</q-td>
           <q-td key="payment" :props="props">{{ props.row.payment }}</q-td>
           <q-td key="amount" :props="props">{{ props.row.amount }}</q-td>
+          <q-td key="total" :props="props">{{ props.row.total }}</q-td>
           <q-td key="currency_code" :props="props">{{ props.row.currency_code }}</q-td>
 
           <!-- <template v-if="usersData">
@@ -152,18 +153,18 @@ function wrapCsvValue (val, formatFn) {
 }
 
 export default {
-  props: ['post_id', 'pending_posts', 'post_reports'],
+  props: ['post_id', 'pending_payments', 'post_reports'],
   setup (props) {
-    const $store = useStore()
-    const $q = useQuasar()
     const $t = i18n?.global?.t
+    const $q = useQuasar()
+    const $store = useStore()
     const timeStamp = Date.now()
     const formattedString = date.formatDate(timeStamp, 'YYYY/MM/DD')//YYYY-MM-DDTHH:mm:ss.SSSZ
     const proxyDate = ref(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
     const period = ref('today')
     const loading = ref(false)
     const rows = ref([])
-    const columns = ref([
+    const columns = computed(() => [
       { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
       { name: 'product', align: 'center', label: $t('product'), field: 'product', sortable: true },
       { name: 'first_name', align: 'center', label: $t('first_name'), field: 'first_name', sortable: true },
@@ -174,6 +175,7 @@ export default {
       { name: 'plan', align: 'center', label: $t('plan'), field: 'plan', sortable: true },
       { name: 'payment', align: 'center', label: $t('payment'), field: 'payment', sortable: true },
       { name: 'amount', align: 'center', label: $t('amount'), field: 'amount', sortable: true },
+      { name: 'total', align: 'center', label: $t('total'), field: 'total', sortable: true },
       { name: 'currency_code', align: 'center', label: $t('currency_code'), field: 'currency_code', sortable: true }
     ]) // https://quasar.dev/vue-components/table#example--synchronizing-with-server
 
@@ -182,9 +184,9 @@ export default {
     const authId = Object.fromEntries(Object.entries(auth).filter(([key]) => key.includes('id')));
 
     const post_id = computed(() => props?.post_id)
-    const pending_posts = computed(() => props?.pending_posts)
+    const pending_payments = computed(() => props?.pending_payments)
 
-    watch([post_id, pending_posts], () => onLoad())
+    watch([post_id, pending_payments], () => onLoad())
 
     function crud(rowsData) {
       // crudAction(rowsData).then(crud => rows.value = crud)
@@ -193,7 +195,7 @@ export default {
     } watch(period, val => !val||onLoad(val))
 
     function onLoad(period) {
-      if (props.pending_posts) return rows.value = props.pending_posts;
+      if (props.pending_payments) return rows.value = props.pending_payments;
       if (props.post_reports) return rows.value = props.post_reports; crud({
         url: 'api/users/reports',
         method: 'get',

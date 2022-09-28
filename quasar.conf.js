@@ -6,6 +6,8 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
+/* eslint-env node */
+// const ESLintPlugin = require('eslint-webpack-plugin') // commented
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { configure } = require('quasar/wrappers')
 
@@ -39,7 +41,7 @@ module.exports = configure(function (ctx) {
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
-      // 'mdi-v4',
+      // 'mdi-v5',
       'fontawesome-v6',
       // 'eva-icons',
       // 'themify',
@@ -75,24 +77,48 @@ module.exports = configure(function (ctx) {
       // Options below are automatically set depending on the env, set them if you want to override
       // extractCSS: false,
 
+      // https://quasar.dev/quasar-cli/handling-webpack
+      // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
+      chainWebpack (/* chain */) {
+        // chain.plugin('eslint-webpack-plugin')
+        //   .use(ESLintPlugin, [{ extensions: [ 'js', 'vue' ] }])
+      }, // Commented,
+
       // https://www.npmjs.com/package/dotenv
       env: env,
       distDir: 'public/quasar', // Comment for dist folder
-      publicPath: localProdServer ? '/www/larasar/public' : '/', // Build URL
+      publicPath: localProdServer ? '/www/suguffie/public' : '/', // Build URL
 
       // https://quasar.dev/quasar-cli/handling-webpack#introduction
       extendWebpack (cfg) {
-        if (ctx.prod) {
-          cfg.output.publicPath = localProdServer ? '/www/larasar/public/quasar/' : '/quasar/'
-        } // Build Path
+        // cfg.module.rules.push({
+        //   enforce: 'pre', // commented
+        //   test: /\.(js|vue)$/,
+        //   loader: 'eslint-loader',
+        //   exclude: /(node_modules|quasar)/
+        // })
+
+        if (ctx.prod) cfg.output.publicPath = localProdServer
+          ? '/www/suguffie/public/quasar/' : '/quasar/' // Build Path
       }
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
-      https: false,
+      // server: {
+      //   type: 'https',
+      //   options: {
+      //     // Use ABSOLUTE paths or path.join(__dirname, 'root/relative/path')
+      //     // key: '/path/to/server.key',
+      //     // pfx: '/path/to/server.pfx',
+      //     // cert: '/path/to/server.crt',
+      //     // ca: '/path/to/ca.pem',
+      //     // passphrase: 'webpack-dev-server' // do you need it?
+      //   }
+      // },
+      // https: true,yarn
       port: ctx.mode.spa ? 8080
-        : (ctx.mode.pwa ? 9090 : 9000),
+         : (ctx.mode.pwa ? 9090 : 9000),
       open: true // opens browser window automatically
     },
 
@@ -151,6 +177,11 @@ module.exports = configure(function (ctx) {
       maxAge: 1000 * 60 * 60 * 24 * 30,
         // Tell browser when a file from the server should expire from cache (in ms)
 
+      chainWebpackWebserver (/* chain */) {
+        // chain.plugin('eslint-webpack-plugin')
+        //   .use(ESLintPlugin, [{ extensions: [ 'js' ] }])
+      }, // commented
+
       middlewares: [
         ctx.prod ? 'compression' : '',
         'render' // keep this as last one
@@ -162,6 +193,18 @@ module.exports = configure(function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
 
+      // ====================Added===========================
+      workboxMode: 'generateSW', // or 'injectManifest'
+      injectPwaMetaTags: true,
+      swFilename: 'sw.js',
+      manifestFilename: 'manifest.json',
+      useCredentialsForManifestTag: false,
+      // extendGenerateSWOptions (cfg) {},
+      // extendInjectManifestOptions (cfg) {},
+      // extendManifestJson (json) {},
+      // extendPWACustomSWConf (esbuildConf) {},
+      // =======================================================
+
       // for the custom service worker ONLY (/src-pwa/custom-service-worker.[js|ts])
       // if using workbox in InjectManifest mode
       chainWebpackCustomSW (/* chain */) {
@@ -170,13 +213,22 @@ module.exports = configure(function (ctx) {
       }, // commented
 
       manifest: {
-        name: 'Laravel - Quasar',
-        short_name: 'Larasar',
-        description: 'A Laravel + Quasar Vue Framework App',
+        name: 'Suguffiè - Classified Marketplace',
+        short_name: 'Suguffiè',
+        description: 'World Marketplace, Classified Ads, Services, Jobs, Buy & Sell',
         display: 'standalone',
+        start_url: 'https://suguffie.com',
         orientation: 'any', // any - portrait
         background_color: '#ffffff', // #ffffff
         theme_color: '#027be3', // #027be3
+        // gcm_sender_id: 103953800507,
+        // prefer_related_applications: true, // Prompt the user to install Web App - false / Native App - true
+        // related_applications: [
+        //   {
+        //     platform: 'play',
+        //     id: 'com.google.samples.apps.iosched'
+        //   } // Play Store app ID
+        // ], // https://developers.google.com/web/fundamentals/app-install-banners/native#mini-info-bar
         icons: [
           {
             src: 'icons/icon-128x128.png',
@@ -206,6 +258,12 @@ module.exports = configure(function (ctx) {
         ]
       }
     },
+
+    sourceFiles: {
+      pwaRegisterServiceWorker: 'src-pwa/register-service-worker',
+      pwaServiceWorker: 'src-pwa/custom-service-worker',
+      pwaManifestFile: 'src-pwa/manifest.json',
+    },//Added
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
@@ -237,17 +295,14 @@ module.exports = configure(function (ctx) {
 
       builder: {
         // https://www.electron.build/configuration/configuration
-
         appId: 'quapp'
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpackMain (/* chain */) {
+      chainWebpack(/* chain */) {
         // do something with the Electron main process Webpack cfg
         // extendWebpackMain also available besides this chainWebpackMain
-        // chain.plugin('eslint-webpack-plugin')
-        //   .use(ESLintPlugin, [{ extensions: [ 'js' ] }])
-      }, // commented
+      },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpackPreload (/* chain */) {
@@ -255,7 +310,21 @@ module.exports = configure(function (ctx) {
         // extendWebpackPreload also available besides this chainWebpackPreload
         // chain.plugin('eslint-webpack-plugin')
         //   .use(ESLintPlugin, [{ extensions: [ 'js' ] }])
-      } // commented
+      }, // commented
+
+      // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
+      // chainWebpack (/* chain */) {
+      //   // do something with the Electron main process Webpack cfg
+      //   // extendWebpackMain also available besides this chainWebpackMain
+      // },
+
+      // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
+      // nodeIntegration: true,
+
+      // extendWebpack (/* cfg */) {
+      //   // do something with Electron main process Webpack cfg
+      //   // chainWebpack also available besides this extendWebpack
+      // }
     }
   }
 })

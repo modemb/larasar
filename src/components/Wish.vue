@@ -31,8 +31,7 @@ export default {
         const method = id ? 'put' : 'post'
         let url = id ? `api/categories/${id}` : 'api/categories'
         crudAction({
-          url: url,
-          method: method,
+          url, method,
           favorite: true,
           user_id: auth.value.id,
           post_id: post.id

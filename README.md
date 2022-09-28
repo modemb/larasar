@@ -123,10 +123,10 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 
 ## Features
 
+- [x] Weather Distance Location Local Currency
 - [x] CRUDAction Reusable State Management
 - [x] Realtime (Chat, Push/Notification)
 - [x] Users Authentication by Roles
-- [x] Weather Location Distance
 - [x] All Platforms in One Go
 - [x] Super Admin ID = 1
 - [x] Email Verification
@@ -134,7 +134,7 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 - [x] Users Analytics
 - [x] Form Validation
 - [x] Password Reset
-- [x] Live Migration 
+- [x]	Live Migration 
 - [x] Users Sessions
 - [x] Social Login
 - [x] Share Button

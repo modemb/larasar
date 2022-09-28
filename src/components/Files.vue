@@ -84,7 +84,7 @@
         ><!-- https://codepen.io/ontwikkelfabriek/pen/yLXXLQY -->
 
           <template v-slot:top-right>
-            <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+            <q-input clearable borderless dense debounce="300" v-model="filter" placeholder="Search">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
@@ -95,7 +95,7 @@
             <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
               <q-card class="my-card">
 
-                <q-img :src="url+'/'+props.row.pic" />
+                <q-img :src="URL+'/'+props.row.pic" />
                 <q-card-section v-html="props.row.name" v-if="props.row.name" />
                 <q-checkbox v-model="selectedFiles" :val="props.row.pic" :label="props.row.updated_at" />
                 <div :class="selectedFile"></div><!-- TagEdit: FilesModule -->
@@ -115,7 +115,7 @@ import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
 import { ref, computed, watch, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { url, api, ipDebug, crudAction, notifyAction } from 'boot/axios'
+import { URL, api, ipDebug, crudAction, notifyAction } from 'boot/axios'
 
 /**
  * Tags: selectModule
@@ -138,18 +138,14 @@ export default {
     const auth = computed(() => $store.getters['users/authGetter'])
     const role = computed(() => $store.getters['users/rolesGetter'])
 
-    const filter = ref('')
+    // const filter = ref('')
     const pagination = ref({
       page: 1,
       rowsPerPage: getItemsPerPage()
-    })
-    watch(() => $q.screen.name, () => {
-      pagination.value.rowsPerPage = getItemsPerPage()
-    })
-
-    watch(showFiles, val => {
-      crudReload(val==='all_pics'?val:(val?'my_pics':'trashed'))
     }) // https://github.com/Intervention/image
+
+    watch(() => $q.screen.name, () => pagination.value.rowsPerPage = getItemsPerPage())
+    watch(showFiles, val => crudReload(val==='all_pics'?val:(val?'my_pics':'trashed')))
 
     function crudReload (show) {
       crud({
@@ -216,8 +212,8 @@ export default {
 
     return {
       rows,
-      url,
-      filter,
+      URL,
+      filter: ref(''),
       pagination,
       auth,
       role,
@@ -278,13 +274,13 @@ export default {
       }, // TagDeleteForever: FilesModule: FilesModule
 
       columns: [
-        // { name: 'pic', align: 'center', label: ('picture'), field: 'pic', sortable: true },
-        // { name: 'post_title', align: 'center', label: ('post_title'), field: 'name', sortable: true },
-        // { name: 'address', align: 'center', label: ('address'), field: 'address', sortable: true },
-        // { name: 'city', align: 'center', label: ('city'), field: 'city', sortable: true },
-        // { name: 'end_date', align: 'center', label: ('expiry'), field: 'end_date', sortable: true },
-        // { name: 'edit', align: 'center', label: ('edit'), field: 'edit', sortable: false },
-        // { name: 'delete', align: 'center', label: ('delete'), field: 'delete', sortable: false }
+        { name: 'pic', align: 'center', label: ('picture'), field: 'pic', sortable: true },
+        { name: 'post_title', align: 'center', label: ('post_title'), field: 'name', sortable: true },
+        { name: 'address', align: 'center', label: ('address'), field: 'address', sortable: true },
+        { name: 'city', align: 'center', label: ('city'), field: 'city', sortable: true },
+        { name: 'end_date', align: 'center', label: ('expiry'), field: 'end_date', sortable: true },
+        { name: 'edit', align: 'center', label: ('edit'), field: 'edit', sortable: false },
+        { name: 'delete', align: 'center', label: ('delete'), field: 'delete', sortable: false }
       ],
 
       cardContainerClass: computed(() => {

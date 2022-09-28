@@ -19,7 +19,6 @@
         <div class="q-gutter-md">
           <div class="row">
 
-            <!-- Profile Info -->
             <div class="col-md-6 q-pa-sm">
 
               <q-card class="my-card text-white">
@@ -59,7 +58,7 @@
                         filled class="col-12"
                         v-model="role" v-if="user"
                         :options="admins"
-                        :label="$t('role')"
+                        :label="$t('role')" clearable
                         :error="role_data ? true : false"
                         :error-message='role_data'
                       />
@@ -67,8 +66,8 @@
                         filled
                         type="text"
                         v-model="name"
-                        :label="user_name||$t('user_name')"
-                        lazy-rules
+                        :label="$t('user_name')"
+                        lazy-rules clearable
                         :rules="[val => val && val.length > 0 || $t('user_name')]"
                         :error="name_data ? true : false"
                         :error-message="name_data"
@@ -80,7 +79,7 @@
                         type="text"
                         v-model="first_name"
                         :label="$t('first_name')"
-                        lazy-rules
+                        lazy-rules clearable
                         :rules="[val => val && val.length > 0 || $t('first_name')]"
                       />
                     </div>
@@ -90,7 +89,7 @@
                         type="text"
                         v-model="last_name"
                         :label="$t('last_name')"
-                        lazy-rules
+                        lazy-rules clearable
                         :rules="[val => val && val.length > 0 || $t('last_name')]"
                       />
                     </div>
@@ -102,21 +101,33 @@
                     v-model="address"
                     :label="$t('address')"
                     :error="address_data ? true : false"
-                    :error-message='address_data'
+                    :error-message='address_data' clearable
                     :rules="[val => val && val.length > 0 || $t('add_address')]"
                   />
 
                   <div class="row">
-                    <div class="col-8">
+                    <div class="col-6">
                       <q-input
                         lazy-rules
                         v-model="city"
                         filled type="text"
-                        :label="$t('city')"
+                        :label="$t('city')" clearable
                         :rules="[val => val && val.length > 0 || $t('add_city')]"
                       />
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
+                      <q-input
+                        filled
+                        lazy-rules
+                        type="text"
+                        v-model="region"
+                        :label="$t('region')"
+                        :error="region_data ? true : false"
+                        :error-message='region_data' clearable
+                        :rules="[val => val && val.length > 0 || $t('add_region')]"
+                      />
+                    </div>
+                    <div class="col-3">
                       <q-input
                         filled
                         lazy-rules
@@ -124,7 +135,7 @@
                         v-model="postal_code"
                         :label="$t('postal_code')"
                         :error="postal_code_data ? true : false"
-                        :error-message='postal_code_data'
+                        :error-message='postal_code_data' clearable
                         :rules="[val => val && val.length > 0 || $t('add_postal_code')]"
                       />
                     </div>
@@ -136,7 +147,7 @@
                         v-model="country"
                         filled type="text"
                         :label="$t('country')"
-                        lazy-rules
+                        lazy-rules clearable
                         :rules="[val => val && val.length > 0 || $t('add_country')]"
                       />
                     </div>
@@ -145,7 +156,7 @@
                         v-model="phone"
                         filled type="tel"
                         :label="$t('phone')"
-                        lazy-rules
+                        lazy-rules clearable
                         :rules="[val => val && val.length > 0 || $t('add_phone')]"
                       />
                     </div>
@@ -153,7 +164,9 @@
                       <q-btn color="primary" :label="$t('update')" @click.prevent="update" />
                     </div>
                     <div class="col-6" v-if="user">
-                      <q-input v-model="gain" label="Gain" filled type="number" />
+                      <q-input v-model="gain" filled type="number"
+                        :label="'Gain '+ cy(xRate(gain))" clearable
+                      />
                     </div>
 
                   </div>
@@ -162,9 +175,8 @@
 
               </q-card>
 
-            </div><!-- Profile Info End -->
+            </div><!-- Profile Info -->
 
-            <!-- Password Reset -->
             <div class="col-md-6 q-pa-sm">
 
               <q-card class="my-card text-white">
@@ -179,7 +191,7 @@
                     v-model="password"
                     :type="isPwd ? 'password' : 'text'"
                     :label="$t('your_password')"
-                    lazy-rules v-if="!user"
+                    lazy-rules v-if="!user" clearable
                     :rules="[val => val && val.length > 0 || $t('your_password')]"
                   />
 
@@ -187,16 +199,15 @@
                     filled
                     :type="isPwd ? 'password' : 'text'"
                     v-model="new_password"
-                    :label="$t('new_password')"
+                    :label="$t('new_password')" clearable
                     lazy-rules :disable="update_email" :readonly="update_email"
                     :rules="[val => val && val.length > 0 || $t('new_password')]"
                   />
 
-                  <q-input
-                    filled
+                  <q-input filled
                     v-model="password_confirmation"
                     :type="isPwd ? 'password' : 'text'"
-                    :label="$t('confirm_password')"
+                    :label="$t('confirm_password')" clearable
                     lazy-rules :disable="update_email" :readonly="update_email"
                     :rules="[val => val && val.length > 0 || $t('confirm_password')]"
                     >
@@ -213,7 +224,7 @@
                     type="email"
                     v-model="email"
                     :label="$t('email')"
-                    lazy-rules v-if="update_email"
+                    lazy-rules v-if="update_email" clearable
                     :rules="[val => val && val.length > 0 || $t('email')]"
                   /><!-- took off :val="auth.email" -->
 
@@ -222,9 +233,22 @@
 
                 </q-form>
 
-              </q-card>
+              </q-card><!-- Password Reset -->
 
-            </div><!-- Password Reset End -->
+              <q-separator vertical inset />
+
+              <q-card class="my-card text-white">
+                <q-card-section class="bg-primary">
+                  <div class="text-h6">{{$t('Parameters')}}</div>
+                </q-card-section>
+
+                <div class="q-ma-sm">
+                  <Checkout :profile="true" :user="auth" v-on:currency="save" />
+                </div>
+
+              </q-card><!-- Parameters -->
+
+            </div><!-- Right Panel -->
 
           </div>
         </div>
@@ -239,12 +263,15 @@ import { useQuasar } from 'quasar'
 import { ref, computed, onMounted, watch } from 'vue'
 // import { useRouter, useRoute } from 'vue-router'
 import {  useStore } from 'vuex'
-import { url, api, crudAction, notifyAction } from 'boot/axios'
+import { URL, api, xRate, cy, crudAction, notifyAction } from 'boot/axios'
+import Checkout from './Checkout'
 
 export default {
   name: 'ProfilePage',
-  props: ['user'],
-  setup (props) {
+  components: {
+    Checkout
+  }, props: ['user'],
+  setup (props, { emit }) {
     const $q = useQuasar()
     // const route = useRoute()
     // const router = useRouter()
@@ -256,27 +283,29 @@ export default {
     const user = ref(props.user)
     const $store = useStore()
     const auth = computed(() => user.value||$store.getters['users/authGetter'])
-    const role = ref(auth.value.role)
+    const role = ref(auth.value?.role)
     const name = ref(null)
-    // const user_name = ref(auth.value.name)
     const name_data = ref(null)
-    const first_name = ref(auth.value.first_name)
-    const last_name = ref(auth.value.last_name)
-    const email = ref(auth.value.email)
+    const first_name = ref(auth.value?.first_name)
+    const last_name = ref(auth.value?.last_name)
+    const email = ref(auth.value?.email)
     const update_email = ref(false)
-    const phone = ref(auth.value.phone)
-    const address = ref(auth.value.address)
-    // const address_data = ref(auth.address_data)
-    const city = ref(auth.value.city)
-    const postal_code = ref(auth.value.postal_code)
-    const postal_code_data = ref(auth.value.postal_code_data)
-    const country = ref(auth.value.country)
-    const country_data = ref(auth.value.country_data)
+    const phone = ref(auth.value?.phone)
+    const address = ref(auth.value?.address)
+    const city = ref(auth.value?.city)
+    const region = ref(auth.value?.region)
+    const region_data = ref(auth.value?.region_data)
+    const postal_code = ref(auth.value?.postal_code)
+    const postal_code_data = ref(auth.value?.postal_code_data)
+    const country = ref(auth.value?.country)
+    const country_data = ref(auth.value?.country_data)
     const password = ref(null)
     const new_password = ref(null)
     const password_confirmation = ref(null)
     const isPwd = ref(true)
     const darkMode = ref($q.localStorage.getItem('darkMode'))
+
+    const url = `api/users/${auth.value?.id}`
 
     watch(user, () => props.user||$store.dispatch('users/authAction'))
 
@@ -297,8 +326,7 @@ export default {
       reader.onload = (e) => {
         setTimeout(() => {
           api({
-            url: 'api/users/' + auth.value.id,
-            method: 'put',
+            url, method: 'put',
             data: { update: true, avatar: e.target.result }
           }).then(res => {user.value = res.data.user; notifyAction(res.data)})
             .catch(e => notifyAction({error: 'createImage', e}))
@@ -306,13 +334,11 @@ export default {
       }; reader.readAsDataURL(files)
     }
 
-    function update () {
+    function update() {
       crudAction({
-        // $store.dispatch('users/updateAction', {
-        url: 'api/users/' + auth.value.id,
-        method: 'put',
+        url, method: 'put',
         update: true,
-        gain: gain.value,
+        gain: gain,
         role: role.value,
         name: name.value,
         first_name: first_name.value,
@@ -320,22 +346,26 @@ export default {
         phone: phone.value,
         address: address.value,
         city: city.value,
+        region: region.value,
         postal_code: postal_code.value,
         country: country.value,
+        // currency_code,
         // avatar: file.value
-      }).then($store.dispatch('users/usersAction', { usersData: 'users' })).catch(error => {
-        try { name_data.value = error.response.data.errors.name[0] || error.response.data.message } catch (e) { name_data.value = null }
-      })
+      }).then(() => emit('update', { usersData: 'users' }))
+        .catch(error => name_data.value = error.response?.data?.errors?.name?.[0] ||
+                                          error.response?.data?.message)
     }
 
     return {
       auth,
       role,
+      name: ref(auth.value?.name),
       gain,
-      name,
+      xRate, cy,
       height: screen.height/($q.platform.is.mobile?1.2:1.35),
+      locale: computed(() => $store.getters['config/localeGetter']),
       // height: ref(screen.height / 1.4),
-      user_name: ref(auth.value.name),
+      // user_name,
       name_data,
       first_name,
       last_name,
@@ -345,6 +375,8 @@ export default {
       address,
       // address_data: ref(null),
       city,
+      region,
+      region_data,
       postal_code,
       postal_code_data,
       country,
@@ -353,7 +385,7 @@ export default {
       new_password,
       password_confirmation,
       isPwd,
-      url,
+      URL,
       admins: [
         'Admin', 'User', 'Editor'
       ],
@@ -361,43 +393,41 @@ export default {
         'User', 'Editor'
       ],//NotInUse
 
-      avatar: computed(() => {
-        if (auth.value?.avatar) { // Stored Avatar
-          if (auth.value.avatar.includes('images/profile')) return url + '/' + auth.value.avatar
-          else return auth.value.avatar // Social Avatar
-        } else return auth.value.new.avatar // Email Avatar
-      }),
       update, // TagUpdate: UserUpdate
-      pwd () {
-        $store.dispatch('users/updateAction', {
+      pwd() {
+        crudAction({
+          url, method: 'put',
           pwd: !props.user,
-          // pwd: true,
           update: true,
-          id: auth.value.id,
           email: email.value,
           update_email: update_email.value,
           password: props.user?false:password.value,
           update_password: props.user?new_password.value:false,//added
           new_password: new_password.value,
           password_confirmation: password_confirmation.value
-        })
+        }).catch(e => notifyAction({error: 'passwordAction', e}))
       },
-      imgSize () {
-        // var currWidth = file.width
-        // var currHeight = file.height
-      }, // TODO http://image.intervention.io/api/filesize
-      onImageChange (e) {
+      avatar: computed(() => {
+        if (auth.value?.avatar) { // Stored Avatar
+          if (auth.value?.avatar.includes('images/profile')) return URL + '/' + auth.value?.avatar
+          else return auth.value?.avatar // Social Avatar
+        } else return auth.value?.new.avatar // Email Avatar
+      }),
+      onImageChange(e) {
         let files = e.target.files || e.dataTransfer.files
         if (!files.length) return; createImage(files[0])
       }, // TagAvatar: UserModule
-      deleteAvatar () {
+      deleteAvatar() {
         crudAction({
-          url: `api/users/${auth.value.id}`,
-          method: 'delete',
+          url, method: 'delete',
           delete_avatar: 1
         }).then(res => user.value = res.user)
           .catch(e => notifyAction({error: 'deleteAvatar', e}))
-      } // ============================================== \\
+      }, // ============================================== \\
+      imgSize() {
+        // var currWidth = file.width
+        // var currHeight = file.height
+      } // TODO http://image.intervention.io/api/filesize
     }
   }
 }

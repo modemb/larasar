@@ -87,7 +87,7 @@ class PageController extends Controller
         ['slug', $request->slug], ['locale', $request->locale]
       ])->first(); // Show Local Page
 
-      if ($request->pages) return Page::where('locale', $request->locale)->get();// Show All Locale Pages
+      if ($id==='pages') return Page::where('locale', $request->locale)->get();// Show All Locale Pages
       else return Page::onlyTrashed()
         ->where('locale', $request->locale)
         ->whereNull('deleted')
@@ -140,7 +140,7 @@ class PageController extends Controller
             'pic' => 'images/post/'.$name
           ]);
         } $page->pics = Pic::where('post_id', $request->post_id)->get(); // Update Pic in Post
-      } $this->save($request); 
+      } $this->save($request);
       return $this->show($request, 1); // TagUpdate: PageModule
     }
 

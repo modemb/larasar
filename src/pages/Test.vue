@@ -49,16 +49,67 @@
       <span id="place-address"></span>
     </div> -->
   </div>
+
+  <section>
+    <div class="product">
+      <img src="https://i.imgur.com/EHyR2nP.png" alt="The cover of Stubborn Attachments" />
+      <div class="description">
+        <h3>Stubborn Attachments</h3>
+        <h5>$20.00</h5>
+      </div>
+    </div>
+    <form action="api/categories" method="POST">
+      <!-- <input name="creditCard" value="true" />X-XSRF-TOKEN XSRF-TOKEN-->
+      <input name="creditCard" value="true" />
+      <input type="hidden" name="_token" :value="Cookies.get('XSRF-TOKEN')" />
+      <button type="submit" id="checkout-button">Checkout</button>
+      <q-btn  @click="xRate(2)" label="xRate" />
+    </form>
+  </section>
 </template>
 
 <script>
-// import GoogleMapsApiLoader from 'google-maps-api-loader'
 import { mapGetters } from 'vuex'
+import { Cookies } from 'quasar'
+
+// import GoogleMapsApiLoader from 'google-maps-api-loader'
 
 export default {
   name: 'App',
+  setup () {
+
+    const xRate = () => {
+
+        const myHeaders = new Headers()
+        myHeaders.append('apikey', 'BgAd8B3zVMdp8gXsx4Yt4DjBCz1pG9JR')
+
+        const apiData = {
+          // ====Api===== \\
+          method: 'GET',
+          redirect: 'follow',
+          headers: myHeaders,
+          // amount,
+          from: 'XAU', // XAU - XAG
+          to: 'USD'
+          // ====Api End=== \\
+        };
+          // fetch(`https://api.apilayer.com/exchangerates_data/convert?to=${apiData.to}&from=${apiData.from}&amount=${amount}`, requestOptions)
+          // fetch('https://api.apilayer.com/exchangerates_data/convert?to=usd&from=XAU&amount=5', requestOptions)
+          fetch('https://api.apilayer.com/exchangerates_data/convert', apiData)
+            .then(response => response.json()) // https://apilayer.com/marketplace/exchangerates_data-api#details-tab
+            .then(result => result) // console.log('result', result)
+            .catch(e => notifyAction({error: 'fetchCurrency', e}))
+            // .catch(error => notifyAction({message: 'fetchCurrency '+error}))//console.log('error', error)
+
+    } // Exchange Rate
+
+    return {
+      xRate
+    }
+  },
   data () {
     return {
+      Cookies,
       map: null,
       card: null,
       input: null,

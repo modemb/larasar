@@ -9,12 +9,12 @@
         </q-card-section>
 
         <div class="q-pa-sm">
-          <q-input outlined v-model="page_title" :label="$t('page_title')">
+          <q-input clearable outlined v-model="page_title" :label="$t('page_title')">
             <template v-slot:append>
               <q-toggle v-model="dense" v-if="desktop"/>
-              <q-input outlined v-model="slug" :label="$t('custom_slug')" :disable="!dense" v-if="desktop"/>
-              <q-input outlined v-model="description" :label="$t('description')" v-if="desktop"/>
-              <q-input outlined v-model="icon" :label="$t('icon')" v-if="desktop"/>
+              <q-input clearable outlined v-model="slug" :label="$t('custom_slug')" :disable="!dense" v-if="desktop"/>
+              <q-input clearable outlined v-model="description" :label="$t('description')" v-if="desktop"/>
+              <q-input clearable outlined v-model="icon" :label="$t('icon')" v-if="desktop"/>
               <locale-dropdown class="bg-primary" />
               <q-btn square outlined v-if="editPage"
                 :color="Page?.active?'secondary':'red'"
@@ -155,7 +155,7 @@
           <q-td key="page_title" :props="props">
             <!-- {{ props.row.page_title }}
             <q-popup-edit v-model="props.row.page_title" title="Update carbs" buttons persistent>
-              <q-input type="text" v-model="props.row.page_title" dense autofocus hint="Use buttons to close" />
+              <q-input clearable type="text" v-model="props.row.page_title" dense autofocus hint="Use buttons to close" />
             </q-popup-edit> -->
             <q-btn color="primary" flat :label="props.row.page_title" :to="'/page/' + props.row.slug" />
           </q-td>
@@ -213,7 +213,7 @@ import { useQuasar } from 'quasar'
 import { ref, watch, onMounted, computed } from 'vue'
 // import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { i18n, url, api, crudAction, notifyAction } from 'boot/axios'
+import { i18n, URL, api, crudAction, notifyAction } from 'boot/axios'
 import LocaleDropdown from '../components/LocaleDropdown'
 // import { i18n } from 'boot/i18n'
 
@@ -276,7 +276,7 @@ export default {
     function Delete(page) {
       if (confirm('Are You Sure You Want To Delete Page ' + page.page_title) === true) {
         crudAction({
-          message: page.forever ? 'Page Deleted Forever' : 'Page Deleted Successfully',
+          success: page.forever ? 'Page Deleted Forever' : 'Page Deleted Successfully',
           url: `api/pages/${page?.id}`,
           // url: `api/pages/${page?.slug}`,
           method: 'delete',
@@ -315,11 +315,11 @@ export default {
 
       // content_data,
 
-      url,
+      URL,
 
       add () {
         crudAction({
-          message: 'Page Created Successfully',
+          success: 'Page Created Successfully',
           url: 'api/pages',
           method: 'post',
           locale: locale.value,
@@ -337,7 +337,7 @@ export default {
       update(page) {
         loader.value = true
         crudAction({
-          message: 'Page Updated Successfully',
+          success: 'Page Updated Successfully',
           url: `api/pages/${page.id}`,
           method: 'put',
           locale: locale.value,
@@ -354,7 +354,7 @@ export default {
       async active (page) {
         loader.value = true
         const { data } = await api.put(`api/pages/${page?.slug}`, {
-          message: page?.active ? 'Page Deactivated Successfully' : 'Page Activated Successfully',
+          success: page?.active ? 'Page Deactivated Successfully' : 'Page Activated Successfully',
           active: 1,
           activePages: page?.active
         }); Page.value = data?.page
@@ -367,7 +367,7 @@ export default {
       restore(page) {
         loader.value = true
         crudAction({
-          message: 'Page Restored Successfully',
+          success: 'Page Restored Successfully',
           url: 'api/pages',
           method: 'POST',
           slug: page.slug,
@@ -389,14 +389,14 @@ export default {
         rowsPerPage: 0,
         rowsNumber: 10
       },
-      columns: [
+      columns: computed(() => [
         { name: 'page_title', align: 'center', label: $t('page_title'), field: 'page_title', sortable: true },
         { name: 'description', align: 'center', label: $t('description'), field: 'description', sortable: true },
         { name: 'icon', align: 'center', label: $t('icon'), field: 'icon', sortable: true },
         { name: 'active', align: 'center', label: $t('active'), field: 'active', sortable: true },
         { name: 'edit', align: 'center', label: $t('edit/restore'), field: 'edit', sortable: false },
         { name: 'delete', align: 'center', label: $t('delete/foreve'), field: 'delete', sortable: false }
-      ], rows
+      ]), rows
     }
   }
 }
