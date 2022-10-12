@@ -5,7 +5,6 @@
       <q-bar>
         <q-icon name="fas fa-user" />
         <div>{{$t('add_user')}}</div>
-        <!-- <div class="text-h6">{{$t('register')}}</div> -->
 
         <q-space />
 
@@ -94,7 +93,7 @@
                   <div class="text-h6">{{$t('verify_email')}}</div>
                 </q-card-section>
 
-                <div class="q-ma-sm q-dark *text-black">
+                <div class="q-ma-sm q-dark">
                   <template v-if="success">
                       {{$t('verify_email_address')}} <br>
                   </template>
@@ -117,7 +116,7 @@
                   :loading="loader"
                   :label="$t('verify_email')"
                   @click.prevent="verify($route)"
-                />
+                /><!-- TagVerify: RetryVerifyModule -->
                 <q-btn class="q-ma-sm" icon="fas fa-paper-plane"
                   color="amber-7" v-if="verify_email_data"
                   :label="$t(verify_email_data)"
@@ -134,27 +133,26 @@
               @click.prevent="reset"
             /><!-- ('token' in $route.path.params) -->
           </div><!-- TagReset: reset-password - api/password/reset-->
-          <div class="*row *q-pt-md" v-else-if="!$route.path.includes('password/email')&&!$route.path.includes('email/verify')">
-          <!-- <div class="*row *q-pt-md" v-else-if="$route.path != '/password/email'&&!$route.path.includes('/email/verify')"> -->
+          <div v-else-if="!$route.path.includes('password/email')&&!$route.path.includes('email/verify')">
             <q-btn color="primary"
               icon="fas fa-sign-in-alt" v-if="$route.path.includes('login')"
               :loading="loader" :label="$t('login')"
-              @click.prevent="authenticateUser" class="q-ma-sm *col-lg-3"
+              @click.prevent="authenticateUser" class="q-ma-sm"
             /><!-- TagLogin -->
             <q-btn color="primary"
               icon="fas fa-plus-circle" v-else
               :loading="loader" :label="auth?$t('add_user'):$t('register')"
-              @click.prevent="authenticateUser" class="q-ma-sm *col-lg-3"
+              @click.prevent="authenticateUser" class="q-ma-sm"
             /><!-- TagRegister - TagAdd -->
             <q-btn color="primary"
               icon="fas fa-sync" v-if="ipDebug"
               :loading="loader" :label="$t('reset')"
-              @click.prevent="deleteAllCookies" class="q-ma-sm *col-lg-3"
+              @click.prevent="deleteAllCookies" class="q-ma-sm"
             /><!-- TagDeleteAllCookies -->
             <q-btn color="primary" flat :label="$t('login')" to='/login' v-if="$route.path.includes('register')"/>
             <q-btn color="primary" flat :label="$t('register')" to='/register'  v-else-if="!auth">
-              <q-btn color="primary" flat :label="$t('forgot_password')" to="/password/email" class="*q-ma-sm *col-lg-12"/>
-              <q-checkbox  v-model="remember" :label="$t('remember_me')" class="*text-black *q-ma-sm *col-lg-3"/>
+              <q-btn color="primary" flat :label="$t('forgot_password')" to="/password/email" />
+              <q-checkbox  v-model="remember" :label="$t('remember_me')" />
             </q-btn><!--  -->
           </div>
           <div v-else-if="$route.path.includes('password/email')">
@@ -166,7 +164,7 @@
               class="q-ma-sm" @click.prevent="send"
             />
           </div>
-          <div class="*col-md-12 *row" v-if="!auth">
+          <div v-if="!auth">
             <login-with-social />
           </div><!-- login-with-social -->
 
@@ -182,7 +180,7 @@ import { LocalStorage } from 'quasar'
 import { ref, onMounted, onUpdated } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import {  useStore } from 'vuex'
-import LoginWithSocial from './LoginWithSocial'
+import LoginWithSocial from './LoginWithSocial.vue'
 import { i18n, SANCTUM_API, api, crudAction, notifyAction, ipDebug } from 'boot/axios'
 
 /**
@@ -218,8 +216,10 @@ export default {
     const remember = ref(true)
     const darkMode = ref(LocalStorage.getItem('darkMode'))
 
-    onMounted(() => darkModeClass(darkMode.value))
-    onUpdated(() => !$route.path.includes('email/verify')||resend())
+    onMounted(() => {
+      verify($route)
+      darkModeClass(darkMode.value)
+    }); onUpdated(() => resend())
 
     function darkModeClass(val) {
       const QDarkClass = document.querySelector('.q-dark')
@@ -231,7 +231,7 @@ export default {
     function resend() {
       const url = SANCTUM_API ? 'email/verification-notification' : 'api/email/resend'
 
-      crudAction({
+      if ($route.path.includes('email/verify')) crudAction({
         success: $t('verify_email_address'),
         url, method: 'post', token: 'csrf'
       }).then(token => {
@@ -239,6 +239,25 @@ export default {
       }).catch(e => notifyAction({error: 'resendAction', e}))
 
     } // TagVerify: ResendModule
+
+    function verify(route) {
+      loader.value = true
+      if (!route.params.id) { loader.value = false; return }
+      else param_id.value = route.params.id
+      crudAction({
+        url: route.path,
+        method: SANCTUM_API ? 'get' : 'post',
+      }).then(token => {
+        console.log('token', token)
+        param_id.value = false
+        notifyAction({message: $t('email_verified_successfully')})
+        $router.push({ path: '/' })
+      }).catch(e => {
+        loader.value = false;
+        verify_email_data.value = e?.response?.data?.message
+        notifyAction({error: 'verifyAction', e})
+      }) // RetryVerifyModule
+    } // TagVerify: VerifyModule
 
     function catchErr(error) {
       const data = error?.response?.data; loader.value = false
@@ -323,24 +342,7 @@ export default {
         }).catch(error => catchErr(error))
       }, // TagReset: Reset Password
       resend, // TagVerify: ResendModule
-      verify(route) {
-        loader.value = true
-        if (!route.params.id) { loader.value = false; return }
-        else param_id.value = route.params.id
-        crudAction({
-          url: route.path,
-          method: SANCTUM_API ? 'get' : 'post',
-        }).then(token => {
-          console.log('token', token)
-          param_id.value = false
-          notifyAction({message: $t('email_verified_successfully')})
-          $router.push({ path: '/' })
-        }).catch(e => {
-          loader.value = false;
-          verify_email_data.value = e?.response?.data?.message
-          notifyAction({error: 'verifyAction', e})
-        })
-      }, // TagVerify: VerifyModule
+      verify, // TagVerify: VerifyModule
       signature() {
         crudAction({
           url: `api/users/${$store.getters['users/authGetter']?.id}`,

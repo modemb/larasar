@@ -55,6 +55,7 @@ class Checkout
           return $response;//print_r($response);
           // return json_encode($response);
         } catch (HttpException $ex) {
+          return ['message' => $ex->getMessage()];
           echo $ex->statusCode;
           print_r($ex->getMessage());
         }
@@ -72,6 +73,7 @@ class Checkout
             // If call returns body in response, you can get the deserialized version from the result attribute of the response
             return $response; // print_r($response);
         } catch (HttpException $ex) {
+            return ['message' => $ex->getMessage()];
             echo $ex->statusCode;
             print_r($ex->getMessage());
         }

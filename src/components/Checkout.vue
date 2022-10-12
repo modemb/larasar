@@ -193,7 +193,7 @@ export default {
         cardElement.value = elements.create('card', {
             classes: { base: 'bg-grey-3' }
         }); cardElement.value.mount('#card-element')
-      } $store.commit('users/usersMutation', { users: null })
+      }
     })
 
     function paypal(api) {
