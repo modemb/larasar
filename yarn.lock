@@ -1297,7 +1297,7 @@
     webpack-merge "5.8.0"
     webpack-node-externals "3.0.0"
 
-"@quasar/app@^3.0.0":
+"@quasar/app@^3.3.3":
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/@quasar/app/-/app-3.3.3.tgz#f4771abd7d0806845aa72ca4e0baff9a8fdc03e5"
   integrity sha512-REWlQpGxo0oNDEyeqP1eoKofSYjt7g0QFesz6ZTJH1OBC79VajlHLrYpiFljlgjzwlabqX2cCF0ncYDv9WPxsA==
