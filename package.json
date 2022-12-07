@@ -52,7 +52,7 @@
     "@inertiajs/inertia": "^0.10.0",
     "@inertiajs/inertia-vue3": "^0.5.1",
     "@inertiajs/progress": "^0.2.6",
-    "@quasar/app": "^3.0.0",
+    "@quasar/app": "^3.3.3",
     "@quasar/app-webpack": "^3.0.0",
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/typography": "^0.5.0",
