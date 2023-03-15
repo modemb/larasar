@@ -270,9 +270,9 @@
     <q-footer elevated v-else>
       <q-toolbar><!-- Mobile View -->
         <q-toolbar-title>
-          <div class="*q-pa-md q-gutter-sm text-center">
+          <div class="q-gutter-sm text-center">
             <q-btn color="primary" :text-color="path=='/'?'orange':color" glossy unelevated icon="fas fa-store" to="/" />
-            <template v-if="auth" class="*q-pa-md">
+            <template v-if="auth">
               <q-btn color="primary" :text-color="path=='/users'?'orange':'white'" glossy unelevated icon="people" to="/users" />
               <q-btn color="primary" :text-color="path=='/analytics'?'orange':'white'" glossy unelevated icon="assessment" to="/analytics" v-if="role.admins" />
               <q-btn color="primary" :text-color="path=='/views'?'orange':'white'" glossy unelevated icon="fas fa-eye" to="/views" v-if="role.admins" />
@@ -280,7 +280,7 @@
               <q-btn color="primary" :text-color="path=='/posts'?'orange':'white'" glossy unelevated icon="fas fa-list-alt" to="/posts" v-else />
               <q-btn color="primary" :text-color="path=='/favorites'?'red':'white'" glossy unelevated icon="fas fa-heart" to='/favorites' v-if="role.users" />
             </template>
-            <template v-else class="*q-pa-md">
+            <template v-else>
               <q-btn color="primary" :text-color="path=='/login'?'orange':'white'" glossy unelevated icon="vpn_key" to="/login" />
               <q-btn color="primary" :text-color="path=='/register'?'orange':'white'" glossy unelevated icon="add_to_queue" to="/register" />
             </template>
@@ -300,8 +300,12 @@ import { openURL, QAjaxBar, useQuasar, Cookies } from 'quasar'
 import { ref, computed, watch, onMounted, version } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { URL, i18n, userData, notifyAction, crudAction, api } from 'boot/axios'
-import LocaleDropdown from '../components/LocaleDropdown'
+// import { baseURL, i18n, ipData, notifyAction, crudAction, api } from 'boot/axios'
+
+import { i18n, api, ipData , baseURL } from 'boot/axios'
+import { useCrudStore } from 'stores/crud'
+
+import LocaleDropdown from 'components/LocaleDropdown.vue'
 
 /**
  * Tags: SearchModule - AdModule - IpDebugModule - TagPostLacation
@@ -319,6 +323,9 @@ export default {
     const $q = useQuasar()
     const $route = useRoute()
     const $store = useStore()
+    const store = useCrudStore()
+    const { crudAction, notifyAction } = store
+
     const authDrawer = ref(true)
     const category = ref(null)
     const pages = ref([])
@@ -369,9 +376,9 @@ export default {
       }).then(getPages => {pages.value = getPages})
         .catch(e => notifyAction({error: 'mountedDrawerPages', e}))
       try {
-        city.value = userData.city
-        region.value = userData.region
-        country.value = userData.country
+        city.value = ipData.city
+        region.value = ipData.region
+        country.value = ipData.country
       } catch (error) {}
     })
 
@@ -393,7 +400,7 @@ export default {
         }, 500) // https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Add_to_home_screen
         function installApp (e) {
           e.prompt(); e.userChoice.then(choiceResult => {
-            if (choiceResult.outcome === 'accepted') Cookies.set('appinstalled', userData, { expires: 365 })
+            if (choiceResult.outcome === 'accepted') Cookies.set('appinstalled', ipData, { expires: 365 })
             color.value = 'white'// either "accepted" or "dismissed"
           })
         }
@@ -417,8 +424,8 @@ export default {
       leftDrawerOpen: ref(false), // $q.platform.is.desktop,
       rightDrawer: ref(false),
       loader: ref(false),
-      URL,
-      userData,
+      baseURL,
+      ipData,
       region,
       country,
       city,

@@ -8,16 +8,14 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            // $table->bigIncrements('id');
-            $table->foreignId('user_id')->default(0);
-            $table->decimal('gain', 8, 2)->default(0);
+            $table->foreignId('user_id')->nullable();
+            $table->decimal('gain', 12, 2)->default(0);
+            $table->decimal('rate', 15, 2)->default(0);
             $table->string('role', 20)->default('User');
             $table->string('status', 20)->nullable();
             $table->string('name')->unique()->nullable();
@@ -30,15 +28,16 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             // ====================Inertia========================= \\
             $table->foreignId('current_team_id')->nullable();
-            $table->text('profile_photo_path')->nullable();
+            $table->text('profile_photo_path', 2048)->nullable();
             // =====================Inertia End====================== \\
             $table->string('address')->nullable();
             $table->string('city')->nullable();
-            $table->string('country')->nullable();
+            $table->string('region')->nullable();
             $table->char('postal_code', 20)->nullable();
-            $table->char('region_code', 2)->nullable();
+            $table->char('currency_code', 3)->nullable();
             $table->char('country_code', 2)->nullable();
-            $table->json('position')->nullable();
+            $table->string('country')->nullable();
+            $table->char('locale', 6)->nullable();
             $table->rememberToken();
             $table->boolean('deleted')->nullable();
             $table->softDeletes();
@@ -48,10 +47,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('users');
     }

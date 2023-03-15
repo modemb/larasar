@@ -1,5 +1,8 @@
 <template>
   <div class="q-pa-md">
+    <!-- <select v-model="$i18n.locale">
+      <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
+    </select> -->
     <q-btn-dropdown color="*primary" :label="locales[locale]">
       <q-list>
         <q-item
@@ -20,8 +23,6 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import { i18n } from 'boot/axios'
-// import { i18n } from 'boot/i18n'
 
 export default {
   setup () {
@@ -30,12 +31,13 @@ export default {
     return {
       locale: computed(() => $store.getters['config/localeGetter']),
       locales: computed(() => $store.getters['config/localesGetter']),
-      setLocale (locale) {
-        if (i18n?.global?.locale !== locale) {
-          $store.dispatch('config/configAction', { locale })
-        } // https://www.askvg.com/tip-enable-new-translator-bubble-ui-in-google-chrome
-      }
-    }
+      setLocale: locale => $store.dispatch('config/configAction', { locale })
+      // setLocale (locale) {
+      //   if (i18n?.global?.locale !== locale) {
+      //     $store.dispatch('config/configAction', { locale })
+      //   }
+      // }
+    } // https://www.askvg.com/tip-enable-new-translator-bubble-ui-in-google-chrome
   }
 }
 </script>

@@ -51,11 +51,11 @@ class RenewPost extends Command
           $renew_post=date_diff($payment_start_date, $current_date);
           $renew_post=$renew_post->format('%a');
           // =========================Check Renew Date==================== \\
-          if ($payment->amount == 5) $true = $renew_post >= 7 ? 1 : 0;
-          if ($payment->amount == 10) $true = $renew_post >= 5 ? 1 : 0;
-          if ($payment->amount == 15) $true = $renew_post >= 3 ? 1 : 0;
+          if ($payment->amount == 5) $bool = $renew_post >= 7 ? 1 : 0;
+          if ($payment->amount == 10) $bool = $renew_post >= 5 ? 1 : 0;
+          if ($payment->amount == 15) $bool = $renew_post >= 3 ? 1 : 0;
           // ==========================Check Renew Date End================ \\
-          if ($true && $payment_expiry > 0) {
+          if ($bool && $payment_expiry > 0) {
             $post->end_date = date('Y-m-d H:i:s', strtotime('1 month'));
             Payment::where('post_id', $post->id)->update([
                 'start_date' => date('Y-m-d H:i:s')

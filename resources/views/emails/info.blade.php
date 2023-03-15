@@ -1,10 +1,10 @@
 @component('mail::message')
-# {{$content['title']}}
+# {{__($content['title'])}}
 
-{{$content['body']}}
+{{__($content['body'])}}
 
 @component('mail::button', ['url' => $content['url']])
-LogIn
+@lang('LogIn')
 @endcomponent
 
 {{-- @component('mail::button', ['url' => $content['url'], 'color' => 'green'])
@@ -16,6 +16,6 @@ Thanks,<br>
 @endcomponent
 
 
-@component('mail::panel')
+{{-- @component('mail::panel')
 This is the panel content.
-@endcomponent
+@endcomponent --}}

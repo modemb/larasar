@@ -1,0 +1,15 @@
+{
+    "Hello!": "مرحبًا!",
+    "If you did not create an account, no further action is required.": "إذا لم تقم بإنشاء حساب ، فلا داعي لاتخاذ أي إجراء آخر",
+    "LogIn": "تسجيل الدخول",
+    "Please click the button below to verify your email address.": "الرجاء النقر فوق الزر أدناه للتحقق من عنوان بريدك الإلكتروني.",
+    "Regards": "يعتبر",
+    "Thank you for registering": "شكرا لتسجيلك",
+    "Verify Email Address": "التحقق من عنوان البريد الإلكتروني",
+
+    "The :attribute must contain at least one letter.": "The :attribute must contain at least one letter.",
+    "The :attribute must contain at least one number.": "The :attribute must contain at least one number.",
+    "The :attribute must contain at least one symbol.": "The :attribute must contain at least one symbol.",
+    "The :attribute must contain at least one uppercase and one lowercase letter.": "The :attribute must contain at least one uppercase and one lowercase letter.",
+    "The given :attribute has appeared in a data leak. Please choose a different :attribute.": "The given :attribute has appeared in a data leak. Please choose a different :attribute."
+}

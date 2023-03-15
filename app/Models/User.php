@@ -49,11 +49,10 @@ class User extends Authenticatable implements MustVerifyEmail
       'currency_code',
       'country_code',
       'country',
-      'position',
+      'locale',
       'password',
       'user_id',
       'role',
-      'position',
       'status',
       'avatar',
       'deleted'
@@ -97,7 +96,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $appends = [
-        'profile_photo_url',
+        // 'profile_photo_url',
         'new', //'posts'//, 'messages'
     ];
 

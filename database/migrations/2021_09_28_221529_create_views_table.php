@@ -8,14 +8,11 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('views', function (Blueprint $table) {
             $table->id();
-            // $table->bigInteger('count')->default(0);
             $table->foreignId('user_id')->nullable();
             $table->foreignId('post_id')->nullable();
             $table->string('slug')->nullable();
@@ -28,10 +25,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('views');
     }

@@ -21,9 +21,11 @@ class Currency extends Model
       'from_to', // XAU-XOF
       'from_name', // Canadian Dollar
       'to_name', // West African CFA franc
+      'decimal_digits',
       'rate',
       'amount',
       'result',
-      'deleted'
+      'deleted',
+      'created_at'
     ];
 }

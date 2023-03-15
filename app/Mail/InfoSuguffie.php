@@ -30,8 +30,8 @@ class InfoSuguffie extends Mailable
     {
         return $this->from(env('MAIL_FROM_ADDRESS'))
         // ->markdown('emails.renewal')->with('content',$this->content)
-        // ->markdown('emails.info')->with('content',$this->content)
-        ->markdown('emails.payment')->with('content',$this->content)
+        ->markdown('emails.info')->with('content', $this->content)
+        // ->markdown('emails.payment')->with('content',$this->content)
         ;
 
         //return $this->markdown('emails.info');

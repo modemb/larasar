@@ -1,11 +1,13 @@
 import { Cookies } from 'quasar'
-import { i18n, api, notifyAction } from 'boot/axios'
+import { i18n, api } from 'boot/axios'
+import { useCrudStore } from 'stores/crud'
 
 export function configAction ({ commit }, payload) {
-  i18n.global.locale = payload.locale
+  const { notifyAction } = useCrudStore()
   Cookies.set('locale', payload.locale, { expires: 365 })
-  api.post('api/users', payload).then(response => {
+  api.put('api/users/config', payload).then(response => {
     const config = response.data
     commit('configMutation', { config, payload })
   }).catch(e => notifyAction({error: 'configAction', e}))
+  return i18n.global.locale.value = payload.locale
 }

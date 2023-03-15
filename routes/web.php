@@ -21,8 +21,8 @@ use App\Http\Controllers\Auth\MessageController;
 |
 */
 
-Route::apiResources([
-  'users' => UserController::class,
+Route::resources([
+  // 'users' => UserController::class,
   'messages' => MessageController::class,
   'notifications' => NotificationController::class, // Notifications
   // 'subscriptions' => PushSubscriptionController::class // Push Subscriptions
@@ -31,24 +31,28 @@ Route::apiResources([
 if (env('JETSTREAM_FRONTEND')) { // Inertia/Livewire Demo
 
   Route::get('/', function () {
-    $data = [
+    $data = [ // Inertia Or Livewire Stack
       'canLogin' => Route::has('login'),
       'canRegister' => Route::has('register'),
       'laravelVersion' => Application::VERSION,
       'phpVersion' => PHP_VERSION,
-    ];if (env('LIVEWIRE')) return view('welcome', $data);
-    else return Inertia::render('Welcome', $data);
+    ];return env('LIVEWIRE') ? view('welcome', $data) : Inertia::render('Welcome', $data);
   });
 
-  Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-      if (env('LIVEWIRE')) return view('dashboard');
-      else return Inertia::render('Dashboard');
-  })->name('dashboard');
+  Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+  ])->group(function () {
+      Route::get('/dashboard', function () {
+        return env('LIVEWIRE') ? view('dashboard') : Inertia::render('Dashboard');
+      })->name('dashboard');
+  }); return;
 
 } elseif (env('SANCTUM_API')) Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
   // return $request->user(); // return $request->user()->with('analytics');
   return array_merge($request->user()->toArray(), $request->user()->analytics->toArray());
-}); // env('SANCTUM_API') - config('sanctumApi')
+});// env('SANCTUM_API') - config('sanctumApi')
 
 Route::middleware(['guest'])->group(function () { // Suguffiè Application
 

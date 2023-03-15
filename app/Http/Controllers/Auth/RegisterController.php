@@ -91,18 +91,18 @@ class RegisterController extends Controller
             $user_name = $user_name.$id;
           } $user_name;
         } while ($user); $this->userData = [
-          'status' => 'Registration',
+          'gain' => env('GAIN'),
+          'currency_code' => env('CURRENCY_CODE'),
+          'role' => 'User',
           'name' => $user_name,
+          'status' => env('Registration'),
           'first_name' => $request['first_name'],
           'last_name' => $request['last_name'],
           'email' => $request['email'],
           'password' => Hash::make($request['password']),
-
-          'gain' => 500,
-
+          'locale' => $request['locale'],
           'deleted' => null,
           'email_verified_at' => null,
-          'role' => 'User',
         ];
 
         if ($this->userDeleted) {

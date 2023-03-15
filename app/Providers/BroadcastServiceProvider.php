@@ -9,13 +9,11 @@ class BroadcastServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        $api = config('sanctumApi')?[]:['middleware' => 'api']; // env('SANCTUM_API') - config('sanctumApi')
-        Broadcast::routes($api);
+        $api = config('sanctumApi')?[]:['middleware' => 'api'];
+        Broadcast::routes($api); // env('SANCTUM_API') - config('sanctumApi')
 
         require base_path('routes/channels.php');
     }

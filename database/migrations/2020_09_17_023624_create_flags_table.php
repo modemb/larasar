@@ -8,18 +8,17 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('flags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->default(0);
-            $table->foreignId('post_id')->default(0);
-            $table->boolean('state')->default(0);
-            $table->foreignId('subcategory_id')->default(0);
-            $table->foreignId('category_id')->default(0);
+            $table->boolean('state')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('post_id')->nullable();
+            $table->foreignId('subcategory_id')->nullable();
+            $table->foreignId('category_id')->nullable();
+            $table->string('ip', 45)->nullable();
             $table->longText('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
@@ -28,10 +27,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('flags');
     }

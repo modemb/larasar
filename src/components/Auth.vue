@@ -83,7 +83,7 @@
               :type="isPwd ? 'password' : 'text'"
               :label="$t('confirm_password')" clearable
               :rules="[val => val && val.length > 7 || 'min 8']"
-            /><!-- TagReset: reset-password - api/password/reset-->
+            /><!-- TagReset: reset-password - api/password/reset -->
 
           </div><!-- Form -->
 
@@ -164,9 +164,9 @@
               class="q-ma-sm" @click.prevent="send"
             />
           </div>
-          <div v-if="!auth">
-            <login-with-social />
-          </div><!-- login-with-social -->
+          <div v-if="!auth&&!mobil||ipDebug">
+            <LoginWithSocial />
+          </div><!--  -->
 
         </q-form>
       </q-page>
@@ -177,20 +177,22 @@
 
 <script>
 import { LocalStorage } from 'quasar'
-import { ref, onMounted, onUpdated } from 'vue'
+import { ref, computed, onMounted, onUpdated } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import {  useStore } from 'vuex'
 import LoginWithSocial from './LoginWithSocial.vue'
-import { i18n, SANCTUM_API, api, crudAction, notifyAction, ipDebug } from 'boot/axios'
+import { i18n, mobil, api, SANCTUM_API, ipDebug } from 'boot/axios'
+
+import { useCrudStore } from 'stores/crud'
 
 /**
- * Tags: TagRegister - TagAdd - TagLogin TagUser - login-with-social
+ * Tags: TagRegister - TagAdd - TagLogin TagUser
  *
  * @from /Auth/
  */
 export default {
   components: {
-    LoginWithSocial // login-with-social
+    LoginWithSocial
   },name: 'registerPage',
   props: ['auth'],
   setup (props) {
@@ -198,6 +200,7 @@ export default {
     const $route = useRoute()
     const $router = useRouter()
     const $store = useStore()
+    const { crudAction, notifyAction } = useCrudStore()
     const loader = ref(false)
     const token = ref($route.query.token || $route.params.token)
     const verify_email_data = ref(null)
@@ -215,6 +218,19 @@ export default {
     const password_confirmation = ref(null)
     const remember = ref(true)
     const darkMode = ref(LocalStorage.getItem('darkMode'))
+
+    const data = computed(() => ({
+      locale: i18n?.global?.locale.value,
+      auth: props.auth,
+      role: role.value,
+      first_name: first_name.value,
+      last_name: last_name.value,
+      email: email.value,
+      password: password.value,
+      password_confirmation: password_confirmation.value,
+      remember: remember.value,
+      token: token.value||'csrf', path: $route.path
+    }))
 
     onMounted(() => {
       verify($route)
@@ -245,17 +261,15 @@ export default {
       if (!route.params.id) { loader.value = false; return }
       else param_id.value = route.params.id
       crudAction({
-        url: route.path,
+        url: route.path, token: 'csrf',
         method: SANCTUM_API ? 'get' : 'post',
       }).then(token => {
         console.log('token', token)
-        param_id.value = false
+        $router.push({ path: '/' }); param_id.value = false
         notifyAction({message: $t('email_verified_successfully')})
-        $router.push({ path: '/' })
       }).catch(e => {
-        loader.value = false;
         verify_email_data.value = e?.response?.data?.message
-        notifyAction({error: 'verifyAction', e})
+        notifyAction({error: 'verifyAction', e}); loader.value = false
       }) // RetryVerifyModule
     } // TagVerify: VerifyModule
 
@@ -270,6 +284,7 @@ export default {
     } // Wth Optional Chaining
 
     return {
+      mobil,
       ipDebug,
       param_id,
       token,
@@ -295,18 +310,8 @@ export default {
         'User', 'Editor'
       ],
       authenticateUser() {
-        const data = {
-          auth: props.auth,
-          role: role.value,
-          first_name: first_name.value,
-          last_name: last_name.value,
-          email: email.value,
-          password: password.value,
-          password_confirmation: password_confirmation.value,
-          remember: remember.value,
-          token: 'csrf', path: $route.path
-        }; const store = $route.path.includes('login')?'users/loginAction':'users/registerAction'
-        $store.dispatch(store, data).then(() => {
+        const store = $route.path.includes('login')?'users/loginAction':'users/registerAction'
+        $store.dispatch(store, data.value).then(() => {
           setTimeout(() => role.value = first_name.value = last_name.value =
             email.value = password.value = password_confirmation.value = null
           , 2000); loader.value = false // name.value =
@@ -314,11 +319,7 @@ export default {
       }, // TagRegister - TagAdd - TagLogin TagUser
       send() {
         // loader.value = true
-        const url = SANCTUM_API?'forgot-password':'api/password/email'; api.post(url, {
-          email: email.value,
-          locale: i18n?.global?.locale,
-          token: 'csrf'
-        }).then(res => {
+        const url = SANCTUM_API?'forgot-password':'api/password/email'; api.post(url, data.value).then(res => {
           console.log('send', res)
           loader.value = false
           notifyAction({success: res.data.message})
@@ -326,19 +327,11 @@ export default {
       }, // Send Email To Reset Password
       reset() {
         loader.value = true
-        const data = {
-          // api: 'login',
-          locale: i18n?.global?.locale,
-          token: token.value,
-          email: email.value,
-          password: password.value,
-          password_confirmation: password_confirmation.value,
-          token: 'csrf'
-        }; const url = SANCTUM_API?'reset-password':'api/password/reset'
-        api.post(url, data).then(() => {
+        const url = SANCTUM_API?'reset-password':'api/password/reset'
+        api.post(url, data.value).then(() => {
           loader.value = false
           notifyAction({success: $t('password_updated')})
-          $store.dispatch('users/loginAction', data)
+          $store.dispatch('users/loginAction', data.value)
         }).catch(error => catchErr(error))
       }, // TagReset: Reset Password
       resend, // TagVerify: ResendModule
@@ -346,9 +339,7 @@ export default {
       signature() {
         crudAction({
           url: `api/users/${$store.getters['users/authGetter']?.id}`,
-          method:'put',
-          update:true,
-          signature: true
+          method:'put', update:true, signature: true
         }).then(() => {
           notifyAction({message: $t('email_verified_successfully')})
           $router.push({ path: '/' })

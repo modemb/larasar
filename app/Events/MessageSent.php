@@ -31,6 +31,13 @@ class MessageSent implements ShouldBroadcast
     public $roomId;
 
     /**
+     * User Typing
+     *
+     * @var Typing
+     */
+    public $typing;
+
+    /**
      * Message details
      *
      * @var Message
@@ -42,11 +49,12 @@ class MessageSent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($userId, $roomId, $message)
+    public function __construct($userId, $roomId, $typing, $message)
     // public function __construct(User $user, Message $message)
     {
         $this->userId = $userId;
         $this->roomId = $roomId;
+        $this->typing = $typing;
         $this->message = $message;
         $this->dontBroadcastToCurrentUser();
     }

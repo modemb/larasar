@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
@@ -27,8 +25,9 @@ return new class extends Migration
             $table->string('product')->nullable();
             $table->char('plan', 20)->nullable();
             $table->char('currency_code', 3)->nullable();
-            $table->decimal('payment', 8, 2)->default(0);
-            $table->decimal('amount', 8, 2)->default(0); // Total Payments
+            $table->decimal('payment', 10, 2)->default(0);
+            $table->decimal('amount', 12, 2)->default(0); // Total Payments
+            $table->decimal('total', 12, 2)->default(0); // Exchanged Total Payments
 
             $table->boolean('deleted')->nullable();
             $table->softDeletes();
@@ -38,10 +37,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('reports');
     }

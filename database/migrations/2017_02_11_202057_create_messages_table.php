@@ -8,16 +8,13 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('messages', function (Blueprint $table) {
-          // $table->increments('id');
             $table->id();
             $table->foreignId('room_id')->nullable();
-            $table->bigInteger('user_id')->unsigned(); // Get User Data For the Message
+            $table->bigInteger('user_id')->nullable()->unsigned(); // Get User Data For the Message
             // $table->bigInteger('post_id')->unsigned();
             $table->text('message')->nullable();
             $table->boolean('deleted')->nullable();
@@ -28,10 +25,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('messages');
     }

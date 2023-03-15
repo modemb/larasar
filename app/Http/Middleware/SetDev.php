@@ -18,8 +18,8 @@ class SetDev
         $dev = $request->server('HTTP_DEV') === 'true'? true: false;
         $ipDebug = $request->server('HTTP_IP_DEBUG') === '1'? true: false;
 
-        $true = $dev && config('app.dev'); config([
-            'app.env' => $true?'local':'production',
+        $bool = $dev && config('app.dev'); config([
+            'app.env' => $bool?'local':'production',
             'app.debug' => $ipDebug,
             'sanctumApi' => env('SANCTUM_API')
             // 'sanctumApi' => $dev?false:env('SANCTUM_API')

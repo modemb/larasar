@@ -13,7 +13,8 @@ const { configure } = require('quasar/wrappers')
 
 // https://quasar.dev/quasar-cli/quasar-conf-js#Example-setting-env-for-dev%2Fbuild
 const env = require('dotenv').config().parsed
-const localProdServer = env.LOCAL_PROD==='1'?1:0
+const localProdServer = Number(env.LOCAL_PROD)
+// const localProdServer = env.LOCAL_PROD==='1'?1:0
 
 module.exports = configure(function (ctx) {
   return {
@@ -84,8 +85,7 @@ module.exports = configure(function (ctx) {
         //   .use(ESLintPlugin, [{ extensions: [ 'js', 'vue' ] }])
       }, // Commented,
 
-      // https://www.npmjs.com/package/dotenv
-      env: env,
+      env: env, // https://www.npmjs.com/package/dotenv
       distDir: 'public/quasar', // Comment for dist folder
       publicPath: localProdServer ? '/www/suguffie/public' : '/', // Build URL
 
@@ -99,7 +99,7 @@ module.exports = configure(function (ctx) {
         // })
 
         if (ctx.prod) cfg.output.publicPath = localProdServer
-          ? '/www/suguffie/public/quasar/' : '/quasar/' // Build Path
+          ? '/www/suguffie/public/quasar/' : '/quasar/' // Server Path
       }
     },
 
@@ -116,7 +116,7 @@ module.exports = configure(function (ctx) {
       //     // passphrase: 'webpack-dev-server' // do you need it?
       //   }
       // },
-      // https: true,yarn
+      // https: ctx.mode.capacitor?true:'',
       port: ctx.mode.spa ? 8080
          : (ctx.mode.pwa ? 9090 : 9000),
       open: true // opens browser window automatically
@@ -212,7 +212,7 @@ module.exports = configure(function (ctx) {
         //   .use(ESLintPlugin, [{ extensions: [ 'js' ] }])
       }, // commented
 
-      manifest: {
+      _manifest: {
         name: 'Suguffiè - Classified Marketplace',
         short_name: 'Suguffiè',
         description: 'World Marketplace, Classified Ads, Services, Jobs, Buy & Sell',
@@ -256,7 +256,7 @@ module.exports = configure(function (ctx) {
             type: 'image/png'
           }
         ]
-      }
+      } // NotInUse
     },
 
     sourceFiles: {

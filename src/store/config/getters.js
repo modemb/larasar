@@ -1,27 +1,8 @@
-export function localeGetter (state) {
-  return state.locale
-}
-
-export function localesGetter (state) {
-  return state.locales
-}
-
-export function laravelGetter (state) {
-  return state.laravel
-}
-
-export function ipDebugGetter (state) {
-  return state.ipDebug
-}
-
-export function appNameGetter (state) {
-  return state.appName
-}
-
-export function sanctumApiGetter (state) {
-  return state.sanctumApi
-}
-
-export function vapidPublicKeyGetter (state) {
-  return state.vapidPublicKey
-}
+export const localeGetter = state => state.locale
+export const localesGetter = state => state.locales
+export const laravelGetter = state => state.laravel
+export const ipDebugGetter = state => state.ipDebug
+export const appNameGetter = state => state.appName
+export const appEnvGetter = state => state.appEnv
+export const sanctumApiGetter = state => state.sanctumApi
+export const vapidPublicKeyGetter = state => state.vapidPublicKey

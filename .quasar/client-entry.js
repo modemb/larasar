@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * THIS FILE IS GENERATED AUTOMATICALLY.
  * DO NOT EDIT.
@@ -50,9 +51,7 @@ console.info('[Quasar] Running SPA.')
 
 
 
-
 const publicPath = `/`
-
 
 async function start ({
   app,
@@ -138,23 +137,31 @@ async function start ({
 createQuasarApp(createApp, quasarUserOptions)
 
   .then(app => {
-    return Promise.allSettled([
-      
-      import(/* webpackMode: "eager" */ 'boot/i18n'),
-      
-      import(/* webpackMode: "eager" */ 'boot/axios')
-      
-    ]).then(bootFiles => {
-      const boot = bootFiles
-        .map(result => {
+    // eventually remove this when Cordova/Capacitor/Electron support becomes old
+    const [ method, mapFn ] = Promise.allSettled !== void 0
+      ? [
+        'allSettled',
+        bootFiles => bootFiles.map(result => {
           if (result.status === 'rejected') {
             console.error('[Quasar] boot error:', result.reason)
             return
           }
           return result.value.default
         })
-        .filter(entry => typeof entry === 'function')
+      ]
+      : [
+        'all',
+        bootFiles => bootFiles.map(entry => entry.default)
+      ]
 
+    return Promise[ method ]([
+      
+      import('boot/i18n'),
+      
+      import('boot/axios')
+      
+    ]).then(bootFiles => {
+      const boot = mapFn(bootFiles).filter(entry => typeof entry === 'function')
       start(app, boot)
     })
   })

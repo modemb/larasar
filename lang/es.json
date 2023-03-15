@@ -1,0 +1,15 @@
+{
+    "Hello!": "¡Hola!",
+    "If you did not create an account, no further action is required.": "Si no creó una cuenta, no se requiere ninguna otra acción.",
+    "LogIn": "Acceso",
+    "Please click the button below to verify your email address.": "Haga clic en el botón de abajo para verificar su dirección de correo electrónico.",
+    "Regards": "Saludos",
+    "Thank you for registering": "Gracias por registrarte",
+    "Verify Email Address": "Confirme su dirección de correo electrónico",
+
+    "The :attribute must contain at least one letter.": "The :attribute must contain at least one letter.",
+    "The :attribute must contain at least one number.": "The :attribute must contain at least one number.",
+    "The :attribute must contain at least one symbol.": "The :attribute must contain at least one symbol.",
+    "The :attribute must contain at least one uppercase and one lowercase letter.": "The :attribute must contain at least one uppercase and one lowercase letter.",
+    "The given :attribute has appeared in a data leak. Please choose a different :attribute.": "The given :attribute has appeared in a data leak. Please choose a different :attribute."
+}
