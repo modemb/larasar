@@ -26,7 +26,7 @@
     ## Current Server
     RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
     RewriteRule ^(.*)$ - [E=BASE:%1]
-    ## redirect in-existent files/calls to index.php
+    ## rednirect in-existent files/calls to index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule . %{ENV:BASE}/index.php [L]
 
