@@ -7,13 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Add table and columns accordingly
+     * AddColumnsToTable: Add table and columns accordingly
      * Run the migrations: php artisan migrate
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-      Schema::table('payments', function (Blueprint $table) {
+      Schema::table('users', function (Blueprint $table) {
           $table->dropColumn([ // 'user_id', // Example
               // 'post_title',
               // 'phone',
@@ -23,9 +22,9 @@ return new class extends Migration
           ]); // $table->bigInteger('user_id')->default(0)->after('id'); // Example
           // $table->decimal('amount', 8, 2)->default(0)->after('payment');
           // $table->dateTime('sale_date')->nullable()->after('pics');
-          // $table->foreignId('message_id')->nullable()->after('user_id');
-          $table->char('plan', 20)->nullable()->after('end_date');
-          // $table->string('product')->nullable()->after('end_date');
+          // $table->decimal('gain', 8, 2)->default(0)->after('user_id');
+          // $table->char('currency')->nullable()->after('place');//"CAD"
+          // $table->char('locale', 6)->nullable();
       });
     }
 };

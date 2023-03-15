@@ -17,6 +17,7 @@ use App\Http\Requests\Auth\LoginRequest;
 
 // use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+
 class LoginController extends Controller
 {
     /*
@@ -102,15 +103,9 @@ class LoginController extends Controller
         $email = $user->email??$user->getEmail();
         $avatar = $user->avatar??$user->getAvatar();
         $name = $user->name??$user->getName();
-
-        try {
-          $full_name = explode('', $name);
-          $first_name = $full_name[0];
-          $last_name = $full_name[1]??'';
-        } catch (\Throwable $th) {
-          $first_name = '';
-          $last_name = '';
-        }
+        $full_name = explode(' ', $name);
+        $first_name = isset($full_name[0])?$full_name[0]:'';
+        $last_name = isset($full_name[1])?$full_name[1]:'';
 
         $localUser = User::where('email', $email)->first(); try {
           $localAvatar = stristr($localUser['avatar'], 'images/profile');
@@ -129,7 +124,8 @@ class LoginController extends Controller
         } while ($user);
 
         if (!$localUser) $localUser = $this->createUser([
-          'gain' => 500,
+          'gain' => env('GAIN'),
+          'currency_code' => env('CURRENCY_CODE'),
           'position' => 'firsTime',
           'role' => 'User',
           'first_name' => $first_name,
@@ -140,6 +136,7 @@ class LoginController extends Controller
         ]);// If does not exist, create it
 
         $localUser->update([
+            'locale' => $request->cookie('locale'), // TODO  NotWorking
             'status' => $provider,
             'email_verified_at' => now(),
             'avatar' => $localAvatar?$localUser->avatar:$avatar
@@ -174,32 +171,6 @@ class LoginController extends Controller
      */
     public function loginApi(LoginRequest $request)
     {  //return $request;
-
-      // $request->validate([
-      //     'email' => ['required', 'string', 'email'],
-      //     'password' => ['required', 'string'],
-      // ]);
-
-      // $request->authenticate();
-
-      // $request->session()->regenerate();
-
-      // return response()->noContent();
-
-
-      // $token = [ // https://laravel.com/docs/9.x/responses#other-response-types
-      //   'access_token' => 'login',
-      //   'remember' => true,
-      //   'expires_in' => 365,
-      //   // ======================== \\
-      //   // 'authenticate' => $request->authenticate(),
-      //   // 'session' => $request->session()->regenerate(),
-      //   // 'response' => response()->noContent()
-      // ];return $token;response()->view('oauth.callback', ['token' => $token]);
-
-      // $token = $request->user()->createToken($request->token_name);
-
-      // return ['token' => $token->plainTextToken];
 
       $passport = config('services.passport');
       // try {

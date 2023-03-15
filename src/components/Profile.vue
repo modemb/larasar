@@ -66,7 +66,7 @@
                         filled
                         type="text"
                         v-model="name"
-                        :label="$t('user_name')"
+                        :label="user_name||$t('user_name')"
                         lazy-rules clearable
                         :rules="[val => val && val.length > 0 || $t('user_name')]"
                         :error="name_data ? true : false"
@@ -106,7 +106,7 @@
                   />
 
                   <div class="row">
-                    <div class="col-6">
+                    <div class="col-4">
                       <q-input
                         lazy-rules
                         v-model="city"
@@ -115,7 +115,7 @@
                         :rules="[val => val && val.length > 0 || $t('add_city')]"
                       />
                     </div>
-                    <div class="col-3">
+                    <div class="col-4">
                       <q-input
                         filled
                         lazy-rules
@@ -127,7 +127,7 @@
                         :rules="[val => val && val.length > 0 || $t('add_region')]"
                       />
                     </div>
-                    <div class="col-3">
+                    <div class="col-4">
                       <q-input
                         filled
                         lazy-rules
@@ -200,17 +200,17 @@
                     :type="isPwd ? 'password' : 'text'"
                     v-model="new_password"
                     :label="$t('new_password')" clearable
-                    lazy-rules :disable="update_email" :readonly="update_email"
+                    lazy-rules :disable="update_email||delete_account"
                     :rules="[val => val && val.length > 0 || $t('new_password')]"
-                  />
+                  /><!-- :disable="update_email" -->
 
                   <q-input filled
                     v-model="password_confirmation"
                     :type="isPwd ? 'password' : 'text'"
                     :label="$t('confirm_password')" clearable
-                    lazy-rules :disable="update_email" :readonly="update_email"
+                    lazy-rules :disable="update_email||delete_account"
                     :rules="[val => val && val.length > 0 || $t('confirm_password')]"
-                    >
+                    ><!-- :readonly="update_email" -->
                     <template v-slot:append>
                       <q-icon
                         :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -228,8 +228,16 @@
                     :rules="[val => val && val.length > 0 || $t('email')]"
                   /><!-- took off :val="auth.email" -->
 
-                  <q-btn color="primary" :label="$t('update')" @click.prevent="pwd" />
-                  <q-checkbox class="q-dark"  v-model="update_email" :label="$t('update_email')" />
+                  <span v-if="!delete_account">
+                    <q-btn color="primary" :label="$t('update')" @click.prevent="pwd" />
+                    <q-checkbox class="q-dark"  v-model="update_email" :label="$t('update_email')" />
+                  </span>
+                  <q-btn color="red" v-else
+                    :label="$t('delete_account')"
+                    @click.prevent="pwd"
+                  /><!-- Delete Your Account -->
+
+                  <q-checkbox class="q-dark"  v-model="delete_account" :label="$t('delete_account')" />
 
                 </q-form>
 
@@ -239,14 +247,19 @@
 
               <q-card class="my-card text-white">
                 <q-card-section class="bg-primary">
-                  <div class="text-h6">{{$t('Parameters')}}</div>
+                  <select v-model="locale" class="float-right"><!-- <select v-model="$i18n.locale"> -->
+                    <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">
+                      {{ locale }}
+                    </option>
+                  </select><!-- TagLocale: LocaleUserModule -->
+                  <div class="text-h6">{{$t('settings')}}</div>
                 </q-card-section>
 
                 <div class="q-ma-sm">
-                  <Checkout :profile="true" :user="auth" v-on:currency="save" />
-                </div>
+                  <Checkout :profile="true" :user="auth" v-on:currency="$emit('update', { usersData: 'users' })"/>
+                </div><!--  -->
 
-              </q-card><!-- Parameters -->
+              </q-card><!-- Settings -->
 
             </div><!-- Right Panel -->
 
@@ -261,10 +274,10 @@
 <script>
 import { useQuasar } from 'quasar'
 import { ref, computed, onMounted, watch } from 'vue'
-// import { useRouter, useRoute } from 'vue-router'
 import {  useStore } from 'vuex'
-import { URL, api, xRate, cy, crudAction, notifyAction } from 'boot/axios'
-import Checkout from './Checkout'
+import { baseURL, api, xRate, cy } from 'boot/axios'
+import { useCrudStore } from 'stores/crud'
+import Checkout from './UserCheckout.vue'
 
 export default {
   name: 'ProfilePage',
@@ -273,23 +286,20 @@ export default {
   }, props: ['user'],
   setup (props, { emit }) {
     const $q = useQuasar()
-    // const route = useRoute()
-    // const router = useRouter()
-    // const addUser = ref(false)
-    // const editUser = ref(false)
-    // const user = ref(null)
-    // const rows = ref([])
+    const $store = useStore()
+    const { crudAction, notifyAction } = useCrudStore()
     const gain = ref(props.user?.gain)
     const user = ref(props.user)
-    const $store = useStore()
     const auth = computed(() => user.value||$store.getters['users/authGetter'])
     const role = ref(auth.value?.role)
     const name = ref(null)
     const name_data = ref(null)
+    const user_name = ref(auth.value?.name)
     const first_name = ref(auth.value?.first_name)
     const last_name = ref(auth.value?.last_name)
     const email = ref(auth.value?.email)
     const update_email = ref(false)
+    const delete_account = ref(false)
     const phone = ref(auth.value?.phone)
     const address = ref(auth.value?.address)
     const city = ref(auth.value?.city)
@@ -304,21 +314,27 @@ export default {
     const password_confirmation = ref(null)
     const isPwd = ref(true)
     const darkMode = ref($q.localStorage.getItem('darkMode'))
+    const locale = ref(auth.value.locale)
 
     const url = `api/users/${auth.value?.id}`
 
-    watch(user, () => props.user||$store.dispatch('users/authAction'))
+    // const locale = computed(() => $store.getters['config/localeGetter'])
 
-    onMounted(() => darkModeClass(darkMode.value))
+    // watch(user, () => props.user||$store.dispatch('users/authAction'))
+    watch(locale, locale => {
+      setTimeout(() => props.user?emit('update', { usersData: 'users' }):
+      $store.dispatch('users/authAction'), 1500) // Master Locale Setting
+      $store.dispatch('config/configAction', { locale, id: auth.value?.id, update:1 })
+    }) // TagLocale: LocaleUserModule
 
     function darkModeClass(val) {
       const QDarkClass = document.querySelector('.q-dark')
       if (val==='null') val = false
       if (QDarkClass) QDarkClass.style.color = val?'#fff':'var(--q-dark)'
       if (QDarkClass) QDarkClass.style.background = val?'var(--q-dark)':'#fff'
-    }
+    } onMounted(() => darkModeClass(darkMode.value))
 
-    function createImage (files) {
+    function createImage(files) {
       // const formData = new FormData()// ToFix
       // formData.append('avatar', files)
       // console.log(formData, files)
@@ -328,17 +344,19 @@ export default {
           api({
             url, method: 'put',
             data: { update: true, avatar: e.target.result }
-          }).then(res => {user.value = res.data.user; notifyAction(res.data)})
-            .catch(e => notifyAction({error: 'createImage', e}))
-        }, 500)//emit('reload', props.user),
+          }).then(res => {
+            user.value = res.data.user; notifyAction(res.data)
+            $store.commit('authMutation', { user: user.value })
+          }).catch(e => notifyAction({error: 'createImage', e}))
+        }, 500) // emit('reload', props.user),
       }; reader.readAsDataURL(files)
-    }
+    } // TagAvatar: UserModule
 
     function update() {
       crudAction({
         url, method: 'put',
         update: true,
-        gain: gain,
+        gain: gain.value,
         role: role.value,
         name: name.value,
         first_name: first_name.value,
@@ -349,27 +367,29 @@ export default {
         region: region.value,
         postal_code: postal_code.value,
         country: country.value,
+        // locale: locale.value
         // currency_code,
         // avatar: file.value
       }).then(() => emit('update', { usersData: 'users' }))
+        .then(() => $store.dispatch('users/authAction'))
         .catch(error => name_data.value = error.response?.data?.errors?.name?.[0] ||
                                           error.response?.data?.message)
-    }
+    } // TagUpdate: UserUpdate
 
     return {
+      height: screen.height/($q.platform.is.mobile?1.2:1.35),
+      // locale: computed(() => $store.getters['config/localeGetter']),
+      // height: ref(screen.height / 1.4),
+      locale,
       auth,
       role,
-      name: ref(auth.value?.name),
-      gain,
-      xRate, cy,
-      height: screen.height/($q.platform.is.mobile?1.2:1.35),
-      locale: computed(() => $store.getters['config/localeGetter']),
-      // height: ref(screen.height / 1.4),
-      // user_name,
+      name,
       name_data,
+      user_name,
       first_name,
       last_name,
       email,
+      delete_account,
       update_email,
       phone,
       address,
@@ -381,11 +401,13 @@ export default {
       postal_code_data,
       country,
       country_data,
+      gain,
+      xRate, cy,
       password,
       new_password,
       password_confirmation,
       isPwd,
-      URL,
+      baseURL,
       admins: [
         'Admin', 'User', 'Editor'
       ],
@@ -401,6 +423,7 @@ export default {
           update: true,
           email: email.value,
           update_email: update_email.value,
+          delete_account: delete_account.value,
           password: props.user?false:password.value,
           update_password: props.user?new_password.value:false,//added
           new_password: new_password.value,
@@ -409,9 +432,9 @@ export default {
       },
       avatar: computed(() => {
         if (auth.value?.avatar) { // Stored Avatar
-          if (auth.value?.avatar.includes('images/profile')) return URL + '/' + auth.value?.avatar
+          if (auth.value?.avatar.includes('images/profile')) return baseURL + '/' + auth.value?.avatar
           else return auth.value?.avatar // Social Avatar
-        } else return auth.value?.new.avatar // Email Avatar
+        } else return auth.value?.new?.avatar // Email Avatar
       }),
       onImageChange(e) {
         let files = e.target.files || e.dataTransfer.files

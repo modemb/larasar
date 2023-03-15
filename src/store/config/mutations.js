@@ -5,6 +5,7 @@ export function configMutation (state, { config, payload }) {
   state.laravel = config.laravel
   state.ipDebug = config.ipDebug
   state.appName = config.appName
+  state.appEnv = config.appEnv
   state.sanctumApi = payload.sanctumApi
   state.vapidPublicKey = config.vapidPublicKey
 }

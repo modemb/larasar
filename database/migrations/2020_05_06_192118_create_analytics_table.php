@@ -8,15 +8,13 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('analytics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->default(0);
-            $table->foreignId('host_id')->default(0);
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('host_id')->nullable();
             $table->string('session', 20)->nullable();
             //=============IPAPI============\\
             $table->string('asn')->nullable();
@@ -71,10 +69,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('analytics');
     }

@@ -87,7 +87,8 @@ class PageController extends Controller
         ['slug', $request->slug], ['locale', $request->locale]
       ])->first(); // Show Local Page
 
-      if ($id==='pages') return Page::where('locale', $request->locale)->get();// Show All Locale Pages
+      if ($request->pages) return // Show All Locale Pages
+        Page::where('locale', $request->locale)->orderBy('page_title')->get();
       else return Page::onlyTrashed()
         ->where('locale', $request->locale)
         ->whereNull('deleted')
@@ -120,7 +121,7 @@ class PageController extends Controller
         Page::where('slug', $id)->update([
           'active' => $request->activePages?0:1
         ]); return [
-          'success' => $request->message,
+          'success' => $request->success,
           'page' => Page::where('slug', $id)->first()
         ];
       } // Activate And Deactivate Page

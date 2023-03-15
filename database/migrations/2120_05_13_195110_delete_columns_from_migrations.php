@@ -7,10 +7,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         DB::table('migrations')
           ->where('migration', '2120_05_10_213215_add_columns_to_table')

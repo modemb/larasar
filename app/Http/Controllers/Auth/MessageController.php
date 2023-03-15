@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Notifications\MessageNotification;
 use Illuminate\Routing\Controller;
+// use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Events\MessageSent;
 use App\Models\Message;
@@ -78,14 +79,14 @@ class MessageController extends Controller
       // broadcast(new MessageSent($auth['id'], $chat->room_id, $chat->message))->toOthers();
 
       foreach (Chat::where('room_id', $chat->room_id)->get() as $chat)
-      if ($chat->user_id != $auth->id) // Send Notifications To ChatRoom's Users
+      if ($chat->user_id !== $auth->id) // Send Notifications To ChatRoom's Users
       User::find($chat->user_id)->notify(new MessageNotification);
 
       return [
         'status' => 'Message Sent! room'.$chat->room_id.' message'.$chat->id,
         'auth' => $request->user(),
-        '$authId' => $auth->id,
-        'message' => $chat->message
+        'authId' => $auth->id,
+        'message' => $chat//->message
       ]; // TagStore: MessageModule
 
     }
@@ -99,13 +100,9 @@ class MessageController extends Controller
     public function show(Request $request, $id)
     {
       if ($request->messages) // Get Rom's Chat Messages
-      // return Room::with('messages')->get(); // TagShow: MessageModule
-      return Room::find($id); // TagShow: RoomModule - MessageModule
-      elseif ($id==='rooms') { // Get User Chat Rooms
-        // return Room::Get();
-        // return Room::with('messages')->where('user_id', $request->user_id)->get();
+        return Room::find($id); // TagShow: RoomModule - MessageModule
+      elseif ($id==='rooms') // Get User Chat Rooms
         return Chat::with('post', 'room')->where('user_id', $request->user_id)->get();
-      }
     }
 
     /**

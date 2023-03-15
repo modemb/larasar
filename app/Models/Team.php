@@ -28,6 +28,7 @@ class Team extends JetstreamTeam
      * @var array
      */
     protected $fillable = [
+        'user_id', 
         'name',
         'personal_team',
     ];

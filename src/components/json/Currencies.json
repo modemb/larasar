@@ -48,7 +48,7 @@
 		"symbol": "ALL",
 		"name": "Albanian Lek",
 		"symbol_native": "Lek",
-		"decimal_digits": 0,
+		"decimal_digits": 2,
 		"rounding": 0,
 		"code": "ALL",
 		"name_plural": "Albanian lekë"
@@ -57,7 +57,7 @@
 		"symbol": "AMD",
 		"name": "Armenian Dram",
 		"symbol_native": "դր.",
-		"decimal_digits": 0,
+		"decimal_digits": 2,
 		"rounding": 0,
 		"code": "AMD",
 		"name_plural": "Armenian drams"

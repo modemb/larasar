@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
@@ -26,7 +24,7 @@ return new class extends Migration
 
             $table->char('plan', 20)->nullable();
             $table->char('currency_code', 3)->nullable();
-            $table->decimal('amount', 8, 2)->default(0);
+            $table->decimal('amount', 12, 2)->default(0);
             $table->json('links')->nullable();
 
             $table->boolean('deleted')->nullable();
@@ -37,10 +35,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('payments');
     }

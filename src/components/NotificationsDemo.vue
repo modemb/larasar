@@ -15,11 +15,13 @@
 <script>
 import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { api, notifyAction, SANCTUM_API } from 'boot/axios'
+import { api, SANCTUM_API } from 'boot/axios'
+import { useCrudStore } from 'stores/crud'
 
 export default {
   setup () {
     const $store = useStore()
+    const { notifyAction } = useCrudStore()
     const loading = ref(false)
     const isPushEnabled = ref(false)
     const pushButtonDisabled = ref(true)

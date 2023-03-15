@@ -10,17 +10,18 @@
 </template>
 
 <script>
-import { i18n, api, crudAction, notifyAction } from 'boot/axios'
 import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import {  useStore } from 'vuex'
-// import { i18n } from 'boot/i18n'
+import { i18n, api } from 'boot/axios'
+import { useCrudStore } from 'stores/crud'
 
 export default {
   name: 'LoginWithsocial',
   setup () {
     const $route = useRoute()
     const $store = useStore()
+    const { crudAction, notifyAction } = useCrudStore()
     const $t = i18n?.global?.t
 
     const auth = computed(() => $store.getters['users/authGetter'])

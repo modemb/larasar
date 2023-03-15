@@ -75,11 +75,28 @@ class UserController extends Controller
       // -------- TagIndex: ViewModule Delete All Views Older Than 1 Years /-1 year \\
       View::where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 year')))->delete();
       // -------- TagIndex: UserModule Delete All Users Not Verify For 1 Years /-1 year \\
-      User::whereNull('email_verified_at')->where('created_at', '<', date('Y-m-d H:i:s', strtotime('-1 year')))->delete();
-      // -------- Delete All Unauthenticated Analytic Older Than 1 Years /-1 year ---\\
+      $users = User::whereNull('email_verified_at')->where('created_at', '<', date('Y-m-d H:i:s', strtotime('-1 year')));
+      $users->update(['deleted' => 1]); $users->delete(); // return app()->currentLocale();
+      if (date('d') == 15) // Send Email Verification Reminder Every 15Th Of the Month
+      foreach (User::whereNull('email_verified_at')->get() as $key => $user) {
+        app()->setLocale($user->locale); $content = [
+          'title'=> 'Thank you for registering',
+          'body'=> 'Please Click below and verify your email',
+          'button' => 'Click Here',
+          'url' => env('APP_URL').'/login'
+        ]; if ($user->id===1) // Email Content
+        try { // Log::warning($user->email.' Sent');
+          Mail::to($user->email)->send(new InfoSuguffie($content));
+        } catch (\Throwable $th) {
+          Log::warning($user->email.' Not Sent'); // echo $th;
+        } // echo $user->id.'-';
+      } // Email To Users Not Verify
+      // -------- TagIndex: AnalyticModule Delete All Unauthenticated Analytic Older Than 1 Years /-1 year ---\\
       Analytic::whereNull('user_id')->where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 year')))->delete();
+      // -------- TagIndex: currencyModule Delete Currency Older Than 1 Month /-1 month ---\\
+      // Currency::where('created_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->delete();
       // ================================================================================ \\
-      return 'Analytic Cron Job Done'; // TagIndex: AnalyticModule
+      return 'User Cron Job Done';
     } // https://laravel.com/docs/9.x/logging#writing-log-messages
 
     /**
@@ -109,7 +126,8 @@ class UserController extends Controller
           if ($analytic->user_id) $analytic->session = env('GuestRecorded');
           elseif ($analytic->session) $analytic->session = env('ReturningGuest');
           else $analytic->session = env('NewGuest');
-        } $this->location($request); // TagSave: LocationModule
+        } if (!$request->post_id) // Save User Location
+          $this->location($request); // TagSave: LocationModule
 
         if ($request->city) $analytic->city = $request->city;
         if ($request->region) $analytic->region = $request->region;
@@ -121,8 +139,8 @@ class UserController extends Controller
         if ($request->ip) $analytic->ip = $request->ip;
 
         $analytic->updated_at = date('Y-m-d H:i:s');
-        $analytic->lat = $request->latitude??$request->lat;
-        $analytic->lon = $request->longitude??$request->lon;
+        $analytic->latitude = $request->latitude??$request->lat;
+        $analytic->longitude = $request->longitude??$request->lon;
         $analytic->utc_offset = $request->utc_offset; $analytic->save();
 
         DB::table('sessions')->where('ip_address', $request->ip())->update([
@@ -131,54 +149,50 @@ class UserController extends Controller
 
         // ----------------- TagSave: PageViewModule --------------------------- \\
         $view = View::where('slug', $request->slug)->where(function ($query) use ($request) {
-            $query->where('user_id', $request->id)
-                  ->orWhere('ip', $request->ip());
+            if ($request->id) $query->where('user_id', $request->id);
+            else $query->where('ip', $request->ip);
         })->first(); // TagSave: ViewModule
 
         $viewData = [
-          'ip' => $request->ip(),
+          'ip' => $request->ip,
           'user_id' => $request->id,
           'post_id' => $request->post_id,
           'slug' => $request->slug
-        ];if (!$view) {
+        ];//Log::warning($viewData);Log::warning($view);
+        if (!$view) {
           $viewTrashed = View::onlyTrashed()->first();
           $post = Post::find($request->post_id);
           if ($post) $post->update(['count' => $post->count+1]);
           if ($viewTrashed) {
             $viewTrashed->restore();
             $viewTrashed->update($viewData);
-          } else View::create($viewData);
+          } else View::create($viewData); return 'viewed';
         } // ----------------- PageViewModule End --------------------------- \\
 
       } elseif ($request->from) { // Save Currency
 
-        // $request->validate([
-        //     'first_name' => ['required', 'string', 'max:255'],
-        //     'last_name' => ['required', 'string', 'max:255'],
-        //     'email' => $emailExist?'':['required', 'string', 'email', 'max:255', 'unique:users'],
-        //     'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        // ]);
-
-        // $request->validate(['email' => ['unique:currencies']]);
-        // Log::warning($request);
-
         if ($request->apiMessage) return ['error' => $request->apiMessage, 'e' => true];
 
-        $from_to = strtoupper($request->from.'-'.$request->to);
-
-        $currency = Currency::where('from_to', $from_to) // Get Currency Rate
-          ->where('updated_at', '>', date('Y-m-d H:i:s', strtotime('-1 month')))
-          ->first(); // TagSave: CurrencyModule
-
-          // if (!$request->update&&$currency?->rate>0) return $currency?->rate;
+        $from_to = strtoupper($request->from.'_'.$request->to);
+        $currency = Currency::where('from_to', $from_to)->first(); // TagSave: CurrencyModule
 
         $currencyDeleted = Currency::onlyTrashed()->whereNotNull('deleted')->first();
 
         if (!$currency&&$currencyDeleted) $currencyDeleted->restore();
 
-        $currency = $currency??$currencyDeleted??new Currency;
+        $currency = $currency??$currencyDeleted?? new Currency;
+
+        $currency_created_at = strtotime($currency?->created_at);
+        $renew_date = strtotime(date('Y-m-d H:i:s', strtotime('-1 month')));
+
+        Log::warning($currency?->created_at.' < '.date('Y-m-d H:i:s', strtotime('-1 month')));
+        Log::warning($currency?->created_at<date('Y-m-d H:i:s', strtotime('-1 month')));
+        Log::warning($currency_created_at<$renew_date);
 
         if (!($currency?->rate>0)) $currency->from_to = $from_to;
+        if ($currency?->deleted) $currency->deleted = Null;
+        if ($currency_created_at<$renew_date) // Update Currency
+            $currency->update(['created_at' => date('Y-m-d H:i:s'), 'rate' => 0]);
 
         if ($request->from) $currency->from = $request->from;
         if ($request->to) $currency->to = $request->to;
@@ -188,8 +202,9 @@ class UserController extends Controller
         if ($request->decimal_digits) $currency->decimal_digits = $request->decimal_digits;
         if ($request->amount) $currency->amount = $request->amount;
         if ($request->result) $currency->result = $request->result;
+
         $currency->save(); if ($request->auth_id&&$currency?->rate>0) {
-          $request->update = 1;
+          $request->update = $request->updateUser;
           $request->rate = $currency?->rate;
           $request->currency_code = $request->to;
           $this->update($request, $request->auth_id);
@@ -305,30 +320,9 @@ class UserController extends Controller
       } elseif ($request->currency_id) { // Restore Currency
         $currencyTrashed = Currency::onlyTrashed()->where('id', $request->currency_id)->first();
         return $currencyTrashed->restore();
-      } elseif ($request->loc) // TagCreateUpdate: LocationModule
-        return $this->location($request);
-        elseif ($request->from) // TagStore: CurrencyModule
-        return $this->save($request);
-
-      if ($request->fromAnalytics) // TagFromAnalytics: LocationModule
+      } elseif ($request->fromAnalytics) // TagFromAnalytics: LocationModule
         foreach(DB::table('analytics')->get() as $request)
          $this->location($request);
-
-      return [
-        'appEnv' => config('app.env'),
-        'appDebug' => config('app.debug'),
-        'ipDebug' => config('app.debug'), // TagStore: IpDebugModule
-        'sanctumApi' => config('sanctumApi'),
-        'user' => config('user'),
-        'stateful' => config('sanctum.stateful'),
-        // =============================== \\
-        'appName' => config('app.name'),
-        'laravel' => app()->version(),
-        'locale' => app()->getLocale(),
-        'locales' => config('app.locales'),
-        'vapidPublicKey' => config('webpush.vapid.public_key'),
-        'gcm_sender_id' => config('webpush.gcm.sender_id')
-      ]; // TagStore: ConfigModule
 
     }
 
@@ -339,7 +333,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $id)
-    { //return $request;
+    { // return $request;
       // Session::get('a');
       // return session('a');
       // return session('a', 'default');
@@ -359,6 +353,12 @@ class UserController extends Controller
         //   ->orderBy('pic', 'asc')->get();
 
       if ($request->location||$request->search) return $this->location($request); // TagShow: LocationModule
+      if ($id==='place') return Location::select('locations.*', DB::raw('6371
+        * acos(cos(radians('.$request->lat.')) * cos(radians(latitude))
+        * cos(radians(longitude) - radians('.$request->lng.'))
+        + sin(radians('.$request->lat.')) * sin(radians(latitude))) AS distance'))
+        ->orderBy('distance')->having('distance', '<=', 100)
+        ->first(); // TagShow: geolocationLocationModule - https://laracasts.com/discuss/channels/laravel/laravel-nearest-location-longitude-and-latitude
 
       if ($request->getUser) return $user; // Get Chat User
       elseif ($id==='analytics') { // Get Users Analytics
@@ -446,7 +446,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { //return$request;
+    { // return$request->cookie('locale');
 
       if ($request->ip) { // Update Auth And Guest Analytic
 
@@ -475,7 +475,7 @@ class UserController extends Controller
           // 'user' => $request->user()
         ];
       } elseif ($request->update) { // Update Users
-        $put = User::find($id); //$picUploaded = false;
+        $put = User::find($request->id??$id);
         $check = Auth::validate([
             'email'    => $put->email,
             'password' => $request->password
@@ -497,14 +497,16 @@ class UserController extends Controller
         if ($request->currency_code) $put->currency_code = $request->currency_code;
         if ($request->country_code) $put->country_code = $request->country_code;
         if ($request->country) $put->country = $request->country;
+        if ($request->locale) $put->locale = $request->locale;
         if ($request->role) $put->role = $request->role;
-        if ($request->gain) $put->gain = $request->gain;
+        if ($request->gain>0) $put->gain = $request->gain;
         if ($request->rate) $put->rate = $request->rate;
         if ($request->signature) $put->email_verified_at = date('Y-m-d H:i:s');
         if ($request->pwd || $request->update_password || $request->update_email) {
           if ($request->update_password) $request->new_password = $check = $request->update_password; // Admin Update Password
           if ($request->email && $request->update_email) $put->email = $request->email;
           if (!$check) return ['success' => 'Current Password Do Not Match Our Record'];
+          if ($request->delete_account) return $this->destroy($request, $id);
           if (!$request->new_password || $request->new_password != $request->password_confirmation)
           if (!$request->update_email) return ['success' => 'Password Confirmation Do Not Match'];
           if (!$request->update_email) $put->password = bcrypt($request->new_password);
@@ -529,7 +531,9 @@ class UserController extends Controller
           foreach ($request->pics as $pic) {
             $post = $request->post; try {
               $name = time().'.' . explode('/', explode(':', substr($pic, 0, strpos($pic, ';')))[1])[1];
-              Image::make($pic)->save(public_path('files/').$name, 80, 'jpg');
+              Image::make($pic)->save(public_path('files/').$name, 50, 'jpg');//
+              // create a new image directly from Laravel file upload
+              $img = Image::make(Input::file('photo'));
             } catch (\Throwable $th) { $name = false; } // https://image.intervention.io/v2/api/encode
 
             $picData = [
@@ -555,13 +559,31 @@ class UserController extends Controller
 
           } $picUploaded = 'Picture Uploaded Successfully';
         } // TagUpdate: FileModule
-        return response()->json([
+        if (!$request->id) return response()->json([
           'success' => $picUploaded??'Updated Successfully',
           'user' => $put
         ]);
       } elseif ($request->chat) { // Update Message
-      } elseif ($request->from) // TagUpdate: CurrencyModule
+      } elseif ($id==='location') // TagCreateUpdate: LocationModule
+        return $this->location($request);
+      elseif ($id==='xRate') // TagUpdate: CurrencyModule
         return $this->save($request);
+        return [
+          'appEnv' => config('app.env'),
+          'appDebug' => config('app.debug'),
+          'production' => app()->isProduction(),
+          'ipDebug' => config('app.debug'), // TagStore: IpDebugModule
+          'sanctumApi' => config('sanctumApi'),
+          'user' => config('user'),
+          'stateful' => config('sanctum.stateful'),
+          // =============================== \\
+          'appName' => config('app.name'),
+          'laravel' => app()->version(),
+          'locale' => app()->getLocale(),
+          'locales' => config('app.locales'),
+          'vapidPublicKey' => config('webpush.vapid.public_key'),
+          'gcm_sender_id' => config('webpush.gcm.sender_id')
+        ]; // TagUpdate: ConfigModule
     }
 
     /**
@@ -608,8 +630,6 @@ class UserController extends Controller
             'region' => null,
             'country' => null,
             'place' => null,
-            'lat' => null,
-            'lon' => null,
             'latitude' => null,
             'longitude' => null,
             'utc_offset' => null,
@@ -620,11 +640,12 @@ class UserController extends Controller
 
       if ($request->currency) { // Delete Currency
         $currencyTrashed = Currency::onlyTrashed()->where('id', $id)->update([
-            'from' => null,  // XAU - XAG
+            'from' => null,  // XAU
             'to' => null, // XOF
-            'from_to' => null, // XAU-XOF
+            'from_to' => null, // XAU_XOF
             'from_name' => null, // Canadian Dollar
             'to_name' => null, // West African CFA franc
+            'decimal_digits' => null,
             'rate' => 0,
             'amount' => 0,
             'result' => 0,
@@ -648,8 +669,9 @@ class UserController extends Controller
           // 'user' => $user->first()
         ];
       } // Remove Image
+      if ($request->delete_account) $request->authID = 'Delete Account';
       if ($id == 1 || $request->authID == $id) return ['success' => 'You Cannot Delete Super Admin or Your Own Account'];
-      else {
+      else { // Trash And Delete User With his Posts and Team
         $userTrashed = User::onlyTrashed()->where('id', $id)->update([
             'email_verified_at' => null,
             'phone' => null,
@@ -659,18 +681,19 @@ class UserController extends Controller
             'postal_code' => null,
             'region' => null,
             'country_code' => null,
-            'position' => null,
+            'locale' => null,
             'deleted' => 1,
             'user_id' => null,
             'gain' => 0,
+            'rate' => 0,
             'currency_code' => null
-        ]); if ($userTrashed) return ['success' => 'User Deleted Forever Successfully'];
-        elseif (!$request->authID) return;
+        ]); // Delete User Forever
+        if ($userTrashed) return ['success' => 'User Deleted Forever Successfully'];
+        elseif (!$request->authID) return $request->authID;
         User::destroy($id); // Trash User
         Team::where('user_id', $id)->delete(); // Trash Team
-        $posts = Post::where('user_id', $id)->get();// TagDestroy: PostModule
-        foreach ($posts as $post) $post->delete(); // Delete User Posts
-        return ['success' => 'User Deleted Successfully'];
+        Post::where('user_id', $id)->delete();// TagDestroy: PostModule
+        return ['message' => 'User Deleted Successfully'];
       } // TagDestroy: UserModule
 
     }
@@ -698,33 +721,28 @@ class UserController extends Controller
     public function location($request)
     { // return $request;
 
-      $latitude = $this->latitude = $request->latitude??$request->lat;
-      $longitude = $this->longitude = $request->longitude??$request->lon;
-      $lat = $this->lat = $latitude==null?null:intval($latitude);
-      $lon = $this->lon = $longitude==null?null:intval($longitude);
-      $city = strtolower($request->city);
-      $region = strtolower($request->region);
-      $country = strtolower($request->country_name??$request->country);
-      $place = $this->place = $request->place??$city.' '.$region.' '.$country;
+      $latitude = $request->latitude??$request->lat;
+      $longitude = $request->longitude??$request->lon;
+      $locPl = explode(' ', isset($request->place)?$request->place:'');
+      $city = strtolower($request->city??(isset($locPl[0])?$locPl[0]:''));
+      $region = strtolower($request->region??(isset($locPl[1])?$locPl[1]:''));
+      $country = strtolower($request->country_name??$request->country??(isset($locPl[2])?$locPl[2]:''));
+      $place = strtolower($request->place??$city.' '.$region.' '.$country);
 
-      $location = Location::where([['latitude', $latitude], ['longitude', $longitude]])
-        ->orWhere(function ($query) use ($request) {
-          $query->where([['lat', $this->lat], ['lon', $this->lon]]);
-          if ($this->place!='  ') $query->orWhere('place', 'like', "%$this->place%");
-      }); // TagLocation: LocationModule
+      $location = $place!='  ' ? Location::where('place', 'like', "%$place%") :
+        Location::where([['city', $city], ['region', $region], ['country', $country]]);
 
-      if (isset($request->location)) { // return $request;
-        $location = $location->first(); $id = $location?->id;
-        if ($location?->place=='  ') $this->destroy($request, $id);
-        else return $location;
-      } if (isset($request->search)) return $location->get();
+      $location = $location->orWhere([['latitude', $latitude], ['longitude', $longitude]]);
 
-      $location = $location->first(); //->whereNotNull('latitude')
+      if (isset($request->location)) return $location->first();
+      if (isset($request->search)) return $location->get();
+
+      $location = $location->first(); // TagLocation: LocationModule
       $locationDeleted = Location::onlyTrashed()->whereNotNull('deleted')->first();
 
       if (!$location&&$locationDeleted) $locationDeleted->restore();
 
-      $location = $location??$locationDeleted??new Location;
+      $location = $location??$locationDeleted?? new Location;
 
       if ($city) $location->city = $city;
       if ($region) $location->region = $region;
@@ -734,13 +752,12 @@ class UserController extends Controller
       if ($request->currency) $location->currency = $request->currency;
       if ($request->currency_name) $location->currency_name = $request->currency_name;
 
-      $location->lat = $lat;
-      $location->lon = $lon;
       $location->latitude = $latitude;
       $location->longitude = $longitude;
-      $location->utc_offset = $request->utc_offset;
+      $location->utc_offset = $request->utc_offset??$location->utc_offset;
       $location->deleted = null;
-      if ($lat||$lon) $location->save();
+
+      if ($latitude||$longitude) $location->save();
 
     }
 }

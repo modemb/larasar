@@ -9,7 +9,7 @@
   // ];
   // require base_path('dist/pwa/index.html')
   // require base_path('dist/spa/index.html')
-  // require public_path('index.html')
+  // require public_path('index.html')/www/suguffie/public/quasar/
   require public_path('quasar/index.html')
 @endphp
 {{-- Global configuration object --}}

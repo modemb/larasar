@@ -31,7 +31,7 @@
       </q-scroll-area><!-- =================Message=========================== -->
       <q-separator /><q-btn flat :label="height" v-if="ipDebug" />
       <q-footer :class="darkMode" elevated>
-        <q-input clearable outlined v-model="newMessage" @keydown="_typing" :class="col" @keyup.enter="sendMessage" :label="$t('Post Message')">
+        <q-input clearable outlined v-model="newMessage" @keydown="_typing" :class="col" @keyup.enter="sendMessage" :label="$t('Send Message')">
           <template v-slot:append>
             <q-btn flat icon="fas fa-paper-plane" @click.prevent="sendMessage" />
           </template><!-- TagMessage: sendMessageModule -->
@@ -46,7 +46,9 @@ import { useQuasar } from 'quasar'
 import { ref, computed, watch, onMounted, onBeforeUpdate } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { api, timeago, notifyAction, crudAction, URL, SANCTUM_API } from 'boot/axios'
+import { api, timeago, SANCTUM_API } from 'boot/axios'
+
+import { useCrudStore } from 'stores/crud'
 
 /**
  * Tags: TagMessage
@@ -59,6 +61,7 @@ export default {
   setup (props) {
     const $q = useQuasar()
     const $store = useStore()
+    const { crudAction, notifyAction } = useCrudStore()
     const $route = useRoute()
     const messages = ref([]) // Chat
     const newMessage = ref('') // =============Form==================
@@ -93,8 +96,10 @@ export default {
       channel.listen('MessageSent', async (e) => {
         // console.log('typing', e.typing, 'listening', $route?.path.includes(`/chat/${roomId.value}`)) // true
 
-        crudAction({notify: $route.path?.includes(`/chat/${roomId.value}`)||'e.typing ToFixNoNotificationInChat'}) // true
-        .catch(e => notifyAction({error: 'notifyAction', e}))
+        crudAction({
+          notify: $route.path?.includes(`/chat/${roomId.value}`)||'e.typing ToFixNoNotificationInChat',
+          mutate: 'notify'
+        }).catch(e => notifyAction({error: 'notifyAction', e})) // true
 
         if (auth.value?.id !== e?.userId) {
           messaging(!e.message)
@@ -122,7 +127,6 @@ export default {
     } // TagMessage: fetchMessageModule
 
     function addMessage (message) {
-      console.log('newMessage', message, 'messages', messages.value)
       try { messages.value.push(message)
       } catch (e) { notifyAction({error: 'messages', e}) }
 
@@ -181,7 +185,7 @@ export default {
 
       avatar(user) {
         if (user.avatar) {
-          if (user.avatar.includes('images/profile')) return URL + '/' + user.avatar
+          if (user.avatar.includes('images/profile')) return baseURL + '/' + user.avatar
           else return user.avatar
         } else return user?.new?.avatar
       }, // ================Message End=============================

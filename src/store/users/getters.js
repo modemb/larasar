@@ -1,27 +1,10 @@
-export function authGetter (state) {
-  return state.user
-}
-
-export function usersGetter (state) {
-  return state.users
-}
-
-export function rolesGetter (state) {
-  return state.roles
-}
-
-export function analyticsGetter (state) {
-  return state.analytics
-}
-
-export function tokenGetter (state) {
-  return state.token
-}
-
-export function locationGetter (state) {
-  return state.location
-}
-
-export function distanceGetter (state) {
-  return state.distance
-}
+export const authGetter = state => state.user
+export const usersGetter = state => state.users
+export const rolesGetter = state => state.roles
+export const tokenGetter = state => state.token
+export const locationGetter = state => state.location
+export const distanceGetter = state => state.distance
+export const rateGetter = state => state.rate
+export const currenciesGetter = state => state.currencies
+export const currencyGetter = state => state.currency
+export const analyticsGetter = state => state.analytics

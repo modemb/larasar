@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
@@ -19,10 +17,10 @@ return new class extends Migration
             $table->string('region')->nullable();
             $table->string('country')->nullable();
             $table->string('place')->nullable();
+            $table->char('currency', 3)->nullable();//"CAD"
+            $table->string('currency_name')->nullable();
             $table->decimal('latitude', 10, 8)->nullable(); // 45.4738
             $table->decimal('longitude', 11, 8)->nullable(); // -73.5875
-            $table->smallInteger('lat')->nullable(); // 45
-            $table->smallInteger('lon')->nullable();// -73
             $table->smallInteger('utc_offset')->nullable(); //"-0400"
             $table->boolean('deleted')->nullable();
             $table->softDeletes();
@@ -32,10 +30,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('locations');
     }

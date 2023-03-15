@@ -8,8 +8,8 @@ use App\Notifications\MessageNotification;
 use App\Notifications\HelloNotification;
 use Illuminate\Http\Request;
 use NotificationChannels\WebPush\PushSubscription;
-// use App\Http\Controllers\Controller; // Added
-use Illuminate\Routing\Controller; // Added
+use App\Http\Controllers\Controller; // Added
+// use Illuminate\Routing\Controller; // Added
 
 class NotificationController extends Controller
 {
@@ -22,6 +22,7 @@ class NotificationController extends Controller
     {
       if (config('sanctumApi')) $this->middleware('auth:sanctum')->except('last', 'dismiss');
       else $this->middleware('auth:api')->except('last', 'dismiss'); // env('SANCTUM_API') - config('sanctumApi')
+      // $this->middleware('auth:sanctum')->except('last', 'dismiss');
     }
 
     /**

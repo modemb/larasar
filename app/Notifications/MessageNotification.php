@@ -47,7 +47,7 @@ class MessageNotification extends Notification
         // $i = $auth->messages->count();
         // $chat = $auth->messages[$i-1]
         $auth = auth()->user();
-        $chat = $auth->messages->last(); return [
+        $chat = $auth->messages->last(); if ($chat->message) return [
           // 'title' => $chat,
           'avatar' => $auth->avatar??$auth->new['avatar'], //'Hello from Laravel!',
           'title' => $auth->name, //'Hello from Laravel!',

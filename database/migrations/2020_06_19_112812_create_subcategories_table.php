@@ -8,14 +8,13 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('subcategories', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('category_id')->default(0);
+            $table->bigInteger('category_id')->nullable();
+            // $table->bigInteger('category_id')->default(0);
             $table->boolean('deleted')->nullable();
             $table->softDeletes();
             $table->timestamps();
@@ -24,10 +23,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('subcategories');
     }

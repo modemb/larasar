@@ -5,28 +5,38 @@
 
     RewriteEngine On
 
-    #Production Server
+    # ============================================================
+
+    # ------------------------------------------------------------
+    ## Production Server
     # RewriteBase /
 
-    # HTTPS
+    ## Local Server
+    # RewriteBase /www/suguffie/public
+    # ---------------------------------------------------------------
+
+    ## HTTPS
     # RewriteCond %{HTTPS} !=on
     # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # Current Server
+    # Generic htaccess redirect www to non-www
+    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+    ## Current Server
     RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
     RewriteRule ^(.*)$ - [E=BASE:%1]
-    #redirect in-existent files/calls to index.php
+    ## redirect in-existent files/calls to index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule . %{ENV:BASE}/index.php [L]
 
-    #Local Server
-    # RewriteBase /www/larasar/public
+    # ======================================================
 
-    # Handle Authorization Header
+    ## Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    ## Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]

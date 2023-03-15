@@ -18,8 +18,10 @@ export function rolesMutation (state, { roles }) {
   state.roles = roles
 }
 
-export function analyticsMutation (state, crud) {
-  state.analytics = crud
+export function logoutMutation (state) {
+  state.user = null; state.token = null
+  Cookies.remove('token')
+  this.$router.push({ path: '/login' })
 }
 
 export function locationMutation (state, { location }) {
@@ -32,8 +34,18 @@ export function distanceMutation (state, distance) {
   state.distance = distance
 }
 
-export function logoutMutation (state) {
-  state.user = null; state.token = null
-  Cookies.remove('token')
-  this.$router.push({ path: '/login' })
+export function rateMutation (state, { rate }) {
+  state.rate = rate
+}
+
+export function currenciesMutation (state, { currencies }) {
+  state.currencies = currencies
+}
+
+export function currencyMutation (state, { currency }) {
+  state.currency = currency
+}
+
+export function analyticsMutation (state, crud) {
+  state.analytics = crud
 }
