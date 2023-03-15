@@ -9,8 +9,6 @@ import Currencies from 'components/json/Countries.json'
 import { i18n } from './i18n'
 import { useCrudStore } from 'stores/crud'
 
-// let i18n: { global: { t: any; locale: { value: string } } }
-
 const qs = (params: { [x: string]: unknown; method?: string; url?: string | undefined }) => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
 
 let locale = Cookies.get('locale')||'en'; const location = Cookies.get('location')
@@ -22,9 +20,6 @@ const mobil = (process.env.MODE === 'capacitor')||(process.env.MODE === 'cordova
 const API_URL = (process.env.DEV||origin?.includes('localhost'))
                 ?process.env.DEV_URL:process.env.API_URL
 const baseURL = mobil?(process.env.PROD?API_URL:process.env.DEV_MOBIL_URL):API_URL
-
-// const SANCTUM = process.env.SANCTUM_API==='true'?true:false
-// const SANCTUM_API = (process.env.DEV&&baseURL==process.env.DEV_URL)?false:SANCTUM
 
 const SANCTUM_API = process.env.SANCTUM_API==='true'?true:false
 
@@ -114,9 +109,6 @@ export default boot(async ({ app, router, store }) => {
 
   app.config.globalProperties.$crudAction = crudAction
   app.config.globalProperties.$notifyAction = notifyAction
-
-  // $t = app.__VUE_I18N__.global.t
-  // $t = i18n?.global?.t
 
   const localeFn = (_number: number, index: string | number) => {
     // number: the time ago / time in number;
@@ -211,16 +203,6 @@ export default boot(async ({ app, router, store }) => {
       // ====Api End=== \\
     }; if (Number(store.getters['users/rateGetter'])===0||apiData.apiMessage||apiData.rate>0)
     crudAction(apiData).then((rate: number) => {
-      console.log(
-        // 'amount?.id', amount.id,
-        // 'auth.id', auth.id,
-        // 'updateUser', apiData.update,
-        // 'rateNumber', rate>0,'rate', rate,
-        // 'isNaN(rate)', isNaN(rate),
-        // 'session', session.includes(currency),
-        // '!isNaN(amount)', !isNaN(amount),
-        // 'Number(amount)', Number(amount),
-      )
 
       if (amount?.id) store.dispatch('users/authAction') // Update Currency On the Database
       if (rate > 0) return store.commit('users/rateMutation', { rate })

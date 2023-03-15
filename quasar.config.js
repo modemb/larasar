@@ -120,7 +120,7 @@ module.exports = configure(function (ctx) {
       //     // passphrase: 'webpack-dev-server' // do you need it?
       //   }
       // }, // https://quasar.dev/quasar-cli-vite/developing-capacitor-apps/capacitor-version-support#capacitor-v3
-      https: ctx.mode.capacitor?true:'',
+      https: (ctx.mode.capacitor||ctx.mode.cordova)?true:'',
       port: ctx.mode.spa ? 8080
          : (ctx.mode.pwa ? 9090 : 9000),
       open: true // opens browser window automatically
@@ -204,7 +204,7 @@ module.exports = configure(function (ctx) {
       // extendPWACustomSWConf (esbuildConf) {}
       // =======================================================
 
-      manifest: {
+      _manifest: {
         name: 'Suguffiè Marketplace',
         short_name: 'Suguffiè',
         description: 'World Marketplace, Classified Ads, Services, Jobs, Buy & Sell',
@@ -248,7 +248,7 @@ module.exports = configure(function (ctx) {
             type: 'image/png'
           }
         ]
-      }
+      } // NotInUse
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-cordova-apps/configuring-cordova

@@ -50,7 +50,6 @@ if (env('JETSTREAM_FRONTEND')) { // Inertia/Livewire Demo
   }); return;
 
 } elseif (env('SANCTUM_API')) Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-  // return $request->user(); // return $request->user()->with('analytics');
   return array_merge($request->user()->toArray(), $request->user()->analytics->toArray());
 });// env('SANCTUM_API') - config('sanctumApi')
 
@@ -64,44 +63,16 @@ Route::middleware(['guest'])->group(function () { // Suguffiè Application
       return view('index');
   });
 
-  // Route::get('api/password/reset', function () {
-  //     return view('index');
-  // });
-
-  // Route::get('/password/reset/{token}', function () {
-  //     return view('index');
-  // });
-
   Route::post('api/login/{driver}', [LoginController::class, 'redirect']);
   Route::get('api/login/{driver}/callback', [LoginController::class, 'callback'])->name('oauth.callback');
 
 });
-
-// Route::get('/api/email/verify/{id}/{hash}', function () {
-//     return view('index');
-// });
-
-// Route::get('/email/verify/{id}/{hash}', function () {
-//     return view('index');
-// });
-
-// Route::get('/post/{id}', function () {
-//     return view('index');
-// });
 
 Route::get('/email/verify', function () {
     return view('index');
 });
 
 // ==================================================================================
-
-// Manifest file (optional if VAPID is used)
-// Route::get('manifest.json', function () {
-//   return [
-//       'name' => config('app.name'),
-//       'gcm_sender_id' => config('webpush.gcm.sender_id'),
-//   ];
-// });
 
 Route::get('{path}', function () {
     return view('index');
@@ -119,7 +90,6 @@ Route::get('/billing-portal', function (Request $request) {
 Route::post('/tokens/create', function (Request $request) {
   $token = $request->user()->createToken($request->token_name);
 
-  // return $token->plainTextToken;
   return ['token' => $token->plainTextToken];
 });// https://laravel.com/docs/9.x/sanctum#issuing-api-tokens
 
