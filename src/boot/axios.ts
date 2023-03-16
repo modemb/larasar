@@ -24,7 +24,7 @@ const baseURL = mobil?(process.env.PROD?API_URL:process.env.DEV_MOBIL_URL):API_U
 const SANCTUM_API = process.env.SANCTUM_API==='true'?true:false
 
 const ipDebugData = [ // Add Your IP To Debug App
-  process.env.DEV_1_IP, '142.184.115.234'
+  process.env.DEV_1_IP, '104.254.90.91'
 ] // TagIpDebug: IpDebugModule
 
 declare global {
