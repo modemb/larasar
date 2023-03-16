@@ -2,9 +2,9 @@
   "name": "suguffie",
   "version": "0.0.1",
   "description": "World Marketplace, Classified Ads, Services, Jobs, Buy & Sell",
-  "productName": "Suguffiè Marketplace",
+  "productName": "Larasar FullStack",
   "cordovaId": "org.cordova.quasar.app",
-  "capacitorId": "com.modemb.suguffie.app",
+  "capacitorId": "org.modemb.suguffie.app",
   "author": "Mohamed Dembele <modembfr@gmail.com>",
   "private": true,
   "scripts": {

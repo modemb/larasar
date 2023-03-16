@@ -96,9 +96,9 @@ export default {
 
     return {
       drivers: [
-        // 'github',
-        'facebook',
-        'google'
+        'github',
+        // 'facebook',
+        // 'google'
       ],
       async login (provider) {
         if (auth.value) {
