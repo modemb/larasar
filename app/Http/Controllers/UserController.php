@@ -123,7 +123,7 @@ class UserController extends Controller
             $analytic->session = env('InvitedGuest');
           } // TagSave: InvitedUserAnalyticModule
         } else { // Guest Analytic
-          if ($analytic->user_id) $analytic->session = env('GuestRecorded');
+          if ($analytic->user_id) $analytic->session = env('RecordedGuest');
           elseif ($analytic->session) $analytic->session = env('ReturningGuest');
           else $analytic->session = env('NewGuest');
         } if (!$request->post_id) // Save User Location
