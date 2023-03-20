@@ -13,6 +13,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('{path}', function () {
-//   return view('index');
-// })->where('path', '.*');
+Route::middleware(['guest'])->group(function () { // Suguffiè Application
+
+  Route::get('/login', function () {
+      return view('index');
+  });
+
+  Route::get('/register', function () {
+      return view('index');
+  });
+
+  Route::any('/reset-password/{token}', function () {
+      return view('index');
+  });
+  
+});
+
+Route::get('/email/verify', function () {
+  return view('index');
+});
+
+Route::get('{path}', function () {
+  return view('index');
+})->where('path', '.*');
