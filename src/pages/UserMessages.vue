@@ -144,7 +144,7 @@ export default {
 
     const updateChatAction = payload => $store.dispatch('categories/updateChatAction', payload)
 
-    chatsAction({ user_chats: 'my_chats', user_id: auth.value.id })
+    // chatsAction({ user_chats: 'my_chats', user_id: auth.value.id })
 
     watch(myChats, val => chatsAction({ user_chats: val, user_id: auth.value.id }))
 
