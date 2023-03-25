@@ -1,10 +1,10 @@
 {
-  "name": "suguffie",
+  "name": "larasar",
   "version": "0.0.1",
-  "description": "World Marketplace, Classified Ads, Services, Jobs, Buy & Sell",
+  "description": "Full Stack Laravel Quasar Framework",
   "productName": "Larasar FullStack",
   "cordovaId": "org.cordova.quasar.app",
-  "capacitorId": "org.modemb.suguffie.app",
+  "capacitorId": "org.modemb.larasar.app",
   "author": "Mohamed Dembele <modembfr@gmail.com>",
   "private": true,
   "scripts": {

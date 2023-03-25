@@ -26,7 +26,18 @@ Route::middleware(['guest'])->group(function () { // Suguffiè Application
   Route::any('/reset-password/{token}', function () {
       return view('index');
   });
-  
+
+  // Route::get('api/password/reset', function () {
+  //     return view('index');
+  // });
+
+  // Route::get('/password/reset/{token}', function () {
+  //     return view('index');
+  // });
+
+  // Route::post('api/login/{driver}', [LoginController::class, 'redirect']);
+  // Route::get('api/login/{driver}/callback', [LoginController::class, 'callback'])->name('oauth.callback');
+
 });
 
 Route::get('/email/verify', function () {

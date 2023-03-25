@@ -45,9 +45,9 @@ class Kernel extends HttpKernel
             \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
         ],
 
-        'spa' => [
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ],
+        // 'spa' => [
+        //     \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        // ],
 
         'api' => [
             // \App\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
