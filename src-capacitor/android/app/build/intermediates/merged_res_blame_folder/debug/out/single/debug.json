@@ -1,0 +1,138 @@
+[
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-xhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-port-xhdpi_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable-port-xhdpi/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-port-mdpi_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable-port-mdpi/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/xml_config.xml.flat",
+        "source": "org.modemb.suguffie.app-main-6:/xml/config.xml"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-land-xxhdpi_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable-land-xxhdpi/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-land-xxxhdpi_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable-land-xxxhdpi/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/xml_file_paths.xml.flat",
+        "source": "org.modemb.suguffie.app-main-6:/xml/file_paths.xml"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-port-xxxhdpi_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable-port-xxxhdpi/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-xxxhdpi_push_icon_name.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-xxxhdpi/push_icon_name.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable_ic_launcher_background.xml.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-port-xxhdpi_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable-port-xxhdpi/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/layout_activity_main.xml.flat",
+        "source": "org.modemb.suguffie.app-main-6:/layout/activity_main.xml"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-hdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-port-hdpi_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable-port-hdpi/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-land-mdpi_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable-land-mdpi/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-land-hdpi_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable-land-hdpi/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-mdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-anydpi-v24_ic_launcher_foreground.xml.flat",
+        "source": "org.modemb.suguffie.app-pngs-0:/drawable-anydpi-v24/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/drawable-land-xhdpi_splash.png.flat",
+        "source": "org.modemb.suguffie.app-main-6:/drawable-land-xhdpi/splash.png"
+    },
+    {
+        "merged": "org.modemb.suguffie.app-merged_res-4:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "org.modemb.suguffie.app-main-6:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    }
+]

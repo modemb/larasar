@@ -1,0 +1,6 @@
+framework module CapacitorCamera {
+  umbrella header "CapacitorCamera-umbrella.h"
+
+  export *
+  module * { export * }
+}

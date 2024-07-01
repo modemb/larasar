@@ -1,0 +1,342 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="org.modemb.suguffie.app"
+4    android:versionCode="4"
+5    android:versionName="1.4" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="22"
+8-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="33" />
+9-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml
+10
+11    <!-- Permissions -->
+12
+13    <uses-permission android:name="android.permission.INTERNET" />
+13-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:46:3-65
+13-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:46:20-62
+14    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+14-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:48:3-79
+14-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:48:20-76
+15    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+15-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:49:3-77
+15-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:49:20-74
+16
+17    <uses-feature android:name="android.hardware.location.gps" />
+17-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:50:3-64
+17-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:50:17-61
+18
+19    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+19-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:52:3-73
+19-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:52:20-71
+20    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+20-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:53:3-77
+20-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:53:20-75
+21    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+21-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:54:3-79
+21-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:54:20-76
+22
+23    <queries>
+23-->[:capacitor-camera] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/camera/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:7:5-11:15
+24        <intent>
+24-->[:capacitor-camera] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/camera/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:8:9-10:18
+25            <action android:name="android.media.action.IMAGE_CAPTURE" />
+25-->[:capacitor-camera] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/camera/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:9:13-73
+25-->[:capacitor-camera] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/camera/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:9:21-70
+26        </intent>
+27    </queries>
+28
+29    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+29-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:24:5-79
+29-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:24:22-76
+30    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+30-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:25:5-77
+30-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:25:22-74
+31    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+31-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:26:5-68
+31-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:26:22-65
+32    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+32-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:28:5-82
+32-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:28:22-79
+33
+34    <permission
+34-->[androidx.core:core:1.10.0] /Users/mohameddembele/.gradle/caches/transforms-3/4084e7bcb4a1738e1ff26326a1997c6e/transformed/core-1.10.0/AndroidManifest.xml:22:5-24:47
+35        android:name="org.modemb.suguffie.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+35-->[androidx.core:core:1.10.0] /Users/mohameddembele/.gradle/caches/transforms-3/4084e7bcb4a1738e1ff26326a1997c6e/transformed/core-1.10.0/AndroidManifest.xml:23:9-81
+36        android:protectionLevel="signature" />
+36-->[androidx.core:core:1.10.0] /Users/mohameddembele/.gradle/caches/transforms-3/4084e7bcb4a1738e1ff26326a1997c6e/transformed/core-1.10.0/AndroidManifest.xml:24:9-44
+37
+38    <uses-permission android:name="org.modemb.suguffie.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+38-->[androidx.core:core:1.10.0] /Users/mohameddembele/.gradle/caches/transforms-3/4084e7bcb4a1738e1ff26326a1997c6e/transformed/core-1.10.0/AndroidManifest.xml:26:5-97
+38-->[androidx.core:core:1.10.0] /Users/mohameddembele/.gradle/caches/transforms-3/4084e7bcb4a1738e1ff26326a1997c6e/transformed/core-1.10.0/AndroidManifest.xml:26:22-94
+39
+40    <application
+40-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:5:3-42:17
+41        android:allowBackup="true"
+41-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:7:5-31
+42        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+42-->[androidx.core:core:1.10.0] /Users/mohameddembele/.gradle/caches/transforms-3/4084e7bcb4a1738e1ff26326a1997c6e/transformed/core-1.10.0/AndroidManifest.xml:28:18-86
+43        android:icon="@mipmap/ic_launcher"
+43-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:8:5-39
+44        android:label="@string/app_name"
+44-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:9:5-37
+45        android:roundIcon="@mipmap/ic_launcher_round"
+45-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:10:5-50
+46        android:supportsRtl="true"
+46-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:11:5-31
+47        android:theme="@style/AppTheme"
+47-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:12:5-36
+48        android:usesCleartextTraffic="true" >
+48-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:6:5-40
+49        <activity
+49-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:14:5-27:16
+50            android:name="org.modemb.suguffie.app.MainActivity"
+50-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:16:7-58
+51            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
+51-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:15:7-123
+52            android:exported="true"
+52-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:20:7-30
+53            android:label="@string/title_activity_main"
+53-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:17:7-50
+54            android:launchMode="singleTask"
+54-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:19:7-38
+55            android:theme="@style/AppTheme.NoActionBarLaunch" >
+55-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:18:7-56
+56            <intent-filter>
+56-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:22:7-25:23
+57                <action android:name="android.intent.action.MAIN" />
+57-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:23:9-61
+57-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:23:17-58
+58
+59                <category android:name="android.intent.category.LAUNCHER" />
+59-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:24:9-69
+59-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:24:19-66
+60            </intent-filter>
+61        </activity>
+62
+63        <provider
+64            android:name="androidx.core.content.FileProvider"
+64-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:30:7-56
+65            android:authorities="org.modemb.suguffie.app.fileprovider"
+65-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:31:7-58
+66            android:exported="false"
+66-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:32:7-31
+67            android:grantUriPermissions="true" >
+67-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:33:7-41
+68            <meta-data
+68-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:34:7-36:56
+69                android:name="android.support.FILE_PROVIDER_PATHS"
+69-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:35:9-59
+70                android:resource="@xml/file_paths" />
+70-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:36:9-43
+71            <meta-data
+71-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:37:7-40:11
+72                android:name="com.google.firebase.messaging.default_notification_icon"
+72-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:38:9-79
+73                android:resource="@mipmap/push_icon_name" /> <!-- <meta-data android:name="com.google.android.geo.API_KEY" android:value="YOUR_API_KEY_HERE"/> -->
+73-->/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/src/main/AndroidManifest.xml:39:9-50
+74        </provider>
+75
+76        <service
+76-->[:capacitor-push-notifications] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/push-notifications/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:8:9-14:19
+77            android:name="com.capacitorjs.plugins.pushnotifications.MessagingService"
+77-->[:capacitor-push-notifications] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/push-notifications/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:9:13-86
+78            android:exported="false" >
+78-->[:capacitor-push-notifications] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/push-notifications/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:10:13-37
+79            <intent-filter>
+79-->[:capacitor-push-notifications] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/push-notifications/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-13:29
+80                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+80-->[:capacitor-push-notifications] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/push-notifications/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:12:17-78
+80-->[:capacitor-push-notifications] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/push-notifications/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:12:25-75
+81            </intent-filter>
+82        </service>
+83
+84        <receiver
+84-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:31:9-38:20
+85            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+85-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:32:13-78
+86            android:exported="true"
+86-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:33:13-36
+87            android:permission="com.google.android.c2dm.permission.SEND" >
+87-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:34:13-73
+88            <intent-filter>
+88-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:35:13-37:29
+89                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+89-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:36:17-81
+89-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:36:25-78
+90            </intent-filter>
+91        </receiver>
+92        <!--
+93             FirebaseMessagingService performs security checks at runtime,
+94             but set to not exported to explicitly avoid allowing another app to call it.
+95        -->
+96        <service
+96-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:44:9-51:19
+97            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+97-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:45:13-82
+98            android:directBootAware="true"
+98-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:46:13-43
+99            android:exported="false" >
+99-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:47:13-37
+100            <intent-filter android:priority="-500" >
+100-->[:capacitor-push-notifications] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/push-notifications/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-13:29
+101                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+101-->[:capacitor-push-notifications] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/push-notifications/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:12:17-78
+101-->[:capacitor-push-notifications] /Applications/MAMP/htdocs/www/suguffie/src-capacitor/node_modules/@capacitor/push-notifications/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:12:25-75
+102            </intent-filter>
+103        </service>
+104        <service
+104-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:52:9-58:19
+105            android:name="com.google.firebase.components.ComponentDiscoveryService"
+105-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:53:13-84
+106            android:directBootAware="true"
+106-->[com.google.firebase:firebase-common:20.3.1] /Users/mohameddembele/.gradle/caches/transforms-3/10e3746b7658e816f47528e6c962989a/transformed/firebase-common-20.3.1/AndroidManifest.xml:34:13-43
+107            android:exported="false" >
+107-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:54:13-37
+108            <meta-data
+108-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:55:13-57:85
+109                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+109-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:56:17-119
+110                android:value="com.google.firebase.components.ComponentRegistrar" />
+110-->[com.google.firebase:firebase-messaging:23.1.2] /Users/mohameddembele/.gradle/caches/transforms-3/5fac1eb95cba1186f24601984c3cb9ff/transformed/firebase-messaging-23.1.2/AndroidManifest.xml:57:17-82
+111            <meta-data
+111-->[com.google.firebase:firebase-datatransport:18.1.7] /Users/mohameddembele/.gradle/caches/transforms-3/876525f9a978da108dfce2a5f3052a4b/transformed/firebase-datatransport-18.1.7/AndroidManifest.xml:27:13-29:85
+112                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+112-->[com.google.firebase:firebase-datatransport:18.1.7] /Users/mohameddembele/.gradle/caches/transforms-3/876525f9a978da108dfce2a5f3052a4b/transformed/firebase-datatransport-18.1.7/AndroidManifest.xml:28:17-115
+113                android:value="com.google.firebase.components.ComponentRegistrar" />
+113-->[com.google.firebase:firebase-datatransport:18.1.7] /Users/mohameddembele/.gradle/caches/transforms-3/876525f9a978da108dfce2a5f3052a4b/transformed/firebase-datatransport-18.1.7/AndroidManifest.xml:29:17-82
+114            <meta-data
+114-->[com.google.firebase:firebase-installations:17.1.3] /Users/mohameddembele/.gradle/caches/transforms-3/156c773db6c2c6f5e4a160f5839505fa/transformed/firebase-installations-17.1.3/AndroidManifest.xml:17:13-19:85
+115                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+115-->[com.google.firebase:firebase-installations:17.1.3] /Users/mohameddembele/.gradle/caches/transforms-3/156c773db6c2c6f5e4a160f5839505fa/transformed/firebase-installations-17.1.3/AndroidManifest.xml:18:17-127
+116                android:value="com.google.firebase.components.ComponentRegistrar" />
+116-->[com.google.firebase:firebase-installations:17.1.3] /Users/mohameddembele/.gradle/caches/transforms-3/156c773db6c2c6f5e4a160f5839505fa/transformed/firebase-installations-17.1.3/AndroidManifest.xml:19:17-82
+117        </service>
+118
+119        <activity
+119-->[com.google.android.gms:play-services-base:18.1.0] /Users/mohameddembele/.gradle/caches/transforms-3/b756c83fade71f41ff2019ff0d774eaa/transformed/play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+120            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+120-->[com.google.android.gms:play-services-base:18.1.0] /Users/mohameddembele/.gradle/caches/transforms-3/b756c83fade71f41ff2019ff0d774eaa/transformed/play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+121            android:exported="false"
+121-->[com.google.android.gms:play-services-base:18.1.0] /Users/mohameddembele/.gradle/caches/transforms-3/b756c83fade71f41ff2019ff0d774eaa/transformed/play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+122            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+122-->[com.google.android.gms:play-services-base:18.1.0] /Users/mohameddembele/.gradle/caches/transforms-3/b756c83fade71f41ff2019ff0d774eaa/transformed/play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+123
+124        <provider
+124-->[com.google.firebase:firebase-common:20.3.1] /Users/mohameddembele/.gradle/caches/transforms-3/10e3746b7658e816f47528e6c962989a/transformed/firebase-common-20.3.1/AndroidManifest.xml:25:9-30:39
+125            android:name="com.google.firebase.provider.FirebaseInitProvider"
+125-->[com.google.firebase:firebase-common:20.3.1] /Users/mohameddembele/.gradle/caches/transforms-3/10e3746b7658e816f47528e6c962989a/transformed/firebase-common-20.3.1/AndroidManifest.xml:26:13-77
+126            android:authorities="org.modemb.suguffie.app.firebaseinitprovider"
+126-->[com.google.firebase:firebase-common:20.3.1] /Users/mohameddembele/.gradle/caches/transforms-3/10e3746b7658e816f47528e6c962989a/transformed/firebase-common-20.3.1/AndroidManifest.xml:27:13-72
+127            android:directBootAware="true"
+127-->[com.google.firebase:firebase-common:20.3.1] /Users/mohameddembele/.gradle/caches/transforms-3/10e3746b7658e816f47528e6c962989a/transformed/firebase-common-20.3.1/AndroidManifest.xml:28:13-43
+128            android:exported="false"
+128-->[com.google.firebase:firebase-common:20.3.1] /Users/mohameddembele/.gradle/caches/transforms-3/10e3746b7658e816f47528e6c962989a/transformed/firebase-common-20.3.1/AndroidManifest.xml:29:13-37
+129            android:initOrder="100" />
+129-->[com.google.firebase:firebase-common:20.3.1] /Users/mohameddembele/.gradle/caches/transforms-3/10e3746b7658e816f47528e6c962989a/transformed/firebase-common-20.3.1/AndroidManifest.xml:30:13-36
+130
+131        <meta-data
+131-->[com.google.android.gms:play-services-basement:18.1.0] /Users/mohameddembele/.gradle/caches/transforms-3/9c93503ec2f6c0acb578d7618e52d827/transformed/play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+132            android:name="com.google.android.gms.version"
+132-->[com.google.android.gms:play-services-basement:18.1.0] /Users/mohameddembele/.gradle/caches/transforms-3/9c93503ec2f6c0acb578d7618e52d827/transformed/play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+133            android:value="@integer/google_play_services_version" />
+133-->[com.google.android.gms:play-services-basement:18.1.0] /Users/mohameddembele/.gradle/caches/transforms-3/9c93503ec2f6c0acb578d7618e52d827/transformed/play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
+134
+135        <provider
+135-->[androidx.emoji2:emoji2:1.2.0] /Users/mohameddembele/.gradle/caches/transforms-3/bc4e404d2e4e27a8333e074e645fe6c4/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+136            android:name="androidx.startup.InitializationProvider"
+136-->[androidx.emoji2:emoji2:1.2.0] /Users/mohameddembele/.gradle/caches/transforms-3/bc4e404d2e4e27a8333e074e645fe6c4/transformed/emoji2-1.2.0/AndroidManifest.xml:25:13-67
+137            android:authorities="org.modemb.suguffie.app.androidx-startup"
+137-->[androidx.emoji2:emoji2:1.2.0] /Users/mohameddembele/.gradle/caches/transforms-3/bc4e404d2e4e27a8333e074e645fe6c4/transformed/emoji2-1.2.0/AndroidManifest.xml:26:13-68
+138            android:exported="false" >
+138-->[androidx.emoji2:emoji2:1.2.0] /Users/mohameddembele/.gradle/caches/transforms-3/bc4e404d2e4e27a8333e074e645fe6c4/transformed/emoji2-1.2.0/AndroidManifest.xml:27:13-37
+139            <meta-data
+139-->[androidx.emoji2:emoji2:1.2.0] /Users/mohameddembele/.gradle/caches/transforms-3/bc4e404d2e4e27a8333e074e645fe6c4/transformed/emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+140                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+140-->[androidx.emoji2:emoji2:1.2.0] /Users/mohameddembele/.gradle/caches/transforms-3/bc4e404d2e4e27a8333e074e645fe6c4/transformed/emoji2-1.2.0/AndroidManifest.xml:30:17-75
+141                android:value="androidx.startup" />
+141-->[androidx.emoji2:emoji2:1.2.0] /Users/mohameddembele/.gradle/caches/transforms-3/bc4e404d2e4e27a8333e074e645fe6c4/transformed/emoji2-1.2.0/AndroidManifest.xml:31:17-49
+142            <meta-data
+142-->[androidx.lifecycle:lifecycle-process:2.6.1] /Users/mohameddembele/.gradle/caches/transforms-3/6965ddfd7c9bb67e76de74f23369d3cb/transformed/lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
+143                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+143-->[androidx.lifecycle:lifecycle-process:2.6.1] /Users/mohameddembele/.gradle/caches/transforms-3/6965ddfd7c9bb67e76de74f23369d3cb/transformed/lifecycle-process-2.6.1/AndroidManifest.xml:30:17-78
+144                android:value="androidx.startup" />
+144-->[androidx.lifecycle:lifecycle-process:2.6.1] /Users/mohameddembele/.gradle/caches/transforms-3/6965ddfd7c9bb67e76de74f23369d3cb/transformed/lifecycle-process-2.6.1/AndroidManifest.xml:31:17-49
+145            <meta-data
+145-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+146                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+146-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+147                android:value="androidx.startup" />
+147-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+148        </provider>
+149
+150        <receiver
+150-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+151            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+151-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+152            android:directBootAware="false"
+152-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+153            android:enabled="true"
+153-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+154            android:exported="true"
+154-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+155            android:permission="android.permission.DUMP" >
+155-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+156            <intent-filter>
+156-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+157                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+157-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+157-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+158            </intent-filter>
+159            <intent-filter>
+159-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+160                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+160-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+160-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+161            </intent-filter>
+162            <intent-filter>
+162-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+163                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+163-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+163-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+164            </intent-filter>
+165            <intent-filter>
+165-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+166                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+166-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+166-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/mohameddembele/.gradle/caches/transforms-3/a916dcd0a76c646859857390ab72a1c7/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+167            </intent-filter>
+168        </receiver>
+169
+170        <service
+170-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/5d3e8aec99f1fb0cb348445c949c4001/transformed/transport-backend-cct-3.1.8/AndroidManifest.xml:28:9-34:19
+171            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+171-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/5d3e8aec99f1fb0cb348445c949c4001/transformed/transport-backend-cct-3.1.8/AndroidManifest.xml:29:13-103
+172            android:exported="false" >
+172-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/5d3e8aec99f1fb0cb348445c949c4001/transformed/transport-backend-cct-3.1.8/AndroidManifest.xml:30:13-37
+173            <meta-data
+173-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/5d3e8aec99f1fb0cb348445c949c4001/transformed/transport-backend-cct-3.1.8/AndroidManifest.xml:31:13-33:39
+174                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+174-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/5d3e8aec99f1fb0cb348445c949c4001/transformed/transport-backend-cct-3.1.8/AndroidManifest.xml:32:17-94
+175                android:value="cct" />
+175-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/5d3e8aec99f1fb0cb348445c949c4001/transformed/transport-backend-cct-3.1.8/AndroidManifest.xml:33:17-36
+176        </service>
+177        <service
+177-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/4e5422fcd44780cf7e44d23d9e8e9fce/transformed/transport-runtime-3.1.8/AndroidManifest.xml:26:9-30:19
+178            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+178-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/4e5422fcd44780cf7e44d23d9e8e9fce/transformed/transport-runtime-3.1.8/AndroidManifest.xml:27:13-117
+179            android:exported="false"
+179-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/4e5422fcd44780cf7e44d23d9e8e9fce/transformed/transport-runtime-3.1.8/AndroidManifest.xml:28:13-37
+180            android:permission="android.permission.BIND_JOB_SERVICE" >
+180-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/4e5422fcd44780cf7e44d23d9e8e9fce/transformed/transport-runtime-3.1.8/AndroidManifest.xml:29:13-69
+181        </service>
+182
+183        <receiver
+183-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/4e5422fcd44780cf7e44d23d9e8e9fce/transformed/transport-runtime-3.1.8/AndroidManifest.xml:32:9-34:40
+184            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+184-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/4e5422fcd44780cf7e44d23d9e8e9fce/transformed/transport-runtime-3.1.8/AndroidManifest.xml:33:13-132
+185            android:exported="false" />
+185-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/mohameddembele/.gradle/caches/transforms-3/4e5422fcd44780cf7e44d23d9e8e9fce/transformed/transport-runtime-3.1.8/AndroidManifest.xml:34:13-37
+186    </application>
+187
+188</manifest>

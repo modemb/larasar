@@ -1,0 +1,7 @@
+#Tue Aug 01 15:48:14 EDT 2023
+base.0=/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/build/intermediates/dex/release/mergeDexRelease/classes.dex
+base.1=/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app/build/intermediates/dex/release/mergeDexRelease/classes2.dex
+path.0=classes.dex
+path.1=classes2.dex
+renamed.0=classes.dex
+renamed.1=classes2.dex

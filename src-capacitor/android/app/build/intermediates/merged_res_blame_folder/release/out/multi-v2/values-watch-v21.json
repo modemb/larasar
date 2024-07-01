@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "org.modemb.suguffie.app-mergeReleaseResources-2:/values-watch-v21/values-watch-v21.xml",
+            "map": [
+                {
+                    "source": "/Users/mohameddembele/.gradle/caches/transforms-3/8bb8b13c1438848676861a1388a97eb3/transformed/appcompat-1.6.1/res/values-watch-v21/values-watch-v21.xml",
+                    "from": {
+                        "startLines": "2,6,10",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,271,499",
+                        "endLines": "5,9,13",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "266,494,724"
+                    }
+                }
+            ]
+        }
+    ]
+}

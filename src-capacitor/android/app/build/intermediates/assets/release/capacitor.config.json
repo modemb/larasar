@@ -1,0 +1,28 @@
+{
+	"appId": "org.modemb.suguffie.app",
+	"appName": "Suguffiè Marketplace",
+	"bundledWebRuntime": false,
+	"npmClient": "yarn",
+	"webDir": "www",
+	"ios": {
+		"appendUserAgent": "modembIos",
+		"contentInset": "always"
+	},
+	"android": {
+		"appendUserAgent": "modembAndroid"
+	},
+	"plugins": {
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		}
+	},
+	"server": {"url": "https://suguffie.com",
+		"hostname": "suguffie.com/",
+		"iosScheme": "capacitor",
+		"androidScheme": "https"
+	}
+}

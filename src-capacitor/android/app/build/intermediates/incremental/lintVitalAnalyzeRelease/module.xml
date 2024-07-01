@@ -1,0 +1,19 @@
+<lint-module
+    format="1"
+    dir="/Applications/MAMP/htdocs/www/suguffie/src-capacitor/android/app"
+    name=":app"
+    type="APP"
+    maven="android:app:"
+    agpVersion="8.0.0"
+    buildFolder="build"
+    bootClassPath="/Users/mohameddembele/Library/Android/sdk/platforms/android-33/android.jar:/Users/mohameddembele/Library/Android/sdk/build-tools/30.0.3/core-lambda-stubs.jar"
+    javaSourceLevel="17"
+    compileTarget="android-33"
+    neverShrinking="true">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>
