@@ -22,7 +22,6 @@ return new class extends Migration
             $table->boolean('deleted')->nullable();
             $table->softDeletes();
             $table->timestamps();
-            // $table->softDeletes();
         });
     }
 

@@ -5,10 +5,10 @@
     <meta name="description" content="<%= productDescription %>">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>">
-    <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>"> -->
-    <meta name="keywords" content="Childcare & Nanny, Computer Services, Courses and Tutoring, Customer Service, Legal Services, Pet, Travel / Vacations, Cours et tutorat, Garde d'enfants et nounou, Services animaux de compagnie, Service à la clientèle,
-      Services informatiques, Services juridiques, Voyage / Vacances, Developers and Computer, Food & Hospitality, Healthcare, Marketing, Développeurs et ordinateur, Marketing, Restauration et hôtellerie, Santé"
+    <meta name="apple-itunes-app" content="app-id=6451084736, app-argument=https://apps.apple.com/app/suguffi%C3%A8/id6451084736">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=contain<% } %>"><!-- cover/contain -->
+    <meta name="keywords" content="Childcare and Nanny, Computer , Pet, Travel / Vacations, Real-estate, Autos / Car, Job, Video Game,
+      Garde d'enfants et nounou, Ordinateur, Animal de compagnie, Voyages / Vacances, Immobilier, Autos / Voiture, Travail, Jeu vidéo"
     ><title><%= productName %></title>
 
     <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128x128.png">
@@ -19,7 +19,7 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=<%= process.env.MAP_API_KEY %>&libraries=places"
       async defer>
-    </script><!-- Google Map &callback=initMap&v=weekly-->
+    </script><!-- Google Map &callback=initMap&v=weekly -->
     <!-- <script src="https://js.stripe.com/v3/" async defer></script> -->
 
   </head>

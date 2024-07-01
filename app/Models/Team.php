@@ -14,33 +14,44 @@ class Team extends JetstreamTeam
     use HasFactory, SoftDeletes;
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-      'user_id', 'personal_team' => 'boolean',
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
-        'user_id', 
         'name',
         'personal_team',
+        'deleted'
     ];
 
     /**
      * The event map for the model.
      *
-     * @var array
+     * @var array<string, class-string>
      */
     protected $dispatchesEvents = [
         'created' => TeamCreated::class,
         'updated' => TeamUpdated::class,
         'deleted' => TeamDeleted::class,
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'personal_team' => 'boolean',
+        ];
+    }
+
+    /**
+     * Get team's users
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

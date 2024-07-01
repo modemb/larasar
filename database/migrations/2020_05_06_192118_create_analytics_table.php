@@ -61,7 +61,7 @@ return new class extends Migration
             // $table->string('status')->nullable();// "success"
             $table->string('zip')->nullable();// "H4C"
             //=========IP-API End=============\\
-            $table->boolean('app')->nullable();
+            $table->char('app', 10)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

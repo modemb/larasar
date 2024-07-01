@@ -17,8 +17,8 @@ class Payment extends Model
     'start_date',
     'end_date',
     'plan',
-    'currency_code',
     'amount',
+    'currency_code',
     'links',
     'deleted'
   ];

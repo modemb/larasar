@@ -30,11 +30,12 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
       'user_id',
       'gain',
+      'credit',
       'rate',
       'first_name',
       'last_name',
@@ -51,21 +52,22 @@ class User extends Authenticatable implements MustVerifyEmail
       'country',
       'locale',
       'password',
-      'user_id',
+      'code',
       'role',
       'status',
       'avatar',
-      'deleted'
+      'deleted',
+      'created_at'
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
       'password',
-      'remember_token',
+      'remember_token', 'code',
       'two_factor_recovery_codes',
       'two_factor_secret',
     ];
@@ -86,14 +88,14 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    // protected $casts = [
+    //     'email_verified_at' => 'datetime',
+    // ];
 
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $appends = [
         // 'profile_photo_url',
@@ -101,9 +103,22 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    /**
      * Get the profile photo URL attribute.
      *
-     * @return string
+     * @return array<string, string>
      */
     public function getNewAttribute()
     {

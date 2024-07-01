@@ -8,8 +8,8 @@ use App\Http\Controllers\Auth\LoginController;
 
 use App\Http\Controllers\Auth\PushSubscriptionController;
 use App\Http\Controllers\Auth\NotificationController;
-// use App\Http\Controllers\Auth\BroadcastController;
 use App\Http\Controllers\Auth\MessageController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,9 +23,9 @@ use App\Http\Controllers\Auth\MessageController;
 
 Route::resources([
   // 'users' => UserController::class,
-  'messages' => MessageController::class,
+  // 'messages' => MessageController::class,
   'notifications' => NotificationController::class, // Notifications
-  // 'subscriptions' => PushSubscriptionController::class // Push Subscriptions
+  'subscriptions' => PushSubscriptionController::class // Push Subscriptions
 ]);
 
 if (env('JETSTREAM_FRONTEND')) { // Inertia/Livewire Demo
@@ -49,10 +49,10 @@ if (env('JETSTREAM_FRONTEND')) { // Inertia/Livewire Demo
       })->name('dashboard');
   }); return;
 
-} elseif (env('SANCTUM_API')) Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-  // return $request->user(); // return $request->user()->with('analytics');
+} elseif (env('SANCTUM_API')) Route::middleware(['auth'])->get('/user', function (Request $request) {
+  // return $request->user(); // return $request->user()->with('analytics'); auth:sanctum
   return array_merge($request->user()->toArray(), $request->user()->analytics->toArray());
-});// env('SANCTUM_API') - config('sanctumApi')
+}); // env('SANCTUM_API') - config('sanctumApi')
 
 Route::middleware(['guest'])->group(function () { // Suguffiè Application
 
@@ -81,29 +81,25 @@ Route::middleware(['guest'])->group(function () { // Suguffiè Application
 
 });
 
-// Route::get('/api/email/verify/{id}/{hash}', function () {
-//     return view('index');
-// });
-
-// Route::get('/email/verify/{id}/{hash}', function () {
-//     return view('index');
-// });
-
-// Route::get('/post/{id}', function () {
-//     return view('index');
-// });
-
-// Route::get('/email/verify', function () {
-//     return view('index');
-// });
-
+Route::get('login/{email}', [LoginController::class, 'callback']);
 Route::get('/email/verify', function () {
   return view('index');
 });
 
-Route::get('{path}', function () {
+// Route::get('/email/verify/{id}/{hash}', function () {
+//   return view('index');
+//   return view('emails.verify');
+// });
+
+Route::fallback(function () {
   return view('index');
-})->where('path', '.*');
+});
+
+// Route::get('{path}', function () {
+//   return view('index');
+// })->where('path', '.*');
+
+// require __DIR__.'/auth.php';
 
 // ==================================================================================
 
@@ -114,12 +110,6 @@ Route::get('{path}', function () {
 //       'gcm_sender_id' => config('webpush.gcm.sender_id'),
 //   ];
 // });
-
-// Route::get('{path}', function () {
-//     return view('index');
-// })->where('path', '.*');
-
-// require __DIR__.'/auth.php';
 
 // =====================Test============================
 // Route::get('/test', function () {
@@ -134,24 +124,4 @@ Route::get('{path}', function () {
 //   // return $token->plainTextToken;
 //   return ['token' => $token->plainTextToken];
 // });// https://laravel.com/docs/9.x/sanctum#issuing-api-tokens
-
-// use App\Models\User;
-// use Illuminate\Support\Facades\Hash;
-// use Illuminate\Validation\ValidationException;
-
-// Route::post('/sanctum/token', function (Request $request) {
-//     $request->validate([
-//         'email' => 'required|email',
-//         'password' => 'required',
-//         'device_name' => 'required',
-//     ]);
-
-//     $user = User::where('email', $request->email)->first();
-
-//     if (! $user || ! Hash::check($request->password, $user->password)) {
-//         throw ValidationException::withMessages([
-//             'email' => ['The provided credentials are incorrect.'],
-//         ]);
-//     } return $user->createToken($request->device_name)->plainTextToken;
-// });//https://laravel.com/docs/9.x/sanctum#mobile-application-authentication
 // =====================Test End========================

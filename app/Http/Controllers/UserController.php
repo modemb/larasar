@@ -20,6 +20,7 @@ use App\Models\Payment;
 use App\Models\Message;
 use App\Models\Session;
 use App\Models\Report;
+use App\Files\Picture;
 use App\Models\User;
 use App\Models\Room;
 use App\Models\Chat;
@@ -29,7 +30,9 @@ use App\Models\Post;
 use App\Models\Pic;
 // use Carbon\Carbon;
 // use Session;
-use Image;
+// use Storage;
+use Cookie;
+// use Image;
 use Mail;
 use File;
 use Hash;
@@ -39,7 +42,8 @@ use DB;
 
 /**
  * Tags: UserModule - AnalyticModule - BitgoModule - IpDebugModule - FileModule
- *       ReportModule - MessageModule - LocationModule
+ *       ReportModule - MessageModule - LocationModule - SessionModule - Invited
+ *       TagSendCode - CodeModule
  *
  * @to Profile.vue - Users.vue - Analytics.vue
  */
@@ -67,30 +71,25 @@ class UserController extends Controller
     {
       // ini_set('max_execution_time', 1800);
       // -------- TagIndex: MessageModule Delete All Messages Older Than 1 Month /-1 month \\
-      Message::where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->delete();
       Room::where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->delete();
       Chat::where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->delete();
       // Notification::where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 day')))->delete();
       DB::table('notifications')->where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->delete();
+      $message = Message::where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')));
+      $message->update(['message' => null]); $message->delete();
       // -------- TagIndex: ViewModule Delete All Views Older Than 1 Years /-1 year \\
       View::where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 year')))->delete();
+      // -------- TagIndex: UserModule Delete All Trashed Users Older Than 1 Years /-1 year \\
+      User::onlyTrashed()->where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 year')))->update(['deleted' => 1]);
+      Team::onlyTrashed()->where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 year')))->update(['deleted' => 1]);
       // -------- TagIndex: UserModule Delete All Users Not Verify For 1 Years /-1 year \\
       $users = User::whereNull('email_verified_at')->where('created_at', '<', date('Y-m-d H:i:s', strtotime('-1 year')));
       $users->update(['deleted' => 1]); $users->delete(); // return app()->currentLocale();
-      if (date('d') == 15) // Send Email Verification Reminder Every 15Th Of the Month
-      foreach (User::whereNull('email_verified_at')->get() as $key => $user) {
-        app()->setLocale($user->locale); $content = [
-          'title'=> 'Thank you for registering',
-          'body'=> 'Please Click below and verify your email',
-          'button' => 'Click Here',
-          'url' => env('APP_URL').'/login'
-        ]; if ($user->id===1) // Email Content
-        try { // Log::warning($user->email.' Sent');
-          Mail::to($user->email)->send(new InfoSuguffie($content));
-        } catch (\Throwable $th) {
-          Log::warning($user->email.' Not Sent'); // echo $th;
-        } // echo $user->id.'-';
-      } // Email To Users Not Verify
+      $teams = Team::whereDoesntHave('user');
+      $teams->update(['deleted' => 1]);
+      $teams->delete();
+      // -------- TagIndex: CodeModule Send Email Verification Code -- \\// if (date('d') == 15)
+      foreach (User::whereNull('email_verified_at')->whereNull('code')->get() as $user) $this->sendCode($user);
       // -------- TagIndex: AnalyticModule Delete All Unauthenticated Analytic Older Than 1 Years /-1 year ---\\
       Analytic::whereNull('user_id')->where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 year')))->delete();
       // -------- TagIndex: currencyModule Delete Currency Older Than 1 Month /-1 month ---\\
@@ -105,47 +104,49 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function save($request)
-    {
+    { //return $request->id;
+
       if ($request->ip) { // Save Analytic
 
         $analytic = $this->analytic; // TagSave: AnalyticModule
+        $hostUser = User::where('name', $request->hostUserName)->first();
 
         if ($request->id) { // Auth Analytic
-          if ($request->newAuth) {
+
+          if ($request->newAuth||$request->authCode) {
             $analytic->session = env('NewAuth');
-            $analytic->user_id = $request->id; // Store New Auth Id To It's Guest Analytic
+            $analytic->user_id = $request->id; // Store New Auth Id To It's Invited/Guest Analytic
+
+            if ($analytic->host_id || // Affiliate Link - IP Has To Be Different
+              $hostUser&&$hostUser->id !== $request->id) // Affiliate Code
+              $this->invitedUser = User::find($request->id)->update([
+                  'user_id' => $analytic->host_id??$hostUser->id, // Invited User
+                  'gain' => env('GAIN')*2 // Assign Invited User To Host user
+              ]); // Invited User - AnalyticAssignInvitedUserModule
+
           } elseif ($analytic->ip !== $request->ip) $analytic->session = env('ReturningAuthNewIP');
-          else $analytic->session = env('ReturningAuth');
-        } elseif ($request->hostUser) { // Assign Invited User's Analytic to Host User
-          $hostUser = User::where('name', $request->hostUser)->first();
-          if ($hostUser) { // IP Has To Be Different
-            $analytic->host_id = $hostUser->id;
-            $analytic->session = env('InvitedGuest');
-          } // TagSave: InvitedUserAnalyticModule
+            else $analytic->session = env('ReturningAuth');
         } else { // Guest Analytic
           if ($analytic->user_id) $analytic->session = env('RecordedGuest');
+          elseif ($hostUser) $analytic->session = env('InvitedGuest'); // TagSave: AnalyticInvitedUserModule
           elseif ($analytic->session) $analytic->session = env('ReturningGuest');
           else $analytic->session = env('NewGuest');
-        } if (!$request->post_id) // Save User Location
-          $this->location($request); // TagSave: LocationModule
+        } if ($hostUser) $analytic->host_id = $hostUser->id; // IP Has To Be Different
+
+        if (!$request->post_id) $this->location($request); // TagSave: UserLocationModule
 
         if ($request->city) $analytic->city = $request->city;
         if ($request->region) $analytic->region = $request->region;
         if ($request->country) $analytic->country = $request->country_name??$request->country;
         if ($request->currency) $analytic->currency = $request->currency;
         if ($request->currency_name) $analytic->currency_name = $request->currency_name;
-
         if ($request->app) $analytic->app = $request->app; // App installed
-        if ($request->ip) $analytic->ip = $request->ip;
 
-        $analytic->updated_at = date('Y-m-d H:i:s');
+        $analytic->ip = $request->ip;
+        $analytic->updated_at = now(); // date('Y-m-d H:i:s');
         $analytic->latitude = $request->latitude??$request->lat;
         $analytic->longitude = $request->longitude??$request->lon;
         $analytic->utc_offset = $request->utc_offset; $analytic->save();
-
-        DB::table('sessions')->where('ip_address', $request->ip())->update([
-            'user_id' => $analytic->user_id
-        ]); // User Sessions - https://laravel.com/docs/9.x/session
 
         // ----------------- TagSave: PageViewModule --------------------------- \\
         $view = View::where('slug', $request->slug)->where(function ($query) use ($request) {
@@ -159,19 +160,19 @@ class UserController extends Controller
           'post_id' => $request->post_id,
           'slug' => $request->slug
         ];//Log::warning($viewData);Log::warning($view);
-        if (!$view) {
+        if ($view) return 'viewed'; else {
           $viewTrashed = View::onlyTrashed()->first();
           $post = Post::find($request->post_id);
           if ($post) $post->update(['count' => $post->count+1]);
           if ($viewTrashed) {
             $viewTrashed->restore();
             $viewTrashed->update($viewData);
-          } else View::create($viewData); return 'viewed';
+          } else View::create($viewData); return 'view';
         } // ----------------- PageViewModule End --------------------------- \\
 
       } elseif ($request->from) { // Save Currency
 
-        if ($request->apiMessage) return ['error' => $request->apiMessage, 'e' => true];
+        if ($request->apiMessage) return ['e' => $request->apiMessage];
 
         $from_to = strtoupper($request->from.'_'.$request->to);
         $currency = Currency::where('from_to', $from_to)->first(); // TagSave: CurrencyModule
@@ -192,7 +193,7 @@ class UserController extends Controller
         if (!($currency?->rate>0)) $currency->from_to = $from_to;
         if ($currency?->deleted) $currency->deleted = Null;
         if ($currency_created_at<$renew_date) // Update Currency
-            $currency->update(['created_at' => date('Y-m-d H:i:s'), 'rate' => 0]);
+            $currency->update(['created_at' => now(), 'rate' => 0]);
 
         if ($request->from) $currency->from = $request->from;
         if ($request->to) $currency->to = $request->to;
@@ -211,7 +212,7 @@ class UserController extends Controller
           return $currency?->rate;
         } return 'abort';
       }
-    }
+    } // https://laravel.com/docs/11.x/eloquent-relationships#the-save-method
 
     /**
      * Store a newly created resource in storage.
@@ -221,6 +222,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     { //return $request;
+
+      $user = $request->user(); // Auth::user();
 
       if ($request->ip) { // Add Guest Analytic
 
@@ -239,13 +242,41 @@ class UserController extends Controller
             'success' => 'Welcome To The World Classified Marketplace'
         ]); // New Guest Analytic IP
 
+        if ($this->analytic->session===env('_ReturningGuest')) return response()->json([
+            'success' => 'SignUp And Start Making Money'
+        ]); // Returning Guest Analytic IP
+
+        if ($this->analytic->session===env('_RecordedGuest')) return response()->json([
+            'success' => 'Welcome Back Please Login'
+        ]); // Recorded Guest Analytic IP
+
         if ($this->analytic->session===env('InvitedGuest')) return response()->json([
-            'success' => 'Please Register To Fulfil Your invitation'
+            'message' => 'Please Register To Fulfil Your invitation'
         ]); // Invited User's Analytic
 
-      } elseif ($request->chat) { // Add Message - NotInUse
-        // $user = User::find($request->user['id']); // Auth::user();
-        $user = $request->user;
+      } elseif ($request->user_room) { // Add Message - NotInUse
+
+        $chat = Chat::where([
+          // ['post_id', $request->post_id],
+          ['user_id', $request->user_id] // Visiter
+        ])->first(); // Validate New User's Room
+
+        $room = $chat?->room??0;
+
+        $roomTrashed = Room::onlyTrashed()->first();
+        $roomName = ['name' => $request->post_title];
+        // $roomName = ['name' => $post->post_title, 'link' => '/post/'.$post->id];
+
+        if (!$room&&$roomTrashed) {
+          $roomTrashed->restore();
+          // $roomTrashed->name = null;
+          $roomTrashed->update($roomName); // Create New Post Room
+          $room = $roomTrashed; // TagStore: MessageModule
+        } elseif (!$room) $room = Room::create($roomName);
+
+        $this->AddUserToRoom($request->user_id, $room->id);
+
+        return $room->id; // TagStore: chatModule // =====================================
 
         // $room = $user->rooms()->where('post_id', $request->post_id)->first();
         $room = Room::where('post_id', $request->post_id)->first();
@@ -293,10 +324,10 @@ class UserController extends Controller
           'room_id' => $room->id,
           'message' => $chat->message
         ]; // TagStore: MessageModule
-      } elseif ($request->api) { // Add User
+      } elseif ($request->api) { // Add User - NotDone
         return redirect()->action([RegisterController::class, 'register']);
       } elseif ($request->id) { // Restore User
-        $userTrashed = User::onlyTrashed()->where('id', $request->id)->first();
+        $userTrashed = User::onlyTrashed()->find($request->id);
         $userTrashed->restore();
         $teamTrashed = Team::onlyTrashed()->first();
         if ($teamTrashed) {
@@ -306,24 +337,41 @@ class UserController extends Controller
           $teamTrashed->update();
         } else $this->createTeam($userTrashed);
       } elseif ($request->log) { // Log User
+        // Cookie::queue(Cookie::make('token', 'value', 120));
         $user = User::find($request->userId);
-        Auth::login($user, $remember = true);
+        return Auth::login($user, $remember = true);
       } elseif ($request->restorePics) { // Restore Pic
-        foreach ($request->restorePics as $pic) {
+        foreach ($request->restorePics as $pic)
           Pic::onlyTrashed()->whereNull('deleted')
-            ->where('pic', $pic)
-              ->restore(); // TagStore: restoreFilePostModule
-        } // TagStore: FileModule
+            ->where('pic', $pic) // TagStore: FileModule
+            ->restore(); // TagStore: restoreFilePostModule
+      } elseif ($request->filesRestore) { // Restore All Pic
+        Pic::onlyTrashed()->whereNull('deleted')->restore();
       } elseif ($request->location_id) { // Restore Location
-        $locationTrashed = Location::onlyTrashed()->where('id', $request->location_id)->first();
+        $locationTrashed = Location::onlyTrashed()
+          ->find($request->location_id);
         return $locationTrashed->restore();
       } elseif ($request->currency_id) { // Restore Currency
-        $currencyTrashed = Currency::onlyTrashed()->where('id', $request->currency_id)->first();
+        $currencyTrashed = Currency::onlyTrashed()
+          ->find($request->currency_id);
         return $currencyTrashed->restore();
-      } elseif ($request->fromAnalytics) // TagFromAnalytics: LocationModule
+      } elseif ($request->fromAnalytics) { // From Analytics
         foreach(DB::table('analytics')->get() as $request)
-         $this->location($request);
+         $this->location($request); // TagStore: LocationModule
+      } elseif ($request->code) { // User Email Verification Code
 
+        $error = \Illuminate\Validation\ValidationException::withMessages([
+            'code' => [__('Code Does Not Match')]
+        ]); $hashedCode = $user->code;
+
+        if (Hash::check($request->code, $hashedCode)) {
+          $user->fill([
+            'email_verified_at' => now(),
+            'code' => Null ])->save();
+          return 'code match...';
+        } throw $error; // TagStore: CodeModule
+
+      } elseif ($request->token) return $this->sendCode($user);
     }
 
     /**
@@ -333,35 +381,41 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $id)
-    { // return $request;
+    { // return is_numeric($request->filterUsers);
       // Session::get('a');
       // return session('a');
       // return session('a', 'default');
       // return (int) ( (0.1+0.7) * 10 ); // echoes 7!
       // Log::warning($request->session()->regenerate());
+      // return date('Y-m-d H:i:s', strtotime('today'));
 
-      $pics = Pic::whereNull('deleted')->orderBy('pic', 'asc');  // Pic::all()
-      $picsAchieved = Pic::onlyTrashed()->whereNull('deleted'); // Show Admins' Achieved Users
+      $pics = Pic::whereNull('deleted')->orderBy('pic', 'desc');  // Pic::all()
+      $picsAchieved = Pic::onlyTrashed()->whereNull('deleted')->orderBy('pic', 'desc'); // Show Admins' Achieved Users
       $user = User::find($id);
 
-      if ($request->show == 'my_pics') return // TagShow: LibraryModule;
-       $pics->where('user_id', $request->auth_id)->get(); // Show Auth's Pics
-      if ($request->show == 'trashed') return // TagShow: FileModule
-        $picsAchieved->where('user_id', $request->auth_id)->get(); // Show Auth's Achieved Pics
-      if ($request->show == 'all_pics') return $pics->get(); // TagShow: LibraryModule;
-        // DB::table('pics')->whereNull('deleted')
-        //   ->orderBy('pic', 'asc')->get();
+      if ($request->mutate === 'my_pics') return // TagShow: LibraryModule;
+        $pics->where('user_id', $id)->get(); // Show Auth's Pics
+      if ($request->mutate === 'trashed_pics') return // TagShow: FileModule
+        $picsAchieved->where('user_id', $id)->get(); // Show Auth's Achieved Pics
+      if ($request->mutate === 'users_pics') return // TagShow: Users Pics
+        $pics->where('user_id', '<>', 1)->get();
+      if ($request->mutate === 'avatars') return // TagShow: AvatarsModule
+        DB::table('users')->whereNotNull('avatar')->get(['id', 'avatar']);
+      if ($request->mutate === 'all_pics') return  // $pics->get(); // TagShow: Users Pics
+        DB::table('pics')->whereNull('deleted')->orderBy('pic', 'desc')->get();
+      if ($request->mutate === 'all_trashed_pics') return $picsAchieved->get(); // All Trashed Pics
 
+      // if ($request->location||($request?->mutate === 'placeGetter')) return $this->location($request); // TagShow: LocationModule
       if ($request->location||$request->search) return $this->location($request); // TagShow: LocationModule
       if ($id==='place') return Location::select('locations.*', DB::raw('6371
         * acos(cos(radians('.$request->lat.')) * cos(radians(latitude))
         * cos(radians(longitude) - radians('.$request->lng.'))
         + sin(radians('.$request->lat.')) * sin(radians(latitude))) AS distance'))
-        ->orderBy('distance')->having('distance', '<=', 100)
+        ->orderBy('distance')->having('distance', '<=', 100) // Nearest Location Longitude And Latitude
         ->first(); // TagShow: geolocationLocationModule - https://laracasts.com/discuss/channels/laravel/laravel-nearest-location-longitude-and-latitude
 
       if ($request->getUser) return $user; // Get Chat User
-      elseif ($id==='analytics') { // Get Users Analytics
+      elseif ($id==='analytics') { // Users analyticsGetter
 
         // return DB::table('analytics')->get();
         // return Analytic::all();
@@ -374,24 +428,35 @@ class UserController extends Controller
 
         $analytics->whereNull('analytics.deleted_at')->select('users.*','analytics.*'); // return '$request';
 
-        if ($request->proxyDate) $analytics->whereDate('analytics.updated_at', $request->proxyDate)
+        if ($request->proxyDate) $analytics->where('analytics.updated_at', $request->proxyDate)
           ->orWhereBetween('analytics.updated_at', [$request->from, $request->to]);
-        if ($request->period) $analytics->whereBetween('analytics.updated_at', [date('Y-m-d H:i:s', strtotime($request->period)), date('Y-m-d H:i:s')]);
+        if ($request->period) $analytics->whereBetween('analytics.updated_at', [date('Y-m-d H:i:s', strtotime($request->period)), now()]);
 
-        return $analytics->get(); // TagShow: AnalyticModule from Analytics.vue
+        if ($request->filterAnalytics) $analytics->where(function ($query) use ($request) {
+          $query->where('email', 'like', "%$request->filterAnalytics%")
+              ->orWhere('name', 'like', "%$request->filterAnalytics%");
+        }); // Filer Users in Analytic
+
+        return $analytics->paginate(); // TagShow: AnalyticModule from Analytics.vue
       } elseif ($id==='views') { // Get Posts views
 
         $views = View::join('analytics', function ($join) {
             $join->on('analytics.user_id', 'views.user_id')
               ->orOn('analytics.ip', 'views.ip')
               ->whereNull('analytics.user_id');
-        });
+        });//->distinct();
 
         if ($request->proxyDate) $views->whereDate('views.updated_at', $request->proxyDate)
           ->orWhereBetween('views.updated_at', [$request->from, $request->to]);
-        if ($request->period) $views->whereBetween('views.updated_at', [date('Y-m-d H:i:s', strtotime($request->period)), date('Y-m-d H:i:s')]);
+        if ($request->period) $views->whereBetween('views.updated_at', [date('Y-m-d H:i:s', strtotime($request->period)), now()]);
 
-        return $views->get(); // TagShow: ViewModule
+        if ($request->filterViews) $views->whereHas('user', function ($query) use ($request) {
+          $query->where('name', 'like', "%$request->filterViews%")
+              ->orWhere('email', 'like', "%$request->filterViews%");
+        }); // $request->perPage
+
+        // return $views->get(); // TagShow: ViewModule
+        return $views->paginate(); // TagShow: ViewModule
       } elseif ($id==='reports') { // Get Users reports
 
         // $reports = DB::table('reports')->whereNotNull('start_date');
@@ -400,31 +465,44 @@ class UserController extends Controller
         if ($request->post_id) $reports = Report::where('post_id', $request->post_id)
                         ->whereNull('end_date'); // Post Pending Payments
         if ($request->pending) $reports = Report::whereNull('end_date'); // Posts Pending Payments
-        if ($request->role == 'User') $reports->where('user_id', $request->id); // User Reports
-
+        if ($request->role === 'User') $reports->where('user_id', $request->id); // User Reports
+        if ($request->users_reports) $reports->leftJoin('users', 'users.id', 'reports.user_id') // Users' Reports
+                                             ->where('reports.user_id', $request->id) // Auth's Users
+                                             ->select('reports.*'); // Auth's Users Reports
         if ($request->proxyDate) $reports->whereDate('updated_at', $request->proxyDate)
           ->orWhereBetween('updated_at', [$request->from, $request->to]);
-        if ($request->period) $reports->whereBetween('updated_at', [date('Y-m-d H:i:s', strtotime($request->period)), date('Y-m-d H:i:s')]);
+        if ($request->period) $reports->whereBetween('updated_at', [date('Y-m-d H:i:s', strtotime($request->period)), now()]);
         return $reports->get(); // TagShow: ReportModule
       } if ($request->avatar) $request->avatar->new['avatar']; // Show User Avatar
 
       // elseif ($id==='currency') return $this->currency($request); // TagShow: CurrencyModule
       // elseif ($id==='cart') return Payment::whereNotNull('token')->get(); // Get Pending Payments
 
-      if ($request->usersData == 'my_users') return User::where('user_id', $id)->get(); // Show User's Users  // TagShow: UserModule
-      elseif ($request->usersData == 'trashed') return User::onlyTrashed()->whereNull('deleted')->get(); // Show Admins' Achieved Users
-      elseif ($request->usersData == 'users') return User::whereNull(['deleted_at', 'deleted'])->get(); // Show Admins' Users
-      elseif ($request->locationsData == 'locations') return Location::get(); // Show Locations
-      elseif ($request->locationsData == 'duplicated') return Location::whereIn('place', function ( $query ) {
+      if ($request->mutate === 'my_users') $usersList =
+        User::where('user_id', $id);  // Show User's Users
+      elseif ($request->mutate === 'userTrashed') $usersList =
+        User::onlyTrashed()->whereNull('deleted'); // Show Admins' Trashed Users
+      elseif ($request->mutate === 'userDeleted') $usersList =
+        User::onlyTrashed()->whereNotNull('deleted'); // Show Admins' Deleted Users
+      elseif ($request->mutate === 'users') $usersList =
+        User::whereNull(['deleted_at', 'deleted']); // Show Admins' Users
+
+      if (isset($usersList)) return $usersList->where(function ($query) use ($request) {
+        if (is_numeric($request->filterUsers)) return $query->where('id', $request->filterUsers);
+        if ($request->filterUsers) $query->where('email', 'like', "%$request->filterUsers%")
+        /* Filter Users And Load It */ ->orWhere('name', 'like', "%$request->filterUsers%");
+      })->paginate();// TagShow: UserModule - Get Users List Filtered
+
+      if ($request->locationsData === 'locations') return Location::get(); // Show Locations
+      elseif ($request->locationsData === 'locDuplicated') return Location::whereIn('place', function ( $query ) {
           $query->select('place')->from('locations')->groupBy('place')->havingRaw('count(*) > 1');
       })->get(); // Show Duplicated Locations
-      elseif ($request->locationsData == 'trashed') return Location::onlyTrashed()->whereNull('deleted')->get(); // Show Trashed Locations
-      elseif ($request->currenciesData == 'currencies') return Currency::all(); // Show Currencies
-      elseif ($request->currenciesData == 'duplicated') return Currency::whereIn('to', function ( $query ) {
+      elseif ($request->locationsData === 'locTrashed') return Location::onlyTrashed()->whereNull('deleted')->get(); // Show Trashed Locations
+      elseif ($request->currenciesData === 'currencies') return Currency::all(); // Show Currencies
+      elseif ($request->currenciesData === 'cyDuplicated') return Currency::whereIn('to', function ( $query ) {
           $query->select('to')->from('currencies')->groupBy('to')->havingRaw('count(*) > 1');
       })->get(); // Show Duplicated Currency
-      elseif ($request->currenciesData == 'trashed') return Currency::onlyTrashed()->whereNull('deleted')->get(); // Show Trashed Currencies
-      // elseif ($request->usersData == 'users') return DB::table('users')->whereNull(['deleted_at', 'deleted'])->get(); // Show Admins' Users
+      elseif ($request->currenciesData === 'cyTrashed') return Currency::onlyTrashed()->whereNull('deleted')->get(); // Show Trashed Currencies
     }
 
     /**
@@ -446,122 +524,142 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { // return$request->cookie('locale');
+    { // return$request->avatar;
+      // return User::where('first_name', 'Mohamed')->toRawSql();
 
       if ($request->ip) { // Update Auth And Guest Analytic
 
         $this->analytic = Analytic::where('user_id', $request->id)->first(); // Auth
         $request->newAuth = !$this->analytic; // Store New Auth Id To It's Guest Analytic
 
-        if ($this->analytic) $this->save($request); // If Auth Analytic Exist
-        else $this->store($request); // TagUpdate: AnalyticModule from axios.js
+        if ($this->analytic) $view = $this->save($request); // If Auth Analytic Exist
+        else $view = $this->store($request); // TagUpdate: AnalyticModule from axios.js
 
         $guest_analytic_ip = Analytic::where('ip', $this->analytic->ip)->whereNull('user_id')
           ->first(); // Check If Auth Guest Old IP Exists
 
-        if ($guest_analytic_ip) {
-          if ($guest_analytic_ip->host_id) User::find($request->id)->update([ // Invited User
-              'user_id' => $guest_analytic_ip->host_id // Assign Invited User To Host user
-          ]); $guest_analytic_ip->delete(); // Replace Old To The New IP And Delete It's Guest IP
-        } // TagUpdate: AssignInvitedUserAnalyticModule
+        if ($guest_analytic_ip) // Replace Old To The New IP
+          $guest_analytic_ip->delete(); // And Delete It's Invited/Guest IP
 
         if ($this->analytic->session===env('NewAuth')) return response()->json([
-            'success' => "Great!!! Don't Forget To Update Your Profile"
+            'message' => isset($this->invitedUser)?'You Won 500 SUD':'Almost there !!!'
         ]); // New Auth's Analytic
 
         return [
           'ip' => $request->ip(),
-          // 'session' => $value = $request->session()->get('key'), // TODO https://laravel.com/docs/8.x/session#interacting-with-the-session
-          // 'user' => $request->user()
+          'view' => $view
         ];
       } elseif ($request->update) { // Update Users
-        $put = User::find($request->id??$id);
+
+        $user = User::find($request->id??$id);
         $check = Auth::validate([
-            'email'    => $put->email,
+            'email'    => $user->email,
             'password' => $request->password
         ]); $file = $request->file('avatar');
-        if ($put->deleted) $put->deleted = Null;
-        if ($request->email && $request->admin) $put->email = $request->email;
+        if ($user->deleted) $user->deleted = Null;
+        if ($request->email && $request->admin) $user->email = $request->email;
         if ($request->name) {
           $this->validate($request, [
               'name' => 'required|string|max:255|unique:users'
-          ]); $put->name = $request->name;
+          ]); $user->name = $request->name;
         } // TagUpdate: UserNameModule
-        if ($request->first_name) $put->first_name = $request->first_name;
-        if ($request->last_name) $put->last_name = $request->last_name;
-        if ($request->phone) $put->phone = $request->phone;
-        if ($request->address) $put->address = $request->address;
-        if ($request->city) $put->city = $request->city;
-        if ($request->region) $put->region = $request->region;
-        if ($request->postal_code) $put->postal_code = $request->postal_code;
-        if ($request->currency_code) $put->currency_code = $request->currency_code;
-        if ($request->country_code) $put->country_code = $request->country_code;
-        if ($request->country) $put->country = $request->country;
-        if ($request->locale) $put->locale = $request->locale;
-        if ($request->role) $put->role = $request->role;
-        if ($request->gain>0) $put->gain = $request->gain;
-        if ($request->rate) $put->rate = $request->rate;
-        if ($request->signature) $put->email_verified_at = date('Y-m-d H:i:s');
+        if ($request->first_name) $user->first_name = $request->first_name;
+        if ($request->last_name) $user->last_name = $request->last_name;
+        if ($request->phone) $user->phone = $request->phone;
+        if ($request->address) $user->address = $request->address;
+        if ($request->city) $user->city = $request->city;
+        if ($request->region) $user->region = $request->region;
+        if ($request->postal_code) $user->postal_code = $request->postal_code;
+        if ($request->currency_code) $user->currency_code = $request->currency_code;
+        if ($request->country_code) $user->country_code = $request->country_code;
+        if ($request->country) $user->country = $request->country;
+        if ($request->role) $user->role = $request->role;
+        if ($request->locale) $user->locale = $request->locale;
+        // if (strlen($request->locale)>0) $user->locale = $request->locale;
+        if ($table = $request->table) $table = DB::table($request->table)->whereNotNull('deleted')
+          ->whereNull('deleted_at')->update([
+          'deleted_at' => now()  // Fix Table
+        ]); if ($table) return ['success' => 'Table Fixed'];
+        if ($request->credit<=$user->credit) {
+          $user->gain += $request->credit;
+          $user->credit -= $request->credit;
+        } // Assigned Money From Credit To Gain
+        if ($request->gain>0) $user->gain = $request->gain;
+        if ($request->rate>0) $user->rate = $request->rate;
         if ($request->pwd || $request->update_password || $request->update_email) {
           if ($request->update_password) $request->new_password = $check = $request->update_password; // Admin Update Password
-          if ($request->email && $request->update_email) $put->email = $request->email;
+          if ($request->email && $request->update_email) $user->email = $request->email;
           if (!$check) return ['success' => 'Current Password Do Not Match Our Record'];
           if ($request->delete_account) return $this->destroy($request, $id);
           if (!$request->new_password || $request->new_password != $request->password_confirmation)
           if (!$request->update_email) return ['success' => 'Password Confirmation Do Not Match'];
-          if (!$request->update_email) $put->password = bcrypt($request->new_password);
+          if (!$request->update_email) $user->password = bcrypt($request->new_password);
         } // Update Password or Email
         if ($request->hasFile('avatar')) {
-          $fileName = $id.'.png'; // $file->getClientOriginalName();
-          $path = $file->storeAs('files/', $fileName);
-          $file->move('files/', $fileName);
-          $put->avatar = $path;
+          $path = $id.'.png'; // $file->getClientOriginalName();
+          $path = $file->storeAs('files/', $path);
+          $file->move('files/', $path);
+          $user->avatar = $path;
         } // https://appdividend.com/2018/02/13/vue-js-laravel-file-upload-tutorial
-        if ($request->get('avatar')) {
-          $avatar = $request->avatar;
-          $type = explode('/', explode(':', substr($avatar, 0, strpos($avatar, ';')))[1])[1];
-          $fileName = time().'.'.$type;
-          Image::make($avatar)->save(public_path('files/').$fileName);
+        if ($avatar = $request->get('_avatar')) {
+          try {
+            $filType = explode('/', explode(':', substr($avatar, 0, strpos($avatar, ';')))[1])[1];
+            $path = time().'.'.$filType;
+            Image::make($avatar)->save(public_path('files/').$path);
+          } catch (\Throwable $th) {
+            $avatar = false; //throw $th;
+          }
+
           $request->delete_avatar = 1;
-          if ($put->avatar) $this->destroy($request, $id);
-          $put->avatar = 'files/'.$fileName;
-          $picUploaded = 'Picture Uploaded Successfully';
-        } $put->update(); // TagUpdate: UserModule
-        if ($request->get('pics')) { // https://github.com/Intervention/image
-          foreach ($request->pics as $pic) {
-            $post = $request->post; try {
-              $name = time().'.' . explode('/', explode(':', substr($pic, 0, strpos($pic, ';')))[1])[1];
-              Image::make($pic)->save(public_path('files/').$name, 50, 'jpg');//
-              // create a new image directly from Laravel file upload
-              $img = Image::make(Input::file('photo'));
-            } catch (\Throwable $th) { $name = false; } // https://image.intervention.io/v2/api/encode
+          if ($user->avatar) $this->destroy($request, $id);
+          $user->avatar = $path;
+          // $picUploaded = 'Picture Uploaded Successfully';
+        } // TagUpdate: UserModule
+        if ($pics=$request->get('pics')??$request->get('avatar')) { // https://github.com/Intervention/image
+          foreach ($pics as $pic) {
+            // $post = $request->post; try {
+            //   $filType = explode('/', explode(':', substr($pic, 0, strpos($pic, ';')))[1])[1];
+            //   $path = time().'.'.$filType; // https://image.intervention.io/v2/api/encode
+            //   Image::make($pic)->save(public_path('files/').$path, 50, 'jpg');
+            //   $picSet = 'Picture Uploaded Successfully';
+            // } catch (\Throwable $th) { $path = null; }
 
-            $picData = [
-              'post_id' => isset($post['id'])?$post['id']:0,
-              'subcategory_id' => isset($post['subcategory_id'])?$post['id']:0,
-              'category_id' => isset($post['category_id'])?$post['id']:0,
+            $picture = new Picture; $post = $request->post;
+
+            $path = $picture->image($pic); $picData = [
               'user_id' => $id,
+              'post_id' => isset($post['id'])?$post['id']:null,
+              'subcategory_id' => isset($post['subcategory_id'])?$post['id']:null,
+              'category_id' => isset($post['category_id'])?$post['id']:null,
               'name' => isset($post['post_title'])?$post['post_title']:null,
-              'pic' => $name?'files/'.$name:$pic,
+              'pic' => $path, //??$pic,
               'deleted' => null
-            ];$picDeleted = Pic::onlyTrashed()->whereNotNull('deleted')->first();
+            ];
 
-            $pic = Pic::where('pic', $pic)
-              ->where('post_id', $picData['post_id'])
-              ->first();
-            // $pic = Pic::where([['pic', $pic], ['post_id', $request->post_id]])->first();
+            if ($request->get('avatar')) { // Profile Avatar
+              $request->delete_avatar = 1; $picSet = 'Avatar Uploaded Successfully';
+              if ($user->avatar) $this->destroy($request, $id);
+              $user->avatar = $picData['pic'];
+            } else { // Library Pictures
+              $picDeleted = Pic::onlyTrashed()->whereNotNull('deleted')->first();
+              $pic = Pic::where('pic', $picData['pic'])
+                ->where('post_id', $picData['post_id'])
+                ->first();
 
-            if ($pic) $pic->update($picData); // Assign Existing Pic
-            elseif ($picDeleted) {
-              $picDeleted->restore();
-              $picDeleted->update($picData);
-            } else Pic::create($picData); // Add post Pictures
-
-          } $picUploaded = 'Picture Uploaded Successfully';
-        } // TagUpdate: FileModule
+              if ($pic) { // Assign Existing Picture
+               $pic->update($picData);
+               $picSet = 'Pic Assigned Successfully';
+              } elseif ($picDeleted) { // Upload Picture
+                $picDeleted->restore();
+                $picDeleted->update($picData);
+              } else Pic::create($picData); // Add post Pictures
+            }
+          }
+        } $user->update(); // TagUpdate: FileModule
         if (!$request->id) return response()->json([
-          'success' => $picUploaded??'Updated Successfully',
-          'user' => $put
+          'success' => $picSet??'Updated Successfully',
+          'user' => $user,
+          // 'path' => $path
         ]);
       } elseif ($request->chat) { // Update Message
       } elseif ($id==='location') // TagCreateUpdate: LocationModule
@@ -570,14 +668,16 @@ class UserController extends Controller
         return $this->save($request);
         return [
           'appEnv' => config('app.env'),
+          'appName' => config('app.name'),
           'appDebug' => config('app.debug'),
+          'appDev' => config('app.dev'),
           'production' => app()->isProduction(),
           'ipDebug' => config('app.debug'), // TagStore: IpDebugModule
+          'mode' => config('mode'),
           'sanctumApi' => config('sanctumApi'),
           'user' => config('user'),
           'stateful' => config('sanctum.stateful'),
           // =============================== \\
-          'appName' => config('app.name'),
           'laravel' => app()->version(),
           'locale' => app()->getLocale(),
           'locales' => config('app.locales'),
@@ -593,39 +693,67 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
-    { //return $id;
+    { // return $id === 1;
 
-      if ($request->pics) { // Delete Pics
+      if ($id==='deleteAllCookies') {
+        $array = array(); // TagDestroy: CookiesModule
+        foreach (Cookie::get() as $key => $item) {
+          // $array[] = cookie($key, null, -2628000, null, null);
+          $array[] = Cookie::queue(Cookie::forget($key));
+        } return $array; // back()->withCookies($array);
+      } elseif ($request->pics) { // Delete Pics
 
         foreach ($request->pics as $pic) {
 
           $img = Pic::where('pic', $pic)->first();
 
           $imgTrashed = Pic::onlyTrashed()->whereNull('deleted')
-            ->where('pic', $pic)->first();
+            ->where('pic', $pic)->first(); // TagDestroy: FileModule
 
-          if ($request?->auth)
+          if ($request?->auth) // Assign Pic To Admin
           if (($request->auth['id']==1)||($request->auth['role']=='Admin')) {
-            $img = $imgTrashed?$imgTrashed:$img;  $img->update([
-              'user_id' => $request->auth['id'],
-            ]);
-          } // Assign Pic To User
-
-          if ($imgTrashed&&$request->forever) {
+            if ($img = $imgTrashed??$img)  $img->update([
+              'user_id' => $request->auth['id'], // Assign Pic To User
+            ]); else return ['message' => 'Select Picture'];
+          } if ($imgTrashed&&$request->forever) {
             $piCount = DB::table('pics')->where('pic', $pic)
               ->whereNull('deleted')->count();
 
             $file_path = public_path($imgTrashed->pic);
             if(File::exists($file_path)&&($piCount<2)) File::delete($file_path);
-            $imgTrashed->update(['deleted' => 1]); // Delete Forever Pic
-          } else $img->delete(); // Delete Pic
 
-        } return 'Pics Deleted Successfully';
+            $imgTrashed->update(['deleted' => 1]); // Delete Pic Forever
+            // return ['success' => 'Pics Deleted Forever Successfully'];
+          } elseif ($img) $img->delete(); // Delete Pic
 
-      } // TagDestroy: FileModule
+        } return ['success' => 'Pics Deleted '.($imgTrashed?'Forever':'').' Successfully'];
 
-      if ($request->location) { // Delete Location
-        $locationTrashed = Location::onlyTrashed()->where('id', $id)->update([
+        // foreach ($request->pics as $id) {
+
+        //   $img = Pic::find($id);
+
+        //   $imgTrashed = Pic::onlyTrashed()->whereNull('deleted')
+        //     ->find($id); // TagDestroy: FileModule
+
+        //   if ($request?->auth) // Assign Pic To Admin
+        //   if (($request->auth['id']==1)||($request->auth['role']=='Admin')) {
+        //     if ($img = $imgTrashed??$img)  $img->update([
+        //       'user_id' => $request->auth['id'], // Assign Pic To User
+        //     ]); else return ['message' => 'Select Picture'];
+        //   } if ($imgTrashed&&$request->forever) {
+        //     $piCount = DB::table('pics')->find($id)
+        //       ->whereNull('deleted')->count();
+
+        //     $file_path = public_path($imgTrashed->pic);
+        //     if(File::exists($file_path)&&($piCount<2)) File::delete($file_path);
+        //     $imgTrashed->update(['deleted' => 1]); // Delete Pic Forever
+        //     return ['success' => 'Pics Deleted Forever Successfully'];
+        //   } elseif ($img) $img->delete(); // Delete Pic
+
+        // } return ['success' => 'Pics Deleted Successfully'];
+
+      } elseif ($request->location) { // Delete Location
+        $locationTrashed = Location::onlyTrashed()->find($id)?->update([
             'city' => null,
             'region' => null,
             'country' => null,
@@ -633,13 +761,11 @@ class UserController extends Controller
             'latitude' => null,
             'longitude' => null,
             'utc_offset' => null,
-            'deleted' => 1,
+            'deleted' => 1,  // TagDestroy: LocationModule
         ]); if ($locationTrashed) return ['success' => 'Location Deleted Forever Successfully'];
         Location::destroy($id); return ['success' => 'Location Deleted Successfully'];
-      } // TagDestroy: LocationModule
-
-      if ($request->currency) { // Delete Currency
-        $currencyTrashed = Currency::onlyTrashed()->where('id', $id)->update([
+      } elseif ($request->currency) { // Delete Currency
+        $currencyTrashed = Currency::onlyTrashed()->find($id)?->update([
             'from' => null,  // XAU
             'to' => null, // XOF
             'from_to' => null, // XAU_XOF
@@ -649,30 +775,36 @@ class UserController extends Controller
             'rate' => 0,
             'amount' => 0,
             'result' => 0,
-            'deleted' => 1,
+            'deleted' => 1, // TagDestroy: CurrencyModule
         ]); if ($currencyTrashed) return ['success' => 'Currency Deleted Forever Successfully'];
         Currency::destroy($id); return ['success' => 'Currency Deleted Successfully'];
-      } // TagDestroy: CurrencyModule
-
-      if ($id == 'truncate') // TagDestroy: truncateLocationModule
-        return DB::table('locations')->truncate();
-
-      if ($request->delete_avatar) {
+      } elseif ($request->delete_avatar) {  // Remove Image
         $user = User::find($id);
         $file_path = public_path($user->avatar);
         if(File::exists($file_path)) File::delete($file_path);
-        // $user = User::where('id', $id);
         $user->update(['avatar' => Null]);
         return [
-          'success' => 'Image Deleted Successfully',
-          'user' => $user
-          // 'user' => $user->first()
-        ];
-      } // Remove Image
+          'success' => 'Picture Deleted Successfully',
+          'User' => $user
+        ]; // TagDestroy: FileModule - avatarModule
+      } elseif ($request->remove) { // Remove User
+        User::find($id)->update(['user_id' => null]);
+        return ['success' => 'User Remove Successfully'];
+      } elseif ($id === 'truncate') { // TagDestroy: truncateLocationModule
+        $check = Auth::validate([
+          'email'    => $request->user()->email,
+          'password' => $request->password_confirmation
+        ]); // return $check;
+        if (!$check) return ['success' => 'Current Password Do Not Match Our Record'];
+        // else return ['success' => 'Current Password Match Our Record'];
+        DB::table('locations')->truncate();
+        return ['success' => 'Locations Truncated Successfully'];
+      }
+
       if ($request->delete_account) $request->authID = 'Delete Account';
       if ($id == 1 || $request->authID == $id) return ['success' => 'You Cannot Delete Super Admin or Your Own Account'];
-      else { // Trash And Delete User With his Posts and Team
-        $userTrashed = User::onlyTrashed()->where('id', $id)->update([
+      else { // Trash And Delete User With His Posts and Team
+        $userTrashed = User::onlyTrashed()->find($id)?->update([
             'email_verified_at' => null,
             'phone' => null,
             'address' => null,
@@ -685,6 +817,7 @@ class UserController extends Controller
             'deleted' => 1,
             'user_id' => null,
             'gain' => 0,
+            'credit' => 0,
             'rate' => 0,
             'currency_code' => null
         ]); // Delete User Forever
@@ -693,24 +826,10 @@ class UserController extends Controller
         User::destroy($id); // Trash User
         Team::where('user_id', $id)->delete(); // Trash Team
         Post::where('user_id', $id)->delete();// TagDestroy: PostModule
-        return ['message' => 'User Deleted Successfully'];
+        Pic::where('user_id', $id)->delete(); // TagDestroy: PictModule
+        return ['success' => 'Account Deleted Successfully'];
       } // TagDestroy: UserModule
 
-    }
-
-    /**
-     * Create a personal team for the user.
-     *
-     * @param  \App\Models\User  $user
-     * @return void
-     */
-    protected function createTeam(User $user)
-    {
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => $user->first_name."'s Team",
-            'personal_team' => true,
-        ]));
     }
 
     /**
@@ -735,6 +854,7 @@ class UserController extends Controller
       $location = $location->orWhere([['latitude', $latitude], ['longitude', $longitude]]);
 
       if (isset($request->location)) return $location->first();
+      // if ($request->mutate === 'placeGetter') return $location->get();
       if (isset($request->search)) return $location->get();
 
       $location = $location->first(); // TagLocation: LocationModule
@@ -758,6 +878,74 @@ class UserController extends Controller
       $location->deleted = null;
 
       if ($latitude||$longitude) $location->save();
+
+    }
+
+    /**
+     * Send Code To Email
+     *
+     * @return Location
+     */
+    public function sendCode($user)
+    { //return $user;
+      try {
+
+        $seed = str_split('0123456789'); // and any other characters
+        shuffle($seed); // probably optional since array_is randomized; this may be redundant
+        $rand = ''; foreach (array_rand($seed, 4) as $k) $rand .= $seed[$k]; $code = $rand;
+
+        $user->fill([
+          'code' => Hash::make($code)
+        ])->save(); // return $code;
+
+        app()->setLocale($user->locale); $content = [
+          'subject' => 'Account Verification',
+          'title'=> 'Thank you for registering',
+          'body'=> 'Please get the code below to verify your email address.',
+          'code' => $code, // TagSendCode: CodeModule
+        ];Mail::to($user->email)->send(new InfoSuguffie($content));
+
+      } catch (\Throwable $th) { /* return $th; */ }
+    }
+
+    /**
+     * Create a personal team for the user.
+     *
+     * @param  \App\Models\User  $user
+     * @return void
+     */
+    protected function createTeam(User $user)
+    {
+        $user->ownedTeams()->save(Team::forceCreate([
+            'user_id' => $user->id,
+            'name' => $user->first_name."'s Team",
+            'personal_team' => true,
+        ]));
+    }
+
+    /**
+     * Add User To Room
+     *
+     * @param \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function AddUserToRoom($user_id, $room_id)
+    {
+      $chat = Chat::where([
+        ['user_id', $user_id], // Room User
+        ['room_id', $room_id]
+      ])->first(); // Check If User Is Added
+
+      $chatTrashed = Chat::onlyTrashed()->first(); $chatData = [
+        'user_id' => $user_id, // Room User
+        'room_id' => $room_id
+      ]; // TagAddUserToRoom: MessageModule
+
+      if (!$chat&&$chatTrashed) {
+        $chatTrashed->restore();
+        $chatTrashed->update($chatData);
+        $chat = $chatTrashed; // Add Users' To Room
+      } elseif (!$chat) $chat = Chat::create($chatData);
 
     }
 }

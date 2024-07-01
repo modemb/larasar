@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, onUnmounted } from "vue";
+import { defineComponent, onMounted, onUnmounted } from 'vue';
 
 export default defineComponent({
         emits: ['close'],

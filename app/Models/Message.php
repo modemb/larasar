@@ -51,8 +51,8 @@ class Message extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    // public function chat()
-    // {
-    //     return $this->belongsTo(Chat::class, 'post_id');
-    // }
+    public function chat()
+    {
+        return $this->belongsTo(Chat::class, 'post_id');
+    }
 }

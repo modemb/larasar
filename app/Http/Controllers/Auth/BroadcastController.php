@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Auth;
+// use Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -19,9 +20,10 @@ class BroadcastController extends Controller
      */
     public function __construct(Request $request)
     { // https://laravel.com/docs/9.x/authentication
-      $string = $request->channel_name; if (Auth::id()) return '';
-      $user = User::find(preg_replace('/[^0-9]/', '', $string));
-      Auth::login($user, $remember = true); // Authenticate Passport
+      if ($string = $request->channel_name) {
+        $user = User::find(preg_replace('/[^0-9]/', '', $string));
+        Auth::login($user, $remember = true);
+      } // Authenticate Passport
     }
 
     /**

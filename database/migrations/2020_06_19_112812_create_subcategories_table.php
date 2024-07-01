@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('subcategories', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('category_id')->nullable();
-            // $table->bigInteger('category_id')->default(0);
-            $table->boolean('deleted')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

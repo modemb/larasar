@@ -6,11 +6,14 @@
   //     'data' => [
   //       'user' => Auth::user(),
   //     ],
-  // ];
+  // ]; // https://laravel.com/docs/10.x/helpers#paths-method-list
   // require base_path('dist/pwa/index.html')
   // require base_path('dist/spa/index.html')
-  // require public_path('index.html')/www/suguffie/public/quasar/
-  require public_path('quasar/index.html')
+  // require base_path('dist/capacitor/index.html')
+  // require base_path('src-capacitor/www/index.html')
+  // require public_path('pwa/index.html')
+  // require public_path('capacitor/index.html')
+  require public_path(config('mode').'/index.html')
 ?>
 
 

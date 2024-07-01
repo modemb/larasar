@@ -13,13 +13,6 @@ return new class extends Migration
     {
         Schema::create('pics', function (Blueprint $table) {
             $table->id();
-
-            // $table->foreignId('user_id')->default(0);
-            // $table->foreignId('page_id')->default(0);
-            // $table->foreignId('post_id')->default(0);
-            // $table->foreignId('subcategory_id')->default(0);
-            // $table->foreignId('category_id')->default(0);
-
             $table->foreignId('user_id')->nullable();
             $table->foreignId('page_id')->nullable();
             $table->foreignId('post_id')->nullable();

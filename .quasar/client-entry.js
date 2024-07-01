@@ -42,26 +42,19 @@ import createQuasarApp from './app.js'
 import quasarUserOptions from './quasar-user-options.js'
 
 
-import 'app/src-pwa/register-service-worker'
 
 
 
 
+console.info('[Quasar] Running SPA.')
 
 
-
-// Needed only for iOS PWAs
-if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.navigator.standalone) {
-  import('@quasar/fastclick')
-}
-
-
-const publicPath = `/`
+const publicPath = `/www/larasar/public/`
 
 async function start ({
   app,
   router
-  , store, storeKey
+  
 }, bootFiles) {
   
 
@@ -99,7 +92,7 @@ async function start ({
       await bootFiles[i]({
         app,
         router,
-        store,
+        
         ssrContext: null,
         redirect,
         urlPath,
@@ -123,7 +116,7 @@ async function start ({
   
 
   app.use(router)
-  app.use(store, storeKey)
+  
 
   
 

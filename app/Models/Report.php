@@ -12,17 +12,18 @@ class Report extends Model
   protected $fillable = [
     'user_id',
     'post_id',
-    'payment_id',
+    // 'payment_id',
     'token',
     'sale_date',
     'start_date',
     'end_date',
     'product',
     'plan',
-    'currency_code',
     'payment',
     'amount',  // Total Payments
+    'paymentAmount',
     'total', // Exchanged Total Payments
+    'currency_code',
     // 'links',
     'deleted'
   ];

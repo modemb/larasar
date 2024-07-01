@@ -14,6 +14,7 @@ const props = defineProps({
     requiresConfirmation: Boolean,
 });
 
+const page = usePage();
 const enabling = ref(false);
 const confirming = ref(false);
 const disabling = ref(false);
@@ -26,7 +27,7 @@ const confirmationForm = useForm({
 });
 
 const twoFactorEnabled = computed(
-    () => ! enabling.value && usePage().props.auth.user?.two_factor_enabled,
+    () => ! enabling.value && page.props.auth.user?.two_factor_enabled,
 );
 
 watch(twoFactorEnabled, () => {
@@ -39,7 +40,7 @@ watch(twoFactorEnabled, () => {
 const enableTwoFactorAuthentication = () => {
     enabling.value = true;
 
-    router.post('/user/two-factor-authentication', {}, {
+    router.post(route('two-factor.enable'), {}, {
         preserveScroll: true,
         onSuccess: () => Promise.all([
             showQrCode(),
@@ -54,26 +55,26 @@ const enableTwoFactorAuthentication = () => {
 };
 
 const showQrCode = () => {
-    return axios.get('/user/two-factor-qr-code').then(response => {
+    return axios.get(route('two-factor.qr-code')).then(response => {
         qrCode.value = response.data.svg;
     });
 };
 
 const showSetupKey = () => {
-    return axios.get('/user/two-factor-secret-key').then(response => {
+    return axios.get(route('two-factor.secret-key')).then(response => {
         setupKey.value = response.data.secretKey;
     });
 }
 
 const showRecoveryCodes = () => {
-    return axios.get('/user/two-factor-recovery-codes').then(response => {
+    return axios.get(route('two-factor.recovery-codes')).then(response => {
         recoveryCodes.value = response.data;
     });
 };
 
 const confirmTwoFactorAuthentication = () => {
-    confirmationForm.post('/user/confirmed-two-factor-authentication', {
-        errorBag: "confirmTwoFactorAuthentication",
+    confirmationForm.post(route('two-factor.confirm'), {
+        errorBag: 'confirmTwoFactorAuthentication',
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
@@ -86,14 +87,14 @@ const confirmTwoFactorAuthentication = () => {
 
 const regenerateRecoveryCodes = () => {
     axios
-        .post('/user/two-factor-recovery-codes')
+        .post(route('two-factor.recovery-codes'))
         .then(() => showRecoveryCodes());
 };
 
 const disableTwoFactorAuthentication = () => {
     disabling.value = true;
 
-    router.delete('/user/two-factor-authentication', {
+    router.delete(route('two-factor.disable'), {
         preserveScroll: true,
         onSuccess: () => {
             disabling.value = false;
@@ -144,7 +145,7 @@ const disableTwoFactorAuthentication = () => {
                         </p>
                     </div>
 
-                    <div class="mt-4" v-html="qrCode" />
+                    <div class="mt-4 p-2 inline-block bg-white" v-html="qrCode" />
 
                     <div v-if="setupKey" class="mt-4 max-w-xl text-sm text-gray-600">
                         <p class="font-semibold">
@@ -200,7 +201,7 @@ const disableTwoFactorAuthentication = () => {
                         <PrimaryButton
                             v-if="confirming"
                             type="button"
-                            class="mr-3"
+                            class="me-3"
                             :class="{ 'opacity-25': enabling }"
                             :disabled="enabling"
                         >
@@ -211,7 +212,7 @@ const disableTwoFactorAuthentication = () => {
                     <ConfirmsPassword @confirmed="regenerateRecoveryCodes">
                         <SecondaryButton
                             v-if="recoveryCodes.length > 0 && ! confirming"
-                            class="mr-3"
+                            class="me-3"
                         >
                             Regenerate Recovery Codes
                         </SecondaryButton>
@@ -220,7 +221,7 @@ const disableTwoFactorAuthentication = () => {
                     <ConfirmsPassword @confirmed="showRecoveryCodes">
                         <SecondaryButton
                             v-if="recoveryCodes.length === 0 && ! confirming"
-                            class="mr-3"
+                            class="me-3"
                         >
                             Show Recovery Codes
                         </SecondaryButton>

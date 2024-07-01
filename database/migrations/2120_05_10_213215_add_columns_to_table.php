@@ -24,7 +24,7 @@ return new class extends Migration
           // $table->dateTime('sale_date')->nullable()->after('pics');
           // $table->decimal('gain', 8, 2)->default(0)->after('user_id');
           // $table->char('currency')->nullable()->after('place');//"CAD"
-          // $table->char('locale', 6)->nullable();
+          // $table->string('code')->after('password');
       });
     }
 };

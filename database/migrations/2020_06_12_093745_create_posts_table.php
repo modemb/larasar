@@ -25,7 +25,7 @@ return new class extends Migration
             $table->dateTime('end_date')->nullable();
             $table->dateTime('extend_date')->nullable();
             $table->string('post_title')->nullable();
-            $table->decimal('price', 8, 2)->nullable();
+            $table->decimal('price', 12, 2)->nullable();
             $table->char('currency_code', 3)->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();

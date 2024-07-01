@@ -4,7 +4,7 @@
     <q-dialog v-model="addPage"><!-- Add Update Pages PopUp ============-->
       <q-card class="my-card col-12" >
         <q-card-section class="bg-primary text-white">
-          <q-btn color="primary" text-color="white" class="float-right" dense round icon="close" v-close-popup />
+          <q-btn dense round class="float-right" icon="close" v-close-popup />
           <div class="text-h6">{{editPage?$t('update_page'):$t('add_page')}}</div>
         </q-card-section>
 
@@ -15,7 +15,7 @@
               <q-input clearable outlined v-model="slug" :label="$t('custom_slug')" :disable="!dense" v-if="desktop"/>
               <q-input clearable outlined v-model="description" :label="$t('description')" v-if="desktop"/>
               <q-input clearable outlined v-model="icon" :label="$t('icon')" v-if="desktop"/>
-              <LocaleDropdown class="bg-primary" />
+              <LocaleDropdown />
               <q-btn square outlined v-if="editPage"
                 :color="Page?.active?'secondary':'red'"
                 :label="Page?.active?'Active':'Draft'"
@@ -24,7 +24,7 @@
               <q-btn square outlined
                 v-if="editPage"
                 class="q-ma-sm"
-                icon="fas fa-edit"
+                icon="fas fa-floppy-disk"
                 :loading="loader"
                 @click.prevent="update(Page)"
               /><!-- TagUpdate: PageModule ToFix -->
@@ -143,10 +143,10 @@
 
       :loading="loading"
       :filter="filter"
-      @request="onRequest"
       binary-state-sort
     >
     <!--
+      @request="onRequest"
       :pagination="pagination"
     -->
 
@@ -188,16 +188,16 @@
           toggle-color="primary"
           :options="[
             {label: $t('pages'), value: 1},
-            {label: $t('trashed'), value: 0}
+            {label: $t('Trash'), value: 0}
           ]"
         /><!-- TagPeriod: PeriodModule -->
         <q-btn
           icon="add_circle_outline"
           rounded class="q-ma-md"
           :label="$t('add_page')"
-          @click="addPage = true, editPage = false, post_title = icon = page_title = description = content = null"
+          @click="addPage = true, editPage = false, page_title = icon = description = content = ''"
         /><!-- TagAdd: PageModule -->
-        <q-input borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
+        <q-input clearable borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -208,12 +208,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useQuasar } from 'quasar'
 import { ref, watch, onMounted, computed } from 'vue'
-// import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
-import { i18n, baseURL, api } from 'boot/axios'
+import { i18n, baseURL, api, mSession } from 'boot/axios'
 import { useCrudStore } from 'stores/crud'
 import LocaleDropdown from 'components/LocaleDropdown.vue'
 
@@ -224,69 +222,72 @@ export default {
   setup () {
     const $t = i18n?.global?.t
     const $q = useQuasar()
-    const $store = useStore()
-    const { crudAction, notifyAction } = useCrudStore()
-    // const $route = useRoute()
+    const store =  useCrudStore()
+    const { crudAction, notifyAction } = store
 
     const loader = ref(false)
     const addPage = ref(false)
     const editPage = ref(false)
     const loading = ref(false)
-    const rows = ref([])
-    const slug = ref(null)
+    // const rows = ref([])
+    const slug = ref('')
     // const slug_data = ref(null)
-    const icon = ref(null)
+    const icon = ref('')
     // const icon_data = ref(null)
-    const Page = ref(null)
-    const page_title = ref(null)
+    const Page = ref<any>({})
+    const page_title = ref('')
     // const page_title_data = ref(null)
-    const description = ref(null)
+    const description = ref('')
     // const description_data = ref(null)
-    const content = ref(null)
+    const content = ref('')
     const pagesData = ref(1)
 
-    const locale = computed(() => $store.getters['config/localeGetter'])
+    // const locale = ref(store['configGetter']?.locale)
+    const locale = computed(() => store.configGetter?.locale)
+    const rows = computed(() => store[pagesData.value+'Getter']||[])
 
-    onMounted (() => crud({e: 'onMountedPages'}))
+    onMounted (() => editPagesAction({e: 'onMountedPages'}))
 
-    function edit(page) {
+    function edit(page: { locale: string; icon: string; page_title: string; slug: string; description: string; content: string }) {
 
-      watch(rows, val => val.forEach(page => {
-        if ((page?.slug===Page.value?.slug)&&(page.locale!==Page.value.locale))
+      watch(rows, val => val.forEach((page: { locale: string; icon: string; page_title: string; slug: string; description: string; content: string }) => {
+        if ((page?.slug===Page.value?.slug)&&(page?.locale!==Page.value.locale))
           return edit(Page.value = page)
       })); editPage.value = addPage.value = true; loader.value = false
 
-      locale.value = page.locale
-      icon.value = page.icon
-      page_title.value = page.page_title
-      slug.value = page.slug
-      description.value = page.description
-      content.value = page.content
+      locale.value = page?.locale
+      icon.value = page?.icon
+      page_title.value = page?.page_title
+      slug.value = page?.slug
+      description.value = page?.description
+      content.value = page?.content
     } // TagEdit: PageModule
 
-    function crud(data) {
+    function editPagesAction(data: { e: string }) {
       crudAction({
         url: 'api/pages/pages',
         method: 'get',
         pages: pagesData.value,
         locale: locale.value,
-      }).then(crud => rows.value = crud)
-        .catch(e => notifyAction({error: data.e, e}))
-    } watch([locale, pagesData], () => crud({e: 'localePage'}))
+        mutate: pagesData.value+'Getter'
+      }).catch((e: unknown) => notifyAction({error: data.e, e}))
+      //.then(crud => rows.value = crud)
 
-    function Delete(page) {
+    } watch([locale, pagesData], () => editPagesAction({e: 'localePage'}))
+
+    function Delete(page: { forever: boolean; page_title?: string; slug: string; id?: number }) {
       if (confirm('Are You Sure You Want To Delete Page ' + page.page_title) === true) {
-        crudAction({
+        crudAction({ // noMutation
           success: page.forever ? 'Page Deleted Forever' : 'Page Deleted Successfully',
           url: `api/pages/${page?.id}`,
           // url: `api/pages/${page?.slug}`,
           method: 'delete',
           locale: locale.value,
-          // slug: page?.slug,
+          slug: page.slug,
           pages: page.forever ? 0 : 1,
-          forever: page.forever
-        }).then(crud => rows.value = crud)
-          .catch(e => notifyAction({error: 'deletePage', e}))
+          forever: page.forever,//.then(() => mSession(['reloadApp']))
+          refresh: ['reloadApp']// .then(crud => rows.value = crud)
+        }).catch((e: unknown) => notifyAction({error: 'deletePage', e}))
       }
     } // TagDelete: PageModule
 
@@ -318,8 +319,8 @@ export default {
 
       baseURL,
 
-      add () {
-        crudAction({
+      add() {
+        crudAction({ // noMutation
           success: 'Page Created Successfully',
           url: 'api/pages',
           method: 'post',
@@ -327,16 +328,18 @@ export default {
           icon: icon.value,
           page_title: page_title.value,
           description: description.value,
-          content: content.value, pages: 1
-        }).then(crud => rows.value = crud)
-          .catch(e => notifyAction({error: 'addPage', e}))
+          content: content.value, pages: 1,
+          refresh: ['reloadApp']
+        })//.then(() => mSession(['reloadApp']))
+          // .then(crud => rows.value = crud)
+          .catch((e: unknown) => notifyAction({error: 'addPage', e}))
         pagesData.value = 1
-        icon.value = page_title.value = description.value = content.value = null
+        icon.value = page_title.value = description.value = content.value = ''
       }, // TagAddTitle: PageModule
       edit,
-      update(page) {
+      update(page: { id: number; slug: string }) {
         loader.value = true
-        crudAction({
+        crudAction({ // noMutation
           success: 'Page Updated Successfully',
           url: `api/pages/${page.id}`,
           method: 'put',
@@ -346,12 +349,13 @@ export default {
           updateSlug: page.slug!==slug.value,
           description: description.value,
           icon: icon.value,
-          content: content.value
-        }).then(crud => {rows.value = crud; loader.value = false })
-          .catch(e => notifyAction({error: 'updatePage', e}))
+          content: content.value,
+          refresh: ['reloadApp']
+        }).then(() =>  loader.value = false) // .then(crud => { rows.value = crud; loader.value = false })
+          .catch((e: unknown) => notifyAction({error: 'updatePage', e}))
       }, // TagUpdate: PageModule
-      async active(page) {
-        loader.value = true // ToFix
+      async active(page: { slug: string; active: boolean}) {
+        mSession(['reloadApp']); loader.value = true // ToFix
         const { data } = await api.put(`api/pages/${page?.slug}`, {
           success: page?.active ? 'Page Deactivated Successfully' : 'Page Activated Successfully',
           active: 1,
@@ -360,24 +364,27 @@ export default {
         if (data.success) {
           loader.value = false
           notifyAction({success: data.success})
-          crud({e: 'mountedPages'})
+          editPagesAction({e: 'mountedPages'})
         }
       }, // TagActive: PageModule
-      restore(page) {
-        loader.value = true
-        crudAction({
+      restore(page: { slug: string }) {
+        loader.value = true; crudAction({ // noMutation
           success: 'Page Restored Successfully',
           url: 'api/pages',
           method: 'POST',
           slug: page.slug,
           // locale: locale.value,
+          refresh: ['reloadApp'],
           restore: true
-        }).then(crud => {rows.value = crud; loader.value = false })
-          .catch(e => notifyAction({error: 'restorePage', e}))
+        }).then(() => loader.value = false) // .then(crud => {rows.value = crud; loader.value = false })
+          .catch((e: unknown) => notifyAction({error: 'restorePage', e}))
       }, // TagRestore: PageModule
       Delete,
-      delete_forever (page) {
-        Delete({...page, ...{forever: 1}})
+      delete_forever (page: { forever: boolean; page_title?: string | undefined; id?: number | undefined }) {
+        Delete({
+          ...page, forever: true,
+          slug: ''
+        })
         // AddPasswordBeforeDeleteForever
       }, // TagDeleteForever: PageModule
 
@@ -388,14 +395,14 @@ export default {
         rowsPerPage: 0,
         rowsNumber: 10
       },
-      columns: computed(() => [
+      columns: <any> [
         { name: 'page_title', align: 'center', label: $t('page_title'), field: 'page_title', sortable: true },
         { name: 'description', align: 'center', label: $t('description'), field: 'description', sortable: true },
         { name: 'icon', align: 'center', label: $t('icon'), field: 'icon', sortable: true },
         { name: 'active', align: 'center', label: $t('active'), field: 'active', sortable: true },
         { name: 'edit', align: 'center', label: $t('edit/restore'), field: 'edit', sortable: false },
-        { name: 'delete', align: 'center', label: $t('delete/foreve'), field: 'delete', sortable: false }
-      ]), rows
+        { name: 'delete', align: 'center', label: $t('delete/forever'), field: 'delete', sortable: false }
+      ], rows
     }
   }
 }

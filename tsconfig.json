@@ -13,5 +13,20 @@
     /* Type Checking */
     // "strict": false /* Enable all strict type-checking options. */,
     // "noImplicitAny": false /* Enable error reporting for expressions and declarations with an implied `any` type.. */,
-  }
+  },
+  // "exclude": ["node_modules"],
+  "include": ["src"],
+  "exclude": [
+    "./public",
+    "./resources",
+    "./bootstrap",
+    "./vendor",
+
+    "./dist",
+    "./.quasar",
+    "./node_modules",
+    "./src-capacitor",
+    "./src-cordova",
+    "quasar.config.*.temporary.compiled*"
+  ]
 }

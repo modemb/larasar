@@ -15,8 +15,7 @@ class Locale extends Model
     'categoryName',
     'subcategoryName',
     'description',
-    'lang',
-    'deleted'
+    'lang'
   ];
 
   /**

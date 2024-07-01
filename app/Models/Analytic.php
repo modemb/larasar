@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -70,7 +71,7 @@ class Analytic extends Model
     /**
      * Get the user's sessions.
      */
-    public function  getSessionsAttribute()
+    public function  getSessionsAttribute()//: HasMany
     { // 'foreign_key', 'local_key'
       return $this->hasMany(Session::class, 'ip_address', 'ip')->get();
       // return $this->hasMany(Session::class, 'user_id')->get();

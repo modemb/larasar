@@ -1,3 +1,4 @@
+import { Cookies } from 'quasar'
 import { boot } from 'quasar/wrappers';
 import { createI18n } from 'vue-i18n';
 
@@ -21,8 +22,8 @@ declare module 'vue-i18n' {
 }
 
 const i18n = createI18n({
-  locale: 'en',//store.getters['config/localeGetter'], //'en-US',
-  fallbackLocale: 'en', // set fallback locale
+  locale: Cookies.get('locale')||'fr',
+  fallbackLocale: 'fr', // set fallback locale
   legacy: false,
   globalInjection: true,
   messages,

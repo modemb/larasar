@@ -1,6 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
 
-// const routes = [
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -63,11 +62,17 @@ const routes: RouteRecordRaw[] = [
         meta: { guest: true }
       },
       {
-        path: '/user',
+        path: ':name',
         name: 'invited.user',
         component: () => import('pages/IndexPage.vue'),
-        meta: { auth: true }
+        meta: { guest: true }
       },
+      // {
+      //   path: '/user',
+      //   name: 'invited.user',
+      //   component: () => import('pages/IndexPage.vue'),
+      //   meta: { auth: true }
+      // },
       // Auth Routes
       {
         path: '/chat/:id',
@@ -79,6 +84,12 @@ const routes: RouteRecordRaw[] = [
         path: '/library',
         name: 'auth.files',
         component: () => import('components/UserFiles.vue'),
+        meta: { auth: true }
+      },
+      {
+        path: '/views',
+        name: 'auth.views',
+        component: () => import('pages/UsersViews.vue'),
         meta: { auth: true }
       },
       {
@@ -111,12 +122,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/UserCurrencies.vue'),
         meta: { auth: true }
       },
-      {
-        path: '/messages',
-        name: 'auth.messages',
-        component: () => import('pages/UserMessages.vue'),
-        meta: { auth: true }
-      },
+      // {
+      //   path: '/payment/:id',
+      //   name: 'auth.payment.id',
+      //   component: () => import('pages/Payment.vue'),
+      //   meta: { auth: true } // PaymentPostModule
+      // },
       {
         path: '/pages',
         name: 'auth.pages',
@@ -125,22 +136,28 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: '/reports',
-        name: 'auth.reports',
-        component: () => import('src/components/UserReports.vue'),
+        name: 'auth?.reports',
+        component: () => import('components/UserReports.vue'),
         meta: { auth: true }
       },
       {
         path: '/test',
         name: 'auth.test',
-        component: () => import('pages/Test.vue'),
+        component: () => import('pages/TestPage.vue'),
         meta: { auth: true }
       },
       // Verify Route
-      { path: 'email/verify/:id/:hash',
-        name: 'auth.verification.verify',
-        component: () => import('components/Auth.vue'),
-        meta: { verify: true }
+      { path: 'verify/:email',
+        // name: 'auth.verification.verify',
+        component: () => import('pages/IndexPage.vue'),
+        // component: () => import('components/Auth.vue'),
+        meta: { public: true }
       },
+      // { path: 'email/verify/:id/:hash',
+      //   name: 'auth.verification.verify',
+      //   component: () => import('components/Auth.vue'),
+      //   meta: { verify: true }
+      // },
       { path: 'api/email/verify/:id/:hash',
         name: 'auth.api.verification.verify',
         component: () => import('components/Auth.vue'),

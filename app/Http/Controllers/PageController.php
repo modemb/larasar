@@ -155,7 +155,7 @@ class PageController extends Controller
     {
       // Page::onlyTrashed()->where('slug', $id)->update(['deleted' => $request->forever]);
       // Page::where('slug', $id)->delete(); // TagDestroy: PageModule
-      Page::onlyTrashed()->where('id', $id)->update(['deleted' => $request->forever]);
+      Page::onlyTrashed()->find($id)?->update(['deleted' => $request->forever]);
       Page::destroy($id); // TagDestroy: PageModule
 
       return $this->show($request, $id);

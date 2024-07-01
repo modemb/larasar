@@ -2,38 +2,71 @@ import { Cookies, LocalStorage } from 'quasar'
 import { boot } from 'quasar/wrappers'
 import axios, { AxiosInstance } from 'axios'
 import { createPinia } from 'pinia'
+import { useCrudStore } from 'stores/crud'
 import { format, register, TDate } from 'timeago.js'
+import Currencies from 'components/json/Countries.json'
 import Echo from 'laravel-echo'
 import Pusher from 'pusher-js'
-import Currencies from 'components/json/Countries.json'
 import { i18n } from './i18n'
-import { useCrudStore } from 'stores/crud'
 
-const qs = (params: { [x: string]: unknown; method?: string; url?: string | undefined }) => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
+let ipData: any; let ipDebug = 0;
+let timeago: (date: TDate) => string
+let cy: (a: number) => string
+let xRate: (arg0: any) => number // https://collect.js.org
+let getAppDisplayMode: (bool: boolean) => string | false | undefined
+let deleteAllCookies: () => void
+let configAction: () => Promise<unknown>
+let currenciesAction: () => Promise<unknown>
+let authAction: () => Promise<unknown> | null
+let logUserAction: (userId: number) => void
+let logoutAction: () => void
+let loginMutation: ({ token, remember }: { token: string; remember: boolean }) => void
+let locationMutation: (location: string) => void
+let shareMutation: (auth: { credit: number; name: string }) => any
 
-let locale = Cookies.get('locale')||'en'; const location = Cookies.get('location')
-let currency: string; let cy; let ipDebug = 0; let timeago
-let ipData: object
-let xRate: (arg0: number) => void // https://collect.js.org
+const session: string[] = []
+const included = (e: string, s = false) => {
+  if (session.includes(e)) s = session.includes(e)
+  else session.push(e); return s // Session Management
+} // TagSession: SessionModule
+const mSession = (elements: string[]) => {
+  if (elements[0] === 'reloadApp') session.length = 0
+  elements.forEach(elementToRemove => {
+    const index = session.indexOf(elementToRemove)
+    if (index !== -1) session.splice(index, 1)
+  }) // Remove Elements
+} // TagSession: ManagementSessionModule
 
-const mobil = (process.env.MODE === 'capacitor')||(process.env.MODE === 'cordova')
+const ipDebugData = [LocalStorage.getItem('ip')] // TagIpDebug: IpDebugModule
+const mobile = (process.env.MODE === 'capacitor')||(process.env.MODE === 'cordova')
 const API_URL = (process.env.DEV||origin?.includes('localhost'))
                 ?process.env.DEV_URL:process.env.API_URL
-const baseURL = mobil?(process.env.PROD?API_URL:process.env.DEV_MOBIL_URL):API_URL
+const baseURL = mobile?(process.env.PROD?API_URL:process.env.DEV_MOBIL_URL):API_URL
+const mobileApp = mobile||('app' in navigator)
 
+const MAIL_VERIFY = process.env.MAIL_VERIFY==='true'?true:false
+const MAIL_CODE = process.env.MAIL_CODE==='true'?true:false
 const SANCTUM_API = process.env.SANCTUM_API==='true'?true:false
 
-const ipDebugData = [ // Add Your IP To Debug App
-  process.env.DEV_1_IP, '142.182.3.235'
-] // TagIpDebug: IpDebugModule
+const http = // mobileApp ? capacitor()?.CapacitorHttp.request :
+  axios.create
 
 declare global {
-  interface Window { Pusher: unknown; Echo: unknown }
+  interface Window {
+    Pusher: any;
+    Echo: any;
+    deferredPrompt: Event | null;
+    location: Location
+  }
+  interface Navigator {
+    standalone: boolean
+  }
 }
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $axios: AxiosInstance;
+    $api: AxiosInstance;
   }
 }
 
@@ -43,59 +76,165 @@ declare module '@vue/runtime-core' {
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client) api.defaults.withCredentials = true
-const api = axios.create({ baseURL, withCredentials: true })
+const api = http({ baseURL, withCredentials: true })
 
-export default boot(async ({ app, router, store }) => {
+export default boot(async ({ app, router }) => {
 
-  // i18n = app?.__VUE_I18N__
-  // i18n = app?.i18n
+  let currency: any;
   const $t = i18n.global.t
+  const locale = i18n.global.locale.value
+
+  const authenticate = (payload: { url: string; remember: boolean }) => api.post(payload.url, payload)
+    .then(({ data }) => loginMutation({ token: data, remember: payload.remember }))
+    .catch(e => notifyAction({error: 'authenticate', e}))
 
   app.use(createPinia())
-  const { crudAction, notifyAction } = useCrudStore()
+  const store = useCrudStore()
+  const { crudAction, notifyAction } = store
+
+  // https://quasar.dev/quasar-cli-vite/handling-process-env#introduction
 
   // https://quasar.dev/quasar-plugins/cookies#introduction
   // const allCookies = $q.cookies.getAll() // {index: data}
   // console.log('cookies', Cookies.getAll().location)
   // console.log('process.env.MODE', process.env.MODE)
 
-  api.interceptors.request.use(request => {
+  deleteAllCookies = () => api.delete('api/users/deleteAllCookies')
+    .then(() => notifyAction({e: 'ServerDeletedAllCookies' }))
+    .catch(e => notifyAction({error: 'deleteAllCookiesErr', e}))
+    .finally((cookies = document.cookie.split(';')) => {
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i]; Cookies.remove('XSRF-TOKEN')
+        const eqPos = cookie.indexOf('=') // let cookies = document.cookie.split(';')
+        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
+        if (cookies.length===1) notifyAction({e: 'AllCookiesDeletedClient'})
+      } // loginMutation({ token: true, remember: false })
+    }) // TagDeleteAllCookie
 
-    console.log(
+  currenciesAction = () => crudAction({
+    url: 'api/users/currencies', method: 'get',
+    currenciesData: 'currencies', mutate: 'currenciesGetter'
+  }).catch((e: unknown) => notifyAction({error: 'currenciesAction', e}))
+
+  configAction = () => crudAction({
+    url: 'api/users/config',
+    method: 'put', // locale,
+    mutate: 'configGetter',
+    refresh: ['configGetter'],
+    id: store.authGetter?.id,
+    locale: i18n.global.locale.value,
+    update: store.authGetter?.id
+  }).catch((e: unknown) => notifyAction({error: 'configAction', e}))
+
+  authAction = () => {
+
+    if (Cookies.get('XSRF-TOKEN')) {
+      const url = SANCTUM_API ? 'user' : 'api/user'
+
+      // if (store.tokenGetter?.token)
+      return crudAction({
+        url, method: 'get',
+        mutate: 'authGetter',
+        refresh: ['authGetter']
+      }).catch((e: unknown) => { if (Cookies.get('token'))
+        notifyAction({error: 'authAction', e})//; logoutAction()
+      }); //else return null
+    } else return null
+  } // TagAuth: UserModule
+
+  logUserAction = (userId: number) => {
+    if (userId!==1) {
+      const authID = store.authGetter?.id
+      crudAction({ authID, mutate: 'authIdGetter', refresh: ['authIdGetter'] }); api({
+        url: 'api/users',
+        method: 'post',
+        data: { log: true, userId }
+      }).then(() => {
+        mSession(['reloadApp'])
+        authAction()
+        router.push({ path: '/' })
+      }).catch(e => notifyAction({error: 'logUserAction', e}))
+    } else notifyAction({message: 'Super Admin Not Allowed'})
+  } // TagLogUser: UserModule
+
+  logoutAction = () => {
+    const url = SANCTUM_API ? 'logout' : 'api/logout'
+    api.post(url, store.authGetter).then(() => {
+      Cookies.remove('token')
+      store.tokenGetter = store.authGetter = null
+    }).catch(e => {
+      notifyAction({error: 'logoutAction', e})
+      setTimeout(() => deleteAllCookies(), 1500)
+    }).finally(() => router.push({ path: '/login' }))
+  } // TagLogout: UserModule
+
+  loginMutation = ({ token, remember }) => {
+
+    Cookies.set('token', token, { expires: remember ? 365 : '' })
+
+    console.log('data', token, remember)
+    crudAction({token, mutate: 'tokenGetter', refresh: ['tokenGetter']})
+    authAction()?.then(() => router.push({ name: 'index' }))
+
+  } // TagLogin: UserModule
+
+  locationMutation = (location: string) => {
+    Cookies.set('location', location, { expires: 365 })
+    crudAction({ location, mutate: 'locationGetter', refresh: ['locationGetter'] })
+  } // TagLocation: UserModule
+
+  shareMutation = (auth: { credit: number; name: string }) => crudAction({ shareData: {
+    credit: auth?.credit, // TagShare: UserModule - Navigator Share
+    url:  window.origin + '/' + (auth?.name||''),
+    banner: $t('Share Your Affiliate Link And Gain Users'),
+    tooltip: $t('Share and earn credit with your affiliate link'),
+    title: $t('One minute to register, share and earn money'),
+    text: $t('One minute to register, share and earn money'),
+  }, mutate: 'shareDataGetter', refresh: ['shareDataGetter']})
+
+  api.interceptors.request.use(async (request) => {
+
+    const { data } = request; console.log(
       `%curl: %c${baseURL}`,
       'color: red; font-size: 24px', 'color: green; font-size: 24px',
-      // 'SANCTUM_API', SANCTUM_API
+      // 'NODE_ENV', process.env.NODE_ENV, 'MODE', process.env.MODE,
+      // 'mobileApp', mobileApp, 'navigator', JSON.stringify(navigator),
+      'target', JSON.stringify(process.env.TARGET),
+      // 'userAgent', JSON.stringify(navigator.userAgent),
+      // 'referrer', document.referrer.startsWith('capacitor://'),
+      // 'CapacitorHttp', capacitor()?.CapacitorHttp.request,
+      // 'canShare()', (await capacitor()?.Share.canShare())?.value
+      // 'device_name', navigator.userAgent.match(/\(([^)]+)\)/)[1].split(';')[0].split(' ')[0],
+      // 'navigator.language', navigator.language
     ) // Console With Style
 
-    if (request.data?.token?.includes('csrf')&&!Cookies.get('XSRF-TOKEN')&&SANCTUM_API)
-      api.get('/sanctum/csrf-cookie').catch(e => { // https://laravel.com/docs/9.x/sanctum#issuing-api-tokens
-        notifyAction({error: 'XSRF-TOKEN-GET', e}); Cookies.remove('XSRF-TOKEN')
-      }).then(() => store.dispatch('users/loginAction', JSON.parse(request.data))
-        .catch((e: string) => notifyAction({error: 'XSRF-TOKEN-POST', e})))
+    if (data?.token?.includes('csrf')&&!Cookies.get('XSRF-TOKEN')&&SANCTUM_API)
+      api.get('/sanctum/csrf-cookie').then(() => authenticate(data))
+        .catch(e => notifyAction({error: 'XSRF-TOKEN-GET', e}))
 
-    locale = store.getters['config/localeGetter']
-    const token = store.getters['users/tokenGetter']
-    if (token) request.headers.common['Authorization'] = `Bearer ${token}`
-    if (locale) request.headers.common['Accept-Language'] = locale
-    request.headers.common['DEV'] = process.env.DEV
-    request.headers.common['IP-DEBUG'] = ipDebug
+    const token = Cookies.get('token') // store.tokenGetter?.token
+    if (token) request.headers['Authorization'] = `Bearer ${token}`
+    request.headers['Accept-Language'] = i18n.global.locale.value
+    request.headers['DEV'] = process.env.DEV
+    request.headers['IP-DEBUG'] = Number(LocalStorage.getItem('debug')) // 1
+    // ipDebug //= store.configGetter?.ipDebug
     // if (window.Echo.socketId()) request.headers['X-Socket-ID'] = window.Echo.socketId()
     // request.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     // request.headers.common['Content-Type'] = 'multipart/form-data'
-    return request
-  })// Request interceptor
+    return request // https://laravel.com/docs/10.x/sanctum#issuing-api-tokens
+  }) // Request interceptor
 
   api.interceptors.response.use(response => response, error => {
-    const { status } = error?.response
+    const { response: { status } } = error
 
-    if (status >= 500) notifyAction({ message: $t('error_alert_text') })//, timeout: 6000
-    if (status === 401 && store.getters['users/authGetter'])
-      store.dispatch('users/logoutAction').then(() => {
-        router.push({ path: '/login' }).then(() => notifyAction({
-          message: $t('token_expired_alert_title')+' '+status,
-          timeout: 6000
-        }))
-      }); return Promise.reject(error)
+    if (status >= 500) notifyAction({ message: 'error_alert_text' })//, timeout: 6000
+    if (status === 401 && store.authGetter) {
+      logoutAction(); notifyAction({
+          message: 'token_expired_alert_title',
+          timeout: 10000
+      })
+    } return Promise.reject(error)
   }) // Response interceptor
 
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -110,7 +249,7 @@ export default boot(async ({ app, router, store }) => {
   app.config.globalProperties.$crudAction = crudAction
   app.config.globalProperties.$notifyAction = notifyAction
 
-  const localeFn = (_number: number, index: string | number) => {
+  const localeFn = (_number: number, index: number): any => {
     // number: the time ago / time in number;
     // index: the index of array below;
     // totalSec: total seconds between date to be formatted and today's date;
@@ -129,20 +268,15 @@ export default boot(async ({ app, router, store }) => {
       ['%s months ago', 'in %s months'],
       ['1 year ago', 'in 1 year'],
       ['%s years ago', 'in %s years']
-    ][index];
+    ][index]
   };register(locale, localeFn);
 
   timeago = (date: TDate) => format(date, locale) // https://timeago.org
-
-  // const echoUrl = (process.env.APP_URL===baseURL)?'/broadcasting/auth':'/api/broadcasting/auth'
-  // const echoUrl = SANCTUM_API?'/broadcasting/auth':'/api/broadcasting/auth'
 
   window.Pusher = Pusher; window.Echo = new Echo({
     broadcaster: 'pusher',
     cluster: process.env.PUSHER_APP_CLUSTER,
     key: process.env.PUSHER_APP_KEY,
-    // cluster: process.env.VITE_PUSHER_APP_CLUSTER,
-    // key: process.env.VITE_PUSHER_APP_KEY,
     forceTLS: true,
     encrypted: true,
     // authEndpoint: baseURL + '/broadcasting/auth'
@@ -151,28 +285,45 @@ export default boot(async ({ app, router, store }) => {
         authorize: (socketId: number, callback: (arg0: boolean, arg1: unknown) => unknown) => api.post('/api/broadcasting/auth', {
           socket_id: socketId,
           channel_name: channel.name
-        }).then(response => callback(false, response.data))
-          // .catch(error => callback(true, error))
-          .catch(e => notifyAction({error: 'EchoErr', e}))
+        }).then((response: { data: unknown }) => callback(false, response.data))
+          .catch((e: unknown) => notifyAction({error: 'EchoErr', e}))
       }// client: window.Pusher // https://pusher.com/docs/channels/server_api/http-api#publishing-events
     } // https://www.youtube.com/watch?v=zooUbo0tz6U&t=341s
   }) // https://laravel.com/docs/9.x/broadcasting#server-side-installation
 
-  const session: string[] = []; const Format = 'json' // json, jsonp, xml, csv, yaml
+  const Format = 'json' // json, jsonp, xml, csv, yaml
   const { data } = await axios.get(`https://ipapi.co/${''/* IP */}/${Format}`)
-    .catch(e => notifyAction({error: 'ipData', e}))
-                || await axios.get(`http://ip-api.com/${Format}/${''/* IP */}`)
+        .catch(e => notifyAction({error: 'ipData', e}))
+          || await axios.get(`http://ip-api.com/${Format}/${''/* IP */}`)
+        .catch(e => notifyAction({error: 'ipData', e}))
+          || {data:{}} // No Network
+
+  const location = Cookies.get('location') ||
+   (data?.city+' '+data?.region||data?.country).toLowerCase()
 
   if (!data?.ip) data.ip = 'noip'+Date.now()
 
   ipDebugData.forEach(ip => {
-    if (data?.ip === ip) ipDebug = Number(LocalStorage.getItem('debug')) //1
+    if (data?.ip === ip) ipDebug = Number(LocalStorage.getItem('debug')) // 1
   }) // TagIpDebug: IpDebugModule
 
-  xRate = (amount: number | {[x: string]: unknown | {[x: string]: number}}) => {
+  getAppDisplayMode = (bool: boolean) => {
 
-    const auth = store.getters['users/authGetter']
-    currency = store.getters['users/currencyGetter']
+    const userAgent = navigator.userAgent
+    const twa = userAgent.includes('modembIos') ? 'iOS' :
+    (userAgent.includes('modembAndroid') ? 'Android' : '')
+
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+    const success = mobileApp || document.referrer.startsWith('android-app://') ? twa :
+      ((navigator.standalone || isStandalone) ? 'standalone' : 'browser')
+    if (bool) return (success !== 'browser') ? success : false
+    notifyAction({ success }) // Trusted Web Activity (TWA)
+  }; data.app = getAppDisplayMode(true)||'browser'
+
+  xRate = amount => {
+
+    const auth = store.authGetter
+    currency = store.currencyGetter?.currency
       || amount?.currency_code // PopUp Users
       || auth?.currency_code // Auth User
       || data?.currency // Api Currency
@@ -180,15 +331,17 @@ export default boot(async ({ app, router, store }) => {
     const currencyInfo = Currencies[currency]
 
     const myHeaders = new Headers()
-    myHeaders.append('apikey', process.env.EXCHANGE_RATES_API)
+    myHeaders.append('apikey', process.env.EXCHANGE_RATES_API||'')
 
     const apiData = {
       url: 'api/users/xRate',
       method: 'PUT',
-      auth_id: amount?.id||auth?.id,
-      rate: amount?.info?.rate,
+      mutate: 'rateGetter',
+      refresh: ['rateGetter'],
+      rate: amount?.info?.rate, // API Rate
       result: amount?.result,
-      updateUser: !!amount?.id, // Update PopUp User
+      auth_id: amount?.id||auth?.id,
+      updateUser: amount?.id||amount?.info?.rate, // User Rate And Currency
       apiMessage: amount?.message||amount?.error?.code,
       from_name: 'Gold Ounce',
       to_name: currencyInfo?.name,
@@ -199,21 +352,24 @@ export default boot(async ({ app, router, store }) => {
       amount: amount?.query?.amount||Number(amount),
       from: 'XAU', // XAU - XAG
       to: currency
-      // to: data.currency_code = currency
       // ====Api End=== \\
-    }; if (Number(store.getters['users/rateGetter'])===0||apiData.apiMessage||apiData.rate>0)
+    }; if (!store.rateGetter||apiData.apiMessage||amount?.id||apiData?.rate>0)
     crudAction(apiData).then((rate: number) => {
 
-      if (amount?.id) store.dispatch('users/authAction') // Update Currency On the Database
-      if (rate > 0) return store.commit('users/rateMutation', { rate })
-      else if (session.includes(currency)) return notifyAction({ error: 'include', e:currency }) // Validate Currency Api
-      // else if (!isNaN(amount)) return notifyAction({ error: 'amount', e:amount }) // Validate Amount
+      if (amount?.id||apiData.rate>0) authAction() // Refresh Updated Currency On the Database
+      if (!auth) return; if (rate > 0) return // Rate Mutated
+      else if (included(currency)) return notifyAction({ error: 'included', e:currency }) // Validate Currency Api
       else if (Number.isNaN(amount)) return notifyAction({ error: 'amount', e:amount }) // Validate Amount
       else apiData.method = 'GET' // Get Exchanged Rate
 
-      notifyAction({success: 'Currency Rate Updated'}) // Wont Be Updated On the Database
+      if (baseURL?.includes('https')) notifyAction({success: 'Currency Rate Updated'})
+      else notifyAction({success: 'Local Currency Rate Updated'})
 
-      if (store.getters['config/appEnvGetter']==='local') xRate({
+      if (baseURL?.includes('https')) fetch(`https://api.apilayer.com/exchangerates_data/convert?to=${apiData.to}&from=${apiData.from}&amount=1`, apiData)
+        .then(response => response.json()) // https://apilayer.com/marketplace/exchangerates_data-api#details-tab
+        .then(result => xRate(result)) //, console.log('resultRate', result?.info?.rate)
+        .catch(e => notifyAction({error: 'fetchCurrency', e})) // https://gist.github.com/ksafranski/2973986
+      else xRate({ // Local Currency Rate
         'date': '2022-10-01',
         'info': {
           'rate': Math.floor(Math.random() * 1234.567890),
@@ -226,75 +382,75 @@ export default boot(async ({ app, router, store }) => {
         },
         'result': Math.floor(Math.random() * 1234.567890),
         'success': true,
-        toFixed: function (): string {
-          throw new Error('Function not implemented.')
+        error: {
+          code: amount?.error?.code
         },
-        toExponential: function (): string {
-          throw new Error('Function not implemented.')
-        },
-        toPrecision: function (): string {
-          throw new Error('Function not implemented.')
-        }
+        message: amount?.message,
+        currency_code: amount?.currency_code,
+        id: amount?.id
       }) // fetch('https://api.apilayer.com/exchangerates_data/convert', apiData)
+    }).catch((e: unknown) => notifyAction({error: 'getCurrency', e}))
 
-      else fetch(`https://api.apilayer.com/exchangerates_data/convert?to=${apiData.to}&from=${apiData.from}&amount=1`, apiData)
-        .then(response => response.json()) // https://apilayer.com/marketplace/exchangerates_data-api#details-tab
-        .then(result => xRate(result)) //, console.log('resultRate', result?.info?.rate)
-        .catch(e => notifyAction({error: 'fetchCurrency', e})) // https://gist.github.com/ksafranski/2973986
-        session.includes(currency)||session.push(currency) // Validate API Request
-        store.commit('users/rateMutation', { rate })
+    const rate = store.rateGetter //apiData.rate||
 
-    }).catch((e: string) => notifyAction({error: 'getCurrency', e}))//.finally(() => /* always executed */)
+    while (!rate||rate==='abort') break
 
-    const rate = store.getters['users/rateGetter']
+    const customRate = rate/1500 // Get Custom Exchanged Rate Based On Gold
+    const xRateAmount = customRate*apiData?.amount||0//; console.log( 'rate2', rate)
 
-    while (!rate||rate==='abort')  break
-
-    const customRate = rate/1500 // Get Custom Exchanged Rate
-    const xRateAmount = customRate*apiData?.amount||0
-
-    return xRateAmount // Suguffiè Coin
+    return xRateAmount // Suguffiè Dinar - SUD
   } // Exchange Rate // 1 gram 0.035274 once // 1 once - 28.3495 gram
 
-  cy = (a: { toLocaleString: (arg0: string, arg1: { style: string; currency: string | number }) => unknown }) => a?.toLocaleString(locale, { style: 'currency', currency })
+  cy = a => a?.toLocaleString(locale, { style: 'currency', currency })
 
-  store.dispatch('config/configAction',{ locale, ipDebug }) // Config
-  store.commit('users/locationMutation', {
-    location: location || (data?.city+' '+data?.region||data?.country).toLowerCase()
-  }) // TagAddLocation: LocationModule
+  configAction() // Config
+  locationMutation(location) // TagAddLocation: LocationModule
 
   router.beforeEach(async (to, _from, next) => {
-    const path = !session.includes(to.path)
-    const postID = (to.path=='/post/'+to.params.id)?to.params.id:null
+    const path = !included(to.path) // !session.includes(to.path)
+    const post_id = (to.path=='/post/'+to.params.id)?to.params.id:null
     const error = to.meta.error ? to.meta.error || { path: '*' } : false
-    if (store.getters['users/tokenGetter']) { // Authenticated Router
-      const auth = store.getters['users/authGetter'] ||
-             await store.dispatch('users/authAction').catch(() => {
-                   store.commit('users/logoutMutation') // Auth Check
-      }); ipData = { ...data, ...{ id: auth?.id } }
-      const verify = !auth?.email_verified_at && process.env.MUST_VERIFY_EMAIL
+    const auth = store.authGetter || await authAction()
+
+    console.log('ipDebug', ipDebug, 'session', session)
+
+    if (store.authIdGetter?.authID) data.ip = null // Prevent Analytic On Logged User
+    if (auth) { // Authenticated Router
+
+      ipData = { ...data, id: auth?.id }
+
+      const mailVerify = 
+        (ipDebug?store.authIdGetter?.authID:'') ? false : // authCanByPassVerification
+        (!auth?.email_verified_at && (MAIL_VERIFY||MAIL_CODE))
+
+      const verify = mailVerify
         ? error || to.meta.verify || { path: '/email/verify' }
         : to.meta.public || to.meta.auth || { path: '/' }; next(verify)
-      if (auth?.[0]?.ip !== data?.ip || path) crudAction({...ipData, ...{
-        url: `api/users/${auth.id}`,
-        method: 'put',
-        post_id: postID, // Post Views
-        slug: to.path // Page Views
-      }}).catch((e: string) => notifyAction({error: 'AuthenticatedAction', e}))
+      if (auth?.[0]?.ip !== data?.ip || path) api({
+        url: `api/users/${auth.id}`, method: 'put',
+        data: {...ipData, post_id, /* Post Views */ slug: to.path /* Page Views */ }
+      }).catch(e => notifyAction({error: 'AuthenticatedAction', e}))
+        .then(({ data }) => notifyAction(data))
     } else { // Guest & Unauthenticated Route
-      if (to.meta.auth) notifyAction({success: 'Please Login'})
+      if (to.meta.verify || to.meta.auth) notifyAction({success: 'Please Login'})
       next(error || to.meta.public || to.meta.guest || { path: '/login' })
-      if (data && path) crudAction({ ...data, ...{
+      if (data && path) api({
         url: 'api/users',
         method: 'post',
-        hostUser: to.query.hostUser, // Invite Users To Gain Money
-        post_id: postID, // Post Views
-        slug: to.path // Page Views
-      }}).catch((e: string) => notifyAction({error: 'GuestUnauthenticatedAction', e}))
-    } session.includes(to.path)||session.push(to.path) // TagBoot: AnalyticModule
+        data: { ...data,
+          hostUserName: to.path.substring(to.path.lastIndexOf('/') + 1),
+          post_id, // Post Views | Invite Users To Gain Money ^^^
+          slug: to.path /* Page Views */ }
+      }).catch(e => notifyAction({error: 'GuestUnauthenticatedAction', e}))
+        .then(({ data }) => notifyAction(data))
+    } //session.includes(to.path)||session.push(to.path) // TagBoot: AnalyticModule
   }) // Authentication
 })
 
-// Here we define a named export
-// that we can later use inside .js files:
-export { cy, qs, timeago, mobil, i18n, api, SANCTUM_API, baseURL, ipData, ipDebug, xRate }
+export {
+  cy, xRate, deleteAllCookies, getAppDisplayMode, mSession, included,
+  authAction, configAction, logUserAction, logoutAction,
+  currenciesAction, loginMutation, locationMutation, shareMutation,
+  timeago, i18n, api, baseURL, mobileApp, ipData, ipDebug,
+  SANCTUM_API, MAIL_VERIFY, MAIL_CODE
+} // Here we define a named export that we can later use inside .js files:

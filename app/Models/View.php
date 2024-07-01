@@ -23,15 +23,15 @@ class View extends Model
      *
      * @var array
      */
-    protected $appends = ['post', 'user', 'analytics'];
+    protected $appends = ['post', 'user'];//, 'analytics'
 
     /**
      * Get subcategory's posts
      */
-    public function getAnalyticsAttribute()
-    {   // return $this->hasMany(Comment::class, 'foreign_key', 'local_key');
-        return $this->hasMany('App\Models\Analytic', 'ip', 'ip')->first();
-    }
+    // public function getAnalyticsAttribute()
+    // {   // return $this->hasMany(Comment::class, 'foreign_key', 'local_key');
+    //     return $this->hasMany('App\Models\Analytic', 'ip', 'ip')->first();
+    // }
 
     /**
      * Get View's Post
@@ -47,13 +47,15 @@ class View extends Model
     public function getUserAttribute()
     {
       return $this->belongsTo(User::class, 'user_id')
-        // ->unsearchable()
-        // ->remove('views')
-        // ->first();
-        ->first(['first_name', 'last_name', 'email']);
-      // $user = $this->belongsTo(User::class, 'user_id')->first();
-      // return $views = collect($user)->forget('views');
-      // return $views;
-      // return $views->all();
+        ->first(['first_name', 'last_name', 'email', 'name']);
+    }
+
+    /**
+     * Get View's User
+     */
+    public function user()
+    {
+      return $this->belongsTo(User::class, 'user_id');
+        // ->first(['first_name', 'last_name', 'email', 'name']);
     }
 }

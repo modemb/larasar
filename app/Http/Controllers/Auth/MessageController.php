@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Notifications\MessageNotification;
-use Illuminate\Routing\Controller;
 // use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Events\MessageSent;
+use App\Mail\InfoSuguffie;
 use App\Models\Message;
 use App\Models\Chat;
 use App\Models\Room;
 use App\Models\User;
-use Auth;
+use DB;
 
 /**
  * Tags: MessageModule
@@ -29,6 +30,7 @@ class MessageController extends Controller
     {
       if (config('sanctumApi')) $this->middleware('auth:sanctum')->except('last', 'dismiss');
       else $this->middleware('auth:api')->except('last', 'dismiss'); // env('SANCTUM_API') - config('sanctumApi')
+      // $this->middleware('auth')->except('last', 'dismiss');
     }
 
     /**
@@ -59,34 +61,51 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-      $auth = $request->user(); // Auth::user(); // $auth = auth()->user();
-      // $auth = $request->user; // Add Message
+      $auth = $request->user(); // $auth = collect($auth)->forget('posts');
 
-      $message = [
-        'message' => $request->input('message'),
-        'room_id' => $request->room_id,
-        'user_id' => $auth['id']
-      ];$messageTrashed = Message::onlyTrashed()->first();
+      if ($message = $request->input('message')) {
 
-      if ($messageTrashed) {
-        $messageTrashed->restore();
-        $messageTrashed->update($message);
-        $chat = $messageTrashed; // User Message
-      } else $chat = Message::create($message);
-      // $auth = collect($auth)->forget('posts');
+        $messageTrashed = Message::onlyTrashed()->first();
 
-      event(new MessageSent($auth->id, $chat->room_id, $request->typing, $chat->message));
-      // broadcast(new MessageSent($auth['id'], $chat->room_id, $chat->message))->toOthers();
+        if ($messageTrashed) $messageTrashed->restore();
 
-      foreach (Chat::where('room_id', $chat->room_id)->get() as $chat)
-      if ($chat->user_id !== $auth->id) // Send Notifications To ChatRoom's Users
-      User::find($chat->user_id)->notify(new MessageNotification);
+        $chatMessage = $messageTrashed ?? new Message;
+
+        $chatMessage->room_id = $request->room_id;
+        $chatMessage->user_id = $auth->id;
+        $chatMessage->message = $message;
+        $chatMessage->save();
+
+      }// event(new MessageSent($auth->id, $chat->room_id, $request->typing, $chat->message));
+
+      broadcast(new MessageSent($auth->id, $request->room_id, $message, $request->typing, $request->received))->toOthers();
+
+      $roomId = $request->room_id??$request->emailRoomId;
+
+      foreach (Chat::where('room_id', $roomId)->get() as $chat)
+      if ($chat->user_id !== $auth->id) try {
+        $user = User::find($chat->user_id);
+
+        app()->setLocale($user->locale); $content = [
+          'subject' => 'You Received a Message',
+          'title' => $request->emailMessage,
+          'body' => 'Please click the button below to access the chat',
+          'button' => 'Click Here', // App::setLocale($locale);
+          'url' => env('API_URL').'/chat/'.$request->emailRoomId
+          // 'url' => env('DEV_URL').'/chat/'.$request->emailRoomId
+        ]; /* return $content; //Send Notifications To ChatRoom's Users */
+        if ($request->notReceived) \Mail::to($user->email)->send(new InfoSuguffie($content));
+        if ($message) $user->notify(new MessageNotification);
+      } catch (\Throwable $th) {throw $th;/*  */}
 
       return [
-        'status' => 'Message Sent! room'.$chat->room_id.' message'.$chat->id,
-        'auth' => $request->user(),
-        'authId' => $auth->id,
-        'message' => $chat//->message
+        'status' => 'Message Sent! room'.$roomId,
+        'auth' => $auth, 'authId' => $auth->id,
+        'received' => $request->received,
+        'message' => $message,
+        'notReceived' => $request->notReceived,
+        'emailMessage' => $request->emailMessage,
+        'emailRoomId' => $request->emailRoomId
       ]; // TagStore: MessageModule
 
     }
@@ -99,10 +118,20 @@ class MessageController extends Controller
      */
     public function show(Request $request, $id)
     {
+      $chats = Chat::with('post', 'room');
       if ($request->messages) // Get Rom's Chat Messages
         return Room::find($id); // TagShow: RoomModule - MessageModule
-      elseif ($id==='rooms') // Get User Chat Rooms
-        return Chat::with('post', 'room')->where('user_id', $request->user_id)->get();
+      elseif ($request->mutate==='my_chats') return // Get Auth Chat Rooms
+        $chats->where('user_id', $request->user_id)->get();
+      elseif ($request->mutate==='contact_us') return // Contact Us
+        $chats->where('user_id', $request->user_id)->get();
+      elseif ($request->mutate==='feedback') return // Get Users Feedback
+        $chats->where('user_id', $request->user_id)->get();
+      elseif ($request->mutate==='users_chats') return // Get Users Chats Rooms
+        $chats->where('user_id', '<>', 1)->get();
+      elseif ($request->mutate==='trashed_chats') return
+        Chat::onlyTrashed()->with('post', 'room')->get(); // toBeDeleted
+      elseif ($request->mutate==='all_chats') return $chats->get();
     }
 
     /**
@@ -137,8 +166,11 @@ class MessageController extends Controller
     public function destroy($id)
     {
         $chat = Chat::find($id);
-        Room::destroy($chat->room_id);
-        Message::where('room_id', $chat->room_id)->delete();
-        $chat->delete();
+        Room::destroy($room_id = $chat->room_id);
+        Chat::where('room_id', $room_id)->delete();
+        DB::table('notifications')->where('notifiable_id', $chat->user_id)->delete();
+        $message = Message::where('room_id', $chat->room_id);
+        $message->update(['message' => null]);
+        $message->delete();
     }
 }

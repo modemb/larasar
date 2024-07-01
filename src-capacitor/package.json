@@ -1,0 +1,21 @@
+{
+  "name": "suguffie",
+  "version": "0.0.1",
+  "description": "World Marketplace, Classified Ads, Services, Jobs, Buy & Sell",
+  "author": "Mohamed Dembele <modembfr@gmail.com>",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/app": "*",
+    "@capacitor/browser": "*",
+    "@capacitor/camera": "*",
+    "@capacitor/cli": "*",
+    "@capacitor/core": "*",
+    "@capacitor/filesystem": "*",
+    "@capacitor/geolocation": "*",
+    "@capacitor/ios": "^5.0.0",
+    "@capacitor/push-notifications": "*",
+    "@capacitor/share": "*",
+    "@capacitor/splash-screen": "*"
+  }
+}

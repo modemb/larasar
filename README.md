@@ -9,15 +9,29 @@ A Laravel + Quasar Vue Framework App (10XAU/m - 2020)
 ## Install the dependencies
 
 ```bash
-# composer require laravel/jetstream #Installing Jetstream https://jetstream.laravel.com/2.x/installation.html
+#Installing Jetstream 
+# https://jetstream.laravel.com/installation.html
+# composer require laravel/jetstream 
 # php artisan jetstream:install livewire --teams
 # php artisan jetstream:install inertia --teams
-# composer require laravel/passport
+# Server Side Rendering
+# https://inertiajs.com/server-side-rendering
+# php artisan jetstream:install inertia --ssr
+# php artisan inertia:start-ssr
+# php artisan inertia:stop-ssr
+# php artisan jetstream:install livewire --dark
+# # composer require laravel/passport
+# php artisan install:api --passport / If No Key - php artisan passport:keys
+# Create Quasar App
+# https://quasar.dev/start/quick-start
+# yarn create quasar
+# =========== App Installation ================
 composer install
-php artisan passport:install / If No Key - php artisan passport:keys
 cp .env.example .env
 php artisan key:generate
 npm install && npm run dev
+# =========== OR ==============================
+yarn ci # Check package.json For more details
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
@@ -28,6 +42,8 @@ quasar dev
 quasar dev -m ssr
 quasar dev -m pwa
 quasar dev -m bex
+# components/Functions
+# Uncomment import to enable native mobile app feature
 quasar dev -m capacitor -T android|ios
 quasar dev -m android|ios
 quasar dev -m electron
@@ -55,21 +71,28 @@ quasar build -m ios -- some params --and options --here
 quasar build -m electron -- --no-sandbox --disable-setuid-sandbox
 ```
 
-## Testing - Manuel (QA) - Automatic (CI/CD)
+### Easily Create Pixar Style 3D Videos
 
-Laravel <https://laravel.com/docs/9.x/testing#introduction>
-        <https://laravel.com/docs/9.x/dusk>
-Quasar <https://testing.quasar.dev/>
-       <https://quasar.dev/quasar-cli-vite/testing-and-auditing>
-       <https://quasar.dev/quasar-cli/testing-and-auditing#introduction>
-       <https://www.youtube.com/playlist?list=PLC2LZCNWKL9ahK1IoODqYxKu5aA9T5IOA>
+https://createstudio.com
 
-### PWA Icons Generate
+### PWA - APP Icons Generate
 
 ```bash
 yarn global add @quasar/icongenie
 icongenie g -i public/images/backup/suguffie.png
+icongenie generate -m capacitor -i database/apps/files/backup/suguffie.png
+icongenie generate -m cordova -i /path/to/source/icon.png [-b /path/to/background.png]
+icongenie generate -m capacitor -i /path/to/source/icon.png [-b /path/to/background.png]
 ```
+
+## Testing - Manuel (QA) - Automatic (CI/CD)
+
+Laravel <https://laravel.com/docs/11.x/testing#introduction>
+        <https://laravel.com/docs/11.x/dusk>
+Quasar <https://testing.quasar.dev/>
+       <https://quasar.dev/quasar-cli-vite/testing-and-auditing>
+       <https://quasar.dev/quasar-cli/testing-and-auditing#introduction>
+       <https://www.youtube.com/playlist?list=PLC2LZCNWKL9ahK1IoODqYxKu5aA9T5IOA>
 
 ### Capacitor Apps: Android Studio – Configure – Default Project Structure
 
@@ -98,7 +121,7 @@ export JAVA_HOME='E:\Apps\Android\Android Studio\jre'
 export JAVA_HOME='C:\Program Files\Java\jdk-17.0.2'
 ```
 
-- [x] Publishing to Stores - AppId: com.modemb.suguffie.app
+- [x] Publishing to Stores - AppId: com.modemb.larasar.app
       Capacitor Apps: <https://quasar.dev/quasar-cli/developing-capacitor-apps/publishing-to-store#introduction> <https://capacitorjs.com/docs/config#schema>
       Cordova Apps: <https://quasar.dev/quasar-cli/developing-cordova-apps/preparation#introduction>
   <https://stackoverflow.com/questions/5488339/how-can-i-find-and-run-the-keytool>
@@ -123,23 +146,24 @@ See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
 
 ## Create Update Columns From AddColumnsToTable
 
-<https://laravel.com/docs/9.x/migrations#columns>
+<https://laravel.com/docs/11.x/migrations#columns>
 php artisan migrate
 
 ## Comment Flow
 
-Backend: Routes -> Controllers - Frontend: Blade -> Vue
+Backend: Routes -> Controllers <-> Frontend: Blade -> Vue
 
 ## Features
 
 - [x] Weather Distance Location Local Currency
-- [x] CRUDAction Reusable State Management
+- [x] crudAction Reusable State Management
 - [x] Realtime (Chat, Push/Notification)
+- [x] Dynamic loading virtual scroll
 - [x] Users Authentication by Roles
 - [x] All Platforms in One Go
 - [x] Super Admin ID = 1
 - [x] Email Verification
-- [x] State Management
+- [x] Session Management
 - [x] Users Analytics
 - [x] Form Validation
 - [x] Password Reset
@@ -150,9 +174,22 @@ Backend: Routes -> Controllers - Frontend: Blade -> Vue
 - [x] Soft Delete
 - [x] File upload  
 - [x] Cron jobs
+- [x] darkMode
 - [x] ipDebug
 - [x] Payment
 - [x] CMS
+
+### Miscellaneous <https://quasar.dev/quasar-cli/commands-list#introduction>>
+
+```bash
+php artisan make:model Example -mcr
+php artisan make:model Flight --all
+php artisan make:controller MessageController -r
+php artisan make:migration create_rooms_table
+laravel new update
+quasar create update
+quasar create update --branch next
+quasar create branch --branch v1
 
 ## Frontend Client
 
@@ -163,10 +200,5 @@ Network:http://192.168.2.11:8080
 <https://www.php.net/manual/en/features.commandline.webserver.php>
 
 Local: http://localhost:8000
-Network: php -S 192.168.2.22:8000 -t public
+Network: php -S 192.168.2.22:8000 -t public ## Mac
 php artisan serve --host=192.168.2.11 --port=8000
-
-## Running Seeders - Super Admin id = 1 - Social Login = Seller
-
-php artisan db:seed --class=UsersTableSeeder
-TRUNCATE TABLE reports;

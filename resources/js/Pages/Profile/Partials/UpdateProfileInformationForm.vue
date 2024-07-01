@@ -90,6 +90,7 @@ const clearPhotoFileInput = () => {
             <div v-if="$page.props.jetstream.managesProfilePhotos" class="col-span-6 sm:col-span-4">
                 <!-- Profile Photo File Input -->
                 <input
+                    id="photo"
                     ref="photoInput"
                     type="file"
                     class="hidden"
@@ -111,7 +112,7 @@ const clearPhotoFileInput = () => {
                     />
                 </div>
 
-                <SecondaryButton class="mt-2 mr-2" type="button" @click.prevent="selectNewPhoto">
+                <SecondaryButton class="mt-2 me-2" type="button" @click.prevent="selectNewPhoto">
                     Select A New Photo
                 </SecondaryButton>
 
@@ -135,6 +136,7 @@ const clearPhotoFileInput = () => {
                     v-model="form.name"
                     type="text"
                     class="mt-1 block w-full"
+                    required
                     autocomplete="name"
                 />
                 <InputError :message="form.errors.name" class="mt-2" />
@@ -148,6 +150,7 @@ const clearPhotoFileInput = () => {
                     v-model="form.email"
                     type="email"
                     class="mt-1 block w-full"
+                    required
                     autocomplete="username"
                 />
                 <InputError :message="form.errors.email" class="mt-2" />
@@ -175,7 +178,7 @@ const clearPhotoFileInput = () => {
         </template>
 
         <template #actions>
-            <ActionMessage :on="form.recentlySuccessful" class="mr-3">
+            <ActionMessage :on="form.recentlySuccessful" class="me-3">
                 Saved.
             </ActionMessage>
 

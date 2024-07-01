@@ -1,11 +1,9 @@
 <template>
-  <q-dialog v-model="view"><!--============ Edit Post PopUp ===========-->
-    <q-card class="my-card  col-12" style="width:1000px">
-        <post :postData="postData" />
+  <q-dialog v-model="view"><!-- Edit Post PopUp ===========-->
+    <q-card class="my-card col-12" style="width:1250px">
     </q-card><!-- TagEditPost: PostModule -->
-  </q-dialog><!--========================== Edit Post PopUp End =======-->
-  <div class="*q-pa-md">
-    <!--============ Data Table ========================-->
+  </q-dialog><!--============== Edit Post PopUp End =======-->
+  <div class="*q-pa-md"><!--=== Data Table ================-->
     <q-table
       hide-header
       :style="'height:' + height + 'px'"
@@ -13,7 +11,7 @@
       :title="$t('favorites')"
       :rows="rows"
       :columns="columns"
-      row-key="id"
+      row-key="name"
       virtual-scroll
       :virtual-scroll-item-size="48"
       :rows-per-page-options="[0]"
@@ -68,73 +66,61 @@
       </template>
 
     </q-table>
-    <!--============ Data Table End ====================-->
-
-  </div>
+  </div><!--=================== Data Table End ============-->
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import { i18n, baseURL } from 'boot/axios'
+import { i18n, api, baseURL, } from 'boot/axios'
 import { useCrudStore } from 'stores/crud'
-import Post from 'components/UserPost.vue'
 
 /**
  * Tags: TagDeletePost - TagPayment - FavoriteModule
  *
- * @from CategoryController
+ * @to CategoryController
  */
 export default {
-  components: {
-    Post
-  },
   setup () {
     const $t = i18n?.global?.t
-    const $store = useStore()
-    const { crudAction, notifyAction } = useCrudStore()
-    const rows = ref([])
-    const postData = ref({})
+    const store = useCrudStore()
     const view = ref(false)
 
-    const auth = computed(() => $store.getters['users/authGetter'])
+    const auth = computed(() => store.authGetter)
+    const rows = computed(() => store.favoritesGetter||[])
 
-    onMounted(() => {
-      crudAction({
-        url: 'api/categories/' + auth.value?.id,
-        method: 'get', favorite: true
-      }).then(crud => rows.value = crud) // TagFavorite: FavoriteModule
-        .catch(e => notifyAction({error: 'favoriteMounted', e}))
-    })
+    onMounted(() => favoritesAction({}))
+
+    function favoritesAction(params: any) {
+      crudAction({...params,
+        url: `api/categories/${auth.value?.id}`,
+        method: 'get', favorite: true,
+        mutate: 'favoritesGetter'
+      }).catch((e: unknown) => notifyAction({error: 'favoritesAction', e}))
+    } // TagFavorite: FavoriteModule
 
     return {
-      postData,
-      view,
+      view, baseURL,
 
       height: ref(screen.height / 1.4),
-      filter: ref(''),
-      baseURL,
 
-      viewPost(post) {
-        postData.value = {...post, ...{ fav:1 }}
+      viewPost(post: object) {
+        postData.value = { ...post, fav: 1 }
         view.value = true
       },
 
-      remove (post) {
-        if (confirm('Are You Sure You Want To Remove Post From Favorite ' + post.id) === true) {
-          crudAction({
-            // error: 'removeFavorite',
-            url: 'api/categories/' + post.favorite_id,
-            auth_id: auth.value?.id,
+      remove (post: { id: number; favorite_id: number }) {
+        if (confirm('Are You Sure You Want To Remove Post From Favorite ' + post.id) === true)
+          api({
             method: 'delete',
-            favorite: true
-          }).then(crud => { rows.value = crud })
-            .catch(e => notifyAction({error: 'removeFavorite', e}))
-        }
+            url: `api/categories/${post.favorite_id}`,
+            data: { auth_id: auth.value?.id, favorite: true }
+          }).then(() => {
+            store['wishGetter'+post.id] = 0
+            favoritesAction({refresh: ['favoritesGetter']})
+          }).catch(e => notifyAction({error: 'removeFavorite', e}))
       }, // TagRemove: FavoriteModule
 
-      rows,
-      columns: [
+      columns: <any> [
         { name: 'pic', align: 'center', label: $t('picture'), field: 'pic', sortable: true },
         { name: 'post_title', align: 'center', label: $t('post_title'), field: 'name', sortable: true },
         { name: 'address', align: 'center', label: $t('address'), field: 'address', sortable: true },
@@ -143,7 +129,7 @@ export default {
         { name: 'edit', align: 'center', label: $t('edit'), field: 'edit', sortable: false },
         { name: 'remove', align: 'center', label: $t('remove'), field: 'remove', sortable: false }
         // { name: 'delete', align: 'center', label: $t('delete'), field: 'delete', sortable: false }
-      ],
+      ], rows, filter: ref(''),
     }
   }
 }
