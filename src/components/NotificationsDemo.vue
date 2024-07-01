@@ -14,20 +14,21 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue'
-import { useStore } from 'vuex'
 import { api, SANCTUM_API } from 'boot/axios'
 import { useCrudStore } from 'stores/crud'
 
 export default {
   setup () {
-    const $store = useStore()
-    const { notifyAction } = useCrudStore()
+    const store = useCrudStore()
+    const { notifyAction } = store
     const loading = ref(false)
     const isPushEnabled = ref(false)
     const pushButtonDisabled = ref(true)
 
-    const vapidPublicKey = computed(() => $store.getters['config/vapidPublicKeyGetter'])
+    const vapidPublicKey = computed(() => store['configGetter']?.vapidPublicKey)
+    // const vapidPublicKey = computed(() => $store.getters['config/vapidPublicKeyGetter'])
 
+    // const url = 'api/notifications'
     const url = SANCTUM_API?'/notifications':'api/notifications'
 
     onMounted(() => registerServiceWorker())
@@ -80,11 +81,9 @@ export default {
         }).catch(e => {
           if (Notification.permission === 'denied') {
             notifyAction({error: 'Permission for Notifications was denied', e})
-            // console.log('Permission for Notifications was denied')
             pushButtonDisabled.value = true
           } else {
             notifyAction({error: 'Unable to subscribe to push.', e})
-            // console.log('Unable to subscribe to push.', e)
             pushButtonDisabled.value = false
           }
         })
@@ -109,14 +108,10 @@ export default {
             isPushEnabled.value = false
             pushButtonDisabled.value = false
           }).catch(e => {
-            notifyAction({error: 'Unsubscription', e})
-            // console.log('Unsubscription error: ', e)
+            notifyAction({error: 'Unsubscribe', e})
             pushButtonDisabled.value = false
           })
-        }).catch(e => {
-            notifyAction({error: 'Error thrown while unsubscribing', e})
-          // console.log('Error thrown while unsubscribing.', e)
-        })
+        }).catch(e => notifyAction({error: 'Error thrown while unsubscribing', e}))
       })
     }
 
@@ -167,7 +162,8 @@ export default {
 
       api.post('api/subscriptions/delete', { endpoint: subscription.endpoint })
       // api.delete('api/subscriptions', { endpoint: subscription.endpoint })
-        .then(() => { loading.value = false })
+        .then(() => loading.value = false)
+        .catch(e => notifyAction({error:'deleteSubscription', e}))
     }
 
     /**
@@ -211,9 +207,8 @@ export default {
       sendNotification () {
         loading.value = true
 
-        api.post(`${url}?notify=1`)
-          .then(() => { loading.value = false })
-          .catch(e => notifyAction({error: 'getSubscription', e}))
+        api.post(`${url}?notify=1`).then(() => loading.value = false)
+          .catch(e => notifyAction({error: 'sendNotification', e}))
       }
     }
   }

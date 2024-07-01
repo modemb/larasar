@@ -1,48 +1,66 @@
 
-import { Cookies, Notify } from 'quasar'
+import { Notify } from 'quasar'
 import { defineStore } from 'pinia'
-import { qs, i18n, api, ipDebug } from 'boot/axios'
+import { api, included, ipDebug, mSession } from 'boot/axios'
+import { Param } from 'components/models'
+import { i18n } from 'boot/i18n'
 
-const t = i18n.global.t
-let state: object | null = Cookies.get('state')
-let getters: object | null = Cookies.get('getters')
+const qs = (params: { [x: string]: unknown; method?: string; url?: string | undefined }) => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
+const $t = i18n.global.t
+const state: any = {}
+const getters = {}
+// const state: any = []
+// const getters: {[x: string]: any} = []
 
 export const useCrudStore = defineStore('crud', {
   state: () => state,
   getters,
   actions: {
 
-    setters(n: string | number) {
-      state = {...{[n]: null}, ...state}
-      getters = {...{[n]: (state: { [x: string]: unknown }) => state[n]}, ...getters}
-      // console.log('state', state, 'getters', getters)
-      Cookies.set('getters', getters, {expires: '1h'});
-      Cookies.set('state', state, {expires: '1h'})
-      return n
-    },
+    async crudAction(params: Partial<Param>) {
 
-    async crudAction(payload: { method: string; url: string | undefined; mutate: string }) {
-      const get = payload?.method?.toLowerCase() === 'get'
-      const { data } = payload.method ? await api({
-        url: get ? payload.url + '?' + qs(payload) : payload.url,
-        method: payload.method, data: payload
-      }) : { data: payload }
-      this.notifyAction({ ...(this[this.setters(payload?.mutate)]=data), ...payload })
-      return data
+      const bool = (b: string) => (this[b]?.length!==0) && included(b)
+      const mutate = params?.mutate||'default' // Getter Index Name
+      const mutation = (res: { data: any[]; total: number }) => {
+
+        const distinctObjects = (arrayOfObjects: any[]) => arrayOfObjects?.reduce((accumulator: any[], currentObject: { id: number }) => {
+          // Check if there's already an object with the same id in the accumulator
+          const existingObject = this[mutate]?.data.find((obj: { id: number }) => obj.id === currentObject.id)
+          // If not found, add the current object to the accumulator
+          existingObject || this[mutate]?.data.push(currentObject)
+          return accumulator = this[mutate]?.data
+        }, []) // Get Distinct Object From Request
+
+        if (params?.load) distinctObjects(res.data)
+        else this[mutate] = res; return res // if (res?.total) this[mutate].total = res.total
+      }   // ^^Mutate ^^GetterName
+
+      // params - mutate: string - refresh: string[] - load: boolean
+      if (params?.refresh) mSession(params?.refresh) // Reload Getter
+      if (params?.load) 'Add To Existing Getter Without Reloading'
+      else if (bool(mutate)) return this[mutate] // Existing Getter Except Bool
+
+      const get = params?.method?.toLowerCase() === 'get'
+      const { data } = params.method ? await api({
+        url: get ? params.url + '?' + qs(params) : params.url,
+        method: params.method, data: params // https://axios-http.com
+      }) : { data: params } // Front End Data / No Http Request
+      this.notifyAction({ ...mutation(data), ...params })
+      return data // Server Data Req/Res | Client Data Getter
     }, // https://medium.com/geekculture/emergency-pinia-course-7a80b8ed0b04
 
-    notifyAction(payload: { success: string; message: string; e: string; color: string; position: undefined; error: string; icon: string; timeout: number }) {
-      if (payload.success || payload.message || (ipDebug&&payload.e)) Notify.create({
-        color: payload.color || (payload.e ? 'negative':(payload.message?'orange':'positive')),
-        position: payload.position || 'top',
-        message: t(payload.success || (payload.e ? payload.error + ' ' + payload.e : payload.message)),
-        icon: payload.icon || payload.e ? 'report_problem' : 'check',
-        timeout: payload.timeout ?? (payload.e||payload.message ? 0 : 6000),
+    notifyAction(params: Partial<Param>) {
+      if (params.success || params.message || (ipDebug&&params.e)) Notify.create({
+        color: params.color || (params.e ? 'negative':(params.message?'orange':'positive')),
+        position: params.position || 'top',
+        message: $t(params.success || (params.e ? (params.error||'') + ' ' + params.e : params.message)||''),
+        icon: params.icon || params.e ? 'report_problem' : 'check',
+        timeout: params.timeout ?? (params.e||params.message ? 0 : 6000),
         actions: [ // https://quasar.dev/quasar-plugins/notify#Notify-API
-          { label: payload.success ?'': t('Reload'), color: 'white', handler: () => history.go() },
+          { label: params.success ?'': $t('reload'), color: 'white', handler: () => history.go() },
           { icon: 'close', color: 'white' }
-        ]
-      })//; console.log('notifyAction', payload)
-    } // https://vueschool.io/articles/vuejs-tutorials/state-management-with-composition-api
+        ] // https://vueschool.io/articles/vuejs-tutorials/state-management-with-composition-api
+      })
+    }
   },
 }) // https://blog.logrocket.com/complex-vue-3-state-management-pinia/

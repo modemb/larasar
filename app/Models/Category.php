@@ -15,13 +15,10 @@ class Category extends Model
   // use Queueable, SerializesModels;
   use SoftDeletes;
 
-  protected $fillable = [
-    'icon',
-    'deleted'
-  ];
+  protected $fillable = ['icon'];
 
   // protected $locale;
-  public $locale;
+  // public $locale;
 
   /**
    * Create a new locale instance.
@@ -46,18 +43,6 @@ class Category extends Model
   public function getSubcategoriesAttribute()
   {
     return $this->hasMany('App\Models\Subcategory')->get();
-
-    // return $this->hasMany('App\Models\Subcategory')->with(['locales' => function ($query) {
-    //     $query->orderBy('subcategoryName', 'desc');
-    // }])->get();
-
-    // return App\Models\Subcategory::with(['locales' => function ($query) {
-    //   $query->orderBy('subcategoryName', 'desc');
-    // }])->get();
-
-    // return $this->hasMany('App\Models\Subcategory')->load(['locales' => function ($query) {
-    //     $query->orderBy('subcategoryName', 'desc');
-    // }]);
   }
 
   /**
@@ -66,7 +51,7 @@ class Category extends Model
   public function getLocalesAttribute()
   {
       return $this->hasMany('App\Models\Locale')
-        ->where('lang', config('app.locale', 'en'))
+        ->where('lang', config('app.locale'))
         ->first();
   }
 }

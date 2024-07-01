@@ -24,7 +24,7 @@ class VerificationController extends Controller
         }
 
         if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+          broadcast(new Verified($request->user()));
         }
 
         return redirect()->intended(

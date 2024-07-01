@@ -16,41 +16,42 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, watch, onMounted, computed } from 'vue'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
-import { useStore } from 'vuex'
 import { useCrudStore } from 'stores/crud'
 
 export default {
   setup () {
-    const $store = useStore()
-    const { crudAction, notifyAction } = useCrudStore()
+    const  store = useCrudStore()
+    const { crudAction, notifyAction } = store
     const $route = useRoute()
     const page_title = ref(null)
     const description = ref(null)
     const content = ref(null)
 
-    const locale = computed(() => $store.getters['config/localeGetter'])
+    const locale = computed(() => store.configGetter?.locale)
     const slug = computed(() => $route.params.slug)
 
     onBeforeRouteUpdate((to, from, next) => next())
 
-    onMounted (() => crud({e: 'mountedPage'}))
+    onMounted (() => pageAction({e: 'mountedPage'}))
 
-    watch([locale, slug], () => crud({e: 'localePage'}))
+    watch([locale, slug], () => pageAction({e: 'localePage'}))
 
-    function crud (data) {
-        crudAction({
-          slug: slug.value,
-          locale: locale.value,
-          url: 'api/pages/showPage',
-          method: 'get', // showPage: 1
-        }).then(page => thenGet(page))
-          .catch(e => notifyAction({error: data.e, e}))
+    function pageAction(data: { e: string }) {
+      // if (included(slug.value)) thenGet(store[slug.value])
+      // else
+      crudAction({
+        slug: slug.value,
+        locale: locale.value,
+        url: 'api/pages/showPage',
+        method: 'get', mutate: slug.value
+      }).then((page: { page_title: null; description: null; content: null }) => thenGet(page))
+        .catch((e: unknown) => notifyAction({error: data.e, e}))
     }
 
-    function thenGet (page) {
+    function thenGet (page: { page_title: null; description: null; content: null }) {
       page_title.value = page.page_title
       description.value = page.description
       content.value = page.content

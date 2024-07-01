@@ -1,24 +1,25 @@
 <template>
   <div class="q-pa-md">
-    <q-table
-      :style="'height:' + height + 'px'"
-      class="my-sticky-virtscroll-table"
-      :title="$t('views')"
+    <q-table flat bordered
+      :style="`height: ${height}px`"
+      class="my-sticky-virtscroll-table *my-sticky-dynamic"
+      :title="`${$t('views')} ${total}`"
       :rows="rows"
       :columns="columns"
-      row-key="name"
-
       :loading="loading"
       :filter="filter"
-      @request="onRequest"
+      row-key="name"
       binary-state-sort
 
       virtual-scroll
-      :rows-per-page-options="[0]"
-      :virtual-scroll-sticky-size-start="48"
-    ><!-- https://quasar.dev/vue-components/table#example--virtual-scroll-with-sticky-header
+      :virtual-scroll-item-size="/*96*/48"
+      :virtual-scroll-sticky-size-start="/*96*/48"
       v-model:pagination="pagination"
-      -->
+      @virtual-scroll="onScroll"
+    ><!-- Dynamic loading virtual scroll
+      @request="onRequest"
+      :rows-per-page-options="[0]"
+     -->
 
       <template v-slot:top-right>
           <q-btn
@@ -40,8 +41,8 @@
             </q-popup-proxy>
           </q-btn>TagPeriod: PeriodModule -->
 
-          <q-btn icon="event" color="primary" class="q-ma-xs" :label="JSON.stringify(proxyDate)">
-            <q-popup-proxy @before-show="updateProxy" transition-show="scale" transition-hide="scale">
+          <q-btn color="primary" class="q-ma-xs" icon="event" :label="JSON.stringify(proxyDate)">
+            <q-popup-proxy transition-show="scale" transition-hide="scale">
               <q-date v-model="proxyDate" :range="range" ><!-- :setToday="!range" -->
                 <div class="row items-center justify-end q-gutter-sm">
                   <q-btn label="Cancel" color="primary" flat v-close-popup />
@@ -49,10 +50,8 @@
                   <q-btn label="OK" color="primary" flat @click="save" v-close-popup />
                 </div>
               </q-date>
-            </q-popup-proxy>
+            </q-popup-proxy><!-- @before-show="updateProxy" -->
           </q-btn><!-- TagPeriod: PeriodModule -->
-
-
 
           <q-btn-toggle
             v-model="period"
@@ -80,56 +79,63 @@
             <div class="text-pre-wrap">{{ props.row.ip }}</div>
           </q-td>
           <q-td key="city" :props="props">
-            <div class="text-pre-wrap">{{ views(props.row, 'city') }}</div>
+            <div class="text-pre-wrap">{{ props.row?.city }}</div>
           </q-td>
           <q-td key="region" :props="props">
-            <div class="text-pre-wrap">{{ views(props.row, 'region') }}</div>
+            <div class="text-pre-wrap">{{ props.row?.region }}</div>
           </q-td>
           <q-td key="country" :props="props">
-            <div class="text-pre-wrap">{{ views(props.row, 'country') }}</div>
+            <div class="text-pre-wrap">{{ props.row?.country }}</div>
           </q-td>
           <q-td key="slug" :props="props">
-            <!-- <div class="text-pre-wrap">{{ views(props.row, 'slug') }}</div> -->
-            <q-btn :to="views(props.row, 'slug')"
-              :label="views(props.row, 'slug')"
-              v-if="views(props.row, 'slug')"
+            <q-btn color="primary"
+              :to="props.row?.slug"
+              :label="props.row?.slug"
+              v-if="props.row?.slug"
             />
           </q-td>
           <q-td key="pic" :props="props">
-            <q-img :src="baseURL+'/'+views(props.row, 'pic')"/>
+            <q-img :src="baseURL+'/'+props.row?.post?.pics?.[0]?.pic"/>
           </q-td>
           <q-td key="post_title" :props="props">
-            <div class="text-pre-wrap">{{ views(props.row, 'post_title') }}</div>
-            <!-- <q-btn :to="`/post/${views(props.row, 'id')}`"
-              :label="views(props.row, 'post_title')"
-              v-if="views(props.row, 'post_title')"
-            /> -->
+            <div class="text-pre-wrap">{{ props.row?.post?.post_title }}</div>
           </q-td>
           <q-td key="first_name" :props="props">
-            {{ views(props.row, 'first_name') }}
+            {{ props.row?.user?.first_name }}
           </q-td>
           <q-td key="last_name" :props="props">
-            {{ views(props.row, 'last_name') }}
+            {{ props.row?.user?.last_name }}
           </q-td>
           <q-td key="email" :props="props">
-            <div class="text-pre-wrap">{{ views(props.row, 'email') }}</div>
+            <div class="text-pre-wrap">{{ props.row?.user?.email }}</div>
           </q-td>
         </q-tr>
       </template><!-- TagRow -->
 
-    </q-table>
+    </q-table><!-- https://quasar.dev/vue-components/table#example--dynamic-loading-virtual-scroll -->
   </div>
 </template>
 
-<script>
-import { ref, watch, onMounted } from 'vue'
-import { exportFile, useQuasar, date  } from 'quasar'
+<script lang="ts">
+import { ref, watch, computed, onMounted, nextTick } from 'vue'
+import { exportFile, useQuasar, date } from 'quasar'
 import { i18n, baseURL } from 'boot/axios'
 import { useCrudStore } from 'stores/crud'
+import { Param } from 'components/models'
 
-function wrapCsvValue (val, formatFn) {
+function wrapCsvValue (val: any, formatFn: ((arg0: any, arg1: any) => any) | undefined, row: {
+    [
+    /* __placeholder__ */
+    x:
+      /* __placeholder__ */
+      string
+    /* __placeholder__ */
+    ]:
+    /* __placeholder__ */
+    any
+  } | undefined) {
   let formatted = formatFn !== void 0
-    ? formatFn(val)
+    ? formatFn(val, row)
     : val
 
   formatted = formatted === void 0 || formatted === null
@@ -149,15 +155,16 @@ function wrapCsvValue (val, formatFn) {
 
 export default {
   setup () {
-    const { crudAction, notifyAction } = useCrudStore()
+    const store = useCrudStore()
+    const { crudAction, notifyAction } = store
     const $t = i18n?.global?.t
     const $q = useQuasar()
     const timeStamp = Date.now()
     const formattedString = date.formatDate(timeStamp, 'YYYY/MM/DD')//YYYY-MM-DDTHH:mm:ss.SSSZ
-    const proxyDate = ref(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
+    const proxyDate = ref<any>(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
     const period = ref('today')
-    const rows = ref([])
-    const columns = ref([ //  https://quasar.dev/vue-components/table#example--synchronizing-with-server
+    const filter = ref('')
+    const columns = ref<any>([ // https://quasar.dev/vue-components/table#example--synchronizing-with-server
       { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
       { name: 'ip', align: 'center', label: $t('ip'), field: 'ip', sortable: true },
       { name: 'city', align: 'center', label: $t('city'), field: 'city', sortable: true },
@@ -171,44 +178,72 @@ export default {
       { name: 'email', align: 'center', label: $t('email'), field: 'email', sortable: true },
     ]); const loading = ref(false)
 
-    function crud(rowsData) {
-      crudAction(rowsData).then(crud => rows.value = crud)
-        .catch(e => notifyAction({error: 'viewsAction', e}))
-    } watch(period, val => !val||onLoad (val))
+    const getter = computed(() => 'viewsGetter'+period.value)
+    const last_page = computed(() => store[getter.value]?.last_page)
+    const reload = computed(() => store.reloadGetter?.reload)
+    const total = computed(() => store[getter.value]?.total)
+    const rows = computed(() => store[getter.value]?.data||[])
 
-    function onLoad (period) {
-      crud({
+    const pagination = ref({
+      sortBy: 'desc',
+      // descending: false,
+      page: 1, // Page Link
+      rowsPerPage: 0, // Pagination Number
+      rowsNumber: total.value // Rows Number Per Page
+    })
+
+    const nextPage = ref(2)
+    // const pageSize = 50
+    // const lastPage = Math.ceil(rows.value?.length / pageSize)
+
+    onMounted(() => viewsAction({}))
+
+    watch([period, reload], () => {
+      pagination.value.page = 1
+      viewsAction({})
+    }); const flt: string[] = []
+    watch(filter, val => {
+      pagination.value.page = 1
+      flt.includes(val) || viewsAction({
+        filterViews: val, load: true,
+      });flt.push(val)
+    })
+
+    function viewsAction(params: Partial<Param>) {
+      console.log('getter', getter.value)
+      return crudAction({...params,
         url: 'api/users/views',
-        method: 'get', period
-      })
-    } onMounted(() => onLoad(period.value))
+        method: 'get',
+        period: period.value,
+        page: pagination.value.page,
+        perPage: pagination.value.rowsPerPage,
+        mutate: getter.value, timeout: 1000
+      }).catch((e: unknown) => notifyAction({error: 'viewsAction', e}))
+    }
 
     return {
-      filter:  ref(''),
+      filter,
       loading,
       baseURL,
-      rows,
-      columns,
+      rows, columns, total,
       height: ref(screen.height / 1.4),
-      period,
-      range: ref(false),
+      period, range: ref(false),
 
       // date, // 'YYYY-MM-DD',
       proxyDate, // 'YYYY-MM-DD',
 
       save () {
-        period.value = null
-        crud({
+        period.value = ''
+        viewsAction({
           expandingRow: true,
-          url: 'api/users/views',
-          method: 'get',
+          refresh: [getter.value],
           from: proxyDate.value.from,
           to: proxyDate.value.to,
           proxyDate: proxyDate.value
         })
       }, // TagPeriod: PeriodModule
 
-      fnum (x) {
+      fNum (x: number) {
         if (isNaN(x)) return x
         if (x < 9999) return x
         if (x < 1000000) return Math.round(x / 1000) + 'K'
@@ -220,12 +255,13 @@ export default {
 
       exportTable () {
         // naive encoding to csv format
-        const content = [columns.value.map(col => wrapCsvValue(col.label))].concat(
-          rows.value.map(row => columns.value.map(col => wrapCsvValue(
+        const content = [columns.value.map((col: { label: any }) => wrapCsvValue(col.label))].concat(
+          rows.value.map((row: { [x: string]: any }) => columns.value.map((col: { field: ((arg0: { [x: string]: any }) => any) | undefined; name: any; format: any }) => wrapCsvValue(
             typeof col.field === 'function'
               ? col.field(row)
               : row[ col.field === void 0 ? col.name : col.field ],
-            col.format
+            col.format,
+            row
           )).join(','))
         ).join('\r\n')
 
@@ -244,18 +280,7 @@ export default {
         }
       }, // TagExport: UserModule
 
-      views (view, name) {
-        if (name === 'first_name') try { return view.user.first_name } catch (error) {}
-        if (name === 'last_name') try { return view.user.last_name } catch (error) {}
-        if (name === 'email') try { return view.user.email } catch (error) {}
-        if (name === 'city') try { return view.analytics.city } catch (error) {}
-        if (name === 'region') try { return view.analytics.region } catch (error) {}
-        if (name === 'country') try { return view.analytics.country } catch (error) {}
-        if (name === 'slug') try { return view.slug } catch (error) {}
-        if (name === 'pic') try { return view.post.pics[0].pic } catch (error) {return false}
-        if (name === 'id') try { return view.post.id } catch (error) {}
-        if (name === 'post_title') try { return view.post.post_title } catch (error) {}
-      },
+      pagination,
 
       // pagination: {
       //   sortBy: 'desc',
@@ -265,13 +290,60 @@ export default {
       //   rowsNumber: 10
       // },
 
-      pagination: ref({
-        rowsPerPage: 0
-      })
+      onScroll ({ to, ref }: any) {
+        const lastIndex = rows.value?.length - 1
+        const lastPage = last_page.value
+        const page = pagination.value.page
+
+        // if (loading.value !== true && nextPage.value < lastPage && to === lastIndex) { && to > 0
+
+        if (loading.value !== true && page < lastPage && to === lastIndex) {
+          loading.value = true;
+
+          setTimeout(() => {
+            pagination.value.page++
+            viewsAction({ load: true })
+            nextTick(() => {
+              ref.refresh()
+              loading.value = false
+            })
+          }, 500)
+        }
+          console.log(
+            'page', page, '<', 'lastPage', lastPage,
+            'to', to,'===', lastIndex, 'lastIndex', '>', 0,
+            'total', total.value
+          )
+
+      }
+
     }
   }
 }
 </script>
 
 <style lang="sass">
-</style>
+.my-sticky-dynamic
+  /* height or max-height is important */
+  height: 410px
+
+  .q-table__top,
+  .q-table__bottom,
+  thead tr:first-child th /* bg color is important for th; just specify one */
+    background-color: #00b4ff
+
+  thead tr th
+    position: sticky
+    z-index: 1
+  /* this will be the loading indicator */
+  thead tr:last-child th
+    /* height of all previous header rows */
+    top: 48px
+  thead tr:first-child th
+    top: 0
+
+  /* prevent scrolling behind sticky top row on focus */
+  tbody
+    /* height of all previous header rows */
+    scroll-margin-top: 48px
+</style>: string: ((arg0: any, arg1: any) => any) | undefined: undefined

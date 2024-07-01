@@ -39,9 +39,9 @@ class RenewPost extends Command
       // ini_set('max_execution_time', 1800);
       $posts = Post::all(); // TagShow: PostModule
       foreach ($posts as $key => $post) { // Show Post
-        $current_date = date_create(date('Y-m-d H:i:s'));
+        $current_date = date_create(now());
         // ----------------- TagIndex: PostPaymentModule ---------------------- \\
-        $payment = $post->payments->where('end_date', '>', date('Y-m-d H:i:s'))->where('PayerID', '<>', '')->first();
+        $payment = $post->payments->where('end_date', '>', now())->where('PayerID', '<>', '')->first();
         $payment_end_date = $payment ? date_create($payment->end_date) : $current_date;
         $payment_expiry = date_diff($current_date, $payment_end_date);
         $payment_expiry = $payment_expiry->format('%a'); // Payment Expiry Date
@@ -58,7 +58,7 @@ class RenewPost extends Command
           if ($bool && $payment_expiry > 0) {
             $post->end_date = date('Y-m-d H:i:s', strtotime('1 month'));
             Payment::where('post_id', $post->id)->update([
-                'start_date' => date('Y-m-d H:i:s')
+                'start_date' => now()
             ]); $post->rank = time(); $post->update();
           } // Bump Up & Extend Post End Date
         } catch (\Throwable $th) {

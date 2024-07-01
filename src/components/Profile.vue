@@ -1,4 +1,11 @@
 <template>
+
+  <q-dialog v-model="filesLibrary"><!-- TagFiles =============-->
+    <q-card class="my-card col-12" style="width:100%; max-width: 1000px">
+      <UserFiles  :avatar="true" />
+    </q-card><!-- TagFiles: FilesModule v-on:reload="onLoad"-->
+  </q-dialog><!--====================== TagFiles End =========-->
+
   <q-layout view="lHh lpr lFf" container :style="'height:' + height + 'px'" class="shadow-2 rounded-borders">
     <q-header elevated v-if="user">
       <q-bar>
@@ -21,20 +28,52 @@
 
             <div class="col-md-6 q-pa-sm">
 
-              <q-card class="my-card text-white">
-                <q-card-section class="bg-primary">
-                  <div class="text-h6">{{$t('your_info')}}</div>
+              <q-card class="my-card">
+                <q-card-section class="bg-primary text-white">
+                  <div class="text-h6">{{ $t('your_info') }}</div>
                 </q-card-section>
 
-                <q-form class="q-pa-sm">
+                <q-form class="q-pa-sm" @keyup.enter="update">
 
-                  <q-card class="q-mb-md">
-                    <q-img :src="avatar" id="sky"/>
-                    <!-- <q-card-section> -->
-                      <input type="file" v-on:change="onImageChange" class="q-ma-lg">
-                      <q-btn color="primary" class="q-ma-md" :label="$t('remove_image')" @click="deleteAvatar"/>
-                    <!-- </q-card-section> --><!-- TagAvatar: UserModule -->
-                  </q-card>
+                  <q-card class="row q-mb-md">
+                    <!-- <q-avatar size="200px" class="col-6 *q-mb-sm"> -->
+                      <img :src="avatar" class="col-md-6"><!-- TagAvatar: UserModule -->
+                      <!-- <q-img :src="avatar" class="col-md-6" id="sky"/> -->
+                    <!-- </q-avatar> -->
+
+                    <q-card-section class="col-md-6">
+
+                      <!-- <q-btn v-if="superAdmin"
+                        class="primary" class="q-ma-md"
+                        :label="$t('library')"
+                        icon="fas fa-photo-video"
+                        @click.prevent="filesLibrary = true"
+                      />TagFiles: FilesModule -->
+
+                      <q-btn color="primary" class="q-ma-md" v-if="mobileApp"
+                        icon="fas fa-camera" @click="async () => storeAV([await takePicture()])"
+                      /><!-- TagTakePhotoApp: UserUpdate -->
+                      <q-input filled clearable type="file" v-else
+                        @update:model-value="(val: any) => createImage(val[0])"
+                      /><!-- TagTakePhoto: UserUpdate <input type="file" v-on:change="onImageChange" class="q-ma-lg"/> -->
+
+                      <!-- <q-input filled type="file" clearable
+                        @update:model-value="(val: any) => storeAV(val[0])"
+                      /> -->
+
+                      <q-btn color="primary" class="q-ma-md" @click="deleteAvatar" :label="$t('remove_image')" />
+
+                      <div>
+                        <Share :shareData="shareData" />
+                        <q-btn dense color="primary" class="q-ma-md" :label="cy(xRate(auth?.gain))">
+                          <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]" class="text-h6">
+                            {{$t('gain_tooltip')}}
+                          </q-tooltip>
+                        </q-btn><!-- TagPayment: GainModule -->
+                      </div><!-- TagPayment -->
+
+                    </q-card-section><!-- TagAvatar: UserModule -->
+                  </q-card><!-- https://quasar.dev/vue-components/input/#example--input-of-file-type -->
 
                   <!-- <q-img
                     :src="avatar"
@@ -53,26 +92,46 @@
                   </q-card> -->
 
                   <div class="row">
-                    <div class="col-12">
+                    <div class="col-12" v-if="user">
                       <q-select
-                        filled class="col-12"
-                        v-model="role" v-if="user"
+                        filled
+                        v-model="role"
                         :options="admins"
                         :label="$t('role')" clearable
-                        :error="role_data ? true : false"
-                        :error-message='role_data'
-                      />
+                      /><br/>
+                    </div><!-- role -->
+                    <div class="col-12" v-if="!auth?.[0]?.host_id">
+                      <q-input
+                        filled
+                        type="text"
+                        v-model="hostUserName"
+                        lazy-rules clearable
+                        :label="$t('Affiliate Code')"
+                        :rules="[(val: string | any[]) => val && val.length > 0 || $t('user_name')]"
+                        :hint="$t('Add The Code To Earn Money')"
+                        :error="hostUserName_data ? true : false"
+                        :error-message="hostUserName_data"
+                      /><!-- TagPayment: HostUserName -->
+                    </div><!-- hostUserName -->
+                    <div class="col-12">
                       <q-input
                         filled
                         type="text"
                         v-model="name"
-                        :label="user_name||$t('user_name')"
                         lazy-rules clearable
-                        :rules="[val => val && val.length > 0 || $t('user_name')]"
+                        :label="user_name||$t('user_name')"
+                        :rules="[(val: string | any[]) => val && val.length > 0 || $t('user_name')]"
                         :error="name_data ? true : false"
                         :error-message="name_data"
-                      />
-                    </div>
+                      ><!-- TagUsername: UserModule -->
+                        <q-btn dense flat round icon="fas fa-question" class="q-ma-md">
+                          <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]" class="text-h6">
+                            {{$t('To gain users and earn money, you can share your username, as your affiliate code. When new users sign up using this code, you\'ll earn a percentage of their spending.')}} |
+                            <!-- {{$t('Share and earn credit with your affiliate link')}} {{ 'suguffie.com/'+auth.name }} -->
+                          </q-tooltip>
+                        </q-btn><!-- TagShare: ShareModule -->
+                      </q-input>
+                    </div><!-- name -->
                     <div class="col-6">
                       <q-input
                         filled
@@ -80,9 +139,9 @@
                         v-model="first_name"
                         :label="$t('first_name')"
                         lazy-rules clearable
-                        :rules="[val => val && val.length > 0 || $t('first_name')]"
+                        :rules="[(val: string | any[]) => val && val.length > 0 || $t('first_name')]"
                       />
-                    </div>
+                    </div><!-- first_name -->
                     <div class="col-6">
                       <q-input
                         filled
@@ -90,10 +149,10 @@
                         v-model="last_name"
                         :label="$t('last_name')"
                         lazy-rules clearable
-                        :rules="[val => val && val.length > 0 || $t('last_name')]"
+                        :rules="[(val: string | any[]) => val && val.length > 0 || $t('last_name')]"
                       />
-                    </div>
-                  </div>
+                    </div><!-- last_name -->
+                  </div><!--  -->
 
                   <q-input
                     filled
@@ -102,8 +161,8 @@
                     :label="$t('address')"
                     :error="address_data ? true : false"
                     :error-message='address_data' clearable
-                    :rules="[val => val && val.length > 0 || $t('add_address')]"
-                  />
+                    :rules="[(val: string | any[]) => val && val.length > 0 || $t('add_address')]"
+                  /><!-- address -->
 
                   <div class="row">
                     <div class="col-4">
@@ -112,9 +171,9 @@
                         v-model="city"
                         filled type="text"
                         :label="$t('city')" clearable
-                        :rules="[val => val && val.length > 0 || $t('add_city')]"
+                        :rules="[(val: string | any[]) => val && val.length > 0 || $t('add_city')]"
                       />
-                    </div>
+                    </div><!-- city -->
                     <div class="col-4">
                       <q-input
                         filled
@@ -124,9 +183,9 @@
                         :label="$t('region')"
                         :error="region_data ? true : false"
                         :error-message='region_data' clearable
-                        :rules="[val => val && val.length > 0 || $t('add_region')]"
+                        :rules="[(val: string | any[]) => val && val.length > 0 || $t('add_region')]"
                       />
-                    </div>
+                    </div><!-- region -->
                     <div class="col-4">
                       <q-input
                         filled
@@ -136,10 +195,10 @@
                         :label="$t('postal_code')"
                         :error="postal_code_data ? true : false"
                         :error-message='postal_code_data' clearable
-                        :rules="[val => val && val.length > 0 || $t('add_postal_code')]"
+                        :rules="[(val: string | any[]) => val && val.length > 0 || $t('add_postal_code')]"
                       />
-                    </div>
-                  </div>
+                    </div><!-- postal_code -->
+                  </div><!--  -->
 
                   <div class="row">
                     <div class="col-6">
@@ -148,43 +207,56 @@
                         filled type="text"
                         :label="$t('country')"
                         lazy-rules clearable
-                        :rules="[val => val && val.length > 0 || $t('add_country')]"
+                        :rules="[(val: string | any[]) => val && val.length > 0 || $t('add_country')]"
                       />
-                    </div>
+                    </div><!-- country -->
                     <div class="col-6">
                       <q-input
                         v-model="phone"
                         filled type="tel"
                         :label="$t('phone')"
-                        lazy-rules clearable
-                        :rules="[val => val && val.length > 0 || $t('add_phone')]"
+                        :hint="$t('Including area code')" lazy-rules clearable
+                        :rules="[(val: string | any[]) => val && val.length > 0 || $t('add_phone')]"
                       />
-                    </div>
-                    <div class="col-6">
+                    </div><!-- phone -->
+                    <div class="col-3">
                       <q-btn color="primary" :label="$t('update')" @click.prevent="update" />
-                    </div>
-                    <div class="col-6" v-if="user">
+                    </div><!-- update -->
+                    <div class="col-9" v-if="user&&superAdmin">
                       <q-input v-model="gain" filled type="number"
                         :label="'Gain '+ cy(xRate(gain))" clearable
-                      />
-                    </div>
+                      /><!-- TagPayment: GainModule -->
+                    </div><!-- Users Popup -->
+                    <div class="col-9" v-else-if="ipDebug">
+                      <q-input v-model="table" filled type="text"
+                        label="Fix Table" clearable
+                      /><!-- TagFixTable -->
+                    </div><!-- table -->
+                    <div class="col-9 *q-pb-md" v-else>
+                      <q-input clearable
+                        v-model="credit" filled type="text"
+                        :label="`${$t('Credit')} ${cy(xRate(auth.credit))} --> ${$t('Gain')} ${cy(xRate(auth.gain))}`"
+                        :hint="$t('Add from your credit to money earned to pay for plans')"
+                      ><!-- TagPayment: CreditModule -->
+                      </q-input><br/>
+                    </div><!-- credit -->
 
-                  </div>
+                  </div><!--  -->
 
-                </q-form>
+                </q-form><!--  -->
 
-              </q-card>
+              </q-card><!--  -->
 
             </div><!-- Profile Info -->
 
             <div class="col-md-6 q-pa-sm">
 
-              <q-card class="my-card text-white">
-                <q-card-section class="bg-primary">
+              <q-card class="my-card">
+                <q-card-section class="bg-primary text-white">
                   <div class="text-h6">{{$t('your_password')}}</div>
                 </q-card-section>
 
-                <q-form class="q-pa-sm">
+                <q-form class="q-pa-sm" @keyup.enter="pwd">
 
                   <q-input
                     filled
@@ -192,16 +264,15 @@
                     :type="isPwd ? 'password' : 'text'"
                     :label="$t('your_password')"
                     lazy-rules v-if="!user" clearable
-                    :rules="[val => val && val.length > 0 || $t('your_password')]"
+                    :rules="[(val: string | any[]) => val && val.length > 0 || $t('your_password')]"
                   />
 
-                  <q-input
-                    filled
+                  <q-input filled
                     :type="isPwd ? 'password' : 'text'"
                     v-model="new_password"
                     :label="$t('new_password')" clearable
                     lazy-rules :disable="update_email||delete_account"
-                    :rules="[val => val && val.length > 0 || $t('new_password')]"
+                    :rules="[(val: string | any[]) => val && val.length > 0 || $t('new_password')]"
                   /><!-- :disable="update_email" -->
 
                   <q-input filled
@@ -209,7 +280,7 @@
                     :type="isPwd ? 'password' : 'text'"
                     :label="$t('confirm_password')" clearable
                     lazy-rules :disable="update_email||delete_account"
-                    :rules="[val => val && val.length > 0 || $t('confirm_password')]"
+                    :rules="[(val: string | any[]) => val && val.length > 0 || $t('confirm_password')]"
                     ><!-- :readonly="update_email" -->
                     <template v-slot:append>
                       <q-icon
@@ -219,25 +290,26 @@
                       />
                     </template>
                   </q-input>
+
                   <q-input
                     filled
                     type="email"
                     v-model="email"
                     :label="$t('email')"
                     lazy-rules v-if="update_email" clearable
-                    :rules="[val => val && val.length > 0 || $t('email')]"
+                    :rules="[(val: string | any[]) => val && val.length > 0 || $t('email')]"
                   /><!-- took off :val="auth.email" -->
 
                   <span v-if="!delete_account">
-                    <q-btn color="primary" :label="$t('update')" @click.prevent="pwd" />
-                    <q-checkbox class="q-dark"  v-model="update_email" :label="$t('update_email')" />
+                    <q-btn color="primary" class="q-ma-sm" :label="$t('update')" @click.prevent="pwd" />
+                    <q-checkbox v-model="update_email" :label="$t('update_email')" />
                   </span>
                   <q-btn color="red" v-else
                     :label="$t('delete_account')"
                     @click.prevent="pwd"
                   /><!-- Delete Your Account -->
 
-                  <q-checkbox class="q-dark"  v-model="delete_account" :label="$t('delete_account')" />
+                  <q-checkbox class="q-ma-sm" v-model="delete_account" :label="$t('delete_account')" />
 
                 </q-form>
 
@@ -245,19 +317,41 @@
 
               <q-separator vertical inset />
 
-              <q-card class="my-card text-white">
-                <q-card-section class="bg-primary">
-                  <select v-model="locale" class="float-right"><!-- <select v-model="$i18n.locale"> -->
+              <q-card class="my-card">
+                <q-card-section class="bg-primary text-white">
+                  <select v-model="locale" class="float-right" v-if="ipDebug">
                     <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">
-                      {{ locale }}
+                      {{ locale }}<!-- <select v-model="$i18n.locale"> -->
                     </option>
                   </select><!-- TagLocale: LocaleUserModule -->
                   <div class="text-h6">{{$t('settings')}}</div>
                 </q-card-section>
 
-                <div class="q-ma-sm">
-                  <Checkout :profile="true" :user="auth" v-on:currency="$emit('update', { usersData: 'users' })"/>
-                </div><!--  -->
+                <div class="row q-ma-sm">
+
+                  <div class="col-xs-12 col-md-4">
+
+                    <Checkout
+                      :profile="true"
+                      :user="auth" filled
+                      v-on:currency="$emit('update', { usersData: 'users' })"
+                    /><!-- Update Users Currency^^^ -->
+
+                  </div>
+                  <div class="col-xs-12 col-md-8">
+
+                    <q-input type="text" filled
+                      v-model="ip" v-if="auth?.role === 'Admin'"
+                      :label="$t('IP Address')" clearable
+                      ><!-- IP Address -->
+                      <q-btn :color="ipEqual?'red':'grey'"
+                        label="IP" @click="getIP"
+                      /><!-- TagIpDebug: IpDebugModule -->
+                    </q-input><br/>
+
+                  </div>
+
+                </div>
 
               </q-card><!-- Settings -->
 
@@ -269,31 +363,53 @@
       </q-page>
     </q-page-container>
   </q-layout>
+
 </template>
 
-<script>
+<script setup lang="ts">
 import { useQuasar } from 'quasar'
 import { ref, computed, onMounted, watch } from 'vue'
-import {  useStore } from 'vuex'
-import { baseURL, api, xRate, cy } from 'boot/axios'
+import { authAction, mobileApp, baseURL, ipData, configAction, shareMutation, xRate, cy , api, i18n} from 'boot/axios'
+import { takePicture } from './Functions'
 import { useCrudStore } from 'stores/crud'
 import Checkout from './UserCheckout.vue'
+import UserFiles from './UserFiles.vue'
+import Share from 'components/UserShare.vue'
 
-export default {
-  name: 'ProfilePage',
-  components: {
-    Checkout
-  }, props: ['user'],
-  setup (props, { emit }) {
+/**
+ * Tags: IpDebugModule - CreditModule - GainModule
+ *       TagTakePhoto - TagFixTable - TagPayment
+ *
+ * @to
+ */
+// export default {
+  // name: 'ProfilePage',
+
+  defineOptions({
+    name: 'ProfilePage'
+  })
+  // components: {
+  //   Checkout,
+  //   UserFiles
+  // },
+  // props: ['user'],
+  // setup (props, { emit }) {
+
+    const emit = defineEmits(['update']);
+
+    const props = defineProps(['user'])
+
     const $q = useQuasar()
-    const $store = useStore()
-    const { crudAction, notifyAction } = useCrudStore()
+    const store = useCrudStore()
+    const { crudAction, notifyAction } = store
+    const table = ref(null)
     const gain = ref(props.user?.gain)
+    const credit = ref(props.user?.credit)
     const user = ref(props.user)
-    const auth = computed(() => user.value||$store.getters['users/authGetter'])
+    const auth = computed(() => user.value||store.authGetter)
     const role = ref(auth.value?.role)
-    const name = ref(null)
-    const name_data = ref(null)
+    const name = ref('')
+    const name_data = ref('')
     const user_name = ref(auth.value?.name)
     const first_name = ref(auth.value?.first_name)
     const last_name = ref(auth.value?.last_name)
@@ -302,61 +418,112 @@ export default {
     const delete_account = ref(false)
     const phone = ref(auth.value?.phone)
     const address = ref(auth.value?.address)
+    const address_data = ref('')
     const city = ref(auth.value?.city)
     const region = ref(auth.value?.region)
     const region_data = ref(auth.value?.region_data)
     const postal_code = ref(auth.value?.postal_code)
     const postal_code_data = ref(auth.value?.postal_code_data)
     const country = ref(auth.value?.country)
-    const country_data = ref(auth.value?.country_data)
+    // const country_data = ref(auth.value?.country_data)
     const password = ref(null)
     const new_password = ref(null)
     const password_confirmation = ref(null)
     const isPwd = ref(true)
-    const darkMode = ref($q.localStorage.getItem('darkMode'))
-    const locale = ref(auth.value.locale)
+    // const darkMode = ref($q.localStorage.getItem('darkMode'))
+    // const darkMode = computed(() => store.darkModeGetter?.darkMode)
+    const locale = ref(auth.value?.locale)
+    // const file = ref(null)
+    const ip = ref<string | null >($q.localStorage.getItem('ip'))
+    const filesLibrary = ref(false)
+
+    const hostUserName = ref('')
+    const hostUserName_data = ref(auth.value?.hostUserName_data)
+
+    const shareData = computed(() => store.shareDataGetter?.shareData)
+
+    // const debug = computed(() => ip.value === ipData?.ip)
+    const ipEqual = computed(() => store.ipGetter?.ip === ipData?.ip)
+    const ipDebug = computed(() => store.configGetter?.ipDebug)
+    const superAdmin = computed(() => store.authGetter?.id === 1)
+    const avatar = computed(() => {
+      if (auth.value?.avatar) {
+        if (auth.value?.avatar.includes('files/')) return baseURL + '/' + auth.value?.avatar
+        else return auth.value?.avatar // Social Avatar
+      } else return auth.value?.new?.avatar // Email Avatar
+    }) // Stored Avatar
 
     const url = `api/users/${auth.value?.id}`
+    // const ios = capacitor()?.Capacitor?.getPlatform()==='ios' // -> 'web', 'ios' or 'android'
+    // const modembIos = navigator.userAgent.match(/(modembIos)/)
+    const height = screen.height/($q.platform.is.mobile?1.2:1.35)
+    // const height = ref(screen.height / 1.4)
+    const admins = [
+      'Admin', 'User', 'Editor'
+    ]
 
-    // const locale = computed(() => $store.getters['config/localeGetter'])
+    const getIP = () => ip.value = ipData?.ip
+    const storeAV = (avatar: string[]) => api({
+        url, method: 'put', data: { update: true, avatar }
+      }).then(({ data }) => { notifyAction(data)
+        store.authGetter = user.value = data.user
+      }).catch(e => notifyAction({error: 'createImage', e}))
 
-    // watch(user, () => props.user||$store.dispatch('users/authAction'))
-    watch(locale, locale => {
+    // watch(darkMode, val => darkModeClass(val))
+    watch(ip, val => {
+      $q.localStorage.set('ip', store.ipGetter.ip = val)
+      configAction() // Load ipDebug onMounted
+    }) // TagIpDebug: IpDebugModule
+    watch(locale, val => {
       setTimeout(() => props.user?emit('update', { usersData: 'users' }):
-      $store.dispatch('users/authAction'), 1500) // Master Locale Setting
-      $store.dispatch('config/configAction', { locale, id: auth.value?.id, update:1 })
+        authAction() , 1500); i18n.global.locale.value = val
+
+      store.authGetter.id = auth.value?.id
+
+      configAction() // Master Locale Setting
     }) // TagLocale: LocaleUserModule
 
-    function darkModeClass(val) {
-      const QDarkClass = document.querySelector('.q-dark')
-      if (val==='null') val = false
-      if (QDarkClass) QDarkClass.style.color = val?'#fff':'var(--q-dark)'
-      if (QDarkClass) QDarkClass.style.background = val?'var(--q-dark)':'#fff'
-    } onMounted(() => darkModeClass(darkMode.value))
-
-    function createImage(files) {
+    function createImage(file: Blob) {
       // const formData = new FormData()// ToFix
-      // formData.append('avatar', files)
-      // console.log(formData, files)
-      let reader = new FileReader()
-      reader.onload = (e) => {
-        setTimeout(() => {
-          api({
-            url, method: 'put',
-            data: { update: true, avatar: e.target.result }
-          }).then(res => {
-            user.value = res.data.user; notifyAction(res.data)
-            $store.commit('authMutation', { user: user.value })
-          }).catch(e => notifyAction({error: 'createImage', e}))
-        }, 500) // emit('reload', props.user),
-      }; reader.readAsDataURL(files)
+      // formData.append('avatar', file)
+      // console.log(formData, file)
+      // return storeAV(file)
+
+      const reader = new FileReader(); console.log('reader', reader)
+      reader.onload = async (e) => storeAV([`${e?.target?.result}`])
+      // reader.readAsBinaryString(file)
+      // reader.readAsArrayBuffer(file)
+      reader.readAsDataURL(file)
+      // reader.readAsText(file)
     } // TagAvatar: UserModule
 
+    onMounted(() => {
+      // darkModeClass(darkMode.value)
+      const currency = auth.value.currency_code
+      store.rateGetter = auth.value.rate
+      shareMutation(auth.value)
+      // store['currencyGetter'].currency = auth.value.currency_code
+      crudAction({ currency, mutate: 'currencyGetter', refresh: ['currencyGetter'] })
+    })
+
+    // function darkModeClass(val: string | number | boolean | object | null) {
+    //   const QDarkClass: any = document.querySelector('.q-dark')//; console.log('val', val)
+    //   // if (val==='null') val = false // authAction()
+    //   if (QDarkClass) QDarkClass.style.color = val?'#fff':'var(--q-dark)'
+    //   if (QDarkClass) QDarkClass.style.background = val?'var(--q-dark)':'#fff'
+    // }
+
     function update() {
-      crudAction({
-        url, method: 'put',
+      api({ url, method: 'put', data: {
+        hostUserName: hostUserName.value, // fixHere
+        authCode: hostUserName.value?true:'',
+        ip: hostUserName.value?ipData?.ip:'',
+        id: hostUserName.value?auth.value?.id:'',
+
         update: true,
+        table: table.value,
         gain: gain.value,
+        credit: credit.value,
         role: role.value,
         name: name.value,
         first_name: first_name.value,
@@ -366,92 +533,45 @@ export default {
         city: city.value,
         region: region.value,
         postal_code: postal_code.value,
-        country: country.value,
-        // locale: locale.value
-        // currency_code,
-        // avatar: file.value
-      }).then(() => emit('update', { usersData: 'users' }))
-        .then(() => $store.dispatch('users/authAction'))
-        .catch(error => name_data.value = error.response?.data?.errors?.name?.[0] ||
-                                          error.response?.data?.message)
-    } // TagUpdate: UserUpdate
+        country: country.value }
+      }).then(({ data }) => notifyAction(data)).then(() => xRate(authAction()))
+        .then(() => emit('update', { refresh: ['reloadApp'] }))
+        .catch((error: { response: { data: { errors: { name: never[] }; message: never } } }) =>
+          name_data.value = error.response?.data?.errors?.name?.[0] || error.response?.data?.message)
+    } // TagUpdate: UserUpdate // hostUserName_data.value = error.response?.data?.errors?.hostUserName?.[0] || error.response?.data?.message
 
-    return {
-      height: screen.height/($q.platform.is.mobile?1.2:1.35),
-      // locale: computed(() => $store.getters['config/localeGetter']),
-      // height: ref(screen.height / 1.4),
-      locale,
-      auth,
-      role,
-      name,
-      name_data,
-      user_name,
-      first_name,
-      last_name,
-      email,
-      delete_account,
-      update_email,
-      phone,
-      address,
-      // address_data: ref(null),
-      city,
-      region,
-      region_data,
-      postal_code,
-      postal_code_data,
-      country,
-      country_data,
-      gain,
-      xRate, cy,
-      password,
-      new_password,
-      password_confirmation,
-      isPwd,
-      baseURL,
-      admins: [
-        'Admin', 'User', 'Editor'
-      ],
-      users: [
-        'User', 'Editor'
-      ],//NotInUse
-
-      update, // TagUpdate: UserUpdate
-      pwd() {
-        crudAction({
-          url, method: 'put',
+    function pwd() {
+      api({
+        url, method: 'put', data: {
           pwd: !props.user,
           update: true,
           email: email.value,
-          update_email: update_email.value,
+          update_email: update_email.value||ipDebug.value,
           delete_account: delete_account.value,
           password: props.user?false:password.value,
-          update_password: props.user?new_password.value:false,//added
+          update_password: props.user?new_password.value:false,
           new_password: new_password.value,
-          password_confirmation: password_confirmation.value
-        }).catch(e => notifyAction({error: 'passwordAction', e}))
-      },
-      avatar: computed(() => {
-        if (auth.value?.avatar) { // Stored Avatar
-          if (auth.value?.avatar.includes('images/profile')) return baseURL + '/' + auth.value?.avatar
-          else return auth.value?.avatar // Social Avatar
-        } else return auth.value?.new?.avatar // Email Avatar
-      }),
-      onImageChange(e) {
-        let files = e.target.files || e.dataTransfer.files
-        if (!files.length) return; createImage(files[0])
-      }, // TagAvatar: UserModule
-      deleteAvatar() {
-        crudAction({
-          url, method: 'delete',
-          delete_avatar: 1
-        }).then(res => user.value = res.user)
-          .catch(e => notifyAction({error: 'deleteAvatar', e}))
-      }, // ============================================== \\
-      imgSize() {
-        // var currWidth = file.width
-        // var currHeight = file.height
-      } // TODO http://image.intervention.io/api/filesize
+          password_confirmation: password_confirmation.value }
+      }).catch(e => notifyAction({error: 'passwordAction', e}))
+        .then(({ data }) => notifyAction(data))
     }
-  }
-}
+
+    function deleteAvatar() {
+      api({ url, method: 'delete',
+        data: { delete_avatar: 1 }
+      }).then(({ data }) => { notifyAction(data)
+        store.authGetter = user.value = data.User
+      }).catch((e: unknown) => notifyAction({error: 'deleteAvatar', e}))
+    } // ============================================== \\
+
+    // function imgSize() {
+    //   // var currWidth = file.width
+    //   // var currHeight = file.height
+    // } // TODO http://image.intervention.io/api/filesize
+
+    // function onImageChange(e: { target: { files: unknown }; dataTransfer: { files: unknown } }) {
+    //   let files = e.target.files || e.dataTransfer.files
+    //   if (!files?.length) return; createImage(files[0])
+    // } // TagAvatar: UserModule - NotInUse
+
 </script>

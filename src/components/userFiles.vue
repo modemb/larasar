@@ -10,55 +10,74 @@
         <!-- <q-btn dense flat icon="minimize" />
         <q-btn dense flat icon="crop_square" /> -->
         <q-btn dense flat icon="close" v-close-popup />
-      </q-bar>
+      </q-bar><!-- -->
 
       <div class="q-pa-sm row items-center">
 
-        <div class="col-xl-4">
+        <div class="col-xl-4" v-if="post||ipDebug"><!-- -->
+
+          <q-btn color="primary" icon="fas fa-camera" @click="takePhoto" v-if="mobileApp"/>
           <q-uploader v-if="upload"
-            :factory="storeFiles"
+            :factory="getFiles"
             :label="$t('Batch upload')"
             multiple max-files="10"
             auto-upload batch
-          /><!-- TagUpload: FilesModule hide-upload-btn  -->
-          <input type="file" v-else
-            v-on:change="onImageChange"
-            class="q-ma-xs col-md-3"
-          /><!-- TagUpload: FilesModule -->
+          /><!-- TagUpload: FileModule hide-upload-btn -->
+
+          <q-input filled multiple type="file"
+            _hint="Native file (multiple)" class="text-white"
+            @update:model-value="(val: any) => getFiles(val)"
+          /><!-- https://quasar.dev/vue-components/input#example--input-of-file-type -->
+
         </div><!-- https://quasar.dev/vue-components/uploader#introduction -->
+
         <div class="col-xl-8">
 
-          <q-btn icon="fas fa-cloud-upload-alt" class="q-ma-xs col-md-2"
-            @click.prevent="upload = !upload"
-          /><!-- TagUpload: FilesModule -->
+          <q-btn class="q-ma-xs col-md-2" icon="fas fa-cloud-upload-alt"
+            @click.prevent="upload = !upload"  v-if="ipDebug"
+          /><!-- TagUpload: FileModule !mobileApp-->
 
           <q-btn-toggle
             v-model="showFiles"
             push
-            glossy class="q-ma-xs col-md-2"
+            glossy class="q-ma-xs *col-xs-2 *col-md-2"
             toggle-color="orange"
             :options="[
-              {label: $t('My Pics'), value: 1},
-              {label: $t('Trash'), value: 0}
-            ].concat(role?.admins?[{label: $t('all_pics'), value: 'all_pics'}]:[])"
-          /><!-- TagPeriod: FilesModule -->
+              {label: $t('My Pics'), value: 'my_pics'},
+              {label: $t('Trash'), value: bool?'all_trashed_pics':'trashed_pics'}
+            ].concat(ipDebug||(auth?.role==='Admin')?[
+              {label: $t('Users Pics'), value: 'users_pics'},
+              {label: $t('Avatars'), value: 'avatars'},
+              {label: $t('All Pics'), value: 'all_pics'}
+            ]:[])"
+          /><!-- TagPeriod: FileModule -->
 
-          <q-btn icon="add" class="q-ma-xs col-md-2"
-            @click="add(selectedFiles)"
-          /><!-- TagAdd: FilesModule -->
+          <q-toggle v-if="(ipDebug&&(showFiles==='trashed_pics')||(showFiles==='all_trashed_pics'))"
+            :icon="'fas fa-user'+(bool?'s':'')"
+            :val="[true]" size="xl" v-model="bool"
+          />
+
+          <q-btn icon="fas fa-file-import" v-if="post"
+            :class="(selectedFiles?.length?'bg-orange':'')+' q-ma-xs col-md-2'"
+            @click="storeFiles(selectedFiles)"
+          /><!-- TagAdd: FileModule -->
           <q-btn icon="edit" class="q-ma-xs col-md-2"
-            @click="edit(selectedFiles)" v-if="ipDebug"
-          /><!-- TagEdit: FilesModule -->
-          <q-btn icon="delete" class="q-ma-xs col-md-2"
-            @click.prevent="Delete(selectedFiles)" v-if="showFiles"
-          /><!-- TagDelete: FilesModule -->
-          <template v-else-if="showFiles!='all_pics'">
-            <q-btn icon="restore" class="q-ma-xs col-md-2"
+            label="restore all" v-if="ipDebug"
+            @click="restoreAll"
+          /><!-- TagEdit: FileModule -->
+          <q-btn icon="delete" v-if="(showFiles!=='trashed_pics')&&(showFiles!=='all_trashed_pics')"
+            :class="(selectedFiles?.length?'bg-orange':'')+' q-ma-xs col-md-2'"
+            @click.prevent="Delete(selectedFiles)"
+          /><!-- TagDelete: FileModule -->
+          <template v-else>
+            <q-btn icon="restore"
+              :class="(selectedFiles?.length?'bg-orange':'')+' q-ma-xs col-md-2'"
               @click="restore(selectedFiles)"
-            /><!-- TagRestore: FilesModule -->
-            <q-btn icon="delete_forever" class="q-ma-xs col-md-2"
+            /><!-- TagRestore: FileModule -->
+            <q-btn icon="delete_forever"
+              :class="(selectedFiles?.length?'bg-orange':'')+' q-ma-xs col-md-2'"
               @click.prevent="delete_forever(selectedFiles)"
-            /><!-- TagDeleteForever: FilesModule -->
+            /><!-- TagDeleteForever: FileModule -->
           </template><!-- <q-separator color="orange" inset /> -->
         </div>
 
@@ -68,7 +87,8 @@
     <q-page-container>
       <q-page class="q-pa-sm">
         <q-table
-          :style="'height:' + height + 'px;'" grid
+          _:style="'height:' + height + 'px;'" grid
+          :card-container-style="cardContainerStyle"
           :card-container-class="cardContainerClass"
           :title="$t('gallery')"
           :rows="rows"
@@ -95,11 +115,21 @@
             <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
               <q-card class="my-card">
 
-                <q-img :src="baseURL+'/'+props.row.pic" />
+                <q-img :src="props.row?.avatar?.includes('https') ? props.row.avatar :
+                                    baseURL+'/'+(props.row.pic||props.row.avatar)" />
                 <div v-html="props.row.name" v-if="props.row.name" />
-                <q-checkbox v-model="selectedFiles" :val="props.row.pic" :label="props.row.updated_at" />
-                <div :class="selectedFile"></div><!-- TagEdit: FilesModule -->
-
+                <q-checkbox v-model="selectedFiles"
+                  :val="props.row.pic"
+                  :label="props.row.updated_at||props.row.id"
+                /><!-- selectModule -->
+                <q-btn size="12px" flat dense icon="fas fa-sign-in-alt"
+                  :label="$t('Log User')" v-if="ipDebug"
+                  @click.prevent="logUserAction(props.row.user_id||props.row.id)"
+                /><!-- TagLogUser: UserModule -->
+                <q-btn v-if="(showFiles!=='trashed_pics'&&showFiles!=='all_trashed_pics')&&selectedFiles?.length"
+                  :label="$t('delete')" size="12px" icon="fas fa-trash"
+                  @click.prevent="deletePic(props.row.id)" flat dense
+                /><!-- TagDeletePic: UserModule -->
               </q-card>
             </div>
           </template>
@@ -110,36 +140,32 @@
   </q-layout>
 </template>
 
-<script>
-import { useQuasar } from 'quasar'
+<script lang="ts">
+import { QUploaderFactoryFn, useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
 import { ref, computed, watch, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import { baseURL, api, ipDebug } from 'boot/axios'
+import { api, baseURL, mobileApp, logUserAction, mSession, included } from 'boot/axios'
+import { capacitor, takePicture } from './Functions'
 import { useCrudStore } from 'stores/crud'
-
 
 /**
  * Tags: selectModule
  *
- * @from
+ * @to
  */
 export default {
-  props: ['height', 'post'],
+  props: ['height', 'avatar', 'post'],
   setup (props, { emit }) {
     const $q = useQuasar()
-    const $store = useStore()
-    const { crudAction, notifyAction } = useCrudStore()
+    const store = useCrudStore()
+    const { crudAction, notifyAction } = store
     const $route = useRoute()
-    const rows = ref([])
-    // const selectedFile = ref(null)
     const selectedFiles = ref([])
-    const showFiles = ref(1)
-    const images  = ref([])
+    const showFiles = ref('my_pics')
     const Items = 0
 
-    const auth = computed(() => $store.getters['users/authGetter'])
-    const role = computed(() => $store.getters['users/rolesGetter'])
+    const auth = computed(() => store.authGetter)
+    const rows = computed(() => store[showFiles.value]||[])
 
     // const filter = ref('')
     const pagination = ref({
@@ -148,59 +174,57 @@ export default {
     }) // https://github.com/Intervention/image
 
     watch(() => $q.screen.name, () => pagination.value.rowsPerPage = getItemsPerPage())
-    watch(showFiles, val => crudReload(val==='all_pics'?val:(val?'my_pics':'trashed')))
+    watch(showFiles, () => filesAction({}))
 
-    function crudReload(show) {
-      crud({
-        url: `api/users/${auth.value?.id}`,
-        method: 'get', show,
-        auth_id: auth.value?.id
+    function filesAction(params: { refresh?: string[] }) {
+      selectedFiles.value = []
+
+      crudAction({...params,
+        url: `api/users/${auth.value?.id}`,// auth_id: auth.value?.id
+        method: 'get', mutate: showFiles.value //.then((crud: string | any[]) => height(crud))
       }).then(() => emit('reload', props.post?'file':$route))
-        .catch(e => notifyAction({error: 'onMountedPicsAction', e}))
-    } onMounted(() => crudReload('my_pics'))
+        .catch((e: unknown) => notifyAction({error: 'FilesAction', e}))
+    } onMounted(() => filesAction({refresh: ['reloadApp']}))
 
-    async function crud(data) {
-      rows.value = await crudAction(data).catch(e => notifyAction({error: data.error, e}))
-      const gridMasonryClass = document.querySelector('.grid-masonry')
-      if (gridMasonryClass) gridMasonryClass.style.height = rows.value?.length*300+'px'
-    } // TagCrud: CrudModule
-
-    function add(selectedFiles) {
+    function storeFiles(selectedFiles: unknown) {
       api({
         url: `api/users/${auth.value?.id}`,
-        method: 'put',
-        data: {
+        method: 'put', data: {
+          avatar: props.avatar,
           post: props.post, // Post Data
           pics: selectedFiles,
-          update: true
-        }
-      }).then(res => {
-        crudReload('my_pics') // Show Picture
-        notifyAction(res.data)
+          update: true }// mSession(['reloadApp'])
+      }).then(({ data }) => {
+        filesAction({refresh: ['reloadApp']}) // Show Picture
+        notifyAction(data); // images.value = []
       }).catch(e => notifyAction({error: 'storeImageAction', e}))
-    } // TagAdd: FilesModule
+    } // TagAdd: FileModule
 
-    function cruDelete (selectedFiles) {
-      return crud ({
-        error: 'DeletePicsAction',
-        url: `api/users/${auth.value?.id}`,
-        method: 'delete',
-        auth: auth?.value,
-        forever: selectedFiles?.forever,
-        pics: selectedFiles
-      })
-    }
+    function getFiles(files: Blob[]) {
 
-    function storeFiles (files) {
       for (let i = 0; i < files.length; i++) {
-        let reader = new FileReader()
-        reader.onload = e => {
-          images.value.push(e.target.result)
-          if (i+1 === files.length) setTimeout(() =>
-            add(images.value), images.value.length*500)
-        }; reader.readAsDataURL(files[i])
-      } images.value = [] // https://www.positronx.io/understand-html5-filereader-api-to-upload-image-and-text-files/
-    } // TagUpload: FilesModule
+        const reader = new FileReader()
+        reader.readAsDataURL(files[i])
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          if (e?.target?.result) selectedFiles.value.push(e.target.result)
+          if (i+1 === files?.length) storeFiles(selectedFiles.value)
+        }
+      }
+    } // TagUpload: FileModule
+
+    function Delete(selectedFiles: { forever: boolean }) {
+
+      if (confirm('Are You Sure You Want '+(selectedFiles?.forever?'To Delete Forever Pics':'To Delete Pics')) === true)
+      return api({
+        url: `api/users/${auth.value?.id}`,
+        method: 'delete', data: {
+          auth: auth?.value,
+          forever: selectedFiles?.forever,
+          pics: selectedFiles}
+      }).then(() => filesAction({refresh: ['reloadApp']}))
+        .catch(e => notifyAction({error: 'deleteSelectedFiles', e}))
+        // .catch(e => notifyAction({error: 'DeletePics', e}))
+    }
 
     function getItemsPerPage () {
       // if ($q.screen.lt.sm) {
@@ -214,22 +238,26 @@ export default {
     }
 
     return {
-      rows,
       baseURL,
       filter: ref(''),
-      pagination,
       auth,
-      role,
-      ipDebug,
+      ipDebug: computed(() => store.configGetter?.ipDebug),
       upload: ref(false),
-      // selectedFile,
+      bool: ref(false),
       selectedFiles,
       showFiles,
 
-      add,
-      storeFiles,
+      ios: capacitor()?.Capacitor?.getPlatform()==='ios', // -> 'web', 'ios' or 'android'
+      modembIos: navigator.userAgent.match(/(modembIos)/), mobileApp,
 
-      // edit (selectedFiles) {
+      storeFiles,
+      getFiles,
+      files: ref(null),
+      logUserAction,
+
+      takePhoto: async () => storeFiles([await takePicture()]),
+
+      // edit(selectedFiles) {
       //   selectedFiles.forEach(selectedFile => {
       //     // let test = document.getElementsByClassName(selectedFile)//.innerHTML =1
       //     let test = document.querySelector(`.${selectedFile}`)//.innerHTML = 1
@@ -240,43 +268,61 @@ export default {
       //     //       flat :loading="loader"
       //     //       icon="fas fa-edit"
       //     //       @click.prevent="edit(text)"
-      //     //     /><!-- TagEdit: FilesModule -->
+      //     //     /><!-- TagEdit: FileModule -->
       //     //   </template>
       //     // </q-input>`
       //   })
-      // },// TODO TagEdit: FilesModule
+      // },// TODO TagEdit: FileModule
 
-      onImageChange (e) {
-        let files = e?.target?.files || e?.dataTransfer?.files
-        if (!files.length) return; storeFiles(files)
-      }, // TagUpload: FilesModule
-
-      restore (selectedFiles) {
-        crud ({
-          error: 'restorePicsAction',
+      restore (selectedFiles: unknown) {
+        api({
           url: 'api/users',
           method: 'post',
+          data: {restorePics: selectedFiles}
+          // refresh: ['reloadApp']
           // auth_id: auth?auth.id:null,
-          // pics: selectedFiles,
-          restorePics: selectedFiles
-          // pic: true
-        }).then(() => crudReload('trashed'))
-      }, // TagRestore: FilesModule
+          // pics: selectedFiles,'trashed_pics'
+          // pic: true.then(() => mSession(['reloadApp']))
+        }).then(() => filesAction({refresh: ['reloadApp']}))
+          .catch(e => notifyAction({error: 'restorePics', e}))
+      }, // TagRestore: FileModule
 
-      Delete (selectedFiles) {
-        selectedFiles.forever = 0
+      restoreAll() {
+        if (confirm('Restore All Files')) api({
+          url: 'api/users', method: 'post',
+          data: {filesRestore: true}
+        }).then(() => filesAction({refresh: ['reloadApp']}))
+          .catch(e => notifyAction({error: 'restoreAll', e}))
+          //.then(() =>  mSession(['reloadApp']))'trashed_pics'
+      },
+
+      deletePic(id: number) {
         if (confirm('Are You Sure You Want To Delete Pics') === true)
-        cruDelete(selectedFiles).then(() => crudReload((showFiles.value === 'all_pics')?'all_pics':'my_pics'))
-      }, // TagDelete: FilesModule
+          api.delete(`api/categories/${id}?deletePic=1`)
+            .then(() => filesAction({refresh: ['reloadApp']}))
+            .catch(e => notifyAction({error: 'deletePic', e}))
+            // .then(() =>  mSession(['reloadApp']))showFiles.value
+      }, // TagDeletePic: FileModule
 
-      delete_forever (selectedFiles) {
-        selectedFiles.forever = 1
-        if (confirm('Are You Sure You Want To Delete Forever Pics') === true)
-        cruDelete(selectedFiles).then(() => crudReload('trashed'))
-        // AddPasswordBeforeDeleteForever
-      }, // TagDeleteForever: FilesModule: FilesModule
+      Delete,
 
-      columns: [
+      // (selectedFiles: { forever: unknown }) {
+      //   selectedFiles.forever = 0
+      //   if (confirm('Are You Sure You Want To Delete Pics') === true)
+      //   cruDelete(selectedFiles)
+      //     // .then(() =>  mSession(['reloadApp']))showFiles.value
+      //     .then(() => filesAction({}))
+      //     .catch(e => notifyAction({error: 'deleteSelectedFiles', e}))
+      //   // cruDelete(selectedFiles).then(() => filesAction((showFiles.value === 'all_pics')?'all_pics':'my_pics'))
+      // }, // TagDelete: FileModule
+
+      delete_forever(selectedFiles: { forever: boolean }) {
+        selectedFiles.forever = true // AddPasswordBeforeDeleteForever
+        Delete(selectedFiles)//.then(() => filesAction({}))
+          // .then(() =>  mSession(['reloadApp']))'trashed_pics'
+      }, // TagDeleteForever: FileModule: FileModule
+
+      columns: <any> [
         { name: 'pic', align: 'center', label: ('picture'), field: 'pic', sortable: true },
         { name: 'post_title', align: 'center', label: ('post_title'), field: 'name', sortable: true },
         { name: 'address', align: 'center', label: ('address'), field: 'address', sortable: true },
@@ -284,21 +330,23 @@ export default {
         { name: 'end_date', align: 'center', label: ('expiry'), field: 'end_date', sortable: true },
         { name: 'edit', align: 'center', label: ('edit'), field: 'edit', sortable: false },
         { name: 'delete', align: 'center', label: ('delete'), field: 'delete', sortable: false }
-      ],
+      ], rows, pagination,
 
       cardContainerClass: computed(() => {
         return $q.screen.gt.xs
           ? 'grid-masonry grid-masonry--' + ($q.screen.gt.sm ? '3' : '2')
-          : null
+          : ''
       }),
 
+      cardContainerStyle: computed(() => ({
+        height: rows.value?.length*200+'px'
+      })),
+
       rowsPerPageOptions: computed(() => {
-        return [0]
+        // return [0]
         return $q.screen.gt.xs
-          // ? $q.screen.gt.sm ? [ 3, 6, 9 ] : [ 3, 6 ]
-          // : [3]
-          ? $q.screen.gt.sm ? [ Items, 6, 9 ] : [ Items, 6 ]
-          : [Items]
+          ? $q.screen.gt.sm ? [ 3, 6, 9 ] : [ 3, 6 ]
+          : [3]
       })
     }
   }

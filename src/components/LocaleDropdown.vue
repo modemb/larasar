@@ -1,9 +1,9 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-ma-sm">
     <!-- <select v-model="$i18n.locale">
       <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
     </select> -->
-    <q-btn-dropdown color="*primary" :label="locales[locale]">
+    <q-btn-dropdown dense color="primary" :label="locales?.[locale]">
       <q-list>
         <q-item
           v-for="(lang, key) in locales" :key="key"
@@ -21,22 +21,23 @@
 </template>
 
 <script>
+import { Cookies } from 'quasar'
 import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { useCrudStore } from 'stores/crud'
+import { i18n, configAction, mSession } from 'boot/axios'
 
 export default {
   setup () {
-    const $store = useStore()
+    const store = useCrudStore()
+    // const { crudAction, notifyAction } = store
 
     return {
-      locale: computed(() => $store.getters['config/localeGetter']),
-      locales: computed(() => $store.getters['config/localesGetter']),
-      setLocale: locale => $store.dispatch('config/configAction', { locale })
-      // setLocale (locale) {
-      //   if (i18n?.global?.locale !== locale) {
-      //     $store.dispatch('config/configAction', { locale })
-      //   }
-      // }
+      locale: computed(() => store['configGetter']?.locale),//computed(() => $store.getters['config/localeGetter']),
+      locales: computed(() => store['configGetter']?.locales),//computed(() => $store.getters['config/localesGetter']),
+      setLocale(locale) {
+        Cookies.set('locale', i18n.global.locale.value = locale, { expires: 365 })
+        mSession(['reloadApp']); configAction()
+      }
     } // https://www.askvg.com/tip-enable-new-translator-bubble-ui-in-google-chrome
   }
 }

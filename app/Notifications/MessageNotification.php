@@ -46,15 +46,13 @@ class MessageNotification extends Notification
         // $chat = end($notifiable->messages)[0];
         // $i = $auth->messages->count();
         // $chat = $auth->messages[$i-1]
-        $auth = auth()->user();
-        $chat = $auth->messages->last(); if ($chat->message) return [
-          // 'title' => $chat,
+        $auth = auth()->user(); $chat = $auth->messages->last(); return [
           'avatar' => $auth->avatar??$auth->new['avatar'], //'Hello from Laravel!',
           'title' => $auth->name, //'Hello from Laravel!',
           'body' => $chat->message,//'Thank you for using our application.',
           'action_url' => '/chat/'.$chat->room_id, //'/profile',
           'created' => Carbon::now()->toIso8601String(),
-        ];// Send Notification To Room Users
+        ]; // Send Notification To Room Users
     }
 
     /**

@@ -3,7 +3,7 @@
   <q-dialog v-model="editLocation"><!--======= Add Update Locations PopUp ============-->
       <q-card class="my-card text-white" style="width:800px">
         <q-card-section class="bg-primary">
-          <q-btn color="primary" text-color="white" class="float-right" dense round icon="close" v-close-popup />
+          <q-btn dense round class="float-right" icon="close" v-close-popup />
           <div class="text-h6">{{place?$t('Update Location'):$t('Add Location')}}</div>
         </q-card-section>
 
@@ -17,9 +17,9 @@
               v-model="place"
               :label="$t('place')"
               lazy-rules class="col-8"
-              :error="place_data ? true : false"
-              :error-message='place_data' clearable
-              :rules="[val => val && val.length > 0 || $t('add_place')]"
+              _:error="place_data ? true : false"
+              _:error-message='place_data' clearable
+              :rules="[(val: string | any[]) => val && val.length > 0 || $t('add_place')]"
             />
 
             <q-input
@@ -28,9 +28,9 @@
               type="text"
               v-model="utc_offset"
               :label="$t('utc_offset')" class="col-4"
-              :error="utc_offset_data ? true : false"
-              :error-message='utc_offset_data' clearable
-              :rules="[val => val && val.length > 0 || $t('add_utc_offset')]"
+              _:error="utc_offset_data ? true : false"
+              _:error-message='utc_offset_data' clearable
+              :rules="[(val: string | any[]) => val && val.length > 0 || $t('add_utc_offset')]"
             />
 
             <q-input
@@ -39,9 +39,9 @@
               v-model="latitude"
               :label="$t('latitude')"
               lazy-rules class="col-6"
-              :error="latitude_data ? true : false"
-              :error-message='latitude_data' clearable
-              :rules="[val => val && val.length > 0 || $t('add_latitude')]"
+              _:error="latitude_data ? true : false"
+              _:error-message='latitude_data' clearable
+              :rules="[(val: string | any[]) => val && val.length > 0 || $t('add_latitude')]"
             />
 
             <q-input
@@ -50,9 +50,9 @@
               v-model="longitude"
               :label="$t('longitude')"
               lazy-rules class="col-6"
-              :error="longitude_data ? true : false"
-              :error-message='longitude_data' clearable
-              :rules="[val => val && val.length > 0 || $t('add_longitude')]"
+              _:error="longitude_data ? true : false"
+              _:error-message='longitude_data' clearable
+              :rules="[(val: string | any[]) => val && val.length > 0 || $t('add_longitude')]"
             />
 
           </div>
@@ -62,8 +62,8 @@
               :loading="loader" @click.prevent="update(Location)"
               :label="place?$t('Update Location'):$t('Add Location')"
             /><!-- TagUpdate: locationModule -->
-            <q-btn color="primary" round icon="fas fa-sync"
-              class="float-right" @click.prevent="Edit({})"
+            <q-btn round icon="fas fa-sync" color="primary"
+              class="float-right" @click.prevent="Edit({ place: '', latitude: 0, longitude: 0, utc_offset: 0 })"
             />
           </div>
 
@@ -80,7 +80,7 @@
       :title="$t('locations_list')"
       :rows="rows"
       :columns="columns"
-      row-key="id"
+      row-key="name"
       virtual-scroll
       :virtual-scroll-item-size="48"
       :rows-per-page-options="[0]"
@@ -118,7 +118,7 @@
             {{ props.row.longitude }}
           </q-td>
           <q-td key="utc_offset" :props="props">{{ props.row.utc_offset }}</q-td>
-          <template v-if="locationsData=='locations'||locationsData=='duplicated'">
+          <template v-if="locationsData=='locations'||locationsData=='locDuplicated'">
             <q-td key="edit" :props="props"><!-- TagEdit: locationModule -->
               <q-btn icon="edit" rounded class="q-ma-md" @click.prevent="Edit(props.row)"/>
             </q-td>
@@ -144,19 +144,21 @@
           glossy class="q-ma-xs col-md-3"
           :options="[
             {label: $t('locations'), value: 'locations'},
-            {label: $t('duplicated'), value: 'duplicated'},
-            {label: $t('trashed'), value: 'trashed'},
+            {label: $t('duplicated'), value: 'locDuplicated'},
+            {label: $t('Trash'), value: 'locTrashed'},
           ]"
         /><!-- TagPeriod: PeriodModule -->
 
-        <q-btn icon="fas fa-plus" color="primary" class="q-ma-xs">
-          <q-popup-proxy @before-show="updateProxy" transition-show="scale" transition-hide="scale">
+        <q-btn color="primary" class="q-ma-xs" icon="fas fa-plus">
+          <q-popup-proxy transition-show="scale" transition-hide="scale">
             <google-autocomplete/>
-          </q-popup-proxy>
+          </q-popup-proxy><!-- @before-show="updateProxy" -->
         </q-btn><!-- TagPeriod: PeriodModule -->
 
-        <q-btn icon="fas fa-cut" color="primary"
-          :loading="loader" class="q-ma-xs"
+        <q-btn color="primary"
+          class="q-ma-xs"
+          icon="fas fa-cut"
+          :loading="loader"
           @click="truncate"
         />
 
@@ -165,7 +167,7 @@
           @click="editLocation=true"
         /><!-- TagAdd: LocationModule :label="$t('Add Location')"-->
 
-        <q-btn icon="add" color="primary" class="q-ma-xs"
+        <q-btn color="primary" class="q-ma-xs" icon="add"
           icon-right="fas fa-chart-bar" :loading="loader"
           @click="fromAnalytics"
         />
@@ -181,17 +183,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-import {  useStore } from 'vuex'
-import { i18n, api } from 'boot/axios'
+import { i18n, api, mSession } from 'boot/axios'
 import { useCrudStore } from 'stores/crud'
 import GoogleAutocomplete from 'components/GoogleAutocomplete.vue'
+import { Param } from 'components/models'
 
 /**
  * Tags:
  *
- * @from UserController
+ * @to UserController
  */
 export default {
   components: {
@@ -199,41 +201,44 @@ export default {
   },
   setup () {
     const $t = i18n.global.t
-    const $store = useStore()
-    const { crudAction, notifyAction } = useCrudStore()
+    const store = useCrudStore()
+    const { crudAction, notifyAction } = store
     const loader = ref(false)
     const editLocation = ref(false)
     const locationsData = ref('locations')
-    const Location = ref(null)
+    const Location = ref()
 
-    const place = ref(null)
-    const latitude = ref(null)
-    const longitude = ref(null)
-    const utc_offset = ref(null)
+    const place = ref('')
+    const latitude = ref(0)
+    const longitude = ref(0)
+    const utc_offset = ref(0)
 
-    const token = $store.getters['users/tokenGetter']
+    const auth = computed(() => store.authGetter)
 
-    onMounted(() => onload({ locationsData: 'locations' }))
-    watch(locationsData, val => onload({ locationsData: val }))
+    onMounted(() => locationsAction({ locationsData: 'locations' }))
+    watch(locationsData, val => locationsAction({ locationsData: val }))
 
-    const toFindDuplicates = array => array.filter((item, index) => array.indexOf(item) !== index)
-    const duplicateElements = toFindDuplicates($store.getters['users/usersGetter'])
+    const toFindDuplicates = (array: any[]) => array?.filter((item, index) => array.indexOf(item) !== index)
+    const duplicateElements = toFindDuplicates(store.locationsGetter)
     console.log(duplicateElements)
 
-    function onload(payload) {
-      crudAction({ ...payload, ...{
+    function locationsAction(payload: Partial<Param>) {
+      // if (!included(locationsData.value))
+      crudAction({ ...payload,
+        mutate: locationsData.value,
         url: 'api/users/locations', method: 'get',
-      }}).then(users => $store.commit('users/usersMutation', { users }))
-         .catch(e => notifyAction({error: 'locationsAction', e}))
+      }).catch((e: unknown) => notifyAction({error: 'locationsAction', e}))
          .then(() => loader.value = false)
     }
 
-    function Delete (location) {
-      if (token && confirm('Are You Sure You Want To '+(location?.forever?'Delete Forever':'Delete')+' Location '+ location?.place) === true) crudAction({
+    function Delete (location: { forever: boolean; place: string; id: number }) {
+      if (auth.value && confirm('Are You Sure You Want To '+(location?.forever?'Delete Forever':'Delete')+' Location '+ location?.place) === true)
+      crudAction({
           url: `/api/users/${location?.id}`,
-          method: 'delete', location: true
-        }).then(() => onload({ locationsData: locationsData.value}))
-          .catch(e => notifyAction({error: 'deleteAction', e}))
+          method: 'delete', location: true,
+          refresh: ['reloadApp']//.then(() => mSession(['reloadApp']))
+        }).then(() => locationsAction({ locationsData: locationsData.value}))
+          .catch((e: unknown) => notifyAction({error: 'deleteAction', e}))
     } // TagDelete: locationModule
 
     return {
@@ -259,7 +264,7 @@ export default {
         rowsNumber: 10
       },
 
-      update(location) {
+      update(location: { place: string; latitude: number; longitude: number; utc_offset: number }) {
         loader.value = true
         crudAction({
           success: 'Location Updated Successfully',
@@ -268,47 +273,55 @@ export default {
           place: place.value||location?.place||'',
           latitude: latitude.value||location?.latitude||'',
           longitude: longitude.value||location?.longitude||'',
-          utc_offset: utc_offset.value||location?.utc_offset||''
-        }).then(() => onload({ locationsData: locationsData.value}))
-          .catch(e => notifyAction({error: 'updateLocation', e}))
+          utc_offset: utc_offset.value||location?.utc_offset||'',
+          refresh: ['reloadApp']//.then(() => mSession(['reloadApp']))
+        }).then(() => locationsAction({ locationsData: locationsData.value}))
+          .catch((e: any) => notifyAction({error: 'updateLocation', e}))
       }, // TagUpdate: locationModule
-      Edit(location) {
+      Edit(location: { place: string; latitude: number; longitude: number; utc_offset: number } | null) {
         editLocation.value = true
 
         place.value = location?.place||''
-        latitude.value = location?.latitude||''
-        longitude.value = location?.longitude||''
-        utc_offset.value = location?.utc_offset||''
+        latitude.value = location?.latitude||0
+        longitude.value = location?.longitude||0
+        utc_offset.value = location?.utc_offset||0
         Location.value = location
       }, // TagEdit: locationModule
       Delete, // TagDelete: locationModule
-      delete_forever(location) { // AddPasswordBeforeDeleteForever
-        Delete({...location, ...{forever: 1}})
+      delete_forever(location: { forever: boolean; place: string; id: number }) {
+        Delete({...location, forever: true}) // AddPasswordBeforeDeleteForever
       },// TagDeleteForever: locationModule
-      restore (location) {
+      restore (location: { id: number }) {
         api.post('api/users', {location_id: location?.id}).then(() => {
-          onload({ locationsData: 'trashed' })
-        })
+          mSession(['reloadApp'])
+          locationsAction({ locationsData: 'locTrashed' })
+        }).catch(e => notifyAction({error: 'restoreLocation', e}))
       }, // TagRestore: locationModule
       fromAnalytics () {
-        if (token && confirm('Are You Sure You Want To Add Locations From Analytics') === true)
+        if (auth.value && confirm('Are You Sure You Want To Add Locations From Analytics') === true)
         loader.value = true; else return
         api.post('api/users', {fromAnalytics: true}).then(() => {
-          onload({ locationsData: 'locations' })
+          mSession(['reloadApp'])
+          locationsAction({ locationsData: 'locations' })
           loader.value = false
         }).catch(e => notifyAction({error: 'fromAnalytics', e}))
       },
 
       truncate () {
-        if (token && confirm('Are You Sure You Want To Truncate Locations') === true)
-        loader.value = true; else return
-        api.delete('api/users/truncate', {truncate: true}).then(() => {
-          onload({ locationsData: 'locations' })
-          loader.value = false
+        const password_confirmation = prompt('Please enter your password:')
+        if (auth.value && confirm('Are You Sure You Want To Truncate Locations') === true)
+        loader.value = true; else return;
+
+        if (password_confirmation)
+        api.delete('api/users/truncate', { data: { truncate: true, password_confirmation }}).then(({ data }) => {
+        // api.delete('api/users/truncate', { data: { truncate: true, password_confirmation }}).then(({ data }) => {
+          mSession(['reloadApp'])
+          locationsAction({ locationsData: 'locations' })
+          loader.value = false; notifyAction(data)
         }).catch(e => notifyAction({error: 'truncate', e}))
       },
 
-      columns: computed(() => [ // Location
+      columns: <any> computed(() => [ // Location
         { name: 'id', align: 'center', label: $t('ID'), field: 'id', sortable: true },
         { name: 'city', align: 'center', label: $t('city'), field: 'city', sortable: true },
         { name: 'region', align: 'center', label: $t('region'), field: 'region', sortable: true },
@@ -320,8 +333,8 @@ export default {
         { name: 'longitude', align: 'center', label: $t('longitude'), field: 'longitude', sortable: true },
         { name: 'utc_offset', align: 'center', label: $t('utc_offset'), field: 'utc_offset', sortable: true },
         { name: 'edit', align: 'center', label: $t('edit/restore'), field: 'edit', sortable: false },
-        { name: 'delete', align: 'center', label: $t('delete/foreve'), field: 'delete', sortable: false }
-      ]), rows: computed(() => $store.getters['users/usersGetter'])
+        { name: 'delete', align: 'center', label: $t('delete/forever'), field: 'delete', sortable: false }
+      ]), rows: computed(() => store[locationsData.value]||[])
     }
   }
 }

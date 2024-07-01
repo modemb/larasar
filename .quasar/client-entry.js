@@ -49,12 +49,12 @@ import quasarUserOptions from './quasar-user-options.js'
 console.info('[Quasar] Running SPA.')
 
 
-const publicPath = `/www/suguffie/public/`
+const publicPath = `/www/larasar/public/`
 
 async function start ({
   app,
   router
-  , store
+  
 }, bootFiles) {
   
 
@@ -92,7 +92,7 @@ async function start ({
       await bootFiles[i]({
         app,
         router,
-        store,
+        
         ssrContext: null,
         redirect,
         urlPath,

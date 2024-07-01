@@ -61,11 +61,19 @@ class Post extends Model
   }
 
   /**
-   * Get Post's Payments
+   * Get Post's join/select Payments
    */
   public function getPaymentsAttribute()
   {
       return $this->hasMany('App\Models\Payment')->get();
+  }
+
+  /**
+   * Get Post's Payments
+   */
+  public function payments()
+  {
+      return $this->hasMany('App\Models\Payment');
   }
 
   /**

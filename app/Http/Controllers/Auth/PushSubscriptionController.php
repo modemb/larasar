@@ -18,8 +18,9 @@ class PushSubscriptionController extends Controller
      */
     public function __construct()
     {
-        if (config('sanctumApi')) $this->middleware('auth:sanctum');
-        else $this->middleware('auth:api'); // env('SANCTUM_API') - config('sanctumApi')
+        // if (config('sanctumApi')) $this->middleware('auth:sanctum');
+        // else $this->middleware('auth:api'); // env('SANCTUM_API') - config('sanctumApi')
+        $this->middleware('auth');
     }
 
     /**

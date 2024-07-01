@@ -59,8 +59,9 @@ class RegisterController extends Controller
         $emailExist = User::onlyTrashed()->whereNotNull('deleted')
           ->where('email', $request['email'])
           ->first();
-        $this->userDeleted = $emailExist?$emailExist:
-          User::onlyTrashed()->whereNotNull('deleted')->first();
+        $this->userDeleted = $emailExist??User::onlyTrashed()
+          ->whereNotNull('deleted')
+          ->first();
 
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
@@ -69,8 +70,8 @@ class RegisterController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]); $user = $this->create($request); // Log::emergency('$user '.$user);
 
-        if($user->id==1&$user['role'] != 'Super Admin')
-        $user->update(['role' => 'Super Admin']); // Super Admin Role
+        // if($user->id==1&$user['role'] != 'Super Admin')
+        // $user->update(['role' => 'Super Admin']); // Super Admin Role
 
         return response()->json('Registered Successfully');
     }
@@ -83,26 +84,27 @@ class RegisterController extends Controller
      */
     protected function create($request)
     {
-        $user_name = strtolower($request['first_name'].$request['last_name']); do {
-          $user = User::where('name', $user_name)->first();
-          if ($user) {
-            $id = DB::table('users')->count();
-            $id = rand(1, $id);
-            $user_name = $user_name.$id;
-          } $user_name;
+        $user_name = strtolower($request['first_name'].$request['last_name']);
+        $user_name = str_replace(' ', '', $user_name);
+        $count = DB::table('users')->whereNotNull('deleted')
+          ->where('name', 'like', "%$user_name%")->count();
+        $userName = $user_name; do { $count++;
+          $user = User::where('name', $userName)->first();
+          if ($user) $userName = $user_name.$count;
         } while ($user); $this->userData = [
           'gain' => env('GAIN'),
           'currency_code' => env('CURRENCY_CODE'),
           'role' => 'User',
-          'name' => $user_name,
-          'status' => env('Registration'),
+          'name' => $userName,
+          'status' => ($request['app']?'App ':'').env('Registration'),
           'first_name' => $request['first_name'],
           'last_name' => $request['last_name'],
           'email' => $request['email'],
+          'email_verified_at' => null,
           'password' => Hash::make($request['password']),
           'locale' => $request['locale'],
           'deleted' => null,
-          'email_verified_at' => null,
+          'created_at' => now()
         ];
 
         if ($this->userDeleted) {
@@ -111,7 +113,12 @@ class RegisterController extends Controller
           $teamTrashed = Team::onlyTrashed()->first();
           if ($teamTrashed) {
             $teamTrashed->restore();
-            $teamTrashed->update(['user_id' => $this->userDeleted->id]);
+            $teamTrashed->update([
+              'user_id' => $this->userDeleted->id,
+              'name' => $this->userDeleted->first_name."'s Team",
+              'personal_team' => true,
+              'deleted' => null,
+            ]);
           } else $this->createTeam($this->userDeleted); return $this->userDeleted;
         } // TagStore: UserModule
 

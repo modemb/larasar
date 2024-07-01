@@ -4,6 +4,7 @@ namespace App\Events;
 
 // use App\Models\User;
 // use App\Models\Message;
+use Auth;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -31,13 +32,6 @@ class MessageSent implements ShouldBroadcast
     public $roomId;
 
     /**
-     * User Typing
-     *
-     * @var Typing
-     */
-    public $typing;
-
-    /**
      * Message details
      *
      * @var Message
@@ -45,17 +39,32 @@ class MessageSent implements ShouldBroadcast
     public $message;
 
     /**
+     * User Typing
+     *
+     * @var Typing
+     */
+    public $typing;
+
+    /**
+     * User that received the message
+     *
+     * @var Receive
+     */
+    public $received;
+
+    /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($userId, $roomId, $typing, $message)
+    public function __construct($userId, $roomId, $message, $typing, $received)
     // public function __construct(User $user, Message $message)
     {
         $this->userId = $userId;
         $this->roomId = $roomId;
         $this->typing = $typing;
         $this->message = $message;
+        $this->received = $received;
         $this->dontBroadcastToCurrentUser();
     }
 

@@ -22,7 +22,7 @@ class NotificationController extends Controller
     {
       if (config('sanctumApi')) $this->middleware('auth:sanctum')->except('last', 'dismiss');
       else $this->middleware('auth:api')->except('last', 'dismiss'); // env('SANCTUM_API') - config('sanctumApi')
-      // $this->middleware('auth:sanctum')->except('last', 'dismiss');
+      // $this->middleware('auth')->except('last', 'dismiss');
     }
 
     /**
@@ -67,7 +67,8 @@ class NotificationController extends Controller
                       $n->markAsRead();
                   });
 
-          event(new NotificationReadAll($request->user()->id));
+          // event(new NotificationReadAll($request->user()->id));
+          broadcast(new NotificationReadAll($request->user()->id));
           return response()->json('markAllRead', 201);
         }
     }
@@ -94,15 +95,16 @@ class NotificationController extends Controller
 
       if ($request->read) {
         $notification = $request->user()
-        ->unreadNotifications()
-        ->where('id', $id)
-        ->first();
+        ->unreadNotifications()->find($id);
+        // ->where('id', $id)
+        // ->first();
 
         if (is_null($notification)) return response()->json('Notification not found.', 404);
 
         $notification->markAsRead(); // markAsRead
 
-        event(new NotificationRead($request->user()->id, $id));
+        // event(new NotificationRead($request->user()->id, $id));
+        broadcast(new NotificationRead($request->user()->id, $id));
         return response()->json('markAsRead', 201);
       } elseif ($request->dismiss) {
         if (empty($request->endpoint)) return response()->json('Endpoint missing.', 403);
@@ -110,12 +112,12 @@ class NotificationController extends Controller
         $subscription = PushSubscription::findByEndpoint($request->endpoint);
         if (is_null($subscription)) return response()->json('Subscription not found.', 404);
 
-        $notification = $subscription->subscribable->notifications()->where('id', $id)->first();
+        $notification = $subscription->subscribable->notifications()->find($id);
         if (is_null($notification)) return response()->json('Notification not found.', 404);
 
         $notification->markAsRead(); // Dismissed
 
-        event(new NotificationRead($subscription->subscribable->id, $id));
+        broadcast(new NotificationRead($subscription->subscribable->id, $id));
         return response()->json('dismissed', 201);
       }
     }

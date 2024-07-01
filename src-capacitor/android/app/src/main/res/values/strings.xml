@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Suguffiè</string>
+    <string name="title_activity_main">Suguffiè</string>
+    <string name="package_name">org.modemb.suguffie.app</string>
+    <string name="custom_url_scheme">org.modemb.suguffie.app</string>
+</resources>

@@ -1,72 +1,77 @@
 <template>
   <span v-for="(provider, key) in drivers" :key="key">
-    <q-btn :icon='"fab fa-"+provider'
+    <q-btn color="primary" class="q-ma-sm col-lg-3"
+      v-if="!mobileApp||ipDebug"
+      :icon='"fab fa-"+provider'
       :label="$t('login_with')"
-      color="primary"
-      class="q-ma-sm col-lg-3"
       @click.prevent="login(provider)"
-    />
+    /><!--  -->
   </span>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
-import {  useStore } from 'vuex'
-import { i18n, api } from 'boot/axios'
+import { capacitor } from './Functions'
+import { i18n, api, mobileApp, loginMutation, logoutAction } from 'boot/axios'
 import { useCrudStore } from 'stores/crud'
 
 export default {
-  name: 'LoginWithsocial',
+  name: 'LoginWithSocial',
   setup () {
     const $route = useRoute()
-    const $store = useStore()
-    const { crudAction, notifyAction } = useCrudStore()
+    const store = useCrudStore()
+    const { notifyAction } = store
     const $t = i18n?.global?.t
 
-    const auth = computed(() => $store.getters['users/authGetter'])
+    const auth = computed(() => store.authGetter)//computed(() => $store.getters['users/authGetter'])
 
     onMounted (() => {
-      !$route.params.driver||crudAction({...$route.query, ...{
-        url: `/api/login/${$route.params.driver}/callback`, // Oauth Callback
-        method: 'get'
-      }}).then(token => {
+
+      if ($route.params.driver) // Oauth Callback
+      api.get(`/api/login/${$route.params.driver}/callback`, {
+          params: $route.query
+        }).then(({ data }, token = data) => {
 
         if (!token.remember) token = {
           access_token: '$provider',
           remember: true,
           expires_in: 365
-        };window.opener.postMessage({token: token}, window.location.href)
+        };window.opener.postMessage({ token }, window.location.href)
         window.close() // https://laravel.com/docs/8.x/responses#other-response-types
 
-      }).catch(e => notifyAction({error: 'LoginWithsocial', e}))
+      }).catch((e: unknown) => notifyAction({error: 'LoginWithSocial', e}))
 
       window.addEventListener('message', onMessage, false)
     })
 
     onBeforeUnmount (() => window.removeEventListener('message', onMessage))
 
-    async function log (provider) {
-      // openWindow(`/api/login/${provider}`, $t('login'))
-      const newWindow = openWindow('', $t('login'))
-      const { data } = await api.post(`/api/login/${provider}`)
+    async function log(provider: string) {
+      const newWindow = mobileApp || openWindow('', $t('login'))
+      const { data: { url } } = await api.post(`/api/login/${provider}`)
         .catch(e => notifyAction({error: 'logProvider', e}))
-      newWindow.location.href = data.url // window.location.href = data.url
+
+      try { // openWindow(data.url, $t('login')) // window.location.href = url
+        if (mobileApp) await capacitor().Browser.open({ url })
+        else newWindow.location.href = url
+      } catch (e) { notifyAction({error: 'openBrowser', e}) }
     }
 
     /**
      * @param {MessageEvent} e
      */
-    function  onMessage (e) {
+    function  onMessage (e: { data: { token: string }; origin: string }) {
       if (!e.data.token || e.origin !== window.origin) return
-      $store.commit('users/loginMutation', e.data.token)
+      loginMutation({token: e.data.token, remember: true})
+      // $store.commit('users/loginMutation', e.data.token)
     }
 
     /**
      * @param  {Object} options
      * @return {Window}
      */
-    function openWindow (url, title, options = {}) {
+    function openWindow (url: string | URL | undefined, title: string | undefined, options = {}) {
       if (typeof url === 'object') {
         options = url
         url = ''
@@ -89,7 +94,7 @@ export default {
 
       const newWindow = window.open(url, title, optionsStr)
 
-      if (window.focus) newWindow.focus()
+      if ('focus' in window) newWindow?.focus()
 
       return newWindow
     }
@@ -99,13 +104,11 @@ export default {
         'github',
         // 'facebook',
         // 'google'
-      ],
-      async login (provider) {
-        if (auth.value) {
-          $store.dispatch('users/logoutAction', auth.value)
-          setTimeout(() => {
-            log(provider)
-          }, 500)
+      ], mobileApp,
+      ipDebug: computed(() => store['configGetter']?.ipDebug),
+      async login(provider: string) {
+        if (auth.value) { logoutAction()
+          setTimeout(() => log(provider), 1500)
         } else log(provider)
       }
     }

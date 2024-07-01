@@ -23,8 +23,8 @@ return new class extends Migration
             $table->dateTime('end_date')->nullable();
 
             $table->char('plan', 20)->nullable();
-            $table->char('currency_code', 3)->nullable();
             $table->decimal('amount', 12, 2)->default(0);
+            $table->char('currency_code', 3)->nullable();
             $table->json('links')->nullable();
 
             $table->boolean('deleted')->nullable();

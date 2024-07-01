@@ -2,38 +2,34 @@
 
 namespace App\Mail;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class InfoSugu extends Mailable
+class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
-     *
-     * @return void
      */
-    public function __construct($content)
-    {
-        $this->content = $content;
-    }
+    public function __construct(
+        protected Order $order,
+    ) {}
 
     /**
-     * Build the message.
-     *
-     * @return $this
+     * Get the message content definition.
      */
-    public function build()
+    public function content(): Content
     {
-        return $this->from(env('MAIL_FROM_ADDRESS'))
-        // ->markdown('emails.renewal')->with('content',$this->content)
-        ->markdown('emails.info')->with('content',$this->content)
-        // ->markdown('emails.payment')->with('content',$this->content)
-        ;
-
-        //return $this->markdown('emails.info');
+        return new Content(
+            view: 'emails.orders.shipped',
+            with: [
+                'orderName' => $this->order->name,
+                'orderPrice' => $this->order->price,
+            ],
+        );
     }
 }

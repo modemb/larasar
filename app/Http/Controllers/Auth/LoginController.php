@@ -80,15 +80,12 @@ class LoginController extends Controller
      * @return Response
      */
     public function callback(Request $request, $provider)
-    {   //return $request;
+    {   // return $request;
 
         if($request->input('error') !== null) return 'error'; do {
           unset($_COOKIE['laravel_token']);
           setcookie('laravel_token', null, -1, '/');
         } while (isset($_COOKIE['laravel_token']));
-
-        $this->driver($provider); $password = '88888888';
-        $user = Socialite::driver($provider)->stateless()->user();
 
         $seed = str_split('abcdefghijklmnopqrstuvwxyz'
             .'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -96,60 +93,84 @@ class LoginController extends Controller
         shuffle($seed); // probably optional since array_is randomized; this may be redundant
         $rand = ''; foreach (array_rand($seed, 8) as $k) $rand .= $seed[$k]; $password = $rand;
 
-        // All providers...
-        // $user->getId();
-        // $user->getNickname();
+        // $provider;
+        $localUser = User::where('email', $provider)->first();
 
-        $email = $user->email??$user->getEmail();
-        $avatar = $user->avatar??$user->getAvatar();
-        $name = $user->name??$user->getName();
-        $full_name = explode(' ', $name);
-        $first_name = isset($full_name[0])?$full_name[0]:'';
-        $last_name = isset($full_name[1])?$full_name[1]:'';
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
 
-        $localUser = User::where('email', $email)->first(); try {
+        if (preg_match('/\b(modembAndroid|modembIos)\b/i', $user_agent, $matches)) {
+            // Match found, and $matches[0] contains the matched string
+            $matchedString = $matches[0];
+
+            if (stripos($matchedString, 'modembAndroid') !== false) {
+                $app = 'Android'; // Android detected
+            } elseif (stripos($matchedString, 'modembIos') !== false)
+                $app = 'iOS'; // iOS detected
+        } else $app = ''; // No match found
+
+        if (!$localUser) {
+          $this->driver($provider); $password = '88888888';
+          $user = Socialite::driver($provider)->stateless()->user();
+
+          // All providers...
+          // $user->getId();
+          // $user->getNickname();
+
+          $email = $user->email??$user->getEmail();
+          $avatar = $user->avatar??$user->getAvatar();
+          $name = $user->name??$user->getName();
+          $full_name = explode(' ', $name);
+          $first_name = isset($full_name[0])?$full_name[0]:'';
+          $last_name = isset($full_name[1])?$full_name[1]:'';
+
+          $localUser = User::where('email', $email)->first();
+          // try {
+          //   $localAvatar = stristr($localUser['avatar'], 'images/profile');
+          // } catch (\Throwable $th) {
+          //   $localAvatar = false;
+          // } // Validate User Avatar
+
+          $username = strstr($email, '@', true);
+          $user_name = strtolower($username); do {
+            $user = User::where('name', $user_name)->first();
+            if ($user) { // Social Login Assign UserName
+              $id = DB::table('users')->count();
+              $id = rand(1, $id);
+              $user_name = $user_name.$id;
+            } $user_name;
+          } while ($user);
+
+          if (!$localUser) $localUser = $this->createUser([
+            'gain' => env('GAIN'),
+            'currency_code' => env('CURRENCY_CODE'),
+            'position' => 'firsTime',
+            'role' => 'User',
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'name' => $user_name,
+            'email' => $email,
+            'password' => Hash::make($password)
+          ]);// If does not exist, create it
+        } try { // Validate User Avatar
           $localAvatar = stristr($localUser['avatar'], 'images/profile');
         } catch (\Throwable $th) {
           $localAvatar = false;
-        } // Validate User Avatar
-
-        $username = strstr($email, '@', true);
-        $user_name = strtolower($username); do {
-          $user = User::where('name', $user_name)->first();
-          if ($user) { // Social Login Assign UserName
-            $id = DB::table('users')->count();
-            $id = rand(1, $id);
-            $user_name = $user_name.$id;
-          } $user_name;
-        } while ($user);
-
-        if (!$localUser) $localUser = $this->createUser([
-          'gain' => env('GAIN'),
-          'currency_code' => env('CURRENCY_CODE'),
-          'position' => 'firsTime',
-          'role' => 'User',
-          'first_name' => $first_name,
-          'last_name' => $last_name,
-          'name' => $user_name,
-          'email' => $email,
-          'password' => Hash::make($password)
-        ]);// If does not exist, create it
-
-        $localUser->update([
-            'locale' => $request->cookie('locale'), // TODO  NotWorking
-            'status' => $provider,
+        } $localUser->update([ // Update Avatar
             'email_verified_at' => now(),
+            'locale' => $request->cookie('locale'), // TODO  NotWorking
+            'status' => isset($avatar)?$provider.$app:null,
             'avatar' => $localAvatar?$localUser->avatar:$avatar
-        ]); // Update Avatar
+        ]);
 
         if (config('sanctumApi')) { // env('SANCTUM_API') - config('sanctumApi')
-          $token = [ // https://laravel.com/docs/9.x/responses#other-response-types
+          $token = [ // https://laravel.com/docs/10.x/responses#other-response-types
             'access_token' => $provider,
             'remember' => true,
             'expires_in' => 365
-          ]; Auth::login($localUser, $remember = true);
-          return response()->view('oauth.callback', ['token' => $token]); $token;
-        } //Login the user https://laravel.com/docs/9.x/authentication#other-authentication-methods
+          ]; Auth::login($localUser, $remember = true); // return $token;
+          return isset($email) ? response()->view('oauth.callback', ['token' => $token]) :
+          /* Social - Email Verify */ response()->view('index', ['token' => $token]);
+        } // Login the user https://laravel.com/docs/9.x/authentication#other-authentication-methods
 
         $user = DB::table('users')->where('email', $email)->first();
         if ($user) $localUser->update(['password' => Hash::make($password)]);
@@ -200,7 +221,7 @@ class LoginController extends Controller
           // view('oauth.callback', ['token' => $response->json()]);
         }// if ($response?->json()['token_type'])
         return $response->json();
-        return $data;
+        // return $data;
 
       // } catch (\Throwable $th) {}
 

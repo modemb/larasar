@@ -3,15 +3,14 @@
     <q-table
       :style="'height:' + height + 'px'"
       class="my-sticky-virtscroll-table"
-      :title="`${$t('reports')}`"
+      :title="`${$t('reports')}: ${cy(xRate(total))} - ${$t('paymentAmount')}: ${cy(xRate(amount))}`"
       :rows="rows"
       :columns="columns"
-      row-key="id"
+      row-key="name"
       ref="table"
 
       :loading="loading"
       :filter="filter"
-      @request="onRequest"
       binary-state-sort
 
       virtual-scroll
@@ -19,9 +18,10 @@
       :virtual-scroll-sticky-size-start="48"
       v-model:pagination="pagination"
     ><!-- https://quasar.dev/vue-components/table#example--virtual-scroll-with-sticky-header
+      @request="onRequest"
       -->
 
-      <template v-slot:top-right v-if="!(post_id||pending_payments)">
+      <template v-slot:top-right v-if="!(post_id||users_reports||pending_payments)">
         <q-btn
           color="primary"
           icon-right="archive"
@@ -30,8 +30,8 @@
           @click="exportTable"
         /><!-- TagExport: UserModule -->
 
-        <q-btn icon="event" color="primary" class="q-ma-xs" :label="JSON.stringify(proxyDate)" v-if="!post_reports">
-          <q-popup-proxy @before-show="updateProxy" transition-show="scale" transition-hide="scale">
+        <q-btn color="primary" class="q-ma-xs" icon="event" :label="JSON.stringify(proxyDate)" v-if="!post_reports">
+          <q-popup-proxy transition-show="scale" transition-hide="scale">
             <q-date v-model="proxyDate" :range="range" ><!-- :setToday="!range" -->
               <div class="row items-center justify-end q-gutter-sm">
                 <q-btn label="Cancel" color="primary" flat v-close-popup />
@@ -39,7 +39,7 @@
                 <q-btn label="OK" color="primary" flat @click="save" v-close-popup />
               </div>
             </q-date>
-          </q-popup-proxy>
+          </q-popup-proxy><!-- @before-show="updateProxy" -->
         </q-btn><!-- TagPeriod: PeriodModule -->
 
         <q-btn-toggle
@@ -62,7 +62,7 @@
           </q-tooltip>
         </q-btn>
 
-        <q-input class="q-ma-xs" borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
+        <q-input class="q-ma-xs" clearable borderless dense debounce="300" v-model="filter" :placeholder="$t('search')">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -93,7 +93,8 @@
           <q-td key="plan" :props="props">{{ props.row.plan }}</q-td>
           <q-td key="payment" :props="props">{{ props.row.payment }}</q-td>
           <q-td key="amount" :props="props">{{ props.row.amount }}</q-td>
-          <q-td key="total" :props="props">{{ props.row.total }}</q-td>
+          <q-td key="paymentAmount" :props="props">{{ props.row.paymentAmount }}</q-td>
+          <q-td key="total" :props="props" v-if="ipDebug">{{ props.row.total }}</q-td>
           <q-td key="currency_code" :props="props">{{ props.row.currency_code }}</q-td>
 
           <!-- <template v-if="usersData">
@@ -120,14 +121,19 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, watch, computed, onMounted } from 'vue'
 import { exportFile, useQuasar, date  } from 'quasar'
-import { useStore } from 'vuex'
-import { i18n } from 'boot/axios'
+import { i18n, cy, xRate } from 'boot/axios'
 import { useCrudStore } from 'stores/crud'
+import { Param } from './models'
 
-function wrapCsvValue (val, formatFn) {
+/**
+ * Tags: ReportsModule - PeriodModule
+ *
+ * @to UserController
+ */
+function wrapCsvValue (val: string, formatFn: ((arg0: string) => any) | undefined) {
   let formatted = formatFn !== void 0
     ? formatFn(val)
     : val
@@ -148,19 +154,33 @@ function wrapCsvValue (val, formatFn) {
 }
 
 export default {
-  props: ['post_id', 'pending_payments', 'post_reports'],
+  props: ['post_id', 'pending_payments', 'post_reports', 'users_reports'],
   setup (props) {
     const $t = i18n?.global?.t
     const $q = useQuasar()
-    const $store = useStore()
-    const { crudAction, notifyAction } = useCrudStore()
+    const store = useCrudStore()
+    const { crudAction, notifyAction } = store
     const timeStamp = Date.now()
     const formattedString = date.formatDate(timeStamp, 'YYYY/MM/DD')//YYYY-MM-DDTHH:mm:ss.SSSZ
-    const proxyDate = ref(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
+    const proxyDate = ref<any>(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
     const period = ref('today')
     const loading = ref(false)
     const rows = ref([])
-    const columns = ref([
+
+
+    // const getter = computed(() => 'reportsGetter'+period.value)
+    // const rows = computed(() => store[getter.value]?.data)
+
+    const pending_payments = computed(() => props?.pending_payments)
+    const ipDebug = computed(() => store['configGetter']?.ipDebug)
+    const auth = computed(() => store.authGetter)
+    const post_id = computed(() => props?.post_id)
+
+    const authId = Object.fromEntries(Object.entries(auth.value||{}).filter(([key]) => key.includes('id')));
+
+    watch([post_id, pending_payments], () => onLoad(''))
+
+    const columns = <any> computed(() => [
       { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
       { name: 'product', align: 'center', label: $t('product'), field: 'product', sortable: true },
       { name: 'first_name', align: 'center', label: $t('first_name'), field: 'first_name', sortable: true },
@@ -171,45 +191,61 @@ export default {
       { name: 'plan', align: 'center', label: $t('plan'), field: 'plan', sortable: true },
       { name: 'payment', align: 'center', label: $t('payment'), field: 'payment', sortable: true },
       { name: 'amount', align: 'center', label: $t('amount'), field: 'amount', sortable: true },
-      { name: 'total', align: 'center', label: $t('total'), field: 'total', sortable: true },
+      { name: 'paymentAmount', align: 'center', label: $t('paymentAmount'), field: 'paymentAmount', sortable: true },
+    ].concat((ipDebug.value)?[{ name: 'total', align: 'center', label: $t('total'), field: 'total', sortable: true },
       { name: 'currency_code', align: 'center', label: $t('currency_code'), field: 'currency_code', sortable: true }
-    ]) // https://quasar.dev/vue-components/table#example--synchronizing-with-server
+    ]:[])) // https://quasar.dev/vue-components/table#example--synchronizing-with-server
 
-    const auth = $store.getters['users/authGetter']
-    const authId = Object.fromEntries(Object.entries(auth).filter(([key]) => key.includes('id')));
-
-    const post_id = computed(() => props?.post_id)
-    const pending_payments = computed(() => props?.pending_payments)
-
-    watch([post_id, pending_payments], () => onLoad())
-
-    function crud(rowsData) {
-      // crudAction(rowsData).then(crud => rows.value = crud)
-      crudAction({...rowsData, ...authId}).then(crud => rows.value = crud)
-        .catch(e => notifyAction({error: 'reportsAction', e}))
+    function reportsAction(rowsData: Partial<Param>) {
+      crudAction({...rowsData, ...authId}).then((crud: never[]) => rows.value = crud)
+        .catch((e: unknown) => notifyAction({error: 'reportsAction', e}))
     } watch(period, val => !val||onLoad(val))
 
-    function onLoad(period) {
+    function onLoad(period: string | undefined) {
       if (props.pending_payments) return rows.value = props.pending_payments;
-      if (props.post_reports) return rows.value = props.post_reports; crud({
+      if (props.users_reports) return rows.value = props.users_reports;
+      if (props.post_reports) return rows.value = props.post_reports;
+      // if (!included('reportsGetter'+period))
+      reportsAction({
+        mutate: 'reportsGetter'+period,
         url: 'api/users/reports',
         method: 'get',
         // reports: true,
         // checkout: true,
         post_id: props?.post_id||0,
-        role: auth.role,
-        period: period
-      })
+        role: auth.value?.role, period
+      }) //; else rows.value = store['reportsGetter'+period]
     } onMounted(() => onLoad (period.value))
 
     return {
+      ipDebug,
       filter: ref(''),
       loading,
       rows, columns,
       height: ref(screen.height / 1.4),
       period,
       range: ref(false),
-      auth: auth,
+      auth,
+
+      cy, xRate,
+
+      total: computed(() => {
+        let sum: any = 0;
+
+        rows.value?.forEach((row: any) => sum += Number(row?.amount))
+
+        return sum
+
+      }), // TagTotal: ReportsModule
+
+      amount: computed(() => {
+        let sum: any = 0;
+
+        rows.value?.forEach((row: any) => sum += Number(row?.paymentAmount))
+
+        return sum
+
+      }), // TagTotal: ReportsModule
 
       // date, // 'YYYY-MM-DD',
       proxyDate, // 'YYYY-MM-DD',
@@ -219,8 +255,8 @@ export default {
       // }, // TagPeriod: PeriodModule
 
       save () {
-        period.value = null
-        crud({
+        period.value = ''
+        reportsAction({
           expandingRow: true,
           url: 'api/users/reports',
           method: 'get',
@@ -231,7 +267,7 @@ export default {
         })
       }, // TagPeriod: PeriodModule
 
-      fnum (x) {
+      fnum (x: number) {
         if (isNaN(x)) return x
         if (x < 9999) return x
         if (x < 1000000) return Math.round(x / 1000) + 'K'
@@ -243,8 +279,18 @@ export default {
 
       exportTable () {
         // naive encoding to csv format
-        const content = [columns.value.map(col => wrapCsvValue(col.label))].concat(
-          rows.value.map(row => columns.value.map(col => wrapCsvValue(
+        const content = [columns.value.map((col: { label: string }) => wrapCsvValue(col.label))].concat(
+          rows.value.map(row => columns.value.map((col: {
+              field: ((arg0: never) => string) | undefined; name: any; format: ((
+                /* __placeholder__ */
+                arg0:
+                  /* __placeholder__ */
+                  string
+                /* __placeholder__ */
+              ) =>
+                /* __placeholder__ */
+                any) | undefined
+            }) => wrapCsvValue(
             typeof col.field === 'function'
               ? col.field(row)
               : row[ col.field === void 0 ? col.name : col.field ],
@@ -272,7 +318,7 @@ export default {
         // descending: false,
         // page: 1,
         // rowsPerPage: 3,
-        rowsNumber: 0//10
+        // rowsNumber: 10
       }
     }
   }

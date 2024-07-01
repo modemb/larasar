@@ -14,13 +14,6 @@ return [
     |
     */
 
-    'mailgun' => [
-        'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_SECRET'),
-        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
-        'scheme' => 'https',
-    ],
-
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
@@ -30,8 +23,23 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+
+    'slack' => [
+        'notifications' => [
+            'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
+            'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
+        ],
+    ],
+
+    'mailgun' => [
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'scheme' => 'https',
+    ],
+
     'passport' => [
-      'login_endpoint' => $app->runningInConsole() ? config('app.url') : url('/').'/oauth/token',
+      'login_endpoint' => app()->runningInConsole() ? config('app.url') : url('/').'/oauth/token',
       'client_id' => env('PASSPORT_GRANT_CLIENT_ID'),
       'client_secret' => env('PASSPORT_GRANT_CLIENT_SECRET'),
     ],
@@ -69,13 +77,10 @@ return [
     //   'model' => App\Models\User::class,
     //   'key' => env('STRIPE_KEY'),
     //   'secret' => env('STRIPE_SECRET'),
-    //   // ----------------------------------------
-    //   // 'key' => env('STRIPE_TEST_KEY'),
-    //   // 'secret' => env('STRIPE_TEST_SECRET'),
-    //   // ----------------------------------------
-    //   // 'test_key' => env('STRIPE_TEST_KEY'),
-    //   // 'test_secret' => env('STRIPE_TEST_SECRET'),
-    //   // 'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    //   // ---------------------------------------- ||
+    //   'test_key' => env('STRIPE_TEST_KEY'),
+    //   'test_secret' => env('STRIPE_TEST_SECRET'),
+    //   'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     // ],
     'paypal' => [
         'clientId' => env('PAYPAL_ID'),

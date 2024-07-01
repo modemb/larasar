@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Suguffiè</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We need your permission to access your camera and or photos so you can take and upload pictures for your profile and ads. We use these pictures to improve our service and show you personalized recommendations.
+Accessing your camera and or photos lets you create and edit posts with our app. You can choose which photos you want to use from your library or take new ones with your camera. We respect your privacy and never upload or share your content without your permission</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Our app requires access to your location when in use to provide you with the best possible experience. We use your location to show you nearby restaurants, events, and other points of interest. Your location data is never shared with third parties and is only used within the app.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need your permission to access your camera and or photos so you can take and upload pictures for your profile and ads. We use these pictures to improve our service and show you personalized recommendations.”
+“Accessing your camera and or photos lets you create and edit posts with our app. You can choose which photos you want to use from your library or take new ones with your camera. We respect your privacy and never upload or share your content without your permission</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need your permission to access your camera and or photos so you can take and upload pictures for your profile and ads. We use these pictures to improve our service and show you personalized recommendations.
+Accessing your camera and or photos lets you create and edit posts with our app. You can choose which photos you want to use from your library or take new ones with your camera. We respect your privacy and never upload or share your content without your permission</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+</dict>
+</plist>

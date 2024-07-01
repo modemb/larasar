@@ -13,37 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['guest'])->group(function () { // Suguffiè Application
-
-  Route::get('/login', function () {
-      return view('index');
-  });
-
-  Route::get('/register', function () {
-      return view('index');
-  });
-
-  Route::any('/reset-password/{token}', function () {
-      return view('index');
-  });
-
-  // Route::get('api/password/reset', function () {
-  //     return view('index');
-  // });
-
-  // Route::get('/password/reset/{token}', function () {
-  //     return view('index');
-  // });
-
-  // Route::post('api/login/{driver}', [LoginController::class, 'redirect']);
-  // Route::get('api/login/{driver}/callback', [LoginController::class, 'callback'])->name('oauth.callback');
-
-});
-
-Route::get('/email/verify', function () {
-  return view('index');
-});
-
-Route::get('{path}', function () {
-  return view('index');
-})->where('path', '.*');
+// Route::get('{path}', function () {
+//   return view('index');
+// })->where('path', '.*');

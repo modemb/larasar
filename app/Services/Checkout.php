@@ -13,6 +13,10 @@ use PayPalCheckoutSdk\Core\ProductionEnvironment;
 // Before capture, Order should be approved by the buyer using the approval URL returned in the create order response.
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 
+
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
+
 class Checkout
 {
     /**
@@ -29,7 +33,8 @@ class Checkout
       $client = new PayPalHttpClient($environment); // Creating an environment
 
       if ($request->order) {
-        $postURL = url('/').'/post/'.$request->post_id;
+        $postURL = url('post').$request->post_id;
+        // $postURL = url('/').'/post/'.$request->post_id;
         $url = $postURL==$request->href?$postURL:$request->href;
 
         $orderRequest = new OrdersCreateRequest();
@@ -89,20 +94,46 @@ class Checkout
      */
     public function stripe($request)
     {
-      config([
+
+      config([ // https://docs.stripe.com/payments/payment-methods/pmd-registration
         'cashier.key' => $request->liveMode ? env('STRIPE_KEY') : env('STRIPE_TEST_KEY'),
         'cashier.secret' => $request->liveMode ? env('STRIPE_SECRET') : env('STRIPE_TEST_SECRET'),
         'cashier.currency_locale' => app()->getLocale(),
         'cashier.currency' => $request->currency_code
       ]); // TagStripe: ConfigModule
-      try {
+
+      try { // https://laracasts.com/discuss/channels/laravel/cashier-stripe-integration-fails-with-error-return-url-required
         $user = User::find($request->auth['id']); // auth()->user();
+        $postURL = url('post').$request->post_id;
+
+        if ($request->pay) { // paymentElement
+          $payment = $user->pay(
+            $request->get('paymentAmount')
+          ); return $payment->client_secret;
+        } // https://laravel.com/docs/11.x/billing#creating-payment-intents
+
         $payment = $user->charge(
-          $request->input('paymentAmount'),
-          $request->input('payment_method_id')
+          $request->paymentAmount,
+          // $request->paymentMethod,
+          $request->paymentMethod['id'],
+
+          // $request->input('paymentAmount'),
+          // $request->input('payment_method_id'),
+          // $request->input('paymentMethod'),
+
+          [ 'off_session' => true,
+            'return_url' => $postURL==$request->href?$postURL:$request->href,
+            // 'automatic_payment_methods' => [
+            //     'enabled' => true,
+            //     'allow_redirects' => 'never', // Set this to 'never' to disable redirects
+            // ], // https://docs.stripe.com/payments/accept-a-payment-synchronously?platform=web
+            // 'confirmation_method' => 'manual',
+            // 'confirm' => false,
+          ] // https://docs.stripe.com/upgrades/manage-payment-methods
+
         ); // Laravel Cashier (Stripe)
-        return $payment = $payment->asStripePaymentIntent();
-      } catch (\Exception $e) { // https://laravel.com/docs/9.x/billing#simple-charge
+        return $payment->asStripePaymentIntent();
+      } catch (\Exception $e) { // https://laravel.com/docs/11.x/billing#simple-charge
         return ['message' => $e->getMessage()];
         // return response()->json(['message' => $e->getMessage()], 500);
       } return ['id' => 'strip'.time()]; // Prevent Admins To Be Charge
@@ -155,4 +186,6 @@ class Checkout
       }
 
     }
+
+    // https://www.moov-africa.ml/particulier/mobile/Pages/MoovMoney.aspx
 }

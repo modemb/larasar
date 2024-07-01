@@ -2,22 +2,26 @@
   <div class="q-pa-md">
     <!--============ Data Table ========================-->
     <q-table
-      :style="'height:' + height + 'px'"
+      :style="`height: ${height}px`"
       class="my-sticky-virtscroll-table"
       ref="table"
-      :title="`${$t('Analytics')}`"
+      :title="`${$t('Analytics')} ${total}`"
       :rows="rows"
       :columns="columns"
       row-key="name"
-      virtual-scroll  id="table"
-      :virtual-scroll-item-size="100/*48*/"
-      :rows-per-page-options="[0]"
       :loading="loading"
       :filter="filter"
       binary-state-sort
+
+      virtual-scroll
+      :virtual-scroll-item-size="48"
+      :virtual-scroll-sticky-size-start="48"
+      :pagination="pagination"
+      @virtual-scroll="onScroll"
     >
     <!--
-      :pagination="pagination"
+      :rows-per-page-options="[total]"
+      v-model:pagination="pagination"
       @request="onRequest"
     -->
 
@@ -29,8 +33,8 @@
             no-caps
             @click="exportTable"
           /><!-- TagExport: UserModule -->
-          <q-btn icon="event" class="q-ma-xs bg-primary" :label="JSON.stringify(proxyDate)">
-            <q-popup-proxy @before-show="updateProxy" transition-show="scale" transition-hide="scale">
+          <q-btn color="primary" class="q-ma-xs" icon="event" :label="JSON.stringify(proxyDate)">
+            <q-popup-proxy transition-show="scale" transition-hide="scale">
               <q-date v-model="proxyDate" :range="range" ><!-- :setToday="!range" -->
                 <div class="row items-center justify-end q-gutter-sm">
                   <q-btn label="Cancel" color="primary" flat v-close-popup />
@@ -38,7 +42,7 @@
                   <q-btn label="OK" color="primary" flat @click="save" v-close-popup />
                 </div>
               </q-date>
-            </q-popup-proxy>
+            </q-popup-proxy><!-- @before-show="updateProxy" -->
           </q-btn><!-- TagPeriod: PeriodModule -->
           <q-btn-toggle
             v-model="period"
@@ -90,13 +94,22 @@
         </q-tr>
         <q-tr v-show="props.expand" :props="props">
           <q-td colspan="100%">
-            <div class="row text-left" v-for="(session, i) in props.row.sessions" :key="i">
+            <!-- <div v-for="(session, i) in props.row.sessions
+              .filter((s: { user_id: number }) => s.user_id === props.row.user_id)
+              .sort((a: { last_activity: number }, b: { last_activity: number }) => b.last_activity - a.last_activity)" :key="i">
               <div class="text-h6">
-                <i class="fab fa-chrome"/> {{session.user_agent}} <i class="far fa-clock"/>
-                <!-- {{ session.agent.platform }} - {{ session.agent.browser }} -->
-                {{timeago(new Date(session.last_activity * 1000))}}
-              </div><!-- props: ['sessions'] https://laravel.com/docs/9.x/authentication#invalidating-sessions-on-other-devices-->
-            </div>
+                <i class="far fa-clock"/> {{timeago(new Date(session.last_activity * 1000))}}
+                <i class="fab fa-chrome"/> {{session.user_agent}}
+              </div>
+            </div>TagSession: SessionModule --><!-- props: ['sessions'] https://laravel.com/docs/9.x/authentication#invalidating-sessions-on-other-devices -->
+
+            <div v-for="(session, i) in sessions(props.row)"  :key="i">
+              <div class="text-h6">
+                <i class="far fa-clock"/> {{timeago(new Date(session.last_activity * 1000))}}
+                <i class="fab fa-chrome"/> {{session.user_agent}}
+              </div>
+            </div><!-- TagSession: SessionModule -->
+
           </q-td>
         </q-tr>
       </template><!-- ExpandingRowModule period==='today'-->
@@ -105,21 +118,21 @@
   </div>
 </template>
 
-<script>
-import { ref, watch, onMounted, computed } from 'vue'
+<script lang="ts">
+import { ref, watch, computed, onMounted, nextTick } from 'vue'
 import { exportFile, useQuasar, date } from 'quasar'
-import { useStore } from 'vuex'
 import { i18n, timeago } from 'boot/axios'
 import { useCrudStore } from 'stores/crud'
-import { printEl } from 'components/Functions.ts'
+import { printEl } from 'components/Functions'
+import { Param } from 'components/models'
 
 /**
- * Tags: PeriodModule - ExpandingRowModule
+ * Tags: PeriodModule - ExpandingRowModule - SessionModule
  *
- * @from
+ * @to
  */
 
-function wrapCsvValue (val, formatFn) {
+function wrapCsvValue (val: string, formatFn: ((arg0: any) => any) | undefined) {
   let formatted = formatFn !== void 0
     ? formatFn(val)
     : val
@@ -139,21 +152,45 @@ function wrapCsvValue (val, formatFn) {
   return `"${formatted}"`
 }
 
+// function wrapCsvValue (val, formatFn, row) {
+//   let formatted = formatFn !== void 0
+//     ? formatFn(val, row)
+//     : val
+
+//   formatted = formatted === void 0 || formatted === null
+//     ? ''
+//     : String(formatted)
+
+//   formatted = formatted.split('"').join('""')
+//   /**
+//    * Excel accepts \n and \r in strings, but some other CSV parsers do not
+//    * Uncomment the next two lines to escape new lines
+//    */
+//   // .split('\n').join('\\n')
+//   // .split('\r').join('\\r')
+
+//   return `"${formatted}"`
+// }
+
 export default {
-  props: ['sessions'],
+  // props: ['sessions'],
   setup () {
     const $t = i18n.global.t
     const $q = useQuasar()
-    const $store = useStore()
-    const { crudAction, notifyAction } = useCrudStore()
+    const store = useCrudStore()
+    const { crudAction, notifyAction } = store
     const timeStamp = Date.now()
     const formattedString = date.formatDate(timeStamp, 'YYYY/MM/DD')//YYYY-MM-DDTHH:mm:ss.SSSZ
-    const proxyDate = ref(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
+    const proxyDate = ref<any>(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
     const period = ref('today')
     const loading = ref(false)
-    const columns = ref( [
+    const filter = ref('')
+    const crud = ref()
+
+    const columns = <any> ref( [
       { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
       { name: 'ip', align: 'center', label: 'IP', field: 'ip', sortable: true },
+      { name: 'app', align: 'center', label: $t('app'), field: 'app', sortable: true },
       { name: 'session', align: 'center', label: $t('session'), field: 'session', sortable: true },
       { name: 'city', align: 'center', label: $t('city'), field: 'city', sortable: true },
       { name: 'region', align: 'center', label: $t('region'), field: 'region', sortable: true },
@@ -163,28 +200,39 @@ export default {
       { name: 'latitude', align: 'center', label: $t('latitude'), field: 'latitude', sortable: true },
       { name: 'longitude', align: 'center', label: $t('longitude'), field: 'longitude', sortable: true },
       { name: 'utc_offset', align: 'center', label: $t('utc_offset'), field: 'utc_offset', sortable: true },
-      { name: 'updated_at', align: 'center', label: $t('updated_at'), field: 'updated_at', sortable: true },
-      { name: 'created_at', align: 'center', label: $t('created_at'), field: 'created_at', sortable: true },
       { name: 'first_name', align: 'center', label: $t('first_name'), field: 'first_name', sortable: true },
       { name: 'last_name', align: 'center', label: $t('last_name'), field: 'last_name', sortable: true },
       { name: 'email', align: 'center', label: $t('email'), field: 'email', sortable: true },
       { name: 'status', align: 'center', label: $t('status'), field: 'status', sortable: true },
       { name: 'role', align: 'center', label: $t('role'), field: 'role', sortable: true },
-      { name: 'app', align: 'center', label: $t('app'), field: 'app', sortable: true },
-      { name: 'email_verified_at', align: 'center', label: $t('email_verified_at'), field: 'email_verified_at', sortable: true }
-    ])//const rows = computed(() => $store.getters['users/analyticsGetter'])
+      { name: 'email_verified_at', align: 'center', label: $t('email_verified_at'), field: 'email_verified_at', sortable: true },
+      { name: 'updated_at', align: 'center', label: $t('updated_at'), field: 'updated_at', sortable: true },
+      { name: 'created_at', align: 'center', label: $t('created_at'), field: 'created_at', sortable: true },
+    ])//; const d = (d: string | number | Date | undefined) => new Date(date.formatDate(d, 'YYYY-MM-DD')).getTime()
 
-    const d = d => new Date(date.formatDate(d, 'YYYY-MM-DD')).getTime()
-    const rows = computed(() => $store.getters['users/analyticsGetter']?.filter(a =>
-        d(a.updated_at) >= d(dateTimePeriod(period.value)) &&
-        d(a.updated_at) <= d(dateTimePeriod('0 day')) ||
-        d(a.updated_at) >= d(proxyDate.value?.from) &&
-        d(a.updated_at) <= d(proxyDate.value?.to) ||
-        d(a.updated_at) == d(proxyDate.value)
-      )
-    )
+    const getter = computed(() => 'analyticsGetter'+period.value)
+    const TO = computed(() => crud.value?.to)
+    const total = computed(() => store[getter.value]?.total)
+    const reload = computed(() => store.reloadGetter?.reload)
+    const last_page = computed(() => store[getter.value]?.last_page)
+    const rows = computed(() => store[getter.value]?.data||[])
+    // ?.filter((a: { updated_at: Date }) =>
+    //   d(a.updated_at) >= d(dateTimePeriod(period.value)) &&
+    //   d(a.updated_at) <= d(dateTimePeriod('0 day')) ||
+    //   d(a.updated_at) >= d(proxyDate.value?.from) &&
+    //   d(a.updated_at) <= d(proxyDate.value?.to) ||
+    //   d(a.updated_at) === d(proxyDate.value)
+    // ))
 
-    function dateTimePeriod(period) {
+    const pagination = ref({
+      // sortBy: 'desc',
+      // descending: false,
+      page: 1, // Page Link
+      rowsPerPage: 0, // Pagination Number
+      rowsNumber: total.value // Rows Number Per Page
+    })
+
+    function dateTimePeriod(period: string) {
       if (period==='today') period = '0 day'
       if (period==='-1 week') period = '-7 day'
       if (!period) return
@@ -193,50 +241,59 @@ export default {
       return date.formatDate(d, 'YYYY-MM-DD H:mm:ss')
     } // Date Time Like SQL From Period
 
-    function crud(rowsData) {
-      crudAction(rowsData).then(crud => $store.commit('users/analyticsMutation', crud))
-                          .catch(e => notifyAction({error: 'analyticsAction', e}))
-    } watch(period, val => !val||onLoad(val))
-
-    function onLoad (period) {
-      console.log(
-        'd', d(Date()),
-        'period', dateTimePeriod(period),
-        'today', dateTimePeriod('0 day')
-      )
-
-      crud({
+    function analyticsAction(params: Partial<Param>) {
+      crudAction({ ...params,
         url: 'api/users/analytics',
-        method: 'get', period, timeout: 1000,
-      })
-    } onMounted(() => onLoad(period.value))
+        method: 'get',
+        period: period.value,
+        page: pagination.value.page,
+        perPage: pagination.value.rowsPerPage,
+        mutate: getter.value, timeout: 1000
+      }).then((CRUD: unknown) => crud.value = CRUD)
+         .catch((e: unknown) => notifyAction({error: 'analyticsAction', e}))
+    } watch([period, reload], () => analyticsAction({}))
+
+    const flt: string[] = []
+    watch(filter, val => {
+      pagination.value.page = 1
+      flt.includes(val) || analyticsAction({
+        filterAnalytics: val, load: true
+      });flt.push(val)
+    }) // TagFiler: SearchModule
+
+    onMounted(() => analyticsAction({}))
 
     return {
       period,
       loading,
       timeago,
-      columns, rows,
-
-      filter: ref(''),
+      total,
+      filter, //: ref(''),
       range: ref(false),
       expend: ref(false),
       proxyDate, // 'YYYY-MM-DD',
       height: ref(screen.height / 1.4),
 
+      sessions(a: { filter: (arg0: (s: { user_id: number }) => boolean) => {
+        user_agent: any; last_activity: number
+      }[]; user_id: number }) {
+
+        return a.filter((s: { user_id: number }) => s.user_id === a.user_id)
+         .sort((a: { last_activity: number }, b: { last_activity: number }) => b.last_activity - a.last_activity)
+      },
+
       save () {
-        period.value = null
-        crud({
+        period.value = ''
+        analyticsAction({
           expandingRow: true,
-          url: 'api/users/analytics',
-          method: 'get',
+          refresh: [getter.value],
           from: proxyDate.value.from,
           to: proxyDate.value.to,
           proxyDate: proxyDate.value
         })
       }, // TagPeriod: PeriodModule
 
-
-      fnum (x) {
+      fNum (x: number) {
         if (isNaN(x)) return x
         if (x < 9999) return x
         if (x < 1000000) return Math.round(x / 1000) + 'K'
@@ -248,8 +305,28 @@ export default {
 
       exportTable () {
         // naive encoding to csv format
-        const content = [columns.value.map(col => wrapCsvValue(col.label))].concat(
-          rows.value.map(row => columns.value.map(col => wrapCsvValue(
+        const content = [columns.value.map((col: { label: string }) => wrapCsvValue(col.label))].concat(
+          rows.value.map((row: { [x: string]: any }) => columns.value.map((col: {
+              field: ((arg0: {
+                [
+                /* __placeholder__ */
+                x:
+                  /* __placeholder__ */
+                  string
+                /* __placeholder__ */
+                ]:
+                /* __placeholder__ */
+                any
+              }) => string) | undefined; name: any; format: ((
+                /* __placeholder__ */
+                arg0:
+                  /* __placeholder__ */
+                  any
+                /* __placeholder__ */
+              ) =>
+                /* __placeholder__ */
+                any) | undefined
+            }) => wrapCsvValue(
             typeof col.field === 'function'
               ? col.field(row)
               : row[ col.field === void 0 ? col.name : col.field ],
@@ -271,49 +348,73 @@ export default {
           })
         }
       }, // TagExport: UserModule
+
+      // print(el: string) {
+
+      //   // let w = null; // windowObjectReference | global variable
+
+      //   // if (w.closed) w = window.open()//;url, windowName w === null ||
+      //   // else w.focus() // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
+
+      //   // const link = document.querySelector("a[target='OpenWikipediaWindow']");
+      //   // link.addEventListener('click', (event) => {
+      //   //   openRequestedTab(link.href);
+      //   //   event.preventDefault();
+      //   //   }, false);
+
+      //   const w = window.open();
+      //   // const w = window.open('', 'PRINT', 'height=800,width=1000');
+
+      //   w.document.write('<html><head><title>' + document.title  + '</title>')
+      //   w.document.write('</head><body>')
+      //   w.document.write('<h1>' + document.title  + '</h1>')
+      //   w.document.write(document.getElementById(el).innerHTML)
+      //   w.document.write('</body></html>')
+
+      //   w.document.close(); // necessary for IE >= 10
+      //   w.focus(); // necessary for IE >= 10*/
+
+      //   w.print(); // w.close();
+
+      //   return true;
+      // },
+
       printEl,
 
-      print(el) {
+      onScroll ({ to, ref }: any ) {
+        const lastIndex = rows.value?.length-1
+        const lastPage = last_page.value
+        const page = pagination.value.page
 
-        // let w = null; // windowObjectReference | global variable
+        // pagination.value.rowsNumber = total.value
 
-        // if (w.closed) w = window.open()//;url, windowName w === null ||
-        // else w.focus() // https://developer.mozilla.org/en-US/docs/Web/API/Window/open
+        // if (loading.value !== true && nextPage.value < lastPage && to === lastIndex) { //
 
-        // const link = document.querySelector("a[target='OpenWikipediaWindow']");
-        // link.addEventListener('click', (event) => {
-        //   openRequestedTab(link.href);
-        //   event.preventDefault();
-        //   }, false);
+        if (loading.value !== true && page < lastPage && to === lastIndex) {
+          loading.value = true; //&& (to > 0)
 
-        const w = window.open();
-        // const w = window.open('', 'PRINT', 'height=800,width=1000');
+          setTimeout(() => {
+            pagination.value.page++
+            analyticsAction({ load: true })
+            nextTick(() => {
+              ref.refresh()
+              loading.value = false
+            })
+          }, 500)
+          console.log(
+            // 'nextPage', nextPage.value, '<','lastPage', lastPage,
+            // 'to', to, '===', 'rowsNumber', pagination.value.rowsNumber,
+            'page', pagination.value.page, '<', 'lastPage', lastPage,
+            'to', to,'===', lastIndex, 'lastIndex', '>', 0,
+            'total', total.value, 'TO', TO.value
 
-        w.document.write('<html><head><title>' + document.title  + '</title>')
-        w.document.write('</head><body>')
-        w.document.write('<h1>' + document.title  + '</h1>')
-        w.document.write(document.getElementById(el).innerHTML)
-        w.document.write('</body></html>')
+            // 'ref', ref,
+            // 'rows', rows.value
+          )
+        }
+      }, pagination, columns, rows,
 
-        w.document.close(); // necessary for IE >= 10
-        w.focus(); // necessary for IE >= 10*/
-
-        w.print(); // w.close();
-
-        return true;
-      },
-
-      pagination: {
-        sortBy: 'asc',
-        descending: false,
-        page: 1,
-        rowsPerPage: 0,
-        rowsNumber: 10
-      }
     }
   }
 }
 </script>
-
-<style lang="sass">
-</style>
