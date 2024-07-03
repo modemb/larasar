@@ -205,7 +205,7 @@
             @click.prevent="Switch(!debug)"
           /><!-- TagIpDebug: IpDebugModule -->
 
-          <div class="text-weight-bold" v-if="superAdmin||ipDebug">
+          <div class="text-weight-bold">
             {{ipData?.city}} {{ipData?.region}} {{ipData?.country}}
             <q-btn color="primary" class="q-ma-sm"
               :loading="loader" label="appDisplayMode"
@@ -216,7 +216,6 @@
           <div class="q-pa-md" style="max-width: 350px">
             <q-list bordered>
 
-              <template v-if="superAdmin||ipDebug">
                 <q-item clickable v-ripple target="_blank" href="https://laravel.com">
                   <q-item-section avatar>
                     <a class="inline-flex items-center">
@@ -253,7 +252,7 @@
 
                   <q-item-section>Vue.js v{{version}}</q-item-section>
                 </q-item><!-- Vue -->
-              </template>
+
 
               <q-separator />
 
