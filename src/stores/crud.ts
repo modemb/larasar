@@ -35,7 +35,7 @@ export const useCrudStore = defineStore('crud', {
         else this[mutate] = res; return res // if (res?.total) this[mutate].total = res.total
       }   // ^^Mutate ^^GetterName
 
-      // params - mutate: string - refresh: string[] - load: boolean
+      // params -> mutate: string - refresh: string[] - load: boolean
       if (params?.refresh) mSession(params?.refresh) // Reload Getter
       if (params?.load) 'Add To Existing Getter Without Reloading'
       else if (bool(mutate)) return this[mutate] // Existing Getter Except Bool

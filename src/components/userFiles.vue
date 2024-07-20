@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh lpr lFf" container style="height: 800px" class="shadow-2 rounded-borders">
     <q-header elevated>
-      <q-bar v-if="post">
+      <q-bar v-if="post||avatar">
         <q-icon name="fas fa-photo-video" />
         <div>{{$t('My Library')}}</div>
 
@@ -12,21 +12,21 @@
         <q-btn dense flat icon="close" v-close-popup />
       </q-bar><!-- -->
 
-      <div class="q-pa-sm row items-center">
+      <div class="q-pa-sm row items-center" v-if="!avatar||ipDebug">
 
         <div class="col-xl-4" v-if="post||ipDebug"><!-- -->
 
           <q-btn color="primary" icon="fas fa-camera" @click="takePhoto" v-if="mobileApp"/>
           <q-uploader v-if="upload"
-            :factory="getFiles"
+            :factory="readFiles"
             :label="$t('Batch upload')"
             multiple max-files="10"
             auto-upload batch
           /><!-- TagUpload: FileModule hide-upload-btn -->
 
           <q-input filled multiple type="file"
-            _hint="Native file (multiple)" class="text-white"
-            @update:model-value="(val: any) => getFiles(val)"
+            hint="Native file (multiple)" dark
+            @update:model-value="(val: any) => readFiles(val)"
           /><!-- https://quasar.dev/vue-components/input#example--input-of-file-type -->
 
         </div><!-- https://quasar.dev/vue-components/uploader#introduction -->
@@ -141,10 +141,10 @@
 </template>
 
 <script lang="ts">
-import { QUploaderFactoryFn, useQuasar } from 'quasar'
+import { useQuasar } from 'quasar'
 import { useRoute } from 'vue-router'
 import { ref, computed, watch, onMounted } from 'vue'
-import { api, baseURL, mobileApp, logUserAction, mSession, included } from 'boot/axios'
+import { api, baseURL, mobileApp, logUserAction, authAction, filesMutation } from 'boot/axios'
 import { capacitor, takePicture } from './Functions'
 import { useCrudStore } from 'stores/crud'
 
@@ -160,11 +160,12 @@ export default {
     const store = useCrudStore()
     const { crudAction, notifyAction } = store
     const $route = useRoute()
-    const selectedFiles = ref([])
+    const selectedFiles = ref<any>([])
     const showFiles = ref('my_pics')
     const Items = 0
 
     const auth = computed(() => store.authGetter)
+    const files = computed(() => store.filesGetter?.array)
     const rows = computed(() => store[showFiles.value]||[])
 
     // const filter = ref('')
@@ -174,56 +175,68 @@ export default {
     }) // https://github.com/Intervention/image
 
     watch(() => $q.screen.name, () => pagination.value.rowsPerPage = getItemsPerPage())
+    watch(files, val => storeFiles(selectedFiles.value = val))
     watch(showFiles, () => filesAction({}))
 
-    function filesAction(params: { refresh?: string[] }) {
-      selectedFiles.value = []
+    const readFiles = (files: Blob[]) => filesMutation(files) // TagReadFiles: FileModule
 
-      crudAction({...params,
+    function filesAction(params: { refresh?: string[] }) {
+      if (props.avatar) showFiles.value = 'avatars'
+      selectedFiles.value = []; return crudAction({...params,
         url: `api/users/${auth.value?.id}`,// auth_id: auth.value?.id
         method: 'get', mutate: showFiles.value //.then((crud: string | any[]) => height(crud))
-      }).then(() => emit('reload', props.post?'file':$route))
+      }).then(() => emit('reload', props.post?'postFilePopUp':$route))
         .catch((e: unknown) => notifyAction({error: 'FilesAction', e}))
-    } onMounted(() => filesAction({refresh: ['reloadApp']}))
 
-    function storeFiles(selectedFiles: unknown) {
+      // const height = (val: string | any[]) => {
+      //   const gridMasonryClass = document.querySelector('.grid-masonry')
+      //   if (gridMasonryClass) gridMasonryClass.style.height = val?.length*300+'px'
+      // }
+    } onMounted(() => filesAction({}))
+
+    function storeFiles(SelectedFiles: string[]) {
+      // if (SelectedFiles)
       api({
         url: `api/users/${auth.value?.id}`,
         method: 'put', data: {
           avatar: props.avatar,
           post: props.post, // Post Data
-          pics: selectedFiles,
-          update: true }// mSession(['reloadApp'])
-      }).then(({ data }) => {
+          pics: SelectedFiles,
+          update: true }
+      }).then(({ data }) => { // images.value = []
         filesAction({refresh: ['reloadApp']}) // Show Picture
-        notifyAction(data); // images.value = []
-      }).catch(e => notifyAction({error: 'storeImageAction', e}))
+         .then(() => !props.avatar || authAction()) // Show Avatar
+        // if (props.avatar) authAction() // Show Avatar
+        // if (props.avatar) emit('reloadAv') // Show Avatar
+        notifyAction(data);
+      }).catch(e => notifyAction({error: 'StoreFiles', e}))
+      // else notifyAction({ message: 'File Do Not Exist' })
+      // return selectedFiles.value
     } // TagAdd: FileModule
 
-    function getFiles(files: Blob[]) {
+    function _readFiles(files: Blob[]) {
 
-      for (let i = 0; i < files.length; i++) {
+      for (let i = 0; i < files?.length; i++) {
         const reader = new FileReader()
-        reader.readAsDataURL(files[i])
+        // readAsDataURL - readAsText - readAsBinaryString - readAsArrayBuffer
         reader.onload = (e: ProgressEvent<FileReader>) => {
-          if (e?.target?.result) selectedFiles.value.push(e.target.result)
-          if (i+1 === files?.length) storeFiles(selectedFiles.value)
-        }
-      }
+          if (e.target?.result) selectedFiles.value.push(e.target.result)
+          if (i+1 === files?.length) return storeFiles(selectedFiles.value)
+        }; reader.readAsDataURL(files[i])
+      } return selectedFiles.value
     } // TagUpload: FileModule
 
-    function Delete(selectedFiles: { forever: boolean }) {
+    function Delete(SelectedFiles: { forever: boolean }) {
 
-      if (confirm('Are You Sure You Want '+(selectedFiles?.forever?'To Delete Forever Pics':'To Delete Pics')) === true)
-      return api({
+      if (confirm('Are You Sure You Want '+(SelectedFiles?.forever?'To Delete Forever Pics':'To Delete Pics')) === true)
+      return crudAction({
         url: `api/users/${auth.value?.id}`,
-        method: 'delete', data: {
+        method: 'delete', //data: {
           auth: auth?.value,
-          forever: selectedFiles?.forever,
-          pics: selectedFiles}
+          forever: SelectedFiles?.forever,
+          pics: SelectedFiles//}
       }).then(() => filesAction({refresh: ['reloadApp']}))
-        .catch(e => notifyAction({error: 'deleteSelectedFiles', e}))
-        // .catch(e => notifyAction({error: 'DeletePics', e}))
+        .catch((e: unknown) => notifyAction({error: 'deleteSelectedFiles', e}))
     }
 
     function getItemsPerPage () {
@@ -251,7 +264,7 @@ export default {
       modembIos: navigator.userAgent.match(/(modembIos)/), mobileApp,
 
       storeFiles,
-      getFiles,
+      readFiles,
       files: ref(null),
       logUserAction,
 
@@ -274,15 +287,15 @@ export default {
       //   })
       // },// TODO TagEdit: FileModule
 
-      restore (selectedFiles: unknown) {
+      restore (SelectedFiles: any[]) {
         api({
           url: 'api/users',
           method: 'post',
-          data: {restorePics: selectedFiles}
+          data: {restorePics: SelectedFiles}
           // refresh: ['reloadApp']
           // auth_id: auth?auth.id:null,
           // pics: selectedFiles,'trashed_pics'
-          // pic: true.then(() => mSession(['reloadApp']))
+          // pic: true
         }).then(() => filesAction({refresh: ['reloadApp']}))
           .catch(e => notifyAction({error: 'restorePics', e}))
       }, // TagRestore: FileModule
@@ -298,7 +311,7 @@ export default {
 
       deletePic(id: number) {
         if (confirm('Are You Sure You Want To Delete Pics') === true)
-          api.delete(`api/categories/${id}?deletePic=1`)
+          api.delete(`api/users/${id}?deletePic=1`)
             .then(() => filesAction({refresh: ['reloadApp']}))
             .catch(e => notifyAction({error: 'deletePic', e}))
             // .then(() =>  mSession(['reloadApp']))showFiles.value
@@ -316,10 +329,8 @@ export default {
       //   // cruDelete(selectedFiles).then(() => filesAction((showFiles.value === 'all_pics')?'all_pics':'my_pics'))
       // }, // TagDelete: FileModule
 
-      delete_forever(selectedFiles: { forever: boolean }) {
-        selectedFiles.forever = true // AddPasswordBeforeDeleteForever
-        Delete(selectedFiles)//.then(() => filesAction({}))
-          // .then(() =>  mSession(['reloadApp']))'trashed_pics'
+      delete_forever(selectedFiles: any) { // AddPasswordBeforeDeleteForever
+        selectedFiles.forever = true; Delete(selectedFiles)
       }, // TagDeleteForever: FileModule: FileModule
 
       columns: <any> [
