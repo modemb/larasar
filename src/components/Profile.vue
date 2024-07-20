@@ -1,13 +1,13 @@
 <template>
 
   <q-dialog v-model="filesLibrary"><!-- TagFiles =============-->
-    <q-card class="my-card col-12" style="width:100%; max-width: 1000px">
+    <!-- <q-card class="my-card col-12" style="width:100%; max-width: 1000px"> -->
       <UserFiles  :avatar="true" />
-    </q-card><!-- TagFiles: FilesModule v-on:reload="onLoad"-->
+    <!-- </q-card>TagFiles: FilesModule v-on:reloadAv="reloadAv" -->
   </q-dialog><!--====================== TagFiles End =========-->
 
   <q-layout view="lHh lpr lFf" container :style="'height:' + height + 'px'" class="shadow-2 rounded-borders">
-    <q-header elevated v-if="user">
+    <q-header elevated v-if="props.user">
       <q-bar>
         <q-icon name="fas fa-user" />
         <div>{{$t('profile')}}</div>
@@ -35,16 +35,21 @@
 
                 <q-form class="q-pa-sm" @keyup.enter="update">
 
-                  <q-card class="row q-mb-md">
-                    <!-- <q-avatar size="200px" class="col-6 *q-mb-sm"> -->
-                      <img :src="avatar" class="col-md-6"><!-- TagAvatar: UserModule -->
-                      <!-- <q-img :src="avatar" class="col-md-6" id="sky"/> -->
-                    <!-- </q-avatar> -->
+                  <q-card class="row text-center q-mb-md">
+                    <q-card-section class="col-md-6">
+                      <q-avatar size="300px">
+                        <!-- <img :src="avatar" class="col-md-6"> -->
+                        <q-img id="sky" height="300px"
+                          :src="avatar" style="cursor: pointer;"
+                          @click.prevent="filesLibrary = true"
+                        /><!-- TagAvatar: UserModule -->
+                      </q-avatar>
+                    </q-card-section><!-- <q-separator dark /> -->
 
                     <q-card-section class="col-md-6">
 
-                      <!-- <q-btn v-if="superAdmin"
-                        class="primary" class="q-ma-md"
+                      <!-- <q-btn _v-if="ipDebug"
+                        color="primary" class="q-ma-md"
                         :label="$t('library')"
                         icon="fas fa-photo-video"
                         @click.prevent="filesLibrary = true"
@@ -54,7 +59,7 @@
                         icon="fas fa-camera" @click="async () => storeAV([await takePicture()])"
                       /><!-- TagTakePhotoApp: UserUpdate -->
                       <q-input filled clearable type="file" v-else
-                        @update:model-value="(val: any) => createImage(val[0])"
+                        @update:model-value="(val: any) => readFile(val[0])"
                       /><!-- TagTakePhoto: UserUpdate <input type="file" v-on:change="onImageChange" class="q-ma-lg"/> -->
 
                       <!-- <q-input filled type="file" clearable
@@ -369,7 +374,7 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar'
 import { ref, computed, onMounted, watch } from 'vue'
-import { authAction, mobileApp, baseURL, ipData, configAction, shareMutation, xRate, cy , api, i18n} from 'boot/axios'
+import { authAction, mobileApp, baseURL, ipData, configAction, shareMutation, xRate, cy , api, i18n, filesMutation} from 'boot/axios'
 import { takePicture } from './Functions'
 import { useCrudStore } from 'stores/crud'
 import Checkout from './UserCheckout.vue'
@@ -405,8 +410,8 @@ import Share from 'components/UserShare.vue'
     const table = ref(null)
     const gain = ref(props.user?.gain)
     const credit = ref(props.user?.credit)
-    const user = ref(props.user)
-    const auth = computed(() => user.value||store.authGetter)
+    const user = ref(props.user||store.authGetter)
+    const auth = computed(() => user.value)
     const role = ref(auth.value?.role)
     const name = ref('')
     const name_data = ref('')
@@ -430,88 +435,72 @@ import Share from 'components/UserShare.vue'
     const new_password = ref(null)
     const password_confirmation = ref(null)
     const isPwd = ref(true)
-    // const darkMode = ref($q.localStorage.getItem('darkMode'))
-    // const darkMode = computed(() => store.darkModeGetter?.darkMode)
     const locale = ref(auth.value?.locale)
-    // const file = ref(null)
     const ip = ref<string | null >($q.localStorage.getItem('ip'))
     const filesLibrary = ref(false)
-
     const hostUserName = ref('')
     const hostUserName_data = ref(auth.value?.hostUserName_data)
 
     const shareData = computed(() => store.shareDataGetter?.shareData)
-
-    // const debug = computed(() => ip.value === ipData?.ip)
     const ipEqual = computed(() => store.ipGetter?.ip === ipData?.ip)
-    const ipDebug = computed(() => store.configGetter?.ipDebug)
     const superAdmin = computed(() => store.authGetter?.id === 1)
+    const ipDebug = computed(() => store.configGetter?.ipDebug)
+    const file = computed(() => store.filesGetter?.array)
     const avatar = computed(() => {
       if (auth.value?.avatar) {
         if (auth.value?.avatar.includes('files/')) return baseURL + '/' + auth.value?.avatar
         else return auth.value?.avatar // Social Avatar
       } else return auth.value?.new?.avatar // Email Avatar
-    }) // Stored Avatar
+    }) // Show Avatar
 
-    const url = `api/users/${auth.value?.id}`
     // const ios = capacitor()?.Capacitor?.getPlatform()==='ios' // -> 'web', 'ios' or 'android'
     // const modembIos = navigator.userAgent.match(/(modembIos)/)
-    const height = screen.height/($q.platform.is.mobile?1.2:1.35)
     // const height = ref(screen.height / 1.4)
+    const height = ref(screen.height/($q.platform.is.mobile?1.2:1.35))
+    const url = `api/users/${auth.value?.id}`
     const admins = [
       'Admin', 'User', 'Editor'
     ]
 
+    // const reloadAv = () => authAction()
     const getIP = () => ip.value = ipData?.ip
-    const storeAV = (avatar: string[]) => api({
-        url, method: 'put', data: { update: true, avatar }
-      }).then(({ data }) => { notifyAction(data)
-        store.authGetter = user.value = data.user
-      }).catch(e => notifyAction({error: 'createImage', e}))
+    const storeAV = (avatar: string[]) => crudAction({
+      url, method: 'put', update: true, avatar, refresh: ['reloadApp']
+    }).then(( data: { user: object } ) => {
+      if (props.user) user.value = data.user
+      else store.authGetter = user.value = data.user
+    }).catch((e: unknown) => notifyAction({error: 'storeAV', e}))
 
-    // watch(darkMode, val => darkModeClass(val))
-    watch(ip, val => {
-      $q.localStorage.set('ip', store.ipGetter.ip = val)
-      configAction() // Load ipDebug onMounted
-    }) // TagIpDebug: IpDebugModule
-    watch(locale, val => {
-      setTimeout(() => props.user?emit('update', { usersData: 'users' }):
-        authAction() , 1500); i18n.global.locale.value = val
+    watch(file, val => storeAV(val))
+    watch([locale, ip], (val, oldVal) => {
+      if (val[0] !== oldVal[0]) {
+        setTimeout(() => props.user?emit('update', { usersData: 'users' }):
+          authAction(), 1500); i18n.global.locale.value = val[0]
+        store.authGetter.id = auth.value?.id // PopUp User
+      } else $q.localStorage.set('ip', store.ipGetter.ip = val[1])
 
-      store.authGetter.id = auth.value?.id
+      configAction() // Master Locale Setting / Load ipDebug onMounted
+    }) // TagLocale: LocaleUserModule - TagIpDebug: IpDebugModule
 
-      configAction() // Master Locale Setting
-    }) // TagLocale: LocaleUserModule
+    onMounted(() => {
+      const currency = auth.value.currency_code
+      store.rateGetter = auth.value.rate
+      shareMutation(auth.value)
+      crudAction({ currency, mutate: 'currencyGetter', refresh: ['currencyGetter'] })
+    })
 
-    function createImage(file: Blob) {
+    const readFile = (file: Blob) => filesMutation([file]) // TagReadFiles: FileModule
+
+    function _readFiles(file: Blob) {
       // const formData = new FormData()// ToFix
       // formData.append('avatar', file)
       // console.log(formData, file)
       // return storeAV(file)
 
       const reader = new FileReader(); console.log('reader', reader)
-      reader.onload = async (e) => storeAV([`${e?.target?.result}`])
-      // reader.readAsBinaryString(file)
-      // reader.readAsArrayBuffer(file)
+      reader.onload = async (e) => storeAV([`${e.target?.result}`])
       reader.readAsDataURL(file)
-      // reader.readAsText(file)
     } // TagAvatar: UserModule
-
-    onMounted(() => {
-      // darkModeClass(darkMode.value)
-      const currency = auth.value.currency_code
-      store.rateGetter = auth.value.rate
-      shareMutation(auth.value)
-      // store['currencyGetter'].currency = auth.value.currency_code
-      crudAction({ currency, mutate: 'currencyGetter', refresh: ['currencyGetter'] })
-    })
-
-    // function darkModeClass(val: string | number | boolean | object | null) {
-    //   const QDarkClass: any = document.querySelector('.q-dark')//; console.log('val', val)
-    //   // if (val==='null') val = false // authAction()
-    //   if (QDarkClass) QDarkClass.style.color = val?'#fff':'var(--q-dark)'
-    //   if (QDarkClass) QDarkClass.style.background = val?'var(--q-dark)':'#fff'
-    // }
 
     function update() {
       api({ url, method: 'put', data: {
@@ -557,10 +546,11 @@ import Share from 'components/UserShare.vue'
     }
 
     function deleteAvatar() {
-      api({ url, method: 'delete',
-        data: { delete_avatar: 1 }
-      }).then(({ data }) => { notifyAction(data)
-        store.authGetter = user.value = data.User
+      crudAction({ url, method: 'delete',
+        delete_avatar: 1, refresh:['reloadApp']
+      }).then((data: { user: object }) => {
+        if (props.user) user.value = data.user
+        else store.authGetter = user.value = data.user
       }).catch((e: unknown) => notifyAction({error: 'deleteAvatar', e}))
     } // ============================================== \\
 
@@ -568,10 +558,5 @@ import Share from 'components/UserShare.vue'
     //   // var currWidth = file.width
     //   // var currHeight = file.height
     // } // TODO http://image.intervention.io/api/filesize
-
-    // function onImageChange(e: { target: { files: unknown }; dataTransfer: { files: unknown } }) {
-    //   let files = e.target.files || e.dataTransfer.files
-    //   if (!files?.length) return; createImage(files[0])
-    // } // TagAvatar: UserModule - NotInUse
 
 </script>

@@ -1,4 +1,4 @@
-import { Cookies, LocalStorage } from 'quasar'
+import { Cookies, LocalStorage, QUploaderFactoryFn } from 'quasar'
 import { boot } from 'quasar/wrappers'
 import axios, { AxiosInstance } from 'axios'
 import { createPinia } from 'pinia'
@@ -9,12 +9,21 @@ import Echo from 'laravel-echo'
 import Pusher from 'pusher-js'
 import { i18n } from './i18n'
 
+// let i18n: { global: { t: any; locale: { value: string } } }
+
 let ipData: any; let ipDebug = 0;
 let timeago: (date: TDate) => string
 let cy: (a: number) => string
+// let cy: (a: { toLocaleString: (arg0: string, arg1: { style: string; currency: string | number }) => unknown }) => number
 let xRate: (arg0: any) => number // https://collect.js.org
+// let xRate: (arg0: {
+//   error: {code: string}; message: string; currency_code: string; id: number; date: string;
+//   info: { rate: number; timestamp: number }; result: number; success: boolean;
+//   query: { amount: number; from: string; to: string };
+// }) => number // https://collect.js.org
 let getAppDisplayMode: (bool: boolean) => string | false | undefined
 let deleteAllCookies: () => void
+let categoriesAction: (params: object) => Promise<unknown>
 let configAction: () => Promise<unknown>
 let currenciesAction: () => Promise<unknown>
 let authAction: () => Promise<unknown> | null
@@ -23,6 +32,7 @@ let logoutAction: () => void
 let loginMutation: ({ token, remember }: { token: string; remember: boolean }) => void
 let locationMutation: (location: string) => void
 let shareMutation: (auth: { credit: number; name: string }) => any
+let filesMutation: (files: Blob[]) => QUploaderFactoryFn
 
 const session: string[] = []
 const included = (e: string, s = false) => {
@@ -55,8 +65,9 @@ declare global {
   interface Window {
     Pusher: any;
     Echo: any;
+    array: any;
     deferredPrompt: Event | null;
-    location: Location
+    location: Location;
   }
   interface Navigator {
     standalone: boolean
@@ -79,6 +90,9 @@ declare module '@vue/runtime-core' {
 const api = http({ baseURL, withCredentials: true })
 
 export default boot(async ({ app, router }) => {
+
+  // i18n = app?.__VUE_I18N__
+  // i18n = app?.i18n
 
   let currency: any;
   const $t = i18n.global.t
@@ -127,6 +141,11 @@ export default boot(async ({ app, router }) => {
     update: store.authGetter?.id
   }).catch((e: unknown) => notifyAction({error: 'configAction', e}))
 
+  categoriesAction = (params: object) => crudAction({
+    url: 'api/categories/categories', ...params,
+    method: 'get', mutate: 'categoriesGetter'
+  }).catch((e: unknown) => notifyAction({error: 'categoriesAction', e}))
+
   authAction = () => {
 
     if (Cookies.get('XSRF-TOKEN')) {
@@ -169,6 +188,20 @@ export default boot(async ({ app, router }) => {
     }).finally(() => router.push({ path: '/login' }))
   } // TagLogout: UserModule
 
+  filesMutation = (files: Blob[]): QUploaderFactoryFn => {
+    const array: (string | ArrayBuffer | null)[] = []
+    for (let i = 0; i < files?.length; i++) {
+      const reader = new FileReader()
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) array.push(e.target.result)
+        if (i+1 === files.length) crudAction({
+          array, mutate: 'filesGetter',
+          refresh: ['filesGetter']
+        }) // readAsText - readAsBinaryString - readAsArrayBuffer
+      }; reader.readAsDataURL(files[i])
+    } return store.filesGetter?.array
+  } // TagFilesMutation: FileModule
+
   loginMutation = ({ token, remember }) => {
 
     Cookies.set('token', token, { expires: remember ? 365 : '' })
@@ -196,17 +229,19 @@ export default boot(async ({ app, router }) => {
   api.interceptors.request.use(async (request) => {
 
     const { data } = request; console.log(
-      `%curl: %c${baseURL}`,
-      'color: red; font-size: 24px', 'color: green; font-size: 24px',
+      // `%curl: %c${baseURL}`,
+      // 'color: red; font-size: 24px', 'color: green; font-size: 24px',
       // 'NODE_ENV', process.env.NODE_ENV, 'MODE', process.env.MODE,
       // 'mobileApp', mobileApp, 'navigator', JSON.stringify(navigator),
-      'target', JSON.stringify(process.env.TARGET),
+      // 'target', JSON.stringify(process.env.TARGET),
       // 'userAgent', JSON.stringify(navigator.userAgent),
       // 'referrer', document.referrer.startsWith('capacitor://'),
       // 'CapacitorHttp', capacitor()?.CapacitorHttp.request,
       // 'canShare()', (await capacitor()?.Share.canShare())?.value
       // 'device_name', navigator.userAgent.match(/\(([^)]+)\)/)[1].split(';')[0].split(' ')[0],
       // 'navigator.language', navigator.language
+      // 'i18n.global.locale', i18n.global.locale//.valueOf
+      'filesGetter', store.filesGetter?.array
     ) // Console With Style
 
     if (data?.token?.includes('csrf')&&!Cookies.get('XSRF-TOKEN')&&SANCTUM_API)
@@ -249,6 +284,9 @@ export default boot(async ({ app, router }) => {
   app.config.globalProperties.$crudAction = crudAction
   app.config.globalProperties.$notifyAction = notifyAction
 
+  // $t = app.__VUE_I18N__.global.t
+  // $t = i18n?.global?.t
+
   const localeFn = (_number: number, index: number): any => {
     // number: the time ago / time in number;
     // index: the index of array below;
@@ -273,10 +311,15 @@ export default boot(async ({ app, router }) => {
 
   timeago = (date: TDate) => format(date, locale) // https://timeago.org
 
+  // const echoUrl = (process.env.APP_URL===baseURL)?'/broadcasting/auth':'/api/broadcasting/auth'
+  // const echoUrl = SANCTUM_API?'/broadcasting/auth':'/api/broadcasting/auth'
+
   window.Pusher = Pusher; window.Echo = new Echo({
     broadcaster: 'pusher',
     cluster: process.env.PUSHER_APP_CLUSTER,
     key: process.env.PUSHER_APP_KEY,
+    // cluster: process.env.VITE_PUSHER_APP_CLUSTER,
+    // key: process.env.VITE_PUSHER_APP_KEY,
     forceTLS: true,
     encrypted: true,
     // authEndpoint: baseURL + '/broadcasting/auth'
@@ -286,6 +329,8 @@ export default boot(async ({ app, router }) => {
           socket_id: socketId,
           channel_name: channel.name
         }).then((response: { data: unknown }) => callback(false, response.data))
+          // .catch(error => callback(true, error))
+          // .catch(() => notifyAction({message: 'notifyErr'}))
           .catch((e: unknown) => notifyAction({error: 'EchoErr', e}))
       }// client: window.Pusher // https://pusher.com/docs/channels/server_api/http-api#publishing-events
     } // https://www.youtube.com/watch?v=zooUbo0tz6U&t=341s
@@ -321,6 +366,7 @@ export default boot(async ({ app, router }) => {
   }; data.app = getAppDisplayMode(true)||'browser'
 
   xRate = amount => {
+  // xRate = (amount: number | {[x: string]: unknown | {[x: string]: number}}) => {
 
     const auth = store.authGetter
     currency = store.currencyGetter?.currency
@@ -328,12 +374,12 @@ export default boot(async ({ app, router }) => {
       || auth?.currency_code // Auth User
       || data?.currency // Api Currency
 
-    const currencyInfo = Currencies[currency]
+    const currencyInfo: any = Currencies[currency]
 
     const myHeaders = new Headers()
     myHeaders.append('apikey', process.env.EXCHANGE_RATES_API||'')
 
-    const apiData = {
+    const apiData: any = {
       url: 'api/users/xRate',
       method: 'PUT',
       mutate: 'rateGetter',
@@ -355,6 +401,19 @@ export default boot(async ({ app, router }) => {
       // ====Api End=== \\
     }; if (!store.rateGetter||apiData.apiMessage||amount?.id||apiData?.rate>0)
     crudAction(apiData).then((rate: number) => {
+
+      console.log(
+        'rate', rate, 'api.rate', apiData.rate,
+        'currency', currency,
+        // 'apiData', apiData
+        'auth.id', apiData.auth_id,
+        // 'updateUser', apiData.update,
+        // 'rateNumber', rate>0,'rate', rate,
+        // 'isNaN(rate)', isNaN(rate),
+        // 'session', session.includes(currency),
+        // '!isNaN(amount)', !isNaN(amount),
+        // 'Number(amount)', Number(amount),
+      ); //const rate = data
 
       if (amount?.id||apiData.rate>0) authAction() // Refresh Updated Currency On the Database
       if (!auth) return; if (rate > 0) return // Rate Mutated
@@ -402,6 +461,7 @@ export default boot(async ({ app, router }) => {
   } // Exchange Rate // 1 gram 0.035274 once // 1 once - 28.3495 gram
 
   cy = a => a?.toLocaleString(locale, { style: 'currency', currency })
+  // cy = (a: { toLocaleString: (arg0: string, arg1: { style: string; currency: string | number }) => unknown }) => a?.toLocaleString(locale, { style: 'currency', currency })
 
   configAction() // Config
   locationMutation(location) // TagAddLocation: LocationModule
@@ -417,11 +477,19 @@ export default boot(async ({ app, router }) => {
     if (store.authIdGetter?.authID) data.ip = null // Prevent Analytic On Logged User
     if (auth) { // Authenticated Router
 
+      // ipData.currency_code = 'xof'
+      // ipData.update = !auth.currency_code
+
       ipData = { ...data, id: auth?.id }
 
-      const mailVerify = 
+      const mailVerify = //(!ipDebug?mobileApp:'') ? false : // AppsNeedVerification
         (ipDebug?store.authIdGetter?.authID:'') ? false : // authCanByPassVerification
         (!auth?.email_verified_at && (MAIL_VERIFY||MAIL_CODE))
+
+        // ((!auth?.email_verified_at && MAIL_VERIFY) ||
+        // (!auth?.email_verified_at && MAIL_CODE))
+
+        // console.log('mailVerify', mailVerify)
 
       const verify = mailVerify
         ? error || to.meta.verify || { path: '/email/verify' }
@@ -449,8 +517,8 @@ export default boot(async ({ app, router }) => {
 
 export {
   cy, xRate, deleteAllCookies, getAppDisplayMode, mSession, included,
-  authAction, configAction, logUserAction, logoutAction,
-  currenciesAction, loginMutation, locationMutation, shareMutation,
+  authAction, categoriesAction, configAction, logUserAction, logoutAction,
+  currenciesAction, loginMutation, locationMutation, shareMutation, filesMutation,
   timeago, i18n, api, baseURL, mobileApp, ipData, ipDebug,
   SANCTUM_API, MAIL_VERIFY, MAIL_CODE
 } // Here we define a named export that we can later use inside .js files:

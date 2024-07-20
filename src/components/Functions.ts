@@ -228,18 +228,6 @@ export const getDeliveredNotifications = async () => {
 // });
 // console.log('navigator.mediaDevices', navigator
 
-// export function getFiles(files: Blob[]) {
-//   const array: (string | ArrayBuffer | null)[] = []
-//   for (let i = 0; i < files.length; i++) {
-//     const reader = new FileReader()
-//     reader.onload = (e: ProgressEvent<FileReader>) => {
-//       if (e?.target?.result) array.push(e.target.result)
-//       if (i+1 === files.length) images = array
-//     };reader.readAsDataURL(files[i])
-//     if (i+1 === files.length) return images
-//   } // NotInUse
-// } // TagGetFiles: FilesModule
-
 // export function onRequest (props: { pagination: { page: number; rowsPerPage: number; sortBy: string; descending: boolean }; filter?: string; rows: any[] }) {
 //   const { page, rowsPerPage, sortBy, descending } = props.pagination
 //   const filter = props.filter; //galleryAction({load: true})

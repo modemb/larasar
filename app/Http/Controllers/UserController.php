@@ -39,6 +39,7 @@ use Hash;
 use Auth;
 use Log;
 use DB;
+use GrahamCampbell\ResultType\Success;
 
 /**
  * Tags: UserModule - AnalyticModule - BitgoModule - IpDebugModule - FileModule
@@ -103,7 +104,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function save($request)
+    private function save($request)
     { //return $request->id;
 
       if ($request->ip) { // Save Analytic
@@ -391,7 +392,7 @@ class UserController extends Controller
 
       $pics = Pic::whereNull('deleted')->orderBy('pic', 'desc');  // Pic::all()
       $picsAchieved = Pic::onlyTrashed()->whereNull('deleted')->orderBy('pic', 'desc'); // Show Admins' Achieved Users
-      $user = User::find($id);
+      $user = User::find($id); $admin = $user?->role === 'Admin';
 
       if ($request->mutate === 'my_pics') return // TagShow: LibraryModule;
         $pics->where('user_id', $id)->get(); // Show Auth's Pics
@@ -399,10 +400,10 @@ class UserController extends Controller
         $picsAchieved->where('user_id', $id)->get(); // Show Auth's Achieved Pics
       if ($request->mutate === 'users_pics') return // TagShow: Users Pics
         $pics->where('user_id', '<>', 1)->get();
-      if ($request->mutate === 'avatars') return // TagShow: AvatarsModule
-        DB::table('users')->whereNotNull('avatar')->get(['id', 'avatar']);
+      if ($request->mutate === 'avatars') return $admin? // TagShow: AvatarsModule
+        DB::table('users')->whereNotNull('avatar')->get(['id', 'avatar']):[$user];
       if ($request->mutate === 'all_pics') return  // $pics->get(); // TagShow: Users Pics
-        DB::table('pics')->whereNull('deleted')->orderBy('pic', 'desc')->get();
+        Pic::whereNull('deleted')->orderBy('pic', 'desc')->get();
       if ($request->mutate === 'all_trashed_pics') return $picsAchieved->get(); // All Trashed Pics
 
       // if ($request->location||($request?->mutate === 'placeGetter')) return $this->location($request); // TagShow: LocationModule
@@ -550,8 +551,8 @@ class UserController extends Controller
           'view' => $view
         ];
       } elseif ($request->update) { // Update Users
-
         $user = User::find($request->id??$id);
+        $success = 'Updated Successfully';
         $check = Auth::validate([
             'email'    => $user->email,
             'password' => $request->password
@@ -624,43 +625,38 @@ class UserController extends Controller
             //   $picSet = 'Picture Uploaded Successfully';
             // } catch (\Throwable $th) { $path = null; }
 
-            $picture = new Picture; $post = $request->post;
-
-            $path = $picture->image($pic); $picData = [
+            $path = Picture::image($pic);
+            $post = $request->post; $picData = [
               'user_id' => $id,
               'post_id' => isset($post['id'])?$post['id']:null,
               'subcategory_id' => isset($post['subcategory_id'])?$post['id']:null,
               'category_id' => isset($post['category_id'])?$post['id']:null,
               'name' => isset($post['post_title'])?$post['post_title']:null,
-              'pic' => $path, //??$pic,
+              'pic' => $path,
               'deleted' => null
-            ];
+            ]; $img = Pic::where('pic', $pic)->first(); // ->where('post_id', $picData['post_id'])
 
-            if ($request->get('avatar')) { // Profile Avatar
-              $request->delete_avatar = 1; $picSet = 'Avatar Uploaded Successfully';
-              if ($user->avatar) $this->destroy($request, $id);
-              $user->avatar = $picData['pic'];
-            } else { // Library Pictures
+            if ($path) {
+
               $picDeleted = Pic::onlyTrashed()->whereNotNull('deleted')->first();
-              $pic = Pic::where('pic', $picData['pic'])
-                ->where('post_id', $picData['post_id'])
-                ->first();
+              $success = 'Picture Uploaded Successfully';
 
-              if ($pic) { // Assign Existing Picture
-               $pic->update($picData);
-               $picSet = 'Pic Assigned Successfully';
+              if ($request->get('avatar')) { // Profile Avatar
+                $request->delete_avatar = 1; $success = 'Avatar Uploaded Successfully';
+                if ($user->avatar) $this->destroy($request, $id);
+                $user->avatar = $path; // Library Pictures
               } elseif ($picDeleted) { // Upload Picture
                 $picDeleted->restore();
                 $picDeleted->update($picData);
               } else Pic::create($picData); // Add post Pictures
-            }
-          }
+            } elseif ($img) { // Assign Existing Picture
+              $picData['pic'] = $img->pic;
+              $img->update($picData);
+              $success = 'Picture Assigned Successfully';
+            } else $message = 'Picture Not Uploaded';
+          } if (isset($message)) return compact('message');
         } $user->update(); // TagUpdate: FileModule
-        if (!$request->id) return response()->json([
-          'success' => $picSet??'Updated Successfully',
-          'user' => $user,
-          // 'path' => $path
-        ]);
+        if (!$request->id) return response()->json(compact('success', 'user'));
       } elseif ($request->chat) { // Update Message
       } elseif ($id==='location') // TagCreateUpdate: LocationModule
         return $this->location($request);
@@ -693,7 +689,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
-    { // return $id === 1;
+    { //return ($id === 1) .' - '. ($request->authID == $id);
 
       if ($id==='deleteAllCookies') {
         $array = array(); // TagDestroy: CookiesModule
@@ -701,57 +697,15 @@ class UserController extends Controller
           // $array[] = cookie($key, null, -2628000, null, null);
           $array[] = Cookie::queue(Cookie::forget($key));
         } return $array; // back()->withCookies($array);
-      } elseif ($request->pics) { // Delete Pics
-
-        foreach ($request->pics as $pic) {
-
-          $img = Pic::where('pic', $pic)->first();
-
-          $imgTrashed = Pic::onlyTrashed()->whereNull('deleted')
-            ->where('pic', $pic)->first(); // TagDestroy: FileModule
-
-          if ($request?->auth) // Assign Pic To Admin
-          if (($request->auth['id']==1)||($request->auth['role']=='Admin')) {
-            if ($img = $imgTrashed??$img)  $img->update([
-              'user_id' => $request->auth['id'], // Assign Pic To User
-            ]); else return ['message' => 'Select Picture'];
-          } if ($imgTrashed&&$request->forever) {
-            $piCount = DB::table('pics')->where('pic', $pic)
-              ->whereNull('deleted')->count();
-
-            $file_path = public_path($imgTrashed->pic);
-            if(File::exists($file_path)&&($piCount<2)) File::delete($file_path);
-
-            $imgTrashed->update(['deleted' => 1]); // Delete Pic Forever
-            // return ['success' => 'Pics Deleted Forever Successfully'];
-          } elseif ($img) $img->delete(); // Delete Pic
-
-        } return ['success' => 'Pics Deleted '.($imgTrashed?'Forever':'').' Successfully'];
-
-        // foreach ($request->pics as $id) {
-
-        //   $img = Pic::find($id);
-
-        //   $imgTrashed = Pic::onlyTrashed()->whereNull('deleted')
-        //     ->find($id); // TagDestroy: FileModule
-
-        //   if ($request?->auth) // Assign Pic To Admin
-        //   if (($request->auth['id']==1)||($request->auth['role']=='Admin')) {
-        //     if ($img = $imgTrashed??$img)  $img->update([
-        //       'user_id' => $request->auth['id'], // Assign Pic To User
-        //     ]); else return ['message' => 'Select Picture'];
-        //   } if ($imgTrashed&&$request->forever) {
-        //     $piCount = DB::table('pics')->find($id)
-        //       ->whereNull('deleted')->count();
-
-        //     $file_path = public_path($imgTrashed->pic);
-        //     if(File::exists($file_path)&&($piCount<2)) File::delete($file_path);
-        //     $imgTrashed->update(['deleted' => 1]); // Delete Pic Forever
-        //     return ['success' => 'Pics Deleted Forever Successfully'];
-        //   } elseif ($img) $img->delete(); // Delete Pic
-
-        // } return ['success' => 'Pics Deleted Successfully'];
-
+      } elseif ($id === 'truncate') { // TagDestroy: truncateLocationModule
+        $check = Auth::validate([
+          'email'    => $request->user()->email,
+          'password' => $request->password_confirmation
+        ]); // return $check;
+        if (!$check) return ['success' => 'Current Password Do Not Match Our Record'];
+        // else return ['success' => 'Current Password Match Our Record'];
+        DB::table('locations')->truncate();
+        return ['success' => 'Locations Truncated Successfully'];
       } elseif ($request->location) { // Delete Location
         $locationTrashed = Location::onlyTrashed()->find($id)?->update([
             'city' => null,
@@ -780,29 +734,52 @@ class UserController extends Controller
         Currency::destroy($id); return ['success' => 'Currency Deleted Successfully'];
       } elseif ($request->delete_avatar) {  // Remove Image
         $user = User::find($id);
+        $success = 'Picture Deleted Successfully';
         $file_path = public_path($user->avatar);
         if(File::exists($file_path)) File::delete($file_path);
-        $user->update(['avatar' => Null]);
-        return [
-          'success' => 'Picture Deleted Successfully',
-          'User' => $user
-        ]; // TagDestroy: FileModule - avatarModule
+        $user->update(['avatar' => null]); // TagDestroy: FileModule - avatarModule
+        return response()->json(compact('success', 'user'));
+        // return [
+        //   'success' => 'Picture Deleted Successfully',
+        //   'User' => $user
+        // ];
       } elseif ($request->remove) { // Remove User
         User::find($id)->update(['user_id' => null]);
         return ['success' => 'User Remove Successfully'];
-      } elseif ($id === 'truncate') { // TagDestroy: truncateLocationModule
-        $check = Auth::validate([
-          'email'    => $request->user()->email,
-          'password' => $request->password_confirmation
-        ]); // return $check;
-        if (!$check) return ['success' => 'Current Password Do Not Match Our Record'];
-        // else return ['success' => 'Current Password Match Our Record'];
-        DB::table('locations')->truncate();
-        return ['success' => 'Locations Truncated Successfully'];
-      }
+      } elseif ($request->pics) { // Delete Pics
+
+        $success = 'Picture Deleted Successfully';
+
+        foreach ($request->pics as $pic) {
+
+          $img = Pic::where('pic', $pic)->first();
+
+          $imgTrashed = Pic::onlyTrashed()->whereNull('deleted')
+            ->where('pic', $pic)->first(); // TagDestroy: FileModule
+
+          if ($request?->auth) // Assign Pic To Admin
+          if (($request->auth['id']==1)||($request->auth['role']=='Admin')) {
+            if ($img = $imgTrashed??$img)  $img->update([
+              'user_id' => $request->auth['id'], // Assign Pic To User
+            ]); else return ['message' => 'Select Picture'];
+          } if ($imgTrashed&&$request->forever) {
+            $piCount = DB::table('pics')->where('pic', $pic)
+              ->whereNull('deleted')->count();
+
+            // $file_path = public_path($imgTrashed->pic);
+            // if(File::exists($file_path)&&($piCount<2)) File::delete($file_path);
+
+            if($piCount<2) $success = Picture::delete($imgTrashed->pic/* Path */);
+
+            $imgTrashed->update(['deleted' => 1]); // Delete Pic Forever
+          } elseif ($img) $img->delete(); // Delete Pic
+
+        } return compact('success'); // return ['success' => 'Pics Deleted '.($imgTrashed?'Forever':'').' Successfully'];
+
+      } elseif ($request->deletePic) Pic::destroy($id); // Delete Pic
 
       if ($request->delete_account) $request->authID = 'Delete Account';
-      if ($id == 1 || $request->authID == $id) return ['success' => 'You Cannot Delete Super Admin or Your Own Account'];
+      if ($id === 1 || $request->authID == $id) return ['success' => 'You Cannot Delete Super Admin or Your Own Account'];
       else { // Trash And Delete User With His Posts and Team
         $userTrashed = User::onlyTrashed()->find($id)?->update([
             'email_verified_at' => null,
