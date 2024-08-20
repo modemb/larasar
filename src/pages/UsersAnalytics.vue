@@ -68,6 +68,12 @@
           </q-input>
       </template>
 
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px" />
+        </div>
+      </template>
+
       <template v-slot:header="props" v-if="expend">
         <q-tr :props="props">
           <q-th auto-width />
@@ -94,21 +100,13 @@
         </q-tr>
         <q-tr v-show="props.expand" :props="props">
           <q-td colspan="100%">
-            <!-- <div v-for="(session, i) in props.row.sessions
-              .filter((s: { user_id: number }) => s.user_id === props.row.user_id)
-              .sort((a: { last_activity: number }, b: { last_activity: number }) => b.last_activity - a.last_activity)" :key="i">
-              <div class="text-h6">
-                <i class="far fa-clock"/> {{timeago(new Date(session.last_activity * 1000))}}
-                <i class="fab fa-chrome"/> {{session.user_agent}}
-              </div>
-            </div>TagSession: SessionModule --><!-- props: ['sessions'] https://laravel.com/docs/9.x/authentication#invalidating-sessions-on-other-devices -->
 
-            <div v-for="(session, i) in sessions(props.row)"  :key="i">
-              <div class="text-h6">
-                <i class="far fa-clock"/> {{timeago(new Date(session.last_activity * 1000))}}
-                <i class="fab fa-chrome"/> {{session.user_agent}}
-              </div>
-            </div><!-- TagSession: SessionModule -->
+            <div v-for="(session, i) in sessionsSortBy(props.row)"  :key="i">
+              <div class="text-h6">{{ i+1 }}
+                <i class="far fa-clock"/> {{ timeago(new Date(session.last_activity * 1000)) }}
+                <i class="fab fa-chrome"/> {{ session.user_agent }}
+              </div><!-- https://laravel.com/docs/11.x/authentication#invalidating-sessions-on-other-devices -->
+            </div><!-- TagSessionsSortBy: SessionModule -->
 
           </q-td>
         </q-tr>
@@ -132,9 +130,19 @@ import { Param } from 'components/models'
  * @to
  */
 
-function wrapCsvValue (val: string, formatFn: ((arg0: any) => any) | undefined) {
+function wrapCsvValue (val: any, formatFn: ((arg0: any, arg1: any) => any) | undefined, row: {
+    [
+    /* __placeholder__ */
+    x:
+      /* __placeholder__ */
+      string
+    /* __placeholder__ */
+    ]:
+    /* __placeholder__ */
+    any
+  } | undefined) {
   let formatted = formatFn !== void 0
-    ? formatFn(val)
+    ? formatFn(val, row)
     : val
 
   formatted = formatted === void 0 || formatted === null
@@ -152,33 +160,13 @@ function wrapCsvValue (val: string, formatFn: ((arg0: any) => any) | undefined) 
   return `"${formatted}"`
 }
 
-// function wrapCsvValue (val, formatFn, row) {
-//   let formatted = formatFn !== void 0
-//     ? formatFn(val, row)
-//     : val
-
-//   formatted = formatted === void 0 || formatted === null
-//     ? ''
-//     : String(formatted)
-
-//   formatted = formatted.split('"').join('""')
-//   /**
-//    * Excel accepts \n and \r in strings, but some other CSV parsers do not
-//    * Uncomment the next two lines to escape new lines
-//    */
-//   // .split('\n').join('\\n')
-//   // .split('\r').join('\\r')
-
-//   return `"${formatted}"`
-// }
-
 export default {
   // props: ['sessions'],
   setup () {
     const $t = i18n.global.t
     const $q = useQuasar()
-    const store = useCrudStore()
-    const { crudAction, notifyAction } = store
+    const $store = useCrudStore()
+    const { crudAction, notifyAction } = $store
     const timeStamp = Date.now()
     const formattedString = date.formatDate(timeStamp, 'YYYY/MM/DD')//YYYY-MM-DDTHH:mm:ss.SSSZ
     const proxyDate = ref<any>(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
@@ -210,12 +198,16 @@ export default {
       { name: 'created_at', align: 'center', label: $t('created_at'), field: 'created_at', sortable: true },
     ])//; const d = (d: string | number | Date | undefined) => new Date(date.formatDate(d, 'YYYY-MM-DD')).getTime()
 
+    const sessionsSortBy = (analytic: { sessions: any[]; user_id: number }) => analytic.sessions
+        .filter((s: { user_id: number }) => s.user_id === analytic.user_id) // TagSessionsSortBy: SessionModule
+        .sort((a: { last_activity: number }, b: { last_activity: number }) => b.last_activity - a.last_activity)
+
+    const last_page = computed(() => $store[getter.value]?.last_page)
     const getter = computed(() => 'analyticsGetter'+period.value)
+    const total = computed(() => $store[getter.value]?.total||0)
+    const rows = computed(() => $store[getter.value]?.data||[])
+    const reload = computed(() => $store.reloadGetter?.reload)
     const TO = computed(() => crud.value?.to)
-    const total = computed(() => store[getter.value]?.total)
-    const reload = computed(() => store.reloadGetter?.reload)
-    const last_page = computed(() => store[getter.value]?.last_page)
-    const rows = computed(() => store[getter.value]?.data||[])
     // ?.filter((a: { updated_at: Date }) =>
     //   d(a.updated_at) >= d(dateTimePeriod(period.value)) &&
     //   d(a.updated_at) <= d(dateTimePeriod('0 day')) ||
@@ -266,7 +258,6 @@ export default {
     return {
       period,
       loading,
-      timeago,
       total,
       filter, //: ref(''),
       range: ref(false),
@@ -274,13 +265,7 @@ export default {
       proxyDate, // 'YYYY-MM-DD',
       height: ref(screen.height / 1.4),
 
-      sessions(a: { filter: (arg0: (s: { user_id: number }) => boolean) => {
-        user_agent: any; last_activity: number
-      }[]; user_id: number }) {
-
-        return a.filter((s: { user_id: number }) => s.user_id === a.user_id)
-         .sort((a: { last_activity: number }, b: { last_activity: number }) => b.last_activity - a.last_activity)
-      },
+      sessionsSortBy, timeago,
 
       save () {
         period.value = ''
@@ -305,32 +290,13 @@ export default {
 
       exportTable () {
         // naive encoding to csv format
-        const content = [columns.value.map((col: { label: string }) => wrapCsvValue(col.label))].concat(
-          rows.value.map((row: { [x: string]: any }) => columns.value.map((col: {
-              field: ((arg0: {
-                [
-                /* __placeholder__ */
-                x:
-                  /* __placeholder__ */
-                  string
-                /* __placeholder__ */
-                ]:
-                /* __placeholder__ */
-                any
-              }) => string) | undefined; name: any; format: ((
-                /* __placeholder__ */
-                arg0:
-                  /* __placeholder__ */
-                  any
-                /* __placeholder__ */
-              ) =>
-                /* __placeholder__ */
-                any) | undefined
-            }) => wrapCsvValue(
+        const content = [columns.value.map((col: { label: any }) => wrapCsvValue(col.label, undefined, undefined))].concat(
+          rows.value.map((row: { [x: string]: any }) => columns.value.map((col: { field: ((arg0: { [x: string]: any }) => any) | undefined; name: any; format: any }) => wrapCsvValue(
             typeof col.field === 'function'
               ? col.field(row)
               : row[ col.field === void 0 ? col.name : col.field ],
-            col.format
+            col.format,
+            row
           )).join(','))
         ).join('\r\n')
 

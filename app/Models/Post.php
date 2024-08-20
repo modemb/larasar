@@ -42,7 +42,7 @@ class Post extends Model
    *
    * @var array
    */
-  protected $appends = ['pics', 'payments', 'reports', 'favorite', 'flag'];
+  protected $appends = ['payments', 'reports', 'favorite', 'flag'];
 
   /**
    * Get Post's Flag

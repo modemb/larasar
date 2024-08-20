@@ -69,6 +69,12 @@
         </q-input>
       </template>
 
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px" />
+        </div>
+      </template>
+
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td key="id" :props="props">{{ props.row.id }}</q-td>
@@ -133,9 +139,20 @@ import { Param } from './models'
  *
  * @to UserController
  */
-function wrapCsvValue (val: string, formatFn: ((arg0: string) => any) | undefined) {
+
+function wrapCsvValue (val: any, formatFn: ((arg0: any, arg1: any) => any) | undefined, row: {
+    [
+    /* __placeholder__ */
+    x:
+      /* __placeholder__ */
+      string
+    /* __placeholder__ */
+    ]:
+    /* __placeholder__ */
+    any
+  } | undefined) {
   let formatted = formatFn !== void 0
-    ? formatFn(val)
+    ? formatFn(val, row)
     : val
 
   formatted = formatted === void 0 || formatted === null
@@ -158,8 +175,8 @@ export default {
   setup (props) {
     const $t = i18n?.global?.t
     const $q = useQuasar()
-    const store = useCrudStore()
-    const { crudAction, notifyAction } = store
+    const $store = useCrudStore()
+    const { crudAction, notifyAction } = $store
     const timeStamp = Date.now()
     const formattedString = date.formatDate(timeStamp, 'YYYY/MM/DD')//YYYY-MM-DDTHH:mm:ss.SSSZ
     const proxyDate = ref<any>(formattedString) //ref({ from: '2020/07/08', to: '2020/07/17' })
@@ -169,11 +186,11 @@ export default {
 
 
     // const getter = computed(() => 'reportsGetter'+period.value)
-    // const rows = computed(() => store[getter.value]?.data)
+    // const rows = computed(() => $store[getter.value]?.data)
 
     const pending_payments = computed(() => props?.pending_payments)
-    const ipDebug = computed(() => store['configGetter']?.ipDebug)
-    const auth = computed(() => store.authGetter)
+    const ipDebug = computed(() => $store['configGetter']?.ipDebug)
+    const auth = computed(() => $store.authGetter)
     const post_id = computed(() => props?.post_id)
 
     const authId = Object.fromEntries(Object.entries(auth.value||{}).filter(([key]) => key.includes('id')));
@@ -214,7 +231,7 @@ export default {
         // checkout: true,
         post_id: props?.post_id||0,
         role: auth.value?.role, period
-      }) //; else rows.value = store['reportsGetter'+period]
+      }) //; else rows.value = $store['reportsGetter'+period]
     } onMounted(() => onLoad (period.value))
 
     return {
@@ -279,22 +296,13 @@ export default {
 
       exportTable () {
         // naive encoding to csv format
-        const content = [columns.value.map((col: { label: string }) => wrapCsvValue(col.label))].concat(
-          rows.value.map(row => columns.value.map((col: {
-              field: ((arg0: never) => string) | undefined; name: any; format: ((
-                /* __placeholder__ */
-                arg0:
-                  /* __placeholder__ */
-                  string
-                /* __placeholder__ */
-              ) =>
-                /* __placeholder__ */
-                any) | undefined
-            }) => wrapCsvValue(
+        const content = [columns.value.map((col: { label: any }) => wrapCsvValue(col.label, undefined, undefined))].concat(
+          rows.value.map((row: { [x: string]: any }) => columns.value.map((col: { field: ((arg0: { [x: string]: any }) => any) | undefined; name: any; format: any }) => wrapCsvValue(
             typeof col.field === 'function'
               ? col.field(row)
               : row[ col.field === void 0 ? col.name : col.field ],
-            col.format
+            col.format,
+            row
           )).join(','))
         ).join('\r\n')
 

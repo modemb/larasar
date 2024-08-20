@@ -95,8 +95,8 @@
             />
           </q-td>
           <q-td key="pic" :props="props">
-            <q-img :src="baseURL+'/'+props.row?.post?.pics?.[0]?.pic"/>
-          </q-td>
+            <q-img :src="baseURL+'/'+props.row?.post?.files?.[0]?.file"/>
+          </q-td><!-- PictureModule -->
           <q-td key="post_title" :props="props">
             <div class="text-pre-wrap">{{ props.row?.post?.post_title }}</div>
           </q-td>
@@ -112,6 +112,12 @@
         </q-tr>
       </template><!-- TagRow -->
 
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px" />
+        </div>
+      </template>
+
     </q-table><!-- https://quasar.dev/vue-components/table#example--dynamic-loading-virtual-scroll -->
   </div>
 </template>
@@ -122,6 +128,12 @@ import { exportFile, useQuasar, date } from 'quasar'
 import { i18n, baseURL } from 'boot/axios'
 import { useCrudStore } from 'stores/crud'
 import { Param } from 'components/models'
+
+/**
+ * Tags: PictureModule
+ *
+ * @to UserController
+ */
 
 function wrapCsvValue (val: any, formatFn: ((arg0: any, arg1: any) => any) | undefined, row: {
     [
@@ -155,8 +167,8 @@ function wrapCsvValue (val: any, formatFn: ((arg0: any, arg1: any) => any) | und
 
 export default {
   setup () {
-    const store = useCrudStore()
-    const { crudAction, notifyAction } = store
+    const $store = useCrudStore()
+    const { crudAction, notifyAction } = $store
     const $t = i18n?.global?.t
     const $q = useQuasar()
     const timeStamp = Date.now()
@@ -178,11 +190,11 @@ export default {
       { name: 'email', align: 'center', label: $t('email'), field: 'email', sortable: true },
     ]); const loading = ref(false)
 
+    const last_page = computed(() => $store[getter.value]?.last_page)
+    const total = computed(() => $store[getter.value]?.total||0)
+    const rows = computed(() => $store[getter.value]?.data||[])
+    const reload = computed(() => $store.reloadGetter?.reload)
     const getter = computed(() => 'viewsGetter'+period.value)
-    const last_page = computed(() => store[getter.value]?.last_page)
-    const reload = computed(() => store.reloadGetter?.reload)
-    const total = computed(() => store[getter.value]?.total)
-    const rows = computed(() => store[getter.value]?.data||[])
 
     const pagination = ref({
       sortBy: 'desc',
@@ -255,7 +267,7 @@ export default {
 
       exportTable () {
         // naive encoding to csv format
-        const content = [columns.value.map((col: { label: any }) => wrapCsvValue(col.label))].concat(
+        const content = [columns.value.map((col: { label: any }) => wrapCsvValue(col.label, undefined, undefined))].concat(
           rows.value.map((row: { [x: string]: any }) => columns.value.map((col: { field: ((arg0: { [x: string]: any }) => any) | undefined; name: any; format: any }) => wrapCsvValue(
             typeof col.field === 'function'
               ? col.field(row)

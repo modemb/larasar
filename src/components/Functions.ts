@@ -6,8 +6,6 @@
 // import { PushNotifications } from '@capacitor/push-notifications'
 // import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 
-// while ( typeof Share === 'undefined') break
-
 // const Comp: any = async (component: string) =>
 //   await import(/* @vite-ignore */ `@capacitor/${component}`)
 
@@ -26,14 +24,6 @@ export function capacitor() {
     Camera, CameraResultType, CapacitorHttp
   } } catch (e) { return {} }
 } // https://github.com/vitejs/vite/issues/6393
-
-
-
-
-
-
-
-
 
 // if(Capacitor.isNativePlatform()) {
 //   // Platform is mobile
@@ -61,8 +51,10 @@ export function capacitor() {
 // }) https://github.com/vitejs/vite/issues/1007
 
 
-
-
+export const reloadPosts = [
+  'my_posts', 'expired_posts', 'trashed_posts', 'all_posts', 'users_posts',
+  'gallery', 'flag', 'galleryGetter', 'favoritesGetter', 'flagGetter'
+] // NotInUse Replaced with reloadApp
 
 export function dateDiffInDays(date1: string, date2: string) {
   // export function dateDiffInDays(date1: string | number | Date, date2: string | number | Date) {
@@ -90,11 +82,6 @@ export function printEl(el: string) {
 
   return true;
 }
-
-export const reloadPosts = [
-  'my_posts', 'expired_posts', 'trashed_posts', 'all_posts', 'users_posts',
-  'gallery', 'flag', 'galleryGetter', 'favoritesGetter', 'flagGetter'
-]
 
 export function pwaInstall(notifyAction: (arg0: { error?: string; e?: unknown; message?: string }) => void) {
 
@@ -180,37 +167,102 @@ export function pwaInstall(notifyAction: (arg0: { error?: string; e?: unknown; m
   })//https://web.dev/customize-install/
 } // https://play.google.com/store/apps/details?id=org.modemb.suguffie.app
 
-// export const addListeners = async () => {
-//   await PushNotifications.addListener('registration', (token: { value: unknown }) => {
-//     console.info('Registration token: ', token.value);
-//   });
+// ======================Browser Push Notifications===========================
 
-//   await PushNotifications.addListener('registrationError', (err: { error: unknown }) => {
-//     console.error('Registration error: ', err.error);
-//   });
+export function initializePush() {
+  navigator.serviceWorker.ready.then(function(swReg) {
+    swReg.pushManager.getSubscription().then(function(subscription) {
+      if (subscription === null) {
+        // Subscribe the user
+        swReg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(process.env.VAPID_PUBLIC_KEY)
+          // applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+        }).then(function(newSubscription) {
+          // Send the subscription details to the server
+          fetch('/subscribe', {
+            method: 'POST',
+            body: JSON.stringify(newSubscription),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+        }).catch(function(e) {
+          console.error('Unable to subscribe to push', e);
+        })
+      }
+    })
+  })
+} // Subscribing to Push Notifications
 
-//   await PushNotifications.addListener('pushNotificationReceived', (notification: unknown) => {
-//     console.log('Push notification received: ', notification);
-//   });
+function urlBase64ToUint8Array(base64String: string | any[]) {
+  // Convert the URL-safe base64 string to a standard base64 string
+  const padding = '='.repeat((4 - (base64String?.length % 4)) % 4)
+  const base64 = (base64String + padding)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/')
 
-//   await PushNotifications.addListener('pushNotificationActionPerformed', (notification: { actionId: unknown; inputValue: unknown }) => {
-//     console.log('Push notification action performed', notification.actionId, notification.inputValue);
-//   });
-// } // https://capacitorjs.com/docs/apis/push-notifications
+  // Decode the base64 string
+  const rawData = atob(base64)
 
-// export const registerNotifications = async () => {
-//   let permStatus = await PushNotifications.checkPermissions();
+  // Create a Uint8Array from the decoded base64 string
+  const outputArray = new Uint8Array(rawData.length);
 
-//   if (permStatus.receive === 'prompt') {
-//     permStatus = await PushNotifications.requestPermissions();
-//   }
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
 
-//   if (permStatus.receive !== 'granted') {
-//     throw new Error('User denied permissions!');
-//   }
+  return outputArray;
+}
 
-//   await PushNotifications.register();
-// } // https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns
+self.addEventListener('push', function(event: Event) {
+  const data = event.data.json();
+  const options = {
+    body: data.body,
+    icon: data.icon,
+    badge: data.badge
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  )
+}) // Handling Push Events in the Service Worker
+
+// =======================Browser Push Notifications End==============================
+
+// =======================Mobil Push Notifications====================================
+
+export const addListeners = async () => {
+  await PushNotifications.addListener('registration', (token: { value: unknown }) => {
+    console.info('Registration token: ', token.value);
+  });
+
+  await PushNotifications.addListener('registrationError', (err: { error: unknown }) => {
+    console.error('Registration error: ', err.error);
+  });
+
+  await PushNotifications.addListener('pushNotificationReceived', (notification: unknown) => {
+    console.log('Push notification received: ', notification);
+  });
+
+  await PushNotifications.addListener('pushNotificationActionPerformed', (notification: { actionId: unknown; inputValue: unknown }) => {
+    console.log('Push notification action performed', notification.actionId, notification.inputValue);
+  });
+} // https://capacitorjs.com/docs/apis/push-notifications
+
+export const registerNotifications = async () => {
+  let permStatus = await PushNotifications.checkPermissions();
+
+  if (permStatus.receive === 'prompt') {
+    permStatus = await PushNotifications.requestPermissions();
+  }
+
+  if (permStatus.receive !== 'granted') {
+    throw new Error('User denied permissions!');
+  }
+
+  await PushNotifications.register();
+} // https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns
 
 export const getDeliveredNotifications = async () => {
   const notificationList = await PushNotifications.getDeliveredNotifications();
@@ -219,79 +271,94 @@ export const getDeliveredNotifications = async () => {
 
 // addListeners(); registerNotifications(); getDeliveredNotifications()
 
-// navigator.mediaDevices.getUserMedia({video: true})
-// .then(function(stream) {
-//   const video = document.querySelector('video');
-//   video.srcObject = stream;
-// }).catch(function(err) {
-//   console.log('Error occurred: ' + err.name);
-// });
-// console.log('navigator.mediaDevices', navigator
+// =======================Mobil Push Notifications End=================================================
 
-// export function onRequest (props: { pagination: { page: number; rowsPerPage: number; sortBy: string; descending: boolean }; filter?: string; rows: any[] }) {
-//   const { page, rowsPerPage, sortBy, descending } = props.pagination
-//   const filter = props.filter; //galleryAction({load: true})
-//   const rows = props.rows // Original Rows
-//   const Rows: any[] = []
+export function onRequest (props: { pagination: { page: number; rowsPerPage: number; sortBy: string; descending: boolean }; filter?: string; rows: any[] }) {
+  const { page, rowsPerPage, sortBy, descending } = props.pagination
+  const filter = props.filter; //galleryAction({load: true})
+  const rows = props.rows // Original Rows
+  const Rows: any[] = []
 
-//   // loading.value = true
+  // loading.value = true
 
-//   function fetchFromServer (startRow: number, count: number, filter: string, sortBy: string | number, descending: boolean) {
-//     const data: any[] = filter
-//       ? rows.filter((row: { name: string | any[] }) => row.name.includes(filter))
-//       : rows.slice();
+  function fetchFromServer (startRow: number, count: number, filter: string, sortBy: string | number, descending: boolean) {
+    const data: any[] = filter
+      ? rows.filter((row: { name: string | any[] }) => row.name.includes(filter))
+      : rows.slice();
 
-//     if (sortBy) {
-//       const sortFn = sortBy === 'desc'
-//         ? (descending
-//             ? (a: { name: number }, b: { name: number }) => (a.name > b.name ? -1 : a.name < b.name ? 1 : 0)
-//             : (a: { name: number }, b: { name: number }) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
-//           )
-//         : (descending
-//             ? (a: { [x: string]: string }, b: { [x: string]: string }) => (parseFloat(b[ sortBy ]) - parseFloat(a[ sortBy ]))
-//             : (a: { [x: string]: string }, b: { [x: string]: string }) => (parseFloat(a[ sortBy ]) - parseFloat(b[ sortBy ]))
-//           )
-//       data.sort(sortFn) // handle sortBy
-//     } return data.slice(startRow, startRow + count)
-//   } // emulate ajax call // SELECT * FROM ... WHERE...LIMIT...
+    if (sortBy) {
+      const sortFn = sortBy === 'desc'
+        ? (descending
+            ? (a: { name: number }, b: { name: number }) => (a.name > b.name ? -1 : a.name < b.name ? 1 : 0)
+            : (a: { name: number }, b: { name: number }) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
+          )
+        : (descending
+            ? (a: { [x: string]: string }, b: { [x: string]: string }) => (parseFloat(b[ sortBy ]) - parseFloat(a[ sortBy ]))
+            : (a: { [x: string]: string }, b: { [x: string]: string }) => (parseFloat(a[ sortBy ]) - parseFloat(b[ sortBy ]))
+          )
+      data.sort(sortFn) // handle sortBy
+    } return data.slice(startRow, startRow + count)
+  } // emulate ajax call // SELECT * FROM ... WHERE...LIMIT...
 
-//   function getRowsNumberCount (filter: string) {
-//     let count = 0
-//     if (!filter) return rows.length
-//     rows.forEach((treat: { name: string | string[] }) => {
-//       if (treat.name.includes(filter)) ++count
-//     }); return count
-//   } // emulate 'SELECT count(*) FROM ...WHERE...'
+  function getRowsNumberCount (filter: string) {
+    let count = 0
+    if (!filter) return rows.length
+    rows.forEach((treat: { name: string | string[] }) => {
+      if (treat.name.includes(filter)) ++count
+    }); return count
+  } // emulate 'SELECT count(*) FROM ...WHERE...'
 
-//   // return setTimeout(() => {
-//   //   // update rowsCount with appropriate value
-//   //   // pagination.value.rowsNumber = getRowsNumberCount(filter)
+  return setTimeout(() => {
+    // update rowsCount with appropriate value
+    // pagination.value.rowsNumber = getRowsNumberCount(filter)
 
-//   //   // get all rows if "All" (0) is selected
-//   //   const fetchCount = rowsPerPage === 0 ? pagination.value.rowsNumber : rowsPerPage
+    // get all rows if "All" (0) is selected
+    const fetchCount = rowsPerPage === 0 ? pagination.value.rowsNumber : rowsPerPage
 
-//   //   const startRow = (page - 1) * rowsPerPage // calculate starting row of data
+    const startRow = (page - 1) * rowsPerPage // calculate starting row of data
 
-//   //   // fetch data from "server"
-//   //   const returnedData = fetchFromServer(startRow, fetchCount, filter, sortBy, descending)
+    // fetch data from "server"
+    const returnedData = fetchFromServer(startRow, fetchCount, filter, sortBy, descending)
 
-//   //   Rows.splice(0, Rows.length, ...returnedData) // clear out existing data and add new
+    Rows.splice(0, Rows.length, ...returnedData) // clear out existing data and add new
 
-//   //   // loading.value = false // ...and turn of loading indicator
+    // loading.value = false // ...and turn of loading indicator
 
-//   //   // don't forget to update local pagination object
-//   //   // pagination.value.page = page
-//   //   // pagination.value.rowsPerPage = rowsPerPage
-//   //   // pagination.value.sortBy = sortBy
-//   //   // pagination.value.descending = descending
-//   //   return { page, rowsPerPage, sortBy, descending }
-//   // }, 0) // emulate server
+    // don't forget to update local pagination object
+    // pagination.value.page = page
+    // pagination.value.rowsPerPage = rowsPerPage
+    // pagination.value.sortBy = sortBy
+    // pagination.value.descending = descending
+    return { page, rowsPerPage, sortBy, descending }
+  }, 0) // emulate server
 
-// } // https://quasar.dev/vue-components/table#example--synchronizing-with-server
+} // https://quasar.dev/vue-components/table#example--synchronizing-with-server
 
 // https://dev.to/soyleninjs/3-ways-to-remove-duplicates-in-an-array-in-javascript-259o
 // export const findDuplicates = (array: unknown[]) => array?.filter((item, index) => array?.indexOf(item) !== index)
 // const duplicateElements = findDuplicates(test);//https://flexiple.com/javascript/find-duplicates-javascript-array/#section3
+
+export const videoFileBool = (file: {
+  filter: (arg0: (f: string) => boolean) => string[];
+  endsWith: (arg0: string) => unknown
+}) => { // File Mime Type video/*
+
+  try { // Get Video File Extension Within The Array
+    const e = file.filter((f: string) =>
+      f.endsWith('.mp4') || f.endsWith('.avi')||
+      f.endsWith('.mov') || f.endsWith('.webm'))
+
+    if (e.length) return true
+
+  } catch (error) { }
+
+  try { // Get Video File Extension
+    const extension = ['.mp4', '.avi', '.mov', '.webm', '.mkv']
+      .filter(type => file.endsWith(type))
+      return file.endsWith(extension[0])
+  } catch (error) { } return false
+
+} // TagVideoFileBool: FilesModule
 
 export const takePicture = async () => {
   const image = await Camera.getPhoto({
@@ -319,7 +386,7 @@ export const writeSecretFile = async () => {
     directory: Directory.Documents,
     encoding: Encoding.UTF8,
   })
-}
+} // https://capacitorjs.com/docs/apis/camera
 
 export const readSecretFile = async () => {
   const contents = await Filesystem.readFile({

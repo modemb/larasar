@@ -1,9 +1,9 @@
 <template>
 
   <q-dialog v-model="filesLibrary"><!-- TagFiles =============-->
-    <!-- <q-card class="my-card col-12" style="width:100%; max-width: 1000px"> -->
+    <q-card class="my-card col-12" style="width:100%; max-width: 1000px">
       <UserFiles  :avatar="true" />
-    <!-- </q-card>TagFiles: FilesModule v-on:reloadAv="reloadAv" -->
+    </q-card><!-- TagFiles: FilesModule v-on:reloadAv="reloadAv" -->
   </q-dialog><!--====================== TagFiles End =========-->
 
   <q-layout view="lHh lpr lFf" container :style="'height:' + height + 'px'" class="shadow-2 rounded-borders">
@@ -55,27 +55,23 @@
                         @click.prevent="filesLibrary = true"
                       />TagFiles: FilesModule -->
 
-                      <q-btn color="primary" class="q-ma-md" v-if="mobileApp"
+                      <q-btn dense color="orange" class="q-ma-xs" v-if="mobileApp"
                         icon="fas fa-camera" @click="async () => storeAV([await takePicture()])"
                       /><!-- TagTakePhotoApp: UserUpdate -->
-                      <q-input filled clearable type="file" v-else
+                      <q-input filled clearable type="file" accept="image/*" v-else
                         @update:model-value="(val: any) => readFile(val[0])"
-                      /><!-- TagTakePhoto: UserUpdate <input type="file" v-on:change="onImageChange" class="q-ma-lg"/> -->
+                      /><!-- TagTakePhoto: UserUpdate  -->
 
-                      <!-- <q-input filled type="file" clearable
-                        @update:model-value="(val: any) => storeAV(val[0])"
-                      /> -->
+                      <q-btn dense icon="delete_forever" color="negative" class="q-ma-xs"
+                        :title="$t('remove_image')" @click="deleteAvatar"
+                      /><!-- Remove Avatar -->
+                      <q-btn dense color="primary" class="q-ma-xs" :label="cy(xRate(auth?.gain))">
+                        <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]" class="text-h6">
+                          {{$t('gain_tooltip')}}
+                        </q-tooltip>
+                      </q-btn><!-- TagPayment: GainModule -->
 
-                      <q-btn color="primary" class="q-ma-md" @click="deleteAvatar" :label="$t('remove_image')" />
-
-                      <div>
-                        <Share :shareData="shareData" />
-                        <q-btn dense color="primary" class="q-ma-md" :label="cy(xRate(auth?.gain))">
-                          <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]" class="text-h6">
-                            {{$t('gain_tooltip')}}
-                          </q-tooltip>
-                        </q-btn><!-- TagPayment: GainModule -->
-                      </div><!-- TagPayment -->
+                      <Share :shareData="shareData" />
 
                     </q-card-section><!-- TagAvatar: UserModule -->
                   </q-card><!-- https://quasar.dev/vue-components/input/#example--input-of-file-type -->
@@ -97,7 +93,7 @@
                   </q-card> -->
 
                   <div class="row">
-                    <div class="col-12" v-if="user">
+                    <div class="col-12" v-if="props.user">
                       <q-select
                         filled
                         v-model="role"
@@ -227,7 +223,7 @@
                     <div class="col-3">
                       <q-btn color="primary" :label="$t('update')" @click.prevent="update" />
                     </div><!-- update -->
-                    <div class="col-9" v-if="user&&superAdmin">
+                    <div class="col-9" v-if="props.user&&superAdmin">
                       <q-input v-model="gain" filled type="number"
                         :label="'Gain '+ cy(xRate(gain))" clearable
                       /><!-- TagPayment: GainModule -->
@@ -266,25 +262,25 @@
                   <q-input
                     filled
                     v-model="password"
+                    v-if="!props.user" clearable
                     :type="isPwd ? 'password' : 'text'"
-                    :label="$t('your_password')"
-                    lazy-rules v-if="!user" clearable
+                    :label="$t('your_password')" lazy-rules
                     :rules="[(val: string | any[]) => val && val.length > 0 || $t('your_password')]"
                   />
 
                   <q-input filled
-                    :type="isPwd ? 'password' : 'text'"
                     v-model="new_password"
+                    :type="isPwd ? 'password' : 'text'"
                     :label="$t('new_password')" clearable
-                    lazy-rules :disable="update_email||delete_account"
+                    :disable="update_email||delete_account" lazy-rules
                     :rules="[(val: string | any[]) => val && val.length > 0 || $t('new_password')]"
-                  /><!-- :disable="update_email" -->
+                  /><!-- new_password -->
 
                   <q-input filled
                     v-model="password_confirmation"
                     :type="isPwd ? 'password' : 'text'"
                     :label="$t('confirm_password')" clearable
-                    lazy-rules :disable="update_email||delete_account"
+                    :disable="update_email||delete_account" lazy-rules
                     :rules="[(val: string | any[]) => val && val.length > 0 || $t('confirm_password')]"
                     ><!-- :readonly="update_email" -->
                     <template v-slot:append>
@@ -371,7 +367,7 @@
 
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useQuasar } from 'quasar'
 import { ref, computed, onMounted, watch } from 'vue'
 import { authAction, mobileApp, baseURL, ipData, configAction, shareMutation, xRate, cy , api, i18n, filesMutation} from 'boot/axios'
@@ -405,12 +401,12 @@ import Share from 'components/UserShare.vue'
     const props = defineProps(['user'])
 
     const $q = useQuasar()
-    const store = useCrudStore()
-    const { crudAction, notifyAction } = store
+    const $store = useCrudStore()
+    const { crudAction, notifyAction } = $store
     const table = ref(null)
     const gain = ref(props.user?.gain)
     const credit = ref(props.user?.credit)
-    const user = ref(props.user||store.authGetter)
+    const user = ref(props.user||$store.authGetter)
     const auth = computed(() => user.value)
     const role = ref(auth.value?.role)
     const name = ref('')
@@ -441,11 +437,11 @@ import Share from 'components/UserShare.vue'
     const hostUserName = ref('')
     const hostUserName_data = ref(auth.value?.hostUserName_data)
 
-    const shareData = computed(() => store.shareDataGetter?.shareData)
-    const ipEqual = computed(() => store.ipGetter?.ip === ipData?.ip)
-    const superAdmin = computed(() => store.authGetter?.id === 1)
-    const ipDebug = computed(() => store.configGetter?.ipDebug)
-    const file = computed(() => store.filesGetter?.array)
+    const shareData = computed(() => $store.shareDataGetter?.shareData)
+    const ipEqual = computed(() => $store.ipGetter?.ip === ipData?.ip)
+    const superAdmin = computed(() => $store.authGetter?.id === 1)
+    const ipDebug = computed(() => $store.configGetter?.ipDebug)
+    const file = computed(() => $store.filesGetter?.array)
     const avatar = computed(() => {
       if (auth.value?.avatar) {
         if (auth.value?.avatar.includes('files/')) return baseURL + '/' + auth.value?.avatar
@@ -453,9 +449,6 @@ import Share from 'components/UserShare.vue'
       } else return auth.value?.new?.avatar // Email Avatar
     }) // Show Avatar
 
-    // const ios = capacitor()?.Capacitor?.getPlatform()==='ios' // -> 'web', 'ios' or 'android'
-    // const modembIos = navigator.userAgent.match(/(modembIos)/)
-    // const height = ref(screen.height / 1.4)
     const height = ref(screen.height/($q.platform.is.mobile?1.2:1.35))
     const url = `api/users/${auth.value?.id}`
     const admins = [
@@ -467,8 +460,9 @@ import Share from 'components/UserShare.vue'
     const storeAV = (avatar: string[]) => crudAction({
       url, method: 'put', update: true, avatar, refresh: ['reloadApp']
     }).then(( data: { user: object } ) => {
-      if (props.user) user.value = data.user
-      else store.authGetter = user.value = data.user
+      // if (props.user) user.value = data.user
+      // else $store.authGetter = user.value = data.user
+      user.value = props.user?data.user:$store.authGetter = data.user
     }).catch((e: unknown) => notifyAction({error: 'storeAV', e}))
 
     watch(file, val => storeAV(val))
@@ -476,15 +470,15 @@ import Share from 'components/UserShare.vue'
       if (val[0] !== oldVal[0]) {
         setTimeout(() => props.user?emit('update', { usersData: 'users' }):
           authAction(), 1500); i18n.global.locale.value = val[0]
-        store.authGetter.id = auth.value?.id // PopUp User
-      } else $q.localStorage.set('ip', store.ipGetter.ip = val[1])
+        $store.authGetter.id = auth.value?.id // PopUp User
+      } else $q.localStorage.set('ip', $store.ipGetter.ip = val[1])
 
       configAction() // Master Locale Setting / Load ipDebug onMounted
     }) // TagLocale: LocaleUserModule - TagIpDebug: IpDebugModule
 
     onMounted(() => {
       const currency = auth.value.currency_code
-      store.rateGetter = auth.value.rate
+      $store.rateGetter = auth.value.rate
       shareMutation(auth.value)
       crudAction({ currency, mutate: 'currencyGetter', refresh: ['currencyGetter'] })
     })
@@ -550,7 +544,7 @@ import Share from 'components/UserShare.vue'
         delete_avatar: 1, refresh:['reloadApp']
       }).then((data: { user: object }) => {
         if (props.user) user.value = data.user
-        else store.authGetter = user.value = data.user
+        else $store.authGetter = user.value = data.user
       }).catch((e: unknown) => notifyAction({error: 'deleteAvatar', e}))
     } // ============================================== \\
 

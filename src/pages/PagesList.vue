@@ -204,6 +204,12 @@
         </q-input>
       </template>
 
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px" />
+        </div>
+      </template>
+
     </q-table><!--================== Data Table End ====================-->
   </div>
 </template>
@@ -222,8 +228,8 @@ export default {
   setup () {
     const $t = i18n?.global?.t
     const $q = useQuasar()
-    const store =  useCrudStore()
-    const { crudAction, notifyAction } = store
+    const $store =  useCrudStore()
+    const { crudAction, notifyAction } = $store
 
     const loader = ref(false)
     const addPage = ref(false)
@@ -242,9 +248,8 @@ export default {
     const content = ref('')
     const pagesData = ref(1)
 
-    // const locale = ref(store['configGetter']?.locale)
-    const locale = computed(() => store.configGetter?.locale)
-    const rows = computed(() => store[pagesData.value+'Getter']||[])
+    const locale = computed(() => $store.configGetter?.locale)
+    const rows = computed(() => $store[pagesData.value+'Getter']||[])
 
     onMounted (() => editPagesAction({e: 'onMountedPages'}))
 
@@ -255,7 +260,8 @@ export default {
           return edit(Page.value = page)
       })); editPage.value = addPage.value = true; loader.value = false
 
-      locale.value = page?.locale
+      // locale.value = page?.locale
+      $store.configGetter.locale  = page?.locale
       icon.value = page?.icon
       page_title.value = page?.page_title
       slug.value = page?.slug
@@ -292,8 +298,8 @@ export default {
     } // TagDelete: PageModule
 
     return {
-      desktop: $q.platform.is.desktop,
-      height: screen.height / 1.4,
+      desktop: ref($q.platform.is.desktop),
+      height: ref(screen.height / 1.4),
       pagesData,
       icon,
       // icon_data,

@@ -19,27 +19,26 @@ use App\Models\Location;
 use App\Models\Payment;
 use App\Models\Message;
 use App\Models\Session;
+use App\Files\FileData;
 use App\Models\Report;
-use App\Files\Picture;
 use App\Models\User;
 use App\Models\Room;
 use App\Models\Chat;
 use App\Models\View;
 use App\Models\Team;
 use App\Models\Post;
-use App\Models\Pic;
+use App\Models\File;
 // use Carbon\Carbon;
 // use Session;
 // use Storage;
 use Cookie;
 // use Image;
 use Mail;
-use File;
+// use File;
 use Hash;
 use Auth;
 use Log;
 use DB;
-use GrahamCampbell\ResultType\Success;
 
 /**
  * Tags: UserModule - AnalyticModule - BitgoModule - IpDebugModule - FileModule
@@ -343,11 +342,11 @@ class UserController extends Controller
         return Auth::login($user, $remember = true);
       } elseif ($request->restorePics) { // Restore Pic
         foreach ($request->restorePics as $pic)
-          Pic::onlyTrashed()->whereNull('deleted')
-            ->where('pic', $pic) // TagStore: FileModule
+          File::onlyTrashed()->whereNull('deleted')
+            ->where('file', $pic) // TagStore: FileModule
             ->restore(); // TagStore: restoreFilePostModule
       } elseif ($request->filesRestore) { // Restore All Pic
-        Pic::onlyTrashed()->whereNull('deleted')->restore();
+        File::onlyTrashed()->whereNull('deleted')->restore();
       } elseif ($request->location_id) { // Restore Location
         $locationTrashed = Location::onlyTrashed()
           ->find($request->location_id);
@@ -390,8 +389,8 @@ class UserController extends Controller
       // Log::warning($request->session()->regenerate());
       // return date('Y-m-d H:i:s', strtotime('today'));
 
-      $pics = Pic::whereNull('deleted')->orderBy('pic', 'desc');  // Pic::all()
-      $picsAchieved = Pic::onlyTrashed()->whereNull('deleted')->orderBy('pic', 'desc'); // Show Admins' Achieved Users
+      $pics = File::whereNull('deleted')->orderBy('file', 'desc');  // File::all() // improveFile
+      $picsAchieved = File::onlyTrashed()->whereNull('deleted')->orderBy('file', 'desc'); // Show Admins' Achieved Users
       $user = User::find($id); $admin = $user?->role === 'Admin';
 
       if ($request->mutate === 'my_pics') return // TagShow: LibraryModule;
@@ -403,7 +402,7 @@ class UserController extends Controller
       if ($request->mutate === 'avatars') return $admin? // TagShow: AvatarsModule
         DB::table('users')->whereNotNull('avatar')->get(['id', 'avatar']):[$user];
       if ($request->mutate === 'all_pics') return  // $pics->get(); // TagShow: Users Pics
-        Pic::whereNull('deleted')->orderBy('pic', 'desc')->get();
+        File::whereNull('deleted')->orderBy('file', 'desc')->get();
       if ($request->mutate === 'all_trashed_pics') return $picsAchieved->get(); // All Trashed Pics
 
       // if ($request->location||($request?->mutate === 'placeGetter')) return $this->location($request); // TagShow: LocationModule
@@ -420,6 +419,7 @@ class UserController extends Controller
 
         // return DB::table('analytics')->get();
         // return Analytic::all();
+        // return Analytic::paginate($request->perPage);
 
         // $analytics = DB::table('analytics')->leftJoin('users', 'users.id', 'analytics.user_id');
         $analytics = Analytic::leftJoin('users', 'users.id', 'analytics.user_id');
@@ -438,7 +438,7 @@ class UserController extends Controller
               ->orWhere('name', 'like', "%$request->filterAnalytics%");
         }); // Filer Users in Analytic
 
-        return $analytics->paginate(); // TagShow: AnalyticModule from Analytics.vue
+        return $analytics->paginate($request->perPage); // TagShow: AnalyticModule from Analytics.vue
       } elseif ($id==='views') { // Get Posts views
 
         $views = View::join('analytics', function ($join) {
@@ -454,10 +454,10 @@ class UserController extends Controller
         if ($request->filterViews) $views->whereHas('user', function ($query) use ($request) {
           $query->where('name', 'like', "%$request->filterViews%")
               ->orWhere('email', 'like', "%$request->filterViews%");
-        }); // $request->perPage
+        });
 
         // return $views->get(); // TagShow: ViewModule
-        return $views->paginate(); // TagShow: ViewModule
+        return $views->paginate($request->perPage); // TagShow: ViewModule
       } elseif ($id==='reports') { // Get Users reports
 
         // $reports = DB::table('reports')->whereNotNull('start_date');
@@ -492,7 +492,7 @@ class UserController extends Controller
         if (is_numeric($request->filterUsers)) return $query->where('id', $request->filterUsers);
         if ($request->filterUsers) $query->where('email', 'like', "%$request->filterUsers%")
         /* Filter Users And Load It */ ->orWhere('name', 'like', "%$request->filterUsers%");
-      })->paginate();// TagShow: UserModule - Get Users List Filtered
+      })->paginate($request->perPage);// TagShow: UserModule - Get Users List Filtered
 
       if ($request->locationsData === 'locations') return Location::get(); // Show Locations
       elseif ($request->locationsData === 'locDuplicated') return Location::whereIn('place', function ( $query ) {
@@ -527,6 +527,8 @@ class UserController extends Controller
     public function update(Request $request, $id)
     { // return$request->avatar;
       // return User::where('first_name', 'Mohamed')->toRawSql();
+      // return Session::get();
+      // return FileData::showLog();
 
       if ($request->ip) { // Update Auth And Guest Analytic
 
@@ -618,27 +620,21 @@ class UserController extends Controller
         } // TagUpdate: UserModule
         if ($pics=$request->get('pics')??$request->get('avatar')) { // https://github.com/Intervention/image
           foreach ($pics as $pic) {
-            // $post = $request->post; try {
-            //   $filType = explode('/', explode(':', substr($pic, 0, strpos($pic, ';')))[1])[1];
-            //   $path = time().'.'.$filType; // https://image.intervention.io/v2/api/encode
-            //   Image::make($pic)->save(public_path('files/').$path, 50, 'jpg');
-            //   $picSet = 'Picture Uploaded Successfully';
-            // } catch (\Throwable $th) { $path = null; }
 
-            $path = Picture::image($pic);
+            $path = FileData::upload($pic); // improveFile
             $post = $request->post; $picData = [
               'user_id' => $id,
               'post_id' => isset($post['id'])?$post['id']:null,
               'subcategory_id' => isset($post['subcategory_id'])?$post['id']:null,
               'category_id' => isset($post['category_id'])?$post['id']:null,
               'name' => isset($post['post_title'])?$post['post_title']:null,
-              'pic' => $path,
+              'file' => $path,
               'deleted' => null
-            ]; $img = Pic::where('pic', $pic)->first(); // ->where('post_id', $picData['post_id'])
+            ]; $img = File::where('file', $pic)->first(); // ->where('post_id', $picData['post_id'])
 
-            if ($path) {
+            if ($path) { // Upload Pictures
 
-              $picDeleted = Pic::onlyTrashed()->whereNotNull('deleted')->first();
+              $picDeleted = File::onlyTrashed()->whereNotNull('deleted')->first();
               $success = 'Picture Uploaded Successfully';
 
               if ($request->get('avatar')) { // Profile Avatar
@@ -648,13 +644,14 @@ class UserController extends Controller
               } elseif ($picDeleted) { // Upload Picture
                 $picDeleted->restore();
                 $picDeleted->update($picData);
-              } else Pic::create($picData); // Add post Pictures
-            } elseif ($img) { // Assign Existing Picture
-              $picData['pic'] = $img->pic;
-              $img->update($picData);
+              } else File::create($picData); // Add post Pictures
+            } elseif ($img) { // Assign Existing Pictures
+              $picData['file'] = $img->file;
+              if (true) $img->update($picData); // Assign Pictures
+              else File::create($picData); // Assign New Linked Pictures
               $success = 'Picture Assigned Successfully';
             } else $message = 'Picture Not Uploaded';
-          } if (isset($message)) return compact('message');
+          } if (isset($message)) return response()->json(compact('message'));
         } $user->update(); // TagUpdate: FileModule
         if (!$request->id) return response()->json(compact('success', 'user'));
       } elseif ($request->chat) { // Update Message
@@ -735,8 +732,9 @@ class UserController extends Controller
       } elseif ($request->delete_avatar) {  // Remove Image
         $user = User::find($id);
         $success = 'Picture Deleted Successfully';
-        $file_path = public_path($user->avatar);
-        if(File::exists($file_path)) File::delete($file_path);
+        // $file_path = public_path($user->avatar);
+        // if(File::exists($file_path)) File::delete($file_path);
+        FileData::delete($user->avatar/* Path */);
         $user->update(['avatar' => null]); // TagDestroy: FileModule - avatarModule
         return response()->json(compact('success', 'user'));
         // return [
@@ -752,10 +750,10 @@ class UserController extends Controller
 
         foreach ($request->pics as $pic) {
 
-          $img = Pic::where('pic', $pic)->first();
+          $img = File::where('file', $pic)->first();
 
-          $imgTrashed = Pic::onlyTrashed()->whereNull('deleted')
-            ->where('pic', $pic)->first(); // TagDestroy: FileModule
+          $imgTrashed = File::onlyTrashed()->whereNull('deleted')
+            ->where('file', $pic)->first(); // TagDestroy: FileModule
 
           if ($request?->auth) // Assign Pic To Admin
           if (($request->auth['id']==1)||($request->auth['role']=='Admin')) {
@@ -763,20 +761,20 @@ class UserController extends Controller
               'user_id' => $request->auth['id'], // Assign Pic To User
             ]); else return ['message' => 'Select Picture'];
           } if ($imgTrashed&&$request->forever) {
-            $piCount = DB::table('pics')->where('pic', $pic)
+            $piCount = DB::table('files')->where('file', $pic)
               ->whereNull('deleted')->count();
 
             // $file_path = public_path($imgTrashed->pic);
             // if(File::exists($file_path)&&($piCount<2)) File::delete($file_path);
 
-            if($piCount<2) $success = Picture::delete($imgTrashed->pic/* Path */);
+            if($piCount<2) $success = FileData::delete($imgTrashed->file/* Path */);
 
             $imgTrashed->update(['deleted' => 1]); // Delete Pic Forever
           } elseif ($img) $img->delete(); // Delete Pic
 
         } return compact('success'); // return ['success' => 'Pics Deleted '.($imgTrashed?'Forever':'').' Successfully'];
 
-      } elseif ($request->deletePic) Pic::destroy($id); // Delete Pic
+      } elseif ($request->deletePic) File::destroy($id); // Delete Pic
 
       if ($request->delete_account) $request->authID = 'Delete Account';
       if ($id === 1 || $request->authID == $id) return ['success' => 'You Cannot Delete Super Admin or Your Own Account'];
@@ -803,7 +801,7 @@ class UserController extends Controller
         User::destroy($id); // Trash User
         Team::where('user_id', $id)->delete(); // Trash Team
         Post::where('user_id', $id)->delete();// TagDestroy: PostModule
-        Pic::where('user_id', $id)->delete(); // TagDestroy: PictModule
+        File::where('user_id', $id)->delete(); // TagDestroy: PictModule
         return ['success' => 'Account Deleted Successfully'];
       } // TagDestroy: UserModule
 
