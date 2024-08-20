@@ -179,6 +179,12 @@
         </q-input>
       </template>
 
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px" />
+        </div>
+      </template>
+
     </q-table><!--============ Data Table ====================-->
   </div>
 </template>
@@ -201,8 +207,8 @@ export default {
   },
   setup () {
     const $t = i18n.global.t
-    const store = useCrudStore()
-    const { crudAction, notifyAction } = store
+    const $store = useCrudStore()
+    const { crudAction, notifyAction } = $store
     const loader = ref(false)
     const editLocation = ref(false)
     const locationsData = ref('locations')
@@ -213,13 +219,13 @@ export default {
     const longitude = ref(0)
     const utc_offset = ref(0)
 
-    const auth = computed(() => store.authGetter)
+    const auth = computed(() => $store.authGetter)
 
     onMounted(() => locationsAction({ locationsData: 'locations' }))
     watch(locationsData, val => locationsAction({ locationsData: val }))
 
     const toFindDuplicates = (array: any[]) => array?.filter((item, index) => array.indexOf(item) !== index)
-    const duplicateElements = toFindDuplicates(store.locationsGetter)
+    const duplicateElements = toFindDuplicates($store.locationsGetter)
     console.log(duplicateElements)
 
     function locationsAction(payload: Partial<Param>) {
@@ -276,7 +282,7 @@ export default {
           utc_offset: utc_offset.value||location?.utc_offset||'',
           refresh: ['reloadApp']//.then(() => mSession(['reloadApp']))
         }).then(() => locationsAction({ locationsData: locationsData.value}))
-          .catch((e: any) => notifyAction({error: 'updateLocation', e}))
+          .catch((e: unknown) => notifyAction({error: 'updateLocation', e}))
       }, // TagUpdate: locationModule
       Edit(location: { place: string; latitude: number; longitude: number; utc_offset: number } | null) {
         editLocation.value = true
@@ -334,7 +340,7 @@ export default {
         { name: 'utc_offset', align: 'center', label: $t('utc_offset'), field: 'utc_offset', sortable: true },
         { name: 'edit', align: 'center', label: $t('edit/restore'), field: 'edit', sortable: false },
         { name: 'delete', align: 'center', label: $t('delete/forever'), field: 'delete', sortable: false }
-      ]), rows: computed(() => store[locationsData.value]||[])
+      ]), rows: computed(() => $store[locationsData.value]||[])
     }
   }
 }

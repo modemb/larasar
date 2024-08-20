@@ -76,6 +76,7 @@ export default {
   'receive_email': 'If you did not receive the email',
   'remember_me': 'Lembre-me',
   'reports': 'Reports',
+  'Unable To Delete File': 'Unable To Delete File',
   'password': 'Senha',
   'forgot_password': 'Esqueceu sua senha?',
   'confirm_password': 'Confirmar Senha',
@@ -144,6 +145,8 @@ export default {
   'View All': 'View All',
   'Week': 'Week',
   'favorites': 'Favorites',
+  'File Deleted Forever': 'File Deleted Forever',
+  'File Does Not Exist': 'File Does Not Exist',
   'Filter': 'Filter',
   'Finalize Payment': 'Finalize Payment',
 }

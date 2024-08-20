@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\File;
 use App\Models\Page;
 use DB;
 
@@ -28,7 +29,7 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function save($request)
+    private function save($request)
     {
       $page = $this->page; if (!$page) return;
 
@@ -41,7 +42,7 @@ class PageController extends Controller
       if ($request->locale) $page->locale = $request->locale;
       if ($request->icon) $page->icon = $request->icon;
       if ($request->description) $page->description = $request->description;
-      if ($request->pics) $page->pics = $request->pics;
+      if ($request->pics) $page->pics = $request->pics; // improveFile
       if ($request->content) $page->content = $request->content;
 
       if ($page->deleted) $page->deleted = Null; $page->save();
@@ -132,16 +133,16 @@ class PageController extends Controller
 
       if (!$page) return $this->store($request); // Create New Locale Page
 
-      if ($request->get('pics')) {
+      if ($request->get('pics')) { // improveFile
         foreach ($request->pics as $pic) {
           $name = time().'.' . explode('/', explode(':', substr($pic, 0, strpos($pic, ';')))[1])[1];
           \Image::make($pic)->save(public_path('images/post/').$name);
-          Pic::create([
+          File::create([
             'page_id' => $request->post_id,
-            'pic' => 'images/post/'.$name
+            'file' => 'images/post/'.$name
           ]);
-        } $page->pics = Pic::where('post_id', $request->post_id)->get(); // Update Pic in Post
-      } $this->save($request);
+        } $page->pics = File::where('post_id', $request->post_id)->get(); // Update File in Post
+      } $this->save($request); // improveFile
       return $this->show($request, 1); // TagUpdate: PageModule
     }
 

@@ -203,6 +203,12 @@
         </q-input>
       </template>
 
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px" />
+        </div>
+      </template>
+
     </q-table><!--============ Data Table ====================-->
   </div>
 </template>
@@ -221,8 +227,8 @@ import { Param } from 'components/models'
 export default {
   setup () {
     const $t = i18n.global.t
-    const store = useCrudStore()
-    const { crudAction, notifyAction } = store
+    const $store = useCrudStore()
+    const { crudAction, notifyAction } = $store
 
     const loader = ref(false)
     const editCurrency = ref(false)
@@ -239,7 +245,7 @@ export default {
 
     const result = ref(rate.value * amount.value)
     // const result = computed(() => rate.value * amount.value)
-    const auth = computed(() => store.authGetter)
+    const auth = computed(() => $store.authGetter)
 
     onMounted(() => currenciesAction({ currenciesData: 'currencies' }))
     watch(currenciesData, val => currenciesAction({ currenciesData: val }))
@@ -383,7 +389,7 @@ export default {
         { name: 'result', align: 'center', label: $t('result'), field: 'result', sortable: true },
         { name: 'edit', align: 'center', label: $t('edit/restore'), field: 'edit', sortable: false },
         { name: 'delete', align: 'center', label: $t('delete/foreve'), field: 'delete', sortable: false }
-      ]), rows: computed(() => store[currenciesData.value]||[])
+      ]), rows: computed(() => $store[currenciesData.value]||[])
     }
   }
 }
