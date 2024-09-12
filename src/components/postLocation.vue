@@ -1,16 +1,16 @@
 <template>
   <div class="q-pa-md _q-dark">
 
-    <div class="row text-center text-h6">
+    <div class="row text-center text-h6"> {{ location }}
       <div class="col-4">{{time}}</div><!-- Time -->
-      <div class="col-4" v-if="temperature">
-        {{temperature}} <span id="temperature" />
+      <div class="col-4" v-if="weather?.C">
+        {{weather?.C}} <span id="temperature" />
       </div><!-- Weather -->
-      <div class="col-4">
-        <img :src="weather" floating />
-      </div><!-- icon v-if="weather" -->
+      <div class="col-4" v-if="weather?.iconUrl">
+        <img :src="weather?.iconUrl" floating />
+      </div><!-- icon -->
       <div id="map"></div>
-    </div>
+    </div><!-- WeatherModule -->
 
     <q-tabs
       v-model="tab"
@@ -80,10 +80,17 @@
                 </q-item-section>
               </q-item>
             </template>
-            <q-btn @click="advance=!advance"
+
+            <!--<q-btn @click="advance=!advance"
               :color="advance?'negative':'grey'"
               :icon="advance?'fab fa-searchengin':'fas fa-search'"
+            /> TagAdvanceSearch: CountryModule -->
+
+            <q-btn dense flat
+              icon="fas fa-search"
+              @click="advance=!advance"
             /><!-- TagAdvanceSearch: CountryModule -->
+
           </q-select>
         </div><!-- TagSelectCountry: CountryModule -->
         <div class="row">
@@ -138,7 +145,7 @@
       <div class="row">
         <div class="col-8">
           <!-- <q-btn :label="$t(distance?'Set':'Reset')" type="submit" :class="(distance?'bg-red':'bg-grey')+' q-ma-xs'"/> -->
-          <q-btn :label="$t('Set')" type="submit" :class="(distance?'bg-red':'bg-grey')+' q-ma-xs'"/>
+          <q-btn :label="$t('Set')" type="submit" :color="distance?'red':'grey'" class="q-ma-xs"/>
           <q-btn :label="$t('Reset')" @click="reset" color="primary"/>
         </div><!-- TagSetLocation: locationModule -->
         <div v-for="(item, index) in submitResult" :key="index" class="col-4">
@@ -146,17 +153,17 @@
           <!-- <q-btn :label="`${item.name} = ${radius(item.value)}km`"/> -->
         </div><!-- <q-badge :label="`${item.name} = ${radius(item.value)}km`"/> -->
       </div>
-    </q-form>
+    </q-form><!-- distanceModule -->
 
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { Cookies } from 'quasar'
-import { ref, watch, computed, onMounted, defineComponent, Ref } from 'vue'
-import { date, LocalStorage } from 'quasar'
+import { ref, watch, computed, onMounted } from 'vue'
+import { date } from 'quasar'
 import { capacitor } from './Functions'
-import { api, ipData, locationMutation, mSession } from 'boot/axios'
+import { ipData, locationMutation, mSession } from 'boot/axios'
 import { useCrudStore } from 'stores/crud'
 import axios from 'axios'
 import countries from './json/Countries.json'
@@ -166,31 +173,30 @@ import statesCities from './json/statesCities.json'
 import countriesWithStates from './json/countriesWithStates.json'
 import GoogleAutocomplete from './GoogleAutocomplete.vue'
 
-//
 // alternative mean/average method (from https://www.30secondsofcode.org/snippet/average):
-const mean = (...numbers: number[]) => numbers.reduce((acc, val) => acc + val, 0) / numbers.length
-//
+// const mean = (...numbers: number[]) => numbers.reduce((acc, val) => acc + val, 0) / numbers.length
 // usage:
-mean(...[1, 2, 3]) // 2
-mean(...[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) // 5
-mean(...[1, 2, 3]) // 2
+// mean(...[1, 2, 3]) // 2
+// mean(...[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) // 5
+// mean(...[1, 2, 3]) // 2
 
 /**
- * Tags: CountryModule - SearchModule - ModuleDateTime - WeatherModule
- *       geolocationLocationModule
+ * Tags: CountryModule - SearchModule - DateTimeModule - WeatherModule
+ *       geolocationLocationModule - distanceModule - PositionModule
  *       TagLatLng - TagApi - TagServer - TagAddLocation - TagLocateMe
+ *       TagPosition
  *
  * @to UserController - json
  */
-export default defineComponent({
-  components: {
-    GoogleAutocomplete // google-autocomplete
-  },
-  setup () {
-    const store = useCrudStore()
-    const { crudAction, notifyAction } = store
-    const country: Ref<string> = ref('')
-    const Countries: Ref<string[]> = ref([])
+// export default defineComponent({
+  // components: {
+  //   GoogleAutocomplete // google-autocomplete
+  // },
+  // setup () {
+    const $store = useCrudStore()
+    const { crudAction, notifyAction } = $store
+    const country = ref<string>('')
+    const Countries = ref<string[]>([])
     const cities = ref<string[]>([])
     const states = ref<string>('')
     const StatesCities = ref<string[]>([])
@@ -199,21 +205,25 @@ export default defineComponent({
     const errorStr = ref('')
     const loader = ref(false)
     const gettingLocation = ref(false)
-    const advance = ref(false)
-    // const darkMode = ref(LocalStorage.getItem('darkMode'))
-    // const darkMode = computed(() => store.darkModeGetter?.darkMode)
-
-    const weather = ref('')
-    const time = ref<Date | null>(null)
-    const temperature = ref(0)
+    const advance = ref(true)
+    const weatherGetter = ref<string>(Cookies.get('weatherGetter'))
+    const time = ref(date.formatDate(Number(Cookies.get('timezone'))||'', 'HH:mm'))
     const offsets = ref(0)
     const localDateTime = ref<any>(false)
-
     const submitResult = ref<any[]>([])
-    const location = ref(Cookies.get('location'))
-    const position = ref<{lat: number; lng: number}>(Cookies.get('position'))
+    const tab = ref('current_location')
 
-    const distance = computed(() => store['distanceGetter']?.distance)
+
+    const weather = computed(() => $store[weatherGetter.value]?.weather)
+    const distance = computed(() => $store.distanceGetter?.distance)
+    const location = computed(() => $store.locationGetter?.location)
+    const position = computed(() => $store.positionGetter?.position)
+    const positionSaved = computed(() => Cookies.get('position'))
+    const weatherSaved = computed(() => Cookies.get('weather'))
+    const auth = computed(() => $store.authGetter)
+
+    const km = computed(() => distance.value?.d||50) // distanceModule
+    // const km = ref(distance.value?.d||50) // distanceModule
 
     const deg2rad = (deg: number) => deg * (Math.PI/180)
     const rad2deg = (rad: number) => rad * (180/Math.PI)
@@ -221,33 +231,25 @@ export default defineComponent({
     // [START maps_circle_simple]
     const cityMap = {
       chicago: {
-        center: { lat: 41.878, lng: -87.629 },
+        center: { lat: 41.878, lon: -87.629 },
         population: 2714856,
       },
       newyork: {
-        center: { lat: 40.714, lng: -74.005 },
+        center: { lat: 40.714, lon: -74.005 },
         population: 8405837,
       },
       losangeles: {
-        center: { lat: 34.052, lng: -118.243 },
+        center: { lat: 34.052, lon: -118.243 },
         population: 3857799,
       },
       vancouver: {
-        center: { lat: 49.25, lng: -123.1 },
+        center: { lat: 49.25, lon: -123.1 },
         population: 603502,
       },
     } // https://developers.google.com/maps/documentation/javascript/examples/circle-simple#maps_circle_simple-html
 
-    onMounted(() => {
-      // initMap() // WorkingOn
-      // darkModeClass(darkMode.value)
-    })
-
-    // function darkModeClass(val: string | number | boolean | object | null) {
-    //   const QDarkClass: any = document.querySelector('.q-dark') // if (val==='null') val = false
-    //   if (QDarkClass) QDarkClass.style.color = val?'#fff':'var(--q-dark)'
-    //   if (QDarkClass) QDarkClass.style.background = val?'var(--q-dark)':'#fff'
-    // }
+    // onMounted(() => initMap()) // WorkingOn
+    onMounted(() => weatherMutation(weatherSaved.value)) // WeatherModule
 
     function Cities() {
       states.value = countriesWithStates[country.value] // Country Have States
@@ -257,24 +259,23 @@ export default defineComponent({
     } watch([chooseStateCity, chooseCity, country], () => Cities())
 
     function chooseLocation() {
-      const loc = chooseStateCity.value || chooseCity.value || country.value
-
-      if (loc) {
-        locationMutation(loc)
-        Place({place: loc.toLowerCase(), location: true}, '').then(({ data }) => {
-            weather.value = ''; time.value = null; temperature.value = 0
-            if (data.latitude??data.longitude) LatLng(data) // Get Lat Lng From Location
-          }) // TagServer: Server Get Offset, LatLng... From Place
+      const loc = chooseStateCity.value || chooseCity.value || country.value; if (loc) {
+        const mutate = 'placeGetter' + loc; locationMutation(loc)
+        Place({place: loc.toLowerCase(), mutate, location: true}, '').then(data => {
+            weatherGetter.value = time.value = '' // weatherIcon.value = ''; temperature.value = 0
+            if (data?.latitude??data?.longitude) LatLng(data) // Get Lat Lng From Location
+            else { // Location Not Available
+              positionMutation(null) /* Reset Position */
+              weatherMutation(''); Cookies.remove('timezone')
+            } console.log('chooseLocation', data)
+        }) // TagServer: Server Get Offset, LatLng... From Place
       } // TagSelectLocation: CountryModule
     } // TagChooseLocation: CountryModule
 
-    async function Place(loc: object | boolean, place: string) { // https://developers.google.com/maps/documentation/geocoding/overview?csw=1#ReverseGeocoding
+    function Place(params: any, place: string) { // https://developers.google.com/maps/documentation/geocoding/overview?csw=1#ReverseGeocoding
 
-      // if (loc) return crudAction({...{url:'api/users/place', method: 'get'}, ...loc}) // TagServer:
-      //   .catch((e: string) => notifyAction({error: 'chooseCityPlace', e})) // Server Get Offset, Place... From Lat Lng
-
-      if (loc) return await api.get('api/users/place', { params: loc }) // TagServer:
-        .catch((e: string) => notifyAction({error: 'chooseCityPlace', e})) // Server Get Offset, Place... From Lat Lng
+      if (params) return crudAction({url:'api/users/place', method: 'get', ...params}) // TagServer:
+        .catch((e: unknown) => notifyAction({error: 'chooseCityPlace', e})) // Server Get Offset, Place... From Lat Lng
 
       return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.MAP_API_KEY}&address=${place}`).then(({ data }) => {
         // console.log('chooseLocation', data, 'data.error_message', data?.error_message || data?.results)
@@ -282,30 +283,34 @@ export default defineComponent({
       }).catch(e => notifyAction({error: 'Place', e}))
     } // TagAddLocation: SearchModule - request: 'address', 'components', 'latlng' or 'place_id' parameter.",
 
-    async function LatLng(params: { coords: { latitude: number; longitude: number }; latitude: number; longitude: number; results: number; city: string; offsets: number }) { //
+    async function LatLng(params: any) {
 
-      const lat = params.coords?.latitude // TagLocateMe: Get Lat From GPS
-               ?? params.latitude // TagServer: Get Lat... From DB
-               ?? ipData.latitude // Get Lat From Analytic
-               ?? ipData.lat // Get Lat From Analytic
-      const lng = params.coords?.longitude // TagLocateMe: Get Lng From GPS
-               ?? params.longitude // TagServer: Get Lng... From DB
-               ?? ipData.longitude // Get Lng From Analytic
-               ?? ipData.lon // Get Lng From Analytic
+      const lat = params?.coords?.latitude // TagLocateMe: Get Lat From GPS
+               ?? params?.latitude // TagServer: Get Lat... From DB Or Google API
+               ?? params?.lat // TagServer: positionGetter
+               ?? ipData?.latitude // Get Lat From Analytic
+               ?? ipData?.lat // Get Lat From Analytic
+      const lon = params?.coords?.longitude // TagLocateMe: Get Lng From GPS
+               ?? params?.longitude // TagServer: Get Lng... From DB Or Google API
+               ?? params?.lon // TagServer: positionGetter
+               ?? ipData?.longitude // Get Lng From Analytic
+               ?? ipData?.lon // Get Lng From Analytic
 
-      const { data } = await Place({ lat, lng }, '') // TagServer: geolocationLocationModule - Server Get Location (Offset, Place) From DB
+      const utc_offset =  params?.offsets // Update  Utc Offset From GPS
+      const mutate = 'placeGetter' + lat + lon
+      const payload = { lat, lon, utc_offset, mutate }
+      const data = await Place(payload, '') // TagServer: geolocationLocationModule - Server Get Location (Offset, Place) From DB
+
       if (!data?.city&&!params?.results) Place(false, params.city) // TagApi: API Get Location (Offset, LatLng) From Google
+      else crudAction({ data, mutate: 'placeGetter', refresh: ['placeGetter'] })  // TagServer: GetterMutation
 
-      const pos = [lat, lng] // Place expressed as lat,lng tuple
-
-      Cookies.set('position', JSON.stringify(position.value = {lat, lng}), { expires: 365 })
-
+      const pos = [lat, lon] // Place expressed as lat,lon tuple
       const timestamp = Date.now() // User DateTime
+      const apiKey = process.env.MAP_API_KEY
 
-      const apiKey = process.env.MAP_API_KEY; loader.value = true
       let apiCall = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + pos + '&timestamp=' + timestamp + '&key=' + apiKey
 
-      offsets.value = params?.offsets??data?.utc_offset/100; if (typeof offsets.value !== undefined)''; else {
+      offsets.value = utc_offset??(data?.utc_offset/100); if (typeof offsets.value !== undefined)''; else {
         const xhr = new XMLHttpRequest() // create new XMLHttpRequest object
         xhr.open('GET', apiCall) // open GET request
         xhr.onload = () => {
@@ -317,25 +322,29 @@ export default defineComponent({
               localDateTime.value = new Date(timestamp * 1000 + offsets.value) // Display current zone date and time
             } else notifyAction({error: output.status, e: 'output'})
           } else notifyAction({error: 'Request failed.  Returned status of ' + xhr.status, e: 'xhr'})
-        }; xhr.send() // send request // Google Locale DateTime
-      } location.value = `${data?.city||ipData?.city} ${(data?.region||data?.country)||(ipData?.region||ipData?.country)}`
+        }; loader.value = true; xhr.send() // send request // Google Locale DateTime
+      } // Get Locale DateTime From Google Api
 
-      // $store.commit('users/locationMutation', { location:location.value })
-      locationMutation(location.value); loader.value = false // TagAddLocation: LocationModule
+      locationMutation(`${data?.city||ipData?.city} ${(data?.region||data?.country)||(ipData?.region||ipData?.country)}`)
+      positionMutation({ lat, lon /* utc_offset: offsets.value */ }); loader.value = false // ^^^ TagAddLocation: LocationModule
 
       const formattedString = date.formatDate(timezone(offsets.value)||timestamp, 'HH:mm' ) // YYYY-MM-DDTHH:mm:ss.SSSZ
 
-      time.value = localDateTime.value||formattedString // TagLocalDateTime: ModuleDateTime
+      time.value = localDateTime.value||formattedString // TagLocalDateTime: DateTimeModule
+      weatherGetter.value = 'weatherGetter' + lat + lon
 
       console.log(
-        // 'data', data,
+        // 'LatLng', params,
+        // 'data/place', data,
+        // 'position', position.value,
+        // 'location', location.value,
+        // 'lat', lat,
+        // 'lon', lon,
+        // 'weatherSaved', weatherSaved,
+        // 'weatherGetter', weatherGetter.value,
         // 'chooseCity.value', chooseCity.value,
-        // 'location', location,
         // 'data.place', data.place,
         // 'pos', pos,
-        // 'lat', lat,
-        // 'lng', lng,
-        // 'LatLng', params,
         // timezone(offsets.value)
         // 'ipData', ipData,
         // 'utc_offset', utc_offset,
@@ -344,7 +353,9 @@ export default defineComponent({
         // 'Date.now()', Date.now(),
       )
 
-      apiCall = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lng + '&APPID=' + process.env.WEATHER_API_KEY
+      if (weatherSaved.value?.G === weatherGetter.value) return weatherMutation(weatherSaved.value) // WeatherModule
+
+      apiCall = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&APPID=' + process.env.WEATHER_API_KEY
 
       const localeWeather = new XMLHttpRequest()
       localeWeather.open('GET', apiCall)
@@ -364,33 +375,49 @@ export default defineComponent({
           // Convert the temperature from Kelvin to degrees Celsius
           const temperatureCelsius = temperatureKelvin - 273.15
           // Convert the temperature from degrees Celsius to degrees Fahrenheit
-          // const temperatureFahrenheit = temperatureCelsius * 1.8 + 32
-          // const F = Math.round(temperatureFahrenheit)
+          const temperatureFahrenheit = temperatureCelsius * 1.8 + 32
+          const F = Math.round(temperatureFahrenheit)
           const C = Math.round(temperatureCelsius)
           const iconUrl = 'https://openweathermap.org/img/w/' + iconCode + '.png'
 
-          weather.value = iconUrl
-          temperature.value = C
           // Median.value = Math.round((median(temp) - 273.15) * 1.8 + 32)
+
+          // weatherIcon.value = iconUrl
+          // temperature.value = C
+
+          weatherMutation({C, F, iconUrl, G: weatherGetter.value })
 
         } else notifyAction({error: 'Request failed.  Returned status of ' + localeWeather.status, e: 'localeWeather'})
       }; localeWeather.send() // TagLocaleWeather: WeatherModule
     } // TagLatLng: SearchModule - https://www.latlong.net
 
+    async function locateMe() {
+      gettingLocation.value = true; try {
+        const pos = await getLocation()
+        pos.offsets = Offset()
+        // console.log('pos', pos)
+        LatLng(pos) // Get LatLng From GPS
+        gettingLocation.value = false
+      } catch (e: any) {
+        gettingLocation.value = false
+        errorStr.value = e.message
+      } // geolocationLocationModule
+    } // TagLocateMe: SearchModule
+
     function Offset() {
-      const d = new Date();
-      const diff = d.getTimezoneOffset()
+      const d = new Date()
+      const offset = d.getTimezoneOffset()
 
-      console.log('Date', d.getUTCDate())
-      console.log('', d.getUTCDay())
-      console.log('', d.getUTCFullYear())
-      console.log('', 'Hours', d.getUTCHours())
-      console.log('', d.getUTCMilliseconds())
-      console.log('', d.getUTCMinutes())
-      console.log('', d.getUTCMonth())
-      console.log('', d.getUTCSeconds())
+      // console.log('Date', d.getUTCDate())
+      // console.log('Day', d.getUTCDay())
+      // console.log('Year', d.getUTCFullYear())
+      // console.log('Hours', d.getUTCHours())
+      // console.log('Milliseconds', d.getUTCMilliseconds())
+      // console.log('Minutes', d.getUTCMinutes())
+      // console.log('Month', d.getUTCMonth())
+      // console.log('Seconds', d.getUTCSeconds())
 
-      return -diff/60 // UTC Offset
+      return -offset/60 // UTC Offset
     } // Get UTC Offset
 
     function timezone(offset: number) {
@@ -401,24 +428,36 @@ export default defineComponent({
       // subtract local time zone offset
       // get UTC time in msec
       const utc = d.getTime() + (d.getTimezoneOffset() * 60000)
+      const timezone = utc + (3600000*offset) // console.log('timezone', timezone)
 
-      // create new Date object for different city
-      // using supplied offset
-      const nd = new Date(utc + (3600000*offset))
+      // Date for different city using supplied offset
+      const nd = new Date(timezone)
+      Cookies.set('timezone', JSON.stringify(timezone), { expires: '1h' })
+
+      // toNormalTime(nd) // Normal Time
 
       // return time as a string
       // return "The local time for city "+ city +" is "+ nd.toLocaleString()
-      return nd
+      return nd.toLocaleString() // Military Time
     } // Get Zone Time - setInterval(myTimer, 1000);
+
+    function toNormalTime(date: { getHours: () => number; getMinutes: () => { (): any; new(): any; toString: { (): string; new(): any } } }) {
+      let hours = date.getHours()
+      const minutes = date.getMinutes().toString().padStart(2, '0')
+      const period = hours >= 12 ? 'PM' : 'AM'
+
+      // Convert hours from 24-hour to 12-hour format
+      hours = hours % 12 || 12 // Convert '0' to '12' for midnight and '13-23' to '1-11' for PM
+
+      return `${hours}:${minutes} ${period}`
+      console.log('toNormalTime', `${hours}:${minutes} ${period}`)
+    } // Helper function to convert time to 12-hour format
 
     async function getLocation() {
 
       mSession(['categoriesGetter'])
 
-      if (capacitor()?.Geolocation)
-
-        return capacitor()?.Geolocation?.getCurrentPosition()
-
+      if (capacitor()?.Geolocation) return capacitor()?.Geolocation?.getCurrentPosition()
       else return new Promise((resolve, reject) => {
         if (!('geolocation' in navigator)) {
           reject(new Error('Geolocation is not available.'))
@@ -431,40 +470,32 @@ export default defineComponent({
       })
     } // TagGetLocation: SearchModule
 
-    // function initMap() {
-    //   // Create the map.
-    //   const map = new google.maps.Map(document.getElementById('map'), {
-    //     zoom: 4,
-    //     center: { lat: 37.09, lng: -95.712 },
-    //     mapTypeId: 'terrain',
-    //   })
-
-    //   // Construct the circle for each value in cityMap.
-    //   // Note: We scale the area of the circle based on the population.
-    //   for (const city in cityMap) {
-    //     // Add the circle for this city to the map.
-    //     const cityCircle = new google.maps.Circle({
-    //       strokeColor: '#FF0000',
-    //       strokeOpacity: 0.8,
-    //       strokeWeight: 2,
-    //       fillColor: '#FF0000',
-    //       fillOpacity: 0.35,
-    //       map,
-    //       center: cityMap[city].center,
-    //       radius: Math.sqrt(cityMap[city].population) * 100,
-    //     }); cityCircle
-    //   }
-    // } // WorkingOn
-
     function distanceMutation(distance: null | {d?: number; lat1?: number; lat2?: number; lon1?: number; lon2?: number }) {
       crudAction({distance, mutate: 'distanceGetter', refresh: ['distanceGetter']}) // Cookies.set('distance', distance, { expires: '365' })
-    } // Radius Distance Mutation
+    } // distanceModule // Radius Distance Mutation
+
+    function positionMutation(position: { lat: number; lon: number } | null) {
+
+      crudAction({ position, mutate: 'positionGetter', refresh: ['positionGetter'] })
+        .then(() => Cookies.set('position', JSON.stringify(position), { expires: 365 }))
+
+    } // Position Mutation - Get Latitude And Long
+
+    function weatherMutation(weather: { C: number; F: number; iconUrl: string; G: string } | any) {
+
+      // if (weather)
+      Cookies.set('weather', JSON.stringify(weather), { expires: '1h' })
+      // if (weatherGetter.value)
+      Cookies.set('weatherGetter', weatherGetter.value, { expires: '1h' })
+      crudAction({ weather, mutate: weatherGetter.value })
+
+    } // TagWeatherMutation: WeatherModule
 
     function radius(d: number) {
       const R = 6371 // Radius of the Earth | d: Distance in km
       const bearing = deg2rad(45) // Bearing degrees to radians.
       const lat = deg2rad(position.value?.lat) // Current lat point converted to radians
-      const lon = deg2rad(position.value?.lng) // Current long point converted to radians
+      const lon = deg2rad(position.value?.lon) // Current long point converted to radians
 
       let lat1 = Math.asin(Math.sin(lat)*Math.cos(-d/R) +
                  Math.cos(lat)*Math.sin(-d/R)*Math.cos(bearing))
@@ -479,13 +510,47 @@ export default defineComponent({
 
       distanceMutation({d, lat1, lat2, lon1, lon2})
 
-      // console.log('position',
+      // console.log('distance',
       //   { lat1, lat2, lon1, lon2, bearing, d, position },
       //   getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2)
       // ) // print(lat2); // print(lon2)
 
       return d // https://www.geodatasource.com/developers/javascript
-    } // Get The Distance (Rayon) From The Middle To The Circle
+    } // distanceModule - Get The Distance (Rayon) From The Middle To The Circle
+
+    function onSubmit (evt: { target: HTMLFormElement | any }) {
+      const formData: any = new FormData(evt.target)
+      const data = []
+
+      if (typeof positionSaved.value === 'object') LatLng(positionSaved.value)
+
+      // crudAction({ position, mutate: 'positionGetter', refresh: ['positionGetter'] })
+
+      for (const [ name, value ] of formData.entries()) {
+        data.push({ name, value }); // console.log('data', data)
+      } radius(data[0].value); submitResult.value = data
+    } // TagPosition: PositionModule - distanceModule
+
+    function reset () {
+      distanceMutation(null)
+      submitResult.value = []
+    }
+
+    function filterFn (val: string, update: (arg0: () => Promise<void>) => void, abort: () => void) { // ===== TagChooseLocation ================= \\
+      update(async () => {
+        const needle = val.toLowerCase(); mSession(['categoriesGetter'])
+        const mutate = 'placeGetter' + needle
+        const places: string[] = []; console.log('mutate', mutate)
+
+        if (needle/* &&advance.value */) try { // TagAdvanceSearch: CountryModule
+          const data = await Place({place: needle, mutate, search: true}, '')
+          data.forEach((loc: { place: string }) => places.push(loc.place)) }
+        catch (e) { notifyAction({error: 'forEachFilter', e}); abort() }
+
+        Countries.value = [...countries, ...places].filter(v => v?.toLowerCase().indexOf(needle) > -1)
+        Cities()
+      })
+    } // TagSelectCountry: CountryModule
 
     function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
       const R = 6371 // Radius of the earth in km
@@ -500,181 +565,121 @@ export default defineComponent({
       const d = R * c; /* Distance in km */ return d
     } // Get Distance From Latitude Longitude In Kilometer
 
-    return {
-      tab: ref('current_location'),
-      auth: computed(() => store.authGetter),
+    function initMap() {
+      // Create the map.
+      const map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 4,
+        center: { lat: 37.09, lon: -95.712 },
+        mapTypeId: 'terrain',
+      })
 
-      distance,
-      km: ref(distance.value?.d||50),
-      submitResult, radius,
-      onSubmit (evt: { target: HTMLFormElement | undefined }) {
-        const formData: any = new FormData(evt.target)
-        const data = [];
+      // Construct the circle for each value in cityMap.
+      // Note: We scale the area of the circle based on the population.
+      for (const city in cityMap) {
+        // Add the circle for this city to the map.
+        const cityCircle = new google.maps.Circle({
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35,
+          map,
+          center: cityMap[city].center,
+          radius: Math.sqrt(cityMap[city].population) * 100,
+        }); cityCircle
+      }
+    } // WorkingOn
 
-        crudAction({ position, mutate: 'positionGetter', refresh: ['positionGetter'] })
+    // ======================================================================== \\
 
-        for (const [ name, value ] of formData.entries()) {
-          data.push({ name, value })
-        } radius(data[0].value); submitResult.value = data
-      },
+    /**
+     * The "mean" is the "average" you're used to, where you add up all the numbers
+     * and then divide by the number of numbers.
+     *
+     * For example, the "mean" of [3, 5, 4, 4, 1, 1, 2, 3] is 2.875.
+     *
+     * @param {Array} numbers An array of numbers.
+     * @return {Number} The calculated average (or mean) value from the specified
+     *     numbers.
+     */
+    function mean (numbers: number[]) {
+      let total = 0, i
+      for (i = 0; i < numbers.length; i += 1) {
+        total += numbers[i]
+      } // Calculating the average/mean
+      return total / numbers.length
+    } // https://www.sitepoint.com/community/t/calculating-the-average-mean/7302/3
 
-      reset () {
-        distanceMutation(null)
-        submitResult.value = []
-      },
+    /**
+     * The "median" is the "middle" value in the list of numbers.
+     *
+     * @param {Array} numbers An array of numbers.
+     * @return {Number} The calculated median value from the specified numbers.
+     */
+    function median (numbers: number[]) {
+      // median of [3, 5, 4, 4, 1, 1, 2, 3] = 3
+      let median = 0, numsLen = numbers.length
+      numbers.sort()
 
-      // == Location == \\
-      loader,
-      position,
-      location, //: computed(() => $store.getters['users/locationGetter']),
-      gettingLocation,
-      errorStr,
-      // results: [],
-      // ===============
-      advance,
-      Countries,
-      country,
-      cities,
-      StatesCities,
-      chooseCity,
-      chooseStateCity,
+      if (
+        numsLen % 2 === 0 // is even
+      ) {
+        // average of two middle numbers
+        median = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2
+      } else { // is odd
+        // middle number only
+        median = numbers[(numsLen - 1) / 2]
+      }
 
-      weather,
-      time,
-      temperature,
-      // Median,
-      ipData,
+      return median
+    } // NotInUse
 
-      filterFn (val: string, update: (arg0: () => Promise<void>) => void, abort: () => void) { // ===== TagChooseLocation ================= \\
-        update(async () => {
-          const needle = val.toLowerCase(); mSession(['categoriesGetter'])
-          const places: string[] = []
+    /**
+     * The "mode" is the number that is repeated most often.
+     *
+     * For example, the "mode" of [3, 5, 4, 4, 1, 1, 2, 3] is [1, 3, 4].
+     *
+     * @param {Array} numbers An array of numbers.
+     * @return {Array} The mode of the specified numbers.
+     */
+    function mode (numbers: number[]) {
+      // as result can be bimodal or multi-modal,
+      // the returned result is provided as an array
+      // mode of [3, 5, 4, 4, 1, 1, 2, 3] = [1, 3, 4]
+      let modes = [], count: number[] = [], i, number, maxIndex = 0
 
-          // const flt: string[] = []
-          // watch(filter, val => {
-          //   if (!flt.includes(val)) analyticsAction({
-          //     load: true,
-          //     filter: val
-          //   });flt.push(val)
-          // })
-
-          if (needle&&advance.value) try { // TagAdvanceSearch: CountryModule
-            // const data = await Place({place: needle, mutate: 'placeGetter', search: true}, '')
-            const { data } = await Place({place: needle, search: true}, '')
-            data.forEach((loc: { place: string }) => places.push(loc.place)) }
-          catch (e) { notifyAction({error: 'forEachFilter', e}) }
-          // catch (e) { notifyAction({error: 'forEachFilter', e}); abort() }
-
-          Countries.value = [...countries, ...places].filter(v => v?.toLowerCase().indexOf(needle) > -1)
-          Cities()
-        })
-      }, // TagSelectCountry: CountryModule
-      async locateMe() {
-        gettingLocation.value = true; try {
-          const pos = await getLocation()
-          pos.offsets = Offset()
-          // console.log('pos', pos)
-          LatLng(pos) // Get LatLng From GPS
-          gettingLocation.value = false
-        } catch (e: any) {
-          gettingLocation.value = false
-          errorStr.value = e.message
-        } // geolocationLocationModule
-      }, // TagLocateMe: SearchModule
-
-      // ======================================================================== \\
-
-      /**
-       * The "mean" is the "average" you're used to, where you add up all the numbers
-       * and then divide by the number of numbers.
-       *
-       * For example, the "mean" of [3, 5, 4, 4, 1, 1, 2, 3] is 2.875.
-       *
-       * @param {Array} numbers An array of numbers.
-       * @return {Number} The calculated average (or mean) value from the specified
-       *     numbers.
-       */
-      mean (numbers: number[]) {
-        let total = 0, i
-        for (i = 0; i < numbers.length; i += 1) {
-          total += numbers[i]
-        } // Calculating the average/mean
-        return total / numbers.length
-      },// https://www.sitepoint.com/community/t/calculating-the-average-mean/7302/3
-
-      /**
-       * The "median" is the "middle" value in the list of numbers.
-       *
-       * @param {Array} numbers An array of numbers.
-       * @return {Number} The calculated median value from the specified numbers.
-       */
-      median (numbers: number[]) {
-        // median of [3, 5, 4, 4, 1, 1, 2, 3] = 3
-        let median = 0, numsLen = numbers.length
-        numbers.sort()
-
-        if (
-          numsLen % 2 === 0 // is even
-        ) {
-          // average of two middle numbers
-          median = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2
-        } else { // is odd
-          // middle number only
-          median = numbers[(numsLen - 1) / 2]
+      for (i = 0; i < numbers.length; i += 1) {
+        number = numbers[i]
+        count[number] = (count[number] || 0) + 1
+        if (count[number] > maxIndex) {
+          maxIndex = count[number]
         }
+      }
 
-        return median
-      }, // NotInUse
-
-      /**
-       * The "mode" is the number that is repeated most often.
-       *
-       * For example, the "mode" of [3, 5, 4, 4, 1, 1, 2, 3] is [1, 3, 4].
-       *
-       * @param {Array} numbers An array of numbers.
-       * @return {Array} The mode of the specified numbers.
-       */
-      mode (numbers: number[]) {
-        // as result can be bimodal or multi-modal,
-        // the returned result is provided as an array
-        // mode of [3, 5, 4, 4, 1, 1, 2, 3] = [1, 3, 4]
-        let modes = [], count: number[] = [], i, number, maxIndex = 0
-
-        for (i = 0; i < numbers.length; i += 1) {
-          number = numbers[i]
-          count[number] = (count[number] || 0) + 1
-          if (count[number] > maxIndex) {
-            maxIndex = count[number]
+      for (i in count) {
+        if (count.hasOwnProperty(i)) {
+          if (count[i] === maxIndex) {
+            modes.push(Number(i))
           }
         }
+      }
 
-        for (i in count) {
-          if (count.hasOwnProperty(i)) {
-            if (count[i] === maxIndex) {
-              modes.push(Number(i))
-            }
-          }
-        }
+      return modes
+    } // NotInUse
 
-        return modes
-      }, // NotInUse
-
-      /**
-       * The "range" of a list a numbers is the difference between the largest and
-       * smallest values.
-       *
-       * For example, the "range" of [3, 5, 4, 4, 1, 1, 2, 3] is [1, 5].
-       *
-       * @param {Array} numbers An array of numbers.
-       * @return {Array} The range of the specified numbers.
-       */
-      range (numbers: number[]) {
-        numbers.sort() // return [numbers[0], numbers[numbers.length - 1]]
-        return [numbers[0], numbers.at(-1)]
-      } // NotInUse
-    }
-  }
-})
+    /**
+     * The "range" of a list a numbers is the difference between the largest and
+     * smallest values.
+     *
+     * For example, the "range" of [3, 5, 4, 4, 1, 1, 2, 3] is [1, 5].
+     *
+     * @param {Array} numbers An array of numbers.
+     * @return {Array} The range of the specified numbers.
+     */
+    function range (numbers: number[]) {
+      numbers.sort() // return [numbers[0], numbers[numbers.length - 1]]
+      return [numbers[0], numbers.at(-1)]
+    } // NotInUse
 </script>
 
 <style scoped>

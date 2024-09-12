@@ -39,6 +39,8 @@ use Hash;
 use Auth;
 use Log;
 use DB;
+use Mockery\Undefined;
+use PhpParser\Node\Stmt\TryCatch;
 
 /**
  * Tags: UserModule - AnalyticModule - BitgoModule - IpDebugModule - FileModule
@@ -327,8 +329,8 @@ class UserController extends Controller
       } elseif ($request->api) { // Add User - NotDone
         return redirect()->action([RegisterController::class, 'register']);
       } elseif ($request->id) { // Restore User
-        $userTrashed = User::onlyTrashed()->find($request->id);
-        $userTrashed->restore();
+        $userTrashed = User::onlyTrashed()->find($request->id); // TagStore: UserModule
+        $userTrashed->restore(); $userTrashed->update(['deleted' => null]);
         $teamTrashed = Team::onlyTrashed()->first();
         if ($teamTrashed) {
           $teamTrashed->restore(); // Team Restore
@@ -407,12 +409,16 @@ class UserController extends Controller
 
       // if ($request->location||($request?->mutate === 'placeGetter')) return $this->location($request); // TagShow: LocationModule
       if ($request->location||$request->search) return $this->location($request); // TagShow: LocationModule
-      if ($id==='place') return Location::select('locations.*', DB::raw('6371
-        * acos(cos(radians('.$request->lat.')) * cos(radians(latitude))
-        * cos(radians(longitude) - radians('.$request->lng.'))
-        + sin(radians('.$request->lat.')) * sin(radians(latitude))) AS distance'))
-        ->orderBy('distance')->having('distance', '<=', 100) // Nearest Location Longitude And Latitude
-        ->first(); // TagShow: geolocationLocationModule - https://laracasts.com/discuss/channels/laravel/laravel-nearest-location-longitude-and-latitude
+      if ($id==='place') { // Get Location From GPS' Lat And Lng
+        $location = Location::select('locations.*', DB::raw('6371
+          * acos(cos(radians('.$request->lat.')) * cos(radians(latitude))
+          * cos(radians(longitude) - radians('.$request->lon.'))
+          + sin(radians('.$request->lat.')) * sin(radians(latitude))) AS distance'))
+          ->orderBy('distance')->having('distance', '<=', 100) // Nearest Location Longitude And Latitude
+          ->first(); // https://laracasts.com/discuss/channels/laravel/laravel-nearest-location-longitude-and-latitude
+          if ($request->utc_offset !== 'undefined') $location->update(['utc_offset' => $request->utc_offset*100]);
+          return $location;
+      } // TagShow: geolocationLocationModule - placeGetter
 
       if ($request->getUser) return $user; // Get Chat User
       elseif ($id==='analytics') { // Users analyticsGetter
@@ -443,8 +449,8 @@ class UserController extends Controller
 
         $views = View::join('analytics', function ($join) {
             $join->on('analytics.user_id', 'views.user_id')
-              ->orOn('analytics.ip', 'views.ip')
-              ->whereNull('analytics.user_id');
+                 ->orOn('analytics.ip', 'views.ip')
+                 ->whereNull('analytics.user_id');
         });//->distinct();
 
         if ($request->proxyDate) $views->whereDate('views.updated_at', $request->proxyDate)
@@ -579,7 +585,7 @@ class UserController extends Controller
         if ($request->role) $user->role = $request->role;
         if ($request->locale) $user->locale = $request->locale;
         // if (strlen($request->locale)>0) $user->locale = $request->locale;
-        if ($table = $request->table) $table = DB::table($request->table)->whereNotNull('deleted')
+        if ($table = $request->table) $table = DB::table(strtolower($request->table))->whereNotNull('deleted')
           ->whereNull('deleted_at')->update([
           'deleted_at' => now()  // Fix Table
         ]); if ($table) return ['success' => 'Table Fixed'];
@@ -823,8 +829,30 @@ class UserController extends Controller
       $country = strtolower($request->country_name??$request->country??(isset($locPl[2])?$locPl[2]:''));
       $place = strtolower($request->place??$city.' '.$region.' '.$country);
 
-      $location = $place!='  ' ? Location::where('place', 'like', "%$place%") :
-        Location::where([['city', $city], ['region', $region], ['country', $country]]);
+      // $place = "   "; // Example with spaces only
+
+      // if (!empty(trim($place))) {
+      //     echo "The string is not empty and contains at least one non-space character.";
+      // } else {
+      //     echo "The string is empty or contains only spaces.";
+      // }
+
+      // use Illuminate\Support\Str;
+
+      // $place = "   "; // Example with spaces only
+
+      // if (!Str::of($place)->trim()->isEmpty()) {
+      //     echo "The string is not empty and contains at least one non-space character.";
+      // } else {
+      //     echo "The string is empty or contains only spaces.";
+      // }
+
+      // $location = $place!='  ' ? Location::where('place', 'like', "%$place%") :
+      //   Location::where([['city', $city], ['region', $region], ['country', $country]]);
+
+      $location = empty(trim($place)) // Get Location
+        ? Location::where([['city', $city], ['region', $region], ['country', $country]])
+        : Location::where('place', 'like', "%$place%"); // Get Place If It Exist
 
       $location = $location->orWhere([['latitude', $latitude], ['longitude', $longitude]]);
 
